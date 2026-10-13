@@ -6,23 +6,27 @@
 public interface ICredentialsProvider
 {
 	/// <summary>
-	/// Try load credentials.
+	/// Load the stored credentials.
 	/// </summary>
-	/// <param name="credentials"><see cref="ServerCredentials"/>.</param>
-	/// <returns>Operation result.</returns>
-	bool TryLoad(out ServerCredentials credentials);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The credentials, or <see langword="null"/> when none are stored.</returns>
+	ValueTask<ServerCredentials> TryLoadAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Save credentials.
 	/// </summary>
 	/// <param name="credentials"><see cref="ServerCredentials"/>.</param>
 	/// <param name="keepSecret">Save <see cref="ServerCredentials.Password"/> and <see cref="ServerCredentials.Token"/>.</param>
-	void Save(ServerCredentials credentials, bool keepSecret);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask SaveAsync(ServerCredentials credentials, bool keepSecret, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Delete credentials.
 	/// </summary>
-	void Delete();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask DeleteAsync(CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -46,11 +50,8 @@ public class TokenCredentialsProvider : ICredentialsProvider
 	public TokenCredentialsProvider(SecureString token)
 		=> _token = token.ThrowIfEmpty(nameof(token));
 
-	void ICredentialsProvider.Delete() => throw new NotSupportedException();
-	void ICredentialsProvider.Save(ServerCredentials credentials, bool keepSecret) => throw new NotSupportedException();
-	bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
-	{
-		credentials = new() { Token = _token };
-		return true;
-	}
+	ValueTask ICredentialsProvider.DeleteAsync(CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask ICredentialsProvider.SaveAsync(ServerCredentials credentials, bool keepSecret, CancellationToken cancellationToken) => throw new NotSupportedException();
+	ValueTask<ServerCredentials> ICredentialsProvider.TryLoadAsync(CancellationToken cancellationToken)
+		=> new(new ServerCredentials { Token = _token });
 }

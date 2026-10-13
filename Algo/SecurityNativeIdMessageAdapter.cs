@@ -119,9 +119,10 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="SecurityNativeIdMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), StorageProvider);
+		return new SecurityNativeIdMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), StorageProvider);
 	}
 }

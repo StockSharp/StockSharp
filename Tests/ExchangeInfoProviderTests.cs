@@ -275,12 +275,13 @@ public class ExchangeInfoProviderTests : BaseTestClass
 	[TestMethod]
 	public void IBoardMessageProvider_Lookup_ReturnsAllBoards()
 	{
-		IBoardMessageProvider provider = new InMemoryExchangeInfoProvider();
+		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+		IBoardMessageProvider provider = exchangeInfoProvider;
 		var criteria = new BoardLookupMessage();
 
 		var results = provider.Lookup(criteria).ToArray();
 
-		results.Length.AssertGreater(1);
+		results.Length.AssertEqual(exchangeInfoProvider.Boards.Count());
 	}
 
 	[TestMethod]

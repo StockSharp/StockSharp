@@ -27,6 +27,7 @@ public class QuotingProcessor : BaseLogReceiver
 	private Order _currentOrder;
 	private IOrderBookMessage _filteredBook;
 	private ITickTradeMessage _lastTrade;
+	private long _lastTradeSeq;
 	private DateTime _startedTime;
 	private QuotingEngine _engine;
 	private decimal _position;
@@ -191,6 +192,7 @@ public class QuotingProcessor : BaseLogReceiver
 				.Do(trade =>
 				{
 					_lastTrade = trade;
+					_lastTradeSeq++;
 					ProcessQuoting();
 				})
 				.Apply(_container));
@@ -412,6 +414,7 @@ public class QuotingProcessor : BaseLogReceiver
 			BestBidPrice = _filteredBook?.Bids?.FirstOr()?.Price,
 			BestAskPrice = _filteredBook?.Asks?.FirstOr()?.Price,
 			LastTradePrice = _lastTrade?.Price,
+			LastTradeSeq = _lastTradeSeq,
 			Bids = _filteredBook?.Bids ?? [],
 			Asks = _filteredBook?.Asks ?? [],
 			CurrentOrder = _currentOrder != null ? new()

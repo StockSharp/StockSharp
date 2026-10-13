@@ -279,6 +279,8 @@ public class DiagramSocket : Disposable, INotifyPropertyChanged
 	/// </summary>
 	public bool IsConnected => _connections.Any();
 
+	internal bool IsConnectedTo(DiagramSocket other) => _connections.Contains(other);
+
 	/// <summary>
 	/// Invoke <see cref="Connected"/> event.
 	/// </summary>

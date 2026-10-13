@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Generation;
+﻿namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// The order book generator using random method.
@@ -156,7 +156,7 @@ public abstract class MarketDepthGenerator(SecurityId securityId) : MarketDataGe
 
 		int? ordersCount = null;
 
-		if (GenerateOrdersCount && RandomGen.GetBool())
+		if (GenerateOrdersCount && RandomProvider.GetBool())
 			ordersCount = Volumes.Next();
 
 		return new QuoteChange(price, Volumes.Next(), ordersCount);

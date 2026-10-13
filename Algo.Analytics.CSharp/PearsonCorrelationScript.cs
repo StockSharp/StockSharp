@@ -9,66 +9,74 @@ public class PearsonCorrelationScript : IAnalyticsScript
 {
 	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
 			return;
 		}
 
-		var closes = new List<double[]>();
+		var closes = new List<Dictionary<DateTime, double>>();
 
 		var idx = 0;
 		foreach (var security in securities)
 		{
-			// stop calculation if user cancel script execution
-			if (cancellationToken.IsCancellationRequested)
-				break;
+			cancellationToken.ThrowIfCancellationRequested();
 
 			logs.LogInfo("Processing {0} of {1}: {2}...", ++idx, securities.Length, security);
+			cancellationToken.ThrowIfCancellationRequested();
 
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 			// get closing prices
-			var pricesList = new List<double>();
+			var pricesByTime = new Dictionary<DateTime, double>();
 			var prevDate = default(DateOnly);
 
 			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
 				if (currDate != prevDate)
 				{
 					prevDate = currDate;
 					logs.LogInfo("  {0}...", currDate);
+					cancellationToken.ThrowIfCancellationRequested();
 				}
 
-				pricesList.Add((double)candle.ClosePrice);
+				pricesByTime[candle.OpenTime] = (double)candle.ClosePrice;
 			}
 
-			var prices = pricesList.ToArray();
-
-			if (prices.Length == 0)
+			if (pricesByTime.Count == 0)
 			{
 				logs.LogWarning("No data for {0}", security);
 				return;
 			}
 
-			closes.Add(prices);
+			closes.Add(pricesByTime);
 		}
 
-		// all array must be same length, so truncate longer
-		var min = closes.Select(arr => arr.Length).Min();
+		// A correlation pairs observations of the same market moment. Truncating each series to
+		// the same length instead pairs unrelated candles whenever either instrument has a gap.
+		var commonTimes = closes[0].Keys
+			.Where(time => closes.Skip(1).All(series => series.ContainsKey(time)))
+			.OrderBy(time => time)
+			.ToArray();
 
-		for (var i = 0; i < closes.Count; i++)
+		if (commonTimes.Length == 0)
 		{
-			var arr = closes[i];
-
-			if (arr.Length > min)
-				closes[i] = arr.Take(min).ToArray();
+			logs.LogWarning("The instruments have no candles at the same time.");
+			return;
 		}
+
+		var pairedCloses = closes
+			.Select(series => commonTimes.Select(time => series[time]).ToArray())
+			.ToArray();
 
 		// calculating correlation
-		var matrix = Correlation.PearsonMatrix(closes);
+		var matrix = Correlation.PearsonMatrix(pairedCloses);
 
 		// displaying result into heatmap
 		var ids = securities.Select(s => s.ToStringId());

@@ -35,9 +35,9 @@ public class PermissionCredentials : ServerCredentials
 	public SynchronizedDictionary<UserPermissions, SynchronizedDictionary<(string name, string param, string extra, DateTime? till), bool>> Permissions { get; } = [];
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(IpRestrictions), IpRestrictions.Select(e => e.To<string>()).JoinComma());
 
@@ -62,9 +62,9 @@ public class PermissionCredentials : ServerCredentials
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		IpRestrictions = [.. storage.GetValue<string>(nameof(IpRestrictions)).SplitByComma().Select(s => s.To<IPAddress>())];
 

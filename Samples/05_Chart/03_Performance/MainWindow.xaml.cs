@@ -385,16 +385,13 @@ class MyMovingAverage(int period) : IIndicator
 		};
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
-	{
-	}
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
-	void IPersistable.Save(SettingsStorage storage)
-	{
-	}
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
-	public IIndicator Clone() => null;
-	object ICloneable.Clone() => Clone();
+	public ValueTask<IIndicator> CloneAsync(CancellationToken cancellationToken) => default;
 
 	IIndicatorValue IIndicator.Process(IIndicatorValue input)
 	{

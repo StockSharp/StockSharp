@@ -3,7 +3,7 @@
 /// <summary>
 /// The chart axis.
 /// </summary>
-public interface IChartAxis : IPersistable, INotifyPropertyChangedEx, INotifyPropertyChanged, INotifyPropertyChanging
+public interface IChartAxis : IAsyncPersistable, INotifyPropertyChangedEx, INotifyPropertyChanged, INotifyPropertyChanging
 {
 	/// <summary>
 	/// Chart area.

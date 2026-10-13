@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" role="img" aria-label="GMO Coin">
+  <circle cx="14" cy="14" r="10.5" fill="none" stroke="#0868ac" stroke-width="4"/>
+  <path fill="#0868ac" d="M14 7.25a6.75 6.75 0 1 0 5.84 10.13h-5.9v-3.76h10.3A10.55 10.55 0 1 1 17.6 4.1Z"/>
+  <circle cx="22.15" cy="6.1" r="3.15" fill="#df2b35"/>
+</svg>

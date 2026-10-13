@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Ecng.Common;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;

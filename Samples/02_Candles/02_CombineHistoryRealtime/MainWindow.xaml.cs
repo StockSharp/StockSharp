@@ -1,7 +1,9 @@
 ﻿namespace StockSharp.Samples.Candles.CombineHistoryRealtime;
 
 using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 
 using Ecng.Common;
 using Ecng.Serialization;
@@ -35,6 +37,8 @@ public partial class MainWindow
 	private ChartCandleElement _candleElement;
 
 	private readonly ChannelExecutor _executor;
+	private bool _isClosing;
+	private bool _isReleased;
 
 	public MainWindow()
 	{
@@ -52,31 +56,54 @@ public partial class MainWindow
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (_fileSystem.FileExists(_connectorFile))
-		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
-		}
 
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		if (_fileSystem.FileExists(_connectorFile))
+			await _connector.LoadAsync(await _connectorFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
 	}
 
-    protected override void OnClosed(EventArgs e)
-    {
-		AsyncHelper.Run(_executor.DisposeAsync);
+	protected override async void OnClosing(CancelEventArgs e)
+	{
+		if (_isReleased)
+		{
+			base.OnClosing(e);
+			return;
+		}
 
-		base.OnClosed(e);
-    }
+		// the window stays open until the queued writes are on the disk
+		e.Cancel = true;
 
-    private void Setting_Click(object sender, RoutedEventArgs e)
+		if (_isClosing)
+			return;
+
+		_isClosing = true;
+		IsEnabled = false;
+
+		try
+		{
+			await _executor.DisposeAsync();
+		}
+		finally
+		{
+			_isReleased = true;
+
+			// a window refuses Close while it is still handling the first attempt to close it
+			await Dispatcher.Yield();
+			Close();
+		}
+	}
+
+    private async void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_fileSystem, _connectorFile);
+			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 		}
 	}
 
@@ -101,7 +128,7 @@ public partial class MainWindow
 		{
 			MarketData =
 			{
-				From = DateTime.Today.AddDays(-720),
+				From = DateTime.UtcNow.Date.AddDays(-720),
 				BuildMode = MarketDataBuildModes.LoadAndBuild,
 			}
 		};

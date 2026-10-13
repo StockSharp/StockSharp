@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Strategies;
 /// <summary>
 /// The strategy parameter.
 /// </summary>
-public interface IStrategyParam : IPersistable, INotifyPropertyChanged, IAttributesEntity
+public interface IStrategyParam : IAsyncPersistable, INotifyPropertyChanged, IAttributesEntity
 {
 	/// <summary>
 	/// Parameter identifier.
@@ -398,67 +398,64 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Id = storage.GetValue<string>(nameof(Id));
 
 		try
 		{
-			TValue getValue<TValue>()
-				=> storage.GetValue<TValue>(nameof(Value));
-
 			if (typeof(T).Is<Security>())
 			{
-				var secId = getValue<string>();
-				if (!secId.IsEmpty())
-					Value = (ServicesRegistry.TrySecurityProvider?.LookupById(secId)).To<T>();
+				var secId = storage.GetValue<string>(nameof(Value));
+
+				if (!secId.IsEmpty() && ServicesRegistry.TrySecurityProvider is { } provider)
+					Value = (await provider.LookupByIdAsync(secId.ToSecurityId(), cancellationToken)).To<T>();
 			}
 			else if (typeof(T).Is<Portfolio>())
 			{
-				var pfName = getValue<string>();
+				var pfName = storage.GetValue<string>(nameof(Value));
 				if (!pfName.IsEmpty())
 					Value = (ServicesRegistry.TryPortfolioProvider?.LookupByPortfolioName(pfName)).To<T>();
 			}
 			else
-				Value = getValue<T>();
+				Value = await storage.GetValueAsync<T>(nameof(Value), cancellationToken: cancellationToken);
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
 		{
 			ex.LogError();
 		}
 
 		CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);
-		OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
-		OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
-		OptimizeStep = storage.GetValue<SettingsStorage>(nameof(OptimizeStep))?.FromStorage();
+		OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom)) is { } optimizeFromStorage ? await optimizeFromStorage.FromStorageAsync(cancellationToken) : null;
+		OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo)) is { } optimizeToStorage ? await optimizeToStorage.FromStorageAsync(cancellationToken) : null;
+		OptimizeStep = storage.GetValue<SettingsStorage>(nameof(OptimizeStep)) is { } optimizeStepStorage ? await optimizeStepStorage.FromStorageAsync(cancellationToken) : null;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		object saveValue()
+		object value = Value switch
 		{
-			var v = Value;
-
-			return v switch
-			{
-				IPersistable ps => ps.Save(),
-				Security s => s.Id,
-				Portfolio pf => pf.Name,
-				_ => v
-			};
-		}
+			IAsyncPersistable ps => await ps.SaveAsync(cancellationToken),
+			Security s => s.Id,
+			Portfolio pf => pf.Name,
+			var v => v,
+		};
 
 		storage
 			.Set(nameof(Id), Id)
-			.Set(nameof(Value), saveValue())
+			.Set(nameof(Value), value)
 			.Set(nameof(CanOptimize), CanOptimize)
-			.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
-			.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
-			.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage());
+			.Set(nameof(OptimizeFrom), OptimizeFrom is null ? null : await OptimizeFrom.ToStorageAsync(false, cancellationToken))
+			.Set(nameof(OptimizeTo), OptimizeTo is null ? null : await OptimizeTo.ToStorageAsync(false, cancellationToken))
+			.Set(nameof(OptimizeStep), OptimizeStep is null ? null : await OptimizeStep.ToStorageAsync(false, cancellationToken));
 	}
 
 	/// <inheritdoc />

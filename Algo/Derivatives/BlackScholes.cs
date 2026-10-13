@@ -160,8 +160,18 @@ public class BlackScholes : IBlackScholes
 		if (timeToExp == null)
 			return null;
 
-		return TryRound(DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
+		return TryRound(CalcPremium(deviation.Value, assetPrice.Value, timeToExp.Value));
 	}
+
+	/// <summary>
+	/// To calculate the option premium from the model inputs already resolved by <see cref="Premium"/>.
+	/// </summary>
+	/// <param name="deviation">Standard deviation.</param>
+	/// <param name="assetPrice">Underlying asset price.</param>
+	/// <param name="timeToExp">The option period before the expiration.</param>
+	/// <returns>The option premium.</returns>
+	protected virtual decimal CalcPremium(decimal deviation, decimal assetPrice, double timeToExp)
+		=> DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice, RiskFree, Dividend, deviation, timeToExp, D1(deviation, assetPrice, timeToExp));
 
 	/// <inheritdoc />
 	public virtual decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
@@ -176,7 +186,11 @@ public class BlackScholes : IBlackScholes
 		if (timeToExp == null)
 			return null;
 
-		return TryRound(DerivativesHelper.Delta(OptionType, assetPrice.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
+		// Holding the asset until expiry forgoes what it pays out, which the premium discounts by
+		// e^(-qT) - so its slope carries the same factor.
+		var expDiv = (decimal)DerivativesHelper.ExpRate(Dividend, timeToExp.Value);
+
+		return TryRound(expDiv * DerivativesHelper.Delta(OptionType, assetPrice.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 	}
 
 	/// <inheritdoc />
@@ -193,7 +207,9 @@ public class BlackScholes : IBlackScholes
 		if (timeToExp == null)
 			return null;
 
-		return TryRound(DerivativesHelper.Gamma(assetPrice.Value, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
+		var expDiv = (decimal)DerivativesHelper.ExpRate(Dividend, timeToExp.Value);
+
+		return TryRound(expDiv * DerivativesHelper.Gamma(assetPrice.Value, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 	}
 
 	/// <inheritdoc />
@@ -209,7 +225,11 @@ public class BlackScholes : IBlackScholes
 		if (timeToExp == null)
 			return null;
 
-		return TryRound(DerivativesHelper.Vega(assetPrice.Value, timeToExp.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
+		// The premium the vega measures is discounted by the payout, so one point of volatility is
+		// worth e^(-qT) of what it adds to an asset that pays nothing out.
+		var expDiv = (decimal)DerivativesHelper.ExpRate(Dividend, timeToExp.Value);
+
+		return TryRound(expDiv * DerivativesHelper.Vega(assetPrice.Value, timeToExp.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 	}
 
 	/// <inheritdoc />
@@ -226,7 +246,7 @@ public class BlackScholes : IBlackScholes
 		if (timeToExp == null)
 			return null;
 
-		return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
+		return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 	}
 
 	/// <inheritdoc />

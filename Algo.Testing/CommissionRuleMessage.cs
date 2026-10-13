@@ -33,7 +33,7 @@ public class CommissionRuleMessage : Message
 	{
 		var clone = new CommissionRuleMessage
 		{
-			Rule = Rule?.Clone(),
+			Rule = Rule,
 			PortfolioName = PortfolioName,
 		};
 

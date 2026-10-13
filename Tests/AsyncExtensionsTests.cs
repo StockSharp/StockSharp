@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 
@@ -12,11 +12,38 @@ public class AsyncExtensionsTests : BaseTestClass
 		{
 			InMessageChannel = new PassThroughMessageChannel();
 			OutMessageChannel = new PassThroughMessageChannel();
+			TimeChange = false;
+		}
+
+		/// <summary>
+		/// The steps of a release, the way a connector derived from <see cref="Connector"/> takes part in it.
+		/// </summary>
+		public List<string> Released { get; } = [];
+
+		/// <summary>
+		/// What the connector put into its incoming channel, in order.
+		/// </summary>
+		public List<MessageTypes> Sent { get; } = [];
+
+		public void RecordWhatIsSent()
+			=> InMessageChannel.NewOutMessageAsync += (message, _) =>
+			{
+				Sent.Add(message.Type);
+				return default;
+			};
+
+		protected override async ValueTask DisposeManagedAsync()
+		{
+			Released.Add("before the connector");
+			await base.DisposeManagedAsync();
+			Released.Add("after the connector");
 		}
 	}
 
 	private class MockAdapter : MessageAdapter
 	{
+		private readonly TaskCompletionSource<long> _subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<long>();
+
 		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public Dictionary<long, OrderRegisterMessage> ActiveOrders { get; } = [];
@@ -37,6 +64,9 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || dataType == DataType.Transactions;
+
+		public Task<long> WaitForSubscriptionStarted(CancellationToken cancellationToken)
+			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
 		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
@@ -72,6 +102,8 @@ public class AsyncExtensionsTests : BaseTestClass
 						// For live subscriptions, send result now to start receiving
 						if (mdMsg.To == null)
 							await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+
+						_subscriptionStarted.TrySetResult(mdMsg.TransactionId);
 					}
 					else
 					{
@@ -224,14 +256,15 @@ public class AsyncExtensionsTests : BaseTestClass
 				await SendOutMessageAsync(mdMsg.CreateResult(), cancellationToken);
 		}
 
-		public override IMessageAdapter Clone() => new MockAsyncAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new MockAsyncAdapter(TransactionIdGenerator));
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_ConnectAsync()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -249,13 +282,16 @@ public class AsyncExtensionsTests : BaseTestClass
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
 
 		await adapter.ConnectAsync(CancellationToken);
+
+		var connectMessages = adapter.SentMessages.OfType<ConnectMessage>().ToArray();
+		HasCount(1, connectMessages);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrder_Basic()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -281,11 +317,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		connector.RegisterOrder(order);
 
 		// Wait for Pending state
-		await Task.Run(async () =>
-		{
-			while (order.State == OrderStates.None)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State != OrderStates.None, CancellationToken);
 
 		AreEqual(OrderStates.Pending, order.State);
 		AreNotEqual(0L, order.TransactionId);
@@ -294,20 +326,17 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for Active state
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State == OrderStates.Active, CancellationToken);
 
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
 
-		// Give event handlers time to process
-		await Task.Delay(100, CancellationToken);
+		// Wait for the event handlers to catch up with both updates
+		await Helper.WaitUntilAsync(() => orderReceived.Count >= 2, CancellationToken);
 
-		// Check events were received
-		orderReceived.Count.AssertEqual(1);
+		// OrderReceived fires once per real order update:
+		// None->Pending (registration) + Pending->Active = 2.
+		orderReceived.Count.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -326,39 +355,58 @@ public class AsyncExtensionsTests : BaseTestClass
 			SecurityId = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" },
 		};
 
-		var got = new List<Level1ChangeMessage>();
-		using var enumCts = new CancellationTokenSource();
+		ConcurrentQueue<Level1ChangeMessage> got = [];
+		using var enumCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var baseTime = new DateTime(2025, 1, 1, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
-		var enumerating = Task.Run(async () =>
+		async Task EnumerateAsync()
 		{
-			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(enumCts.Token))
+					got.Enqueue(l1);
 			}
-		}, CancellationToken);
-
-		// Give time for enumeration to start
-		await Task.Delay(200, CancellationToken);
-
-		var id = subMsg.TransactionId;
-
-		for (var i = 0; i < 3; i++)
-		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
-			await adapter.SimulateData(id, l1, CancellationToken);
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}
 
-		await enumerating.WithCancellation(CancellationToken);
+		var enumerating = EnumerateAsync();
+		long id;
 
-		HasCount(3, got);
+		try
+		{
+			id = await adapter.WaitForSubscriptionStarted(CancellationToken);
+			id.AssertEqual(subMsg.TransactionId);
 
-		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, CancellationToken);
+			for (var i = 0; i < expectedTimes.Length; i++)
+			{
+				var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
+				await adapter.SimulateData(id, l1, CancellationToken);
+			}
+
+			await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
+		}
+		finally
+		{
+			enumCts.Cancel();
+
+			using var cleanupCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+			var completedTask = await Task.WhenAny(enumerating, Task.Delay(Timeout.Infinite, cleanupCts.Token));
+
+			(completedTask == enumerating).AssertTrue(
+				"Live adapter subscription enumeration should stop promptly after cancellation");
+
+			await enumerating;
+		}
+
+		var received = got.ToArray();
+		HasCount(3, received);
+		received.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live adapter subscription should preserve message order without duplicates");
+
+		await Helper.WaitUntilAsync(
+			() => adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id),
+			CancellationToken);
 	}
 
 	[TestMethod]
@@ -379,25 +427,21 @@ public class AsyncExtensionsTests : BaseTestClass
 		};
 
 		var got = new List<Level1ChangeMessage>();
+		var baseTime = new DateTime(2025, 1, 2, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 2).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var run = Task.Run(async () =>
 		{
 			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(CancellationToken))
-			{
 				got.Add(l1);
-				if (got.Count >= 2)
-					break;
-			}
 		}, CancellationToken);
 
-		// wait activation
-		await Task.Delay(100, CancellationToken);
-
-		var id = subMsg.TransactionId;
+		var id = await adapter.WaitForSubscriptionStarted(CancellationToken);
+		id.AssertEqual(subMsg.TransactionId);
 
 		for (var i = 0; i < 2; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
@@ -405,13 +449,15 @@ public class AsyncExtensionsTests : BaseTestClass
 		await run.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Historical adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_SyncAdapter()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -421,50 +467,56 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 3, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
 		await started.Task.WithCancellation(CancellationToken);
 
-		// Give time for enumeration to start
-		await Task.Delay(200, CancellationToken);
+		// Wait until enumeration reached the adapter
+		await Helper.WaitUntilAsync(() => adapter.LastSubscribedId != 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live connector subscription should preserve message order without duplicates");
 
-		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id),
+			CancellationToken);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_SyncAdapter()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -487,14 +539,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for subscription to be processed
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		// Give time for subscription to fully activate
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -516,7 +561,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_AsyncAdapter()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -526,47 +571,52 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 4, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
 		await started.Task.WithCancellation(CancellationToken);
 
-		// Give time for enumeration to start
-		await Task.Delay(200, CancellationToken);
+		// Wait until enumeration reached the adapter
+		await Helper.WaitUntilAsync(() => adapter.LastSubscribedId != 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live async-adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_AsyncAdapter()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -579,36 +629,23 @@ public class AsyncExtensionsTests : BaseTestClass
 		};
 
 		var got = new List<Level1ChangeMessage>();
-		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 5, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 2).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
-			{
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(CancellationToken))
 				got.Add(l1);
-				if (got.Count >= 2)
-				{
-					enumCts.Cancel();
-					break;
-				}
-			}
 		}, CancellationToken);
 
 		// Wait for subscription to be processed
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		// Give time for subscription to fully activate
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
 		for (var i = 0; i < 2; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
@@ -618,13 +655,15 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Historical async-adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Lifecycle()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -648,6 +687,110 @@ public class AsyncExtensionsTests : BaseTestClass
 		await run.WithCancellation(CancellationToken);
 
 		adapter.SentMessages.OfType<MarketDataMessage>().Count(m => !m.IsSubscribe && m.OriginalTransactionId == id).AssertEqual(1);
+	}
+
+	/// <summary>
+	/// Emits data the way the shipped connectors do: tagged with <see cref="IOriginalTransactionIdMessage.OriginalTransactionId"/>
+	/// and nothing else.
+	/// </summary>
+	private class OriginalTransactionIdAdapter : MessageAdapter
+	{
+		public const int CandleCount = 5;
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
+		public OriginalTransactionIdAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+			this.AddSupportedCandleTimeFrames([TimeSpan.FromMinutes(5)]);
+		}
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.Disconnect:
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
+
+					if (mdMsg.IsSubscribe)
+					{
+						var time = mdMsg.From ?? DateTime.UtcNow;
+
+						for (var i = 0; i < CandleCount; i++)
+						{
+							await SendOutMessageAsync(new TimeFrameCandleMessage
+							{
+								OpenPrice = 100,
+								HighPrice = 101,
+								LowPrice = 99,
+								ClosePrice = 100.5m,
+								TotalVolume = 1000,
+								OpenTime = time.AddMinutes(5 * i),
+								State = CandleStates.Finished,
+
+								// Exactly how every shipped connector tags what it sends out.
+								OriginalTransactionId = mdMsg.TransactionId,
+							}, cancellationToken);
+						}
+
+						await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+					}
+
+					break;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Data tagged only with the original transaction id must reach the caller.
+	/// </summary>
+	/// <remarks>
+	/// Every connector in the Connectors repository tags outgoing data this way and leaves
+	/// <see cref="ISubscriptionIdMessage.SubscriptionIds"/> alone; the identifiers are filled in later by
+	/// <see cref="BasketMessageAdapter"/>. Nothing fills them when an adapter is driven directly, which is
+	/// exactly what these helpers are for, so a filter that looks only at the subscription identifiers
+	/// silently discards every message and hands back nothing but the finish.
+	/// </remarks>
+	[TestMethod]
+	public async Task SubscribeAsync_DataTaggedByOriginalTransactionId_IsDelivered()
+	{
+		var adapter = new OriginalTransactionIdAdapter(new IncrementalIdGenerator());
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = new() { SecurityCode = "TEST", BoardCode = "TEST" },
+			From = new DateTime(2026, 1, 2, 14, 30, 0, DateTimeKind.Utc),
+			To = new DateTime(2026, 1, 2, 15, 30, 0, DateTimeKind.Utc),
+			IsSubscribe = true,
+		};
+
+		var candles = new List<CandleMessage>();
+
+		await foreach (var candle in adapter
+			.ConnectAndDownloadAsync<CandleMessage>(subscription)
+			.WithCancellation(CancellationToken))
+		{
+			candles.Add(candle);
+		}
+
+		candles.Count.AssertEqual(OriginalTransactionIdAdapter.CandleCount,
+			"data tagged with the original transaction id was discarded by the subscription filter");
 	}
 
 	#region SubscribeAsync Bug Tests
@@ -695,6 +838,130 @@ public class AsyncExtensionsTests : BaseTestClass
 			(completedTask == subscribeTask).AssertTrue(
 				"SubscribeAsync should not hang when cancelled, even if adapter doesn't send SubscriptionFinishedMessage");
 		}
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_CancelBeforeInitialResponse_CompletesPromptly()
+	{
+		var adapter = new ControlledTestAdapter { AutoSendSubscriptionResponse = false };
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			To = null,
+		};
+
+		using var subCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var subscribeTask = adapter.SubscribeAsync(subscription, subCts.Token).AsTask();
+
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
+		adapter.OutMessageHandlerCount.AssertEqual(1, "SubscribeAsync must attach one response handler while waiting for the initial response");
+
+		subCts.Cancel();
+		(await adapter.WaitForUnsubscription(CancellationToken)).AssertEqual(subscription.TransactionId);
+
+		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(1), CancellationToken));
+		var completedPromptly = completedTask == subscribeTask;
+
+		// Keep a failing regression test self-cleaning: the old implementation waits forever for
+		// the initial response even after cancellation, so release that wait before asserting.
+		if (!completedPromptly)
+			await adapter.SendSubscriptionResponse(subscription.TransactionId, CancellationToken.None);
+
+		try
+		{
+			await subscribeTask;
+		}
+		catch (OperationCanceledException) when (subCts.IsCancellationRequested) { }
+
+		adapter.OutMessageHandlerCount.AssertEqual(0, "SubscribeAsync must detach its response handler after cancellation");
+		completedPromptly.AssertTrue("SubscribeAsync should complete promptly when cancelled before the initial response");
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_CancelWhileSubscribeSendPending_UnsubscribesInOrder()
+	{
+		var adapter = new ControlledTestAdapter { HoldSubscriptionSend = true };
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			To = null,
+		};
+
+		using var subCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var subscribeTask = adapter.SubscribeAsync(subscription, subCts.Token).AsTask();
+
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
+		subCts.Cancel();
+
+		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(1), CancellationToken));
+		var completedPromptly = completedTask == subscribeTask;
+		var handlerDetachedPromptly = completedPromptly && adapter.OutMessageHandlerCount == 0;
+		var unsubscribeOvertookSubscribe = adapter.HasReceivedUnsubscription;
+
+		// Always release the transport operation before asserting so a failing implementation
+		// cannot leave a pending send or its event handler in the shared test host.
+		adapter.ReleaseSubscriptionSend();
+
+		try
+		{
+			await subscribeTask;
+		}
+		catch (OperationCanceledException) when (subCts.IsCancellationRequested) { }
+
+		(await adapter.WaitForUnsubscription(CancellationToken)).AssertEqual(subscription.TransactionId);
+
+		completedPromptly.AssertTrue("SubscribeAsync should complete promptly while the adapter's subscribe send is still pending");
+		handlerDetachedPromptly.AssertTrue("SubscribeAsync must detach its response handler before returning from cancellation");
+		unsubscribeOvertookSubscribe.AssertFalse("Unsubscribe must not overtake the pending subscribe send");
+		adapter.UnsubscriptionCount.AssertEqual(1, "Cancellation should send exactly one ordered unsubscribe");
+		adapter.UnsubscribeTokenCanBeCanceled.AssertFalse("The cleanup timeout must not cancel the actual unsubscribe transport operation");
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_Historical_CancelWhileWaitingForFinished_CompletesPromptly()
+	{
+		var adapter = new ControlledTestAdapter();
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			From = DateTime.UtcNow.AddDays(-1),
+			To = DateTime.UtcNow,
+		};
+
+		using var subCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var subscribeTask = adapter.SubscribeAsync(subscription, subCts.Token).AsTask();
+
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
+		adapter.OutMessageHandlerCount.AssertEqual(1, "SubscribeAsync must keep one response handler while awaiting historical completion");
+
+		subCts.Cancel();
+		(await adapter.WaitForUnsubscription(CancellationToken)).AssertEqual(subscription.TransactionId);
+
+		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(1), CancellationToken));
+		var completedPromptly = completedTask == subscribeTask;
+
+		// Release the historical wait in the buggy implementation so the test does not leak the
+		// subscription task or its event handler when the prompt-completion assertion fails.
+		if (!completedPromptly)
+			await adapter.SendSubscriptionFinished(subscription.TransactionId, CancellationToken.None);
+
+		try
+		{
+			await subscribeTask;
+		}
+		catch (OperationCanceledException) when (subCts.IsCancellationRequested) { }
+
+		adapter.OutMessageHandlerCount.AssertEqual(0, "SubscribeAsync must detach its response handler after historical cancellation");
+		completedPromptly.AssertTrue("Historical SubscribeAsync should complete promptly when cancelled while awaiting finish");
 	}
 
 	/// <summary>
@@ -798,7 +1065,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Send some data
 		await adapter.SendLevel1Data(subscription.TransactionId, CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => items.Count > 0, CancellationToken);
 
 		// Cancel
 		cts.Cancel();
@@ -859,6 +1126,9 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Assert
 		items.Count.AssertEqual(5);
+		items.Select(m => m.TryGetDecimal(Level1Fields.LastTradePrice))
+			.SequenceEqual(Enumerable.Range(100, 5).Select(price => (decimal?)price))
+			.AssertTrue("Generic subscription should preserve Level1 prices and order");
 	}
 
 	#endregion
@@ -914,6 +1184,12 @@ public class AsyncExtensionsTests : BaseTestClass
 	private class ControlledTestAdapter : MessageAdapter
 	{
 		private readonly TaskCompletionSource<bool> _subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		private readonly TaskCompletionSource<bool> _releaseSubscriptionSend = AsyncHelper.CreateTaskCompletionSource<bool>();
+		private readonly TaskCompletionSource<long> _unsubscriptionReceived = AsyncHelper.CreateTaskCompletionSource<long>();
+		private int _unsubscriptionCount;
+		private static readonly System.Reflection.FieldInfo _outMessageHandlersField = typeof(MessageAdapter)
+			.GetField("_newOutMessageAsync", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+			?? throw new InvalidOperationException("MessageAdapter outgoing handler field was not found.");
 
 		public ControlledTestAdapter() : base(new IncrementalIdGenerator()) { }
 
@@ -922,9 +1198,20 @@ public class AsyncExtensionsTests : BaseTestClass
 		/// Set to false to manually control responses (e.g., for error testing).
 		/// </summary>
 		public bool AutoSendSubscriptionResponse { get; set; } = true;
+		public bool HoldSubscriptionSend { get; set; }
+		public bool HasReceivedUnsubscription => _unsubscriptionReceived.Task.IsCompleted;
+		public int UnsubscriptionCount => Volatile.Read(ref _unsubscriptionCount);
+		public bool UnsubscribeTokenCanBeCanceled { get; private set; }
+		public int OutMessageHandlerCount => (_outMessageHandlersField.GetValue(this) as Delegate)?.GetInvocationList().Length ?? 0;
 
 		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
 			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
+
+		public Task<long> WaitForUnsubscription(CancellationToken cancellationToken)
+			=> _unsubscriptionReceived.Task.WithCancellation(cancellationToken);
+
+		public void ReleaseSubscriptionSend()
+			=> _releaseSubscriptionSend.TrySetResult(true);
 
 		public async ValueTask SendSubscriptionResponse(long subscriptionId, CancellationToken cancellationToken)
 		{
@@ -963,11 +1250,18 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				case MarketDataMessage mdm when mdm.IsSubscribe:
 					_subscriptionStarted.TrySetResult(true);
+
+					if (HoldSubscriptionSend)
+						await _releaseSubscriptionSend.Task.NoWait();
+
 					if (AutoSendSubscriptionResponse)
 						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId }, cancellationToken);
 					break;
 
 				case MarketDataMessage mdm when !mdm.IsSubscribe:
+					UnsubscribeTokenCanBeCanceled = cancellationToken.CanBeCanceled;
+					Interlocked.Increment(ref _unsubscriptionCount);
+					_unsubscriptionReceived.TrySetResult(mdm.OriginalTransactionId);
 					// Unsubscribe - send response (not finished - finished is for subscription completion)
 					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId }, cancellationToken);
 					break;
@@ -1157,11 +1451,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel to be sent
-		await Task.Run(async () =>
-		{
-			while (adapter.LastCancel == null)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastCancel != null, CancellationToken);
 
 		// Send done after cancel
 		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
@@ -1227,6 +1517,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			count++;
 
 		AreEqual(0, count);
+		adapter.LastOrder.AssertNull("Cancelled registration must not be sent to the adapter");
 	}
 
 	[TestMethod]
@@ -1468,7 +1759,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[TestMethod]
 	public void Connector_RegisterOrderAsync_NullOrder_Throws()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 
 		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAndWaitAsync(null));
 	}
@@ -1477,7 +1768,10 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_CancelledToken_YieldsNothing()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
 		var order = new Order
 		{
 			Security = new Security { Id = "AAPL@TEST" },
@@ -1494,13 +1788,16 @@ public class AsyncExtensionsTests : BaseTestClass
 			count++;
 
 		AreEqual(0, count);
+		AreEqual(0L, adapter.LastOrderTransactionId, "Cancelled registration must not reach the connector adapter");
+		adapter.SentMessages.OfType<OrderRegisterMessage>().Any()
+			.AssertFalse("No OrderRegisterMessage should be sent for an already-cancelled token");
 	}
 
 	[TestMethod]
-	[Timeout(6000, CooperativeCancellation = true)]
+	[Timeout(30000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1522,7 +1819,15 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// track all OrderReceived events
 		var allOrderReceived = new List<Order>();
-		connector.OrderReceived += (_, o) => allOrderReceived.Add(o);
+		var bothReceived = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.OrderReceived += (_, o) =>
+		{
+			allOrderReceived.Add(o);
+
+			if (allOrderReceived.Count >= 2)
+				bothReceived.TrySetResult();
+		};
 
 		var enumTask = Task.Run(async () =>
 		{
@@ -1531,11 +1836,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for order to reach Pending state (connector processed registration)
-		await Task.Run(async () =>
-		{
-			while (order.State == OrderStates.None)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State != OrderStates.None, CancellationToken);
 
 		var transId = order.TransactionId;
 
@@ -1543,17 +1844,14 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for state change via order object
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State == OrderStates.Active, CancellationToken);
 
-		// Give connector time to process and fire events
-		await Task.Delay(100, CancellationToken);
+		// Waited for, not polled for: the order reaching Active is raised before the notification for
+		// it has been delivered, and a poll bounded by a fixed number of milliseconds is a bet on how
+		// loaded the machine is. The method's own timeout is what fails a notification that never comes.
+		await bothReceived.Task.WithCancellation(CancellationToken);
 
-		// Debug check: did OrderReceived fire?
-		allOrderReceived.Count.AssertEqual(1, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+		allOrderReceived.Count.AssertEqual(2, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// Simulate order filled
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
@@ -1562,7 +1860,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for multiple state transitions (Pending, Active, Done)
 		// Since Order is mutable, all events reference the same object with final state
-		events.Count.AssertEqual(2, "Should receive events for Active and Done states");
+		events.Count.AssertEqual(3, "Should receive events for Pending, Active and Done states");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 	}
@@ -1571,7 +1869,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1597,11 +1895,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -1618,8 +1912,8 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for state transitions AND OwnTradeReceived for trades.
 		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
-		// Active(1) + Trade1(2: order+trade) + Trade2(2: order+trade) + Done(1) = 6
-		events.Count.AssertEqual(6, "Should receive events for order states and trades");
+		// Pending(1) + Active(1) + Trade1(2: order+trade) + Trade2(2: order+trade) + Done(1) = 7
+		events.Count.AssertEqual(7, "Should receive events for order states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1639,7 +1933,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_CancellationSendsCancelOrder()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1671,11 +1965,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -1683,11 +1973,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel message to be sent
-		await Task.Run(async () =>
-		{
-			while (adapter.LastCancelMessage == null)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastCancelMessage != null, CancellationToken);
 
 		// Simulate order cancelled
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
@@ -1695,13 +1981,17 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		adapter.LastCancelMessage.AssertNotNull();
+		AreEqual(456L, adapter.LastCancelMessage.OrderId);
+		AreEqual("AAPL", adapter.LastCancelMessage.SecurityId.SecurityCode);
+		AreEqual("Test", adapter.LastCancelMessage.PortfolioName);
+		AreEqual(Sides.Buy, adapter.LastCancelMessage.Side);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_FiltersOtherOrders()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1727,11 +2017,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 		var otherTransId1 = transId + 100;
@@ -1760,8 +2046,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Verify we received events for our order only
-		// Active(1) + Trade(2: order+trade) + Done(1) = 4
-		events.Count.AssertEqual(4, "Should receive events for our order (Active, Trade, Done)");
+		// Pending(1) + Active(1) + Trade(2: order+trade) + Done(1) = 5
+		events.Count.AssertEqual(5, "Should receive events for our order (Pending, Active, Trade, Done)");
 
 		// Verify final order state - all events reference the same mutable Order
 		AreEqual(OrderStates.Done, order.State);
@@ -1780,7 +2066,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_FullLifecycle_AllStatesAndTrades()
 	{
-		var connector = new TestConnector();
+		using var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1806,11 +2092,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -1835,9 +2117,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Connector fires multiple events for order updates and trades.
-		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
-		// Pending(1) + Active(1) + Trade1(2) + Trade2(2) + Trade3(2) + Done(1) = 9
-		events.Count.AssertEqual(9, "Should receive events for states and trades");
+		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived.
+		// Two distinct Pending OrderReceived fire: the None->Pending registration and the
+		// explicit Pending execution simulated at step 1.
+		// regPending(1) + Pending(1) + Active(1) + Trade1(2) + Trade2(2) + Trade3(2) + Done(1) = 10
+		events.Count.AssertEqual(10, "Should receive events for states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1901,13 +2185,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -1972,13 +2256,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -1996,7 +2280,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for message to be received
-		await WaitForConditionAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Cancel
 		cts.Cancel();
@@ -2012,7 +2296,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}
 
 		// Verify disconnect was sent
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
@@ -2036,7 +2320,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect error
 		await adapter.SendOutMessageAsync(new ConnectMessage { Error = new InvalidOperationException("Connection failed") }, CancellationToken);
@@ -2065,13 +2349,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -2087,15 +2371,192 @@ public class AsyncExtensionsTests : BaseTestClass
 		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));
 
 		// Verify disconnect was sent (finally block should execute)
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
-	private async Task WaitForConditionAsync(Func<bool> condition, TimeSpan timeout)
+	#endregion
+
+	#region Connector release
+
+	private sealed class RecordingAdapter : MessageAdapter
 	{
-		var deadline = DateTime.UtcNow + timeout;
-		while (!condition() && DateTime.UtcNow < deadline)
-			await Task.Delay(10, CancellationToken);
+		private readonly TaskCompletionSource _disconnectGate;
+
+		public RecordingAdapter(IdGenerator transactionIdGenerator, bool holdDisconnect)
+			: base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+
+			if (holdDisconnect)
+				_disconnectGate = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		}
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
+		public ConcurrentQueue<MessageTypes> Received { get; } = [];
+
+		public void ReleaseDisconnect() => _disconnectGate.TrySetResult();
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			Received.Enqueue(message.Type);
+
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.Disconnect:
+					if (_disconnectGate is not null)
+						await _disconnectGate.Task;
+
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+					break;
+			}
+		}
+
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new RecordingAdapter(TransactionIdGenerator, _disconnectGate is not null));
+	}
+
+	private async Task<(TestConnector connector, RecordingAdapter adapter)> CreateConnectedAsync(bool holdDisconnect)
+	{
+		var connector = new TestConnector();
+		var adapter = new RecordingAdapter(connector.TransactionIdGenerator, holdDisconnect);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+		connector.ConnectionState.AssertEqual(ConnectionStates.Connected);
+
+		adapter.Received.Clear();
+
+		return (connector, adapter);
+	}
+
+	/// <summary>
+	/// The release sends a disconnect and then waits for the adapter to take it. Awaited, it has to
+	/// stay pending for as long as the adapter holds the disconnect - not block the caller, and not
+	/// report the connector released before it is.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_WaitsForWhatTheReleaseSends()
+	{
+		var (connector, adapter) = await CreateConnectedAsync(holdDisconnect: true);
+
+		var releasing = connector.DisposeAsync().AsTask();
+
+		releasing.IsCompleted.AssertFalse("the adapter has not let the disconnect through yet");
+		connector.IsDisposed.AssertFalse("a connector whose release is still going on is not released");
+		connector.IsDisposeStarted.AssertTrue();
+
+		// a release asked for again while the first one is going on has nothing to do and nothing to wait for
+		connector.Dispose();
+		connector.Released.Count.AssertEqual(1, "the release that is going on must not be started a second time");
+
+		adapter.ReleaseDisconnect();
+		await releasing.WaitAsync(CancellationToken);
+
+		connector.IsDisposed.AssertTrue();
+		connector.Released.Count.AssertEqual(2, "the release has to run once");
+		adapter.Received.ToArray().AssertEqual(new[] { MessageTypes.Disconnect, MessageTypes.Reset },
+			"the connector disconnects and then tells its adapters to take themselves apart");
+	}
+
+	/// <summary>
+	/// Blocking and awaiting are two ways of waiting for one release: a class derived from the connector
+	/// releases what is its own in a single place, and both ways have to go through it and send the same.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_Dispose_BlockingAndAwaitingRunTheSameRelease()
+	{
+		var (awaited, awaitedAdapter) = await CreateConnectedAsync(holdDisconnect: false);
+		var (blocked, blockedAdapter) = await CreateConnectedAsync(holdDisconnect: false);
+
+		await awaited.DisposeAsync();
+		blocked.Dispose();
+
+		awaited.IsDisposed.AssertTrue();
+		blocked.IsDisposed.AssertTrue();
+
+		var expected = new[] { "before the connector", "after the connector" };
+
+		awaited.Released.ToArray().AssertEqual(expected, "the awaited release has to run what the derived connector releases");
+		blocked.Released.ToArray().AssertEqual(expected, "the blocking release has to run what the derived connector releases");
+
+		awaitedAdapter.Received.ToArray().AssertEqual(blockedAdapter.Received.ToArray(), "both releases have to send the same messages");
+	}
+
+	/// <summary>
+	/// A connector is released once, whichever way is asked first and however many times.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_Dispose_ReleasesOnce()
+	{
+		var (awaitedFirst, _) = await CreateConnectedAsync(holdDisconnect: false);
+
+		await awaitedFirst.DisposeAsync();
+		await awaitedFirst.DisposeAsync();
+		awaitedFirst.Dispose();
+
+		awaitedFirst.Released.Count.AssertEqual(2, "the release has to run once");
+
+		var (blockedFirst, _) = await CreateConnectedAsync(holdDisconnect: false);
+
+		blockedFirst.Dispose();
+		await blockedFirst.DisposeAsync();
+
+		blockedFirst.Released.Count.AssertEqual(2, "the release has to run once");
+	}
+
+	/// <summary>
+	/// A connector that was never connected has nothing to disconnect from: all its release sends is
+	/// the message that takes the adapters apart. A connected one sends the disconnect before it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_NotConnected_SendsNoDisconnect()
+	{
+		var idle = new TestConnector();
+		idle.RecordWhatIsSent();
+
+		await idle.DisposeAsync();
+
+		idle.IsDisposed.AssertTrue();
+		idle.Sent.ToArray().AssertEqual(new[] { MessageTypes.Reset }, "a connector that is not connected only takes its adapters apart");
+
+		var (connected, _) = await CreateConnectedAsync(holdDisconnect: false);
+		connected.RecordWhatIsSent();
+
+		await connected.DisposeAsync();
+
+		// a connected one takes its subscriptions down and disconnects before that
+		connected.Sent.Count(t => t == MessageTypes.Disconnect).AssertEqual(1);
+		connected.Sent.Count(t => t == MessageTypes.Reset).AssertEqual(1);
+		connected.Sent[^1].AssertEqual(MessageTypes.Reset, "taking the adapters apart is the last thing the release sends");
+	}
+
+	/// <summary>
+	/// A strategy or an application holds a connector by <see cref="IConnector"/> and has to be able to
+	/// release it by await without knowing the class behind it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_HeldByItsInterface_ReleasesByAwait()
+	{
+		var (connector, _) = await CreateConnectedAsync(holdDisconnect: false);
+		IConnector held = connector;
+
+		await held.DisposeAsync();
+
+		connector.IsDisposed.AssertTrue();
+		connector.Released.Count.AssertEqual(2, "the release has to go through the chain of the connector");
 	}
 
 	#endregion

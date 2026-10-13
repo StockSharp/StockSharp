@@ -139,6 +139,20 @@ public class ParentChildMap : IParentChildMap
 	}
 
 	/// <inheritdoc />
+	public int RemoveMappings(long parentId)
+	{
+		using (_syncObject.EnterScope())
+		{
+			var childIds = FilterByParent(parentId).Select(p => p.Key).ToArray();
+
+			foreach (var childId in childIds)
+				_childToParentIds.Remove(childId);
+
+			return childIds.Length;
+		}
+	}
+
+	/// <inheritdoc />
 	public void Clear()
 	{
 		using (_syncObject.EnterScope())

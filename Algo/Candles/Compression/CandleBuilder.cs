@@ -68,6 +68,8 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 	/// <param name="volSide">The side of the volume to be added to the candle.</param>
 	protected static void AddVolume(TCandleMessage candle, decimal volume, Sides? volSide)
 	{
+		var hadOnlyKnownSideVolume = candle.TotalVolume == (candle.BuyVolume ?? 0) + (candle.SellVolume ?? 0);
+
 		candle.TotalVolume += volume;
 
 		switch (volSide)
@@ -81,6 +83,9 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) - volume;
 				break;
 		}
+
+		if (hadOnlyKnownSideVolume && volSide != null)
+			candle.TotalVolume = (candle.BuyVolume ?? 0) + (candle.SellVolume ?? 0);
 	}
 
 	/// <summary>
@@ -132,7 +137,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				subscription.VolumeProfile = volumeProfile = new();
+				subscription.VolumeProfile = volumeProfile = new(subscription.Message.PriceStep);
 				volumeProfile.Update(transform);
 
 				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
@@ -298,35 +303,6 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		return currentCandle;
 	}
 
-	///// <summary>
-	///// To finish the candle forcibly.
-	///// </summary>
-	///// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	///// <param name="candleMessage">Candle.</param>
-	//protected void ForceFinishCandle(MarketDataMessage message, CandleMessage candleMessage)
-	//{
-	//	var info = _info.TryGetValue(message);
-
-	//	if (info == null)
-	//		return;
-
-	//	var isNone = candleMessage.State == CandleStates.None;
-
-	//	// если успела прийти новая свеча
-	//	if (isNone && info.CurrentCandle != null)
-	//		return;
-
-	//	if (!isNone && info.CurrentCandle != candleMessage)
-	//		return;
-
-	//	info.CurrentCandle = isNone ? null : candleMessage;
-
-	//	if (!isNone)
-	//		candleMessage.State = CandleStates.Finished;
-
-	//	RaiseProcessing(series, candleMessage);
-	//}
-
 	/// <summary>
 	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
 	/// </summary>
@@ -376,132 +352,53 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<TimeFrameCandleMessage>(exchangeInfoProvider)
 {
-	//private sealed class TimeoutInfo : Disposable
-	//{
-	//	private readonly MarketTimer _timer;
-	//	private DateTime _emptyCandleTime;
-	//	private readonly TimeSpan _timeFrame;
-	//	private readonly TimeSpan _offset;
-	//	private DateTime _nextTime;
-
-	//	public TimeoutInfo(CandleSeries series, TimeFrameCandleBuilder builder)
-	//	{
-	//		if (series == null)
-	//			throw new ArgumentNullException(nameof(series));
-
-	//		if (builder == null)
-	//			throw new ArgumentNullException(nameof(builder));
-
-	//		_timeFrame = (TimeSpan)series.Arg;
-	//		_offset = TimeSpan.FromTicks((long)((decimal)((decimal)_timeFrame.Ticks + builder.Timeout)));
-
-	//		var security = series.Security;
-	//		var connector = security.Connector;
-
-	//		var isFirstTime = true;
-
-	//		_timer = new MarketTimer(connector, () =>
-	//		{
-	//			if (isFirstTime)
-	//			{
-	//				isFirstTime = false;
-
-	//				var bounds = _timeFrame.GetCandleBounds(security);
-
-	//				_emptyCandleTime = bounds.Min;
-	//				_nextTime = GetLimitTime(bounds.Min);
-
-	//				return;
-	//			}
-
-	//			if (security.GetMarketTime() >= _nextTime)
-	//			{
-	//				_nextTime += _timeFrame;
-
-	//				var candle = LastCandle;
-
-	//				if (candle == null)
-	//				{
-	//					candle = new TimeFrameCandle
-	//					{
-	//						Security = security,
-	//						TimeFrame = _timeFrame,
-	//						OpenTime = _emptyCandleTime,
-	//						CloseTime = _emptyCandleTime + _timeFrame,
-	//					};
-
-	//					_emptyCandleTime += _timeFrame;
-
-	//					if (!builder.GenerateEmptyCandles)
-	//						return;
-	//				}
-
-	//				builder.ForceFinishCandle(series, candle);
-	//			}
-	//		}).Interval(_timeFrame).Start();
-	//	}
-
-	//	private TimeFrameCandle _lastCandle;
-
-	//	public TimeFrameCandle LastCandle
-	//	{
-	//		private get { return _lastCandle; }
-	//		set
-	//		{
-	//			_lastCandle = value;
-	//			_emptyCandleTime = value.OpenTime + _timeFrame;
-	//			_nextTime = GetLimitTime(value.OpenTime);
-	//		}
-	//	}
-
-	//	private DateTime GetLimitTime(DateTime currentCandleTime)
-	//	{
-	//		return currentCandleTime + _offset;
-	//	}
-
-	//	protected override void DisposeManaged()
-	//	{
-	//		base.DisposeManaged();
-	//		_timer.Dispose();
-	//	}
-	//}
-
-	//private readonly SynchronizedDictionary<CandleSeries, TimeoutInfo> _timeoutInfos = new SynchronizedDictionary<CandleSeries, TimeoutInfo>();
-
 	/// <summary>
 	/// Whether to create empty candles (<see cref="CandleStates.None"/>) in the lack of trades. The default mode is enabled.
 	/// </summary>
 	public bool GenerateEmptyCandles { get; set; } = true;
 
-	private Unit _timeout = UnitHelper.Percents(10);
-
-	/// <summary>
-	/// The time shift from the time frame end after which a signal is sent to close the unclosed candle forcibly. The default is 10% of the time frame.
-	/// </summary>
-	public Unit Timeout
+	/// <inheritdoc />
+	protected override IEnumerable<TimeFrameCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
-		get => _timeout;
-		set
+		var current = (TimeFrameCandleMessage)subscription.CurrentCandle;
+
+		if (current is not null && transform.Time < current.OpenTime)
+			yield break;
+
+		var emptyFrom = current?.OpenTime + current?.TypedArg;
+
+		foreach (var candle in base.OnProcess(subscription, transform))
 		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
+			yield return candle;
 
-			if (value < 0)
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.OffsetValueIncorrect);
+			if (!GenerateEmptyCandles || current is null || candle != current || candle.State != CandleStates.Finished)
+				continue;
 
-			_timeout = value;
+			var (zone, time) = GetTimeZone(subscription);
+			var nextOpen = current.TypedArg.GetCandleBounds(transform.Time, zone, time).Min;
+
+			for (var openTime = emptyFrom.Value; openTime < nextOpen; openTime += current.TypedArg)
+			{
+				yield return new TimeFrameCandleMessage
+				{
+					SecurityId = current.SecurityId,
+					TypedArg = current.TypedArg,
+					BuildFrom = current.BuildFrom,
+					OpenTime = openTime,
+					CloseTime = openTime + current.TypedArg,
+					HighTime = openTime,
+					LowTime = openTime,
+					OpenPrice = current.ClosePrice,
+					HighPrice = current.ClosePrice,
+					LowPrice = current.ClosePrice,
+					ClosePrice = current.ClosePrice,
+					TotalTicks = 0,
+					LocalTime = transform.Time,
+					State = CandleStates.None,
+				};
+			}
 		}
 	}
-
-	///// <summary>
-	///// Reset state.
-	///// </summary>
-	//public override void Reset()
-	//{
-	//	base.Reset();
-
-	//	_timeoutInfos.Clear();
-	//}
 
 	/// <inheritdoc />
 	protected override TimeFrameCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
@@ -531,7 +428,7 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 	/// <inheritdoc />
 	protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, TimeFrameCandleMessage candle, ICandleBuilderValueTransform transform)
 	{
-		return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TypedArg) <= transform.Time;
+		return (candle.OpenTime + candle.TypedArg) <= transform.Time;
 	}
 }
 
@@ -763,7 +660,7 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 
 		if (subscription.Message.IsCalcVolumeProfile)
 		{
-			subscription.VolumeProfile = new();
+			subscription.VolumeProfile = new(subscription.Message.PriceStep);
 			candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 		}
 
@@ -782,6 +679,9 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RenkoCandleMessage>(exchangeInfoProvider)
 {
+	private const int VolumeScale = 8;
+	private const int MaxCandlesPerValue = 10_000;
+
 	/// <inheritdoc />
 	protected override IEnumerable<RenkoCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -811,11 +711,31 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				subscription.VolumeProfile = new();
+				subscription.VolumeProfile = new(subscription.Message.PriceStep);
 				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 			}
 
 			return candle;
+		}
+
+		void UpdateRenkoCandle(RenkoCandleMessage candle, decimal closePrice, decimal? updateVolume)
+		{
+			IncrementTicks(candle);
+
+			candle.ClosePrice = closePrice;
+			candle.CloseVolume = updateVolume;
+			candle.CloseTime = time;
+			candle.OpenInterest = oi;
+			candle.HighPrice = candle.HighPrice.Max(closePrice);
+			candle.LowPrice = candle.LowPrice.Min(closePrice);
+
+			if (updateVolume is decimal v)
+			{
+				candle.TotalPrice += v * closePrice;
+				AddVolume(candle, v, side);
+			}
+
+			subscription.VolumeProfile?.Update(closePrice, updateVolume, side);
 		}
 
 		var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
@@ -824,39 +744,69 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 		var priceChange = price - currentCandle.OpenPrice;
 		var boxSizeAbs = (decimal)((price + boxSize) - price);
-		var boxesMoved = ((int)(priceChange / boxSizeAbs)).Abs();
+
+		// Brick prices are snapped onto the security price grid, so a box finer than that grid
+		// rounds every new brick back onto its own open and the series can never advance: each
+		// following tick then re-derives the same box count from the same stale open, which makes
+		// brick production quadratic in the number of ticks. Clamp the box to the finest movement
+		// the grid can express.
+		if (subscription.Message.PriceStep is decimal priceStep && priceStep > 0 && boxSizeAbs < priceStep)
+			boxSizeAbs = priceStep;
+
+		if (boxSizeAbs <= 0)
+			throw new ArgumentOutOfRangeException(nameof(boxSize), boxSize, LocalizedStrings.InvalidValue);
+
+		var absoluteChange = priceChange.Abs();
+		var canReachLimit = boxSizeAbs <= decimal.MaxValue / MaxCandlesPerValue;
+		var isTruncated = canReachLimit && absoluteChange >= boxSizeAbs * MaxCandlesPerValue;
+		var boxesMoved = isTruncated
+			? MaxCandlesPerValue - 1
+			: (int)decimal.Floor(absoluteChange / boxSizeAbs);
 
 		if (boxesMoved >= 1)
 		{
 			var sign = priceChange.Sign();
+			var remainingParts = boxesMoved + 1;
+			var remainingVolume = volume;
+
+			decimal? TakeVolumePart()
+			{
+				if (remainingVolume is not decimal v)
+					return null;
+
+				if (remainingParts == 1)
+					return v;
+
+				var part = (v / remainingParts).Round(VolumeScale);
+				remainingVolume = v - part;
+				remainingParts--;
+
+				return part;
+			}
 
 			for (var i = 0; i < boxesMoved; i++)
 			{
+				var closePrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
+
+				// Snapping rounds the brick back onto its own open when the box is finer than the
+				// price grid - advance by the clamped box so the series always moves forward.
+				if (closePrice == currentCandle.OpenPrice)
+					closePrice = currentCandle.OpenPrice + boxSizeAbs * sign;
+
+				UpdateRenkoCandle(currentCandle, closePrice, TakeVolumePart());
 				currentCandle.State = CandleStates.Finished;
-				subscription.VolumeProfile?.Update(price, volume, side);
 				yield return currentCandle;
 
-				var openPrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
-				currentCandle = GenerateNewCandle(openPrice, openPrice);
+				currentCandle = GenerateNewCandle(closePrice, closePrice);
 			}
+
+			if (isTruncated)
+				currentCandle = GenerateNewCandle(price, price);
+
+			volume = TakeVolumePart();
 		}
 
-		IncrementTicks(currentCandle);
-
-		currentCandle.ClosePrice = price;
-		currentCandle.CloseVolume = volume;
-		currentCandle.CloseTime = time;
-		currentCandle.OpenInterest = oi;
-		currentCandle.HighPrice = currentCandle.HighPrice.Max(price);
-		currentCandle.LowPrice = currentCandle.LowPrice.Min(price);
-
-		if (volume is decimal v)
-		{
-			currentCandle.TotalPrice += v * price;
-			AddVolume(currentCandle, v, side);
-		}
-
-		subscription.VolumeProfile?.Update(price, volume, side);
+		UpdateRenkoCandle(currentCandle, price, volume);
 		yield return currentCandle;
 	}
 }
@@ -894,7 +844,11 @@ public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 
 		var currentCandle = subscription.CurrentCandle;
 		if (currentCandle != null)
+		{
 			candle.OpenPrice = (currentCandle.OpenPrice + currentCandle.ClosePrice) / 2M;
+			candle.HighPrice = candle.HighPrice.Max(candle.OpenPrice).Max(candle.ClosePrice);
+			candle.LowPrice = candle.LowPrice.Min(candle.OpenPrice).Min(candle.ClosePrice);
+		}
 
 		return candle;
 	}
@@ -911,5 +865,7 @@ public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 		base.UpdateCandle(subscription, candle, transform);
 
 		candle.ClosePrice = (candle.OpenPrice + candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 4M;
+		candle.HighPrice = candle.HighPrice.Max(candle.OpenPrice).Max(candle.ClosePrice);
+		candle.LowPrice = candle.LowPrice.Min(candle.OpenPrice).Min(candle.ClosePrice);
 	}
 }

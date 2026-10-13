@@ -47,27 +47,31 @@ public class GatorHistogram : BaseIndicator
 	/// <summary>
 	/// Create a copy of <see cref="GatorHistogram"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IIndicator Clone()
+	public override async ValueTask<IIndicator> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new GatorHistogram(Line1.TypedClone(), Line2.TypedClone(), _isNegative) { Name = Name };
+		var line1 = (AlligatorLine)await Line1.CloneAsync(cancellationToken);
+		var line2 = (AlligatorLine)await Line2.CloneAsync(cancellationToken);
+
+		return new GatorHistogram(line1, line2, _isNegative) { Name = Name };
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Line1.LoadIfNotNull(storage, "line1");
-		Line2.LoadIfNotNull(storage, "line2");
+		await Line1.LoadIfNotNullAsync(storage, "line1", cancellationToken);
+		await Line2.LoadIfNotNullAsync(storage, "line2", cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue("line1", Line1.Save());
-		storage.SetValue("line2", Line2.Save());
+		storage.SetValue("line1", await Line1.SaveAsync(cancellationToken));
+		storage.SetValue("line2", await Line2.SaveAsync(cancellationToken));
 	}
 }

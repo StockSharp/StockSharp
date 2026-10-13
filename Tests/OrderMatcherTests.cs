@@ -23,6 +23,65 @@ public class OrderMatcherTests : BaseTestClass
 	};
 
 	[TestMethod]
+	public void Match_AfterOldestCancellation_NewOrderStaysBehindRemainingOrder()
+	{
+		var book = new OrderBook(CreateSecId());
+		var matcher = new OrderMatcher();
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 90, Side = Sides.Buy, Price = 100, Balance = 5, Volume = 5 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 2, Side = Sides.Buy, Price = 100, Balance = 3, Volume = 3 });
+		IsTrue(book.RemoveQuote(90, Sides.Buy, 100));
+		book.AddQuote(new EmulatorOrder { TransactionId = 3, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		var result = matcher.Match(new EmulatorOrder
+		{
+			TransactionId = 999,
+			Side = Sides.Sell,
+			Price = 100,
+			Balance = 3,
+			Volume = 3,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+		}, book, DefaultSettings);
+
+		AreEqual(0m, result.RemainingVolume);
+		var resting = book.GetOrdersAtPrice(Sides.Buy, 100).ToArray();
+		AreEqual(1, resting.Length);
+		AreEqual(3L, resting[0].TransactionId);
+		AreEqual(7m, resting[0].Balance);
+	}
+
+	[TestMethod]
+	public void Match_AfterMiddleCancellation_NewOrderStaysBehindOlderOrders()
+	{
+		var book = new OrderBook(CreateSecId());
+		var matcher = new OrderMatcher();
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 90, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 2, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 4, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		IsTrue(book.RemoveQuote(2, Sides.Buy, 100));
+		book.AddQuote(new EmulatorOrder { TransactionId = 3, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+
+		var result = matcher.Match(new EmulatorOrder
+		{
+			TransactionId = 999,
+			Side = Sides.Sell,
+			Price = 100,
+			Balance = 2,
+			Volume = 2,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+		}, book, DefaultSettings);
+
+		AreEqual(0m, result.RemainingVolume);
+		var resting = book.GetOrdersAtPrice(Sides.Buy, 100).ToArray();
+		AreEqual(1, resting.Length);
+		AreEqual(3L, resting[0].TransactionId);
+		AreEqual(1m, resting[0].Balance);
+	}
+
+	[TestMethod]
 	public void Match_LimitBuy_BelowBestAsk_NoMatch()
 	{
 		var book = CreateBookWithSpread();
@@ -201,7 +260,7 @@ public class OrderMatcherTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Match_MarketOrder_NoLiquidity_NoMatch()
+	public void Match_MarketOrder_NoLiquidity_IsRefusedWithAReason()
 	{
 		var book = new OrderBook(CreateSecId()); // Empty book
 		var matcher = new OrderMatcher();
@@ -220,7 +279,73 @@ public class OrderMatcherTests : BaseTestClass
 		IsFalse(result.HasTrades);
 		AreEqual(5m, result.RemainingVolume);
 		IsFalse(result.ShouldPlaceInBook);
+
+		// A market order names no price, so the book is the only thing that can give it one, and the
+		// matcher is the one place that knows this order never reached a market at all. A clean Done
+		// carries that knowledge nowhere: it is the same answer a fully filled order gets, and the
+		// caller cannot tell the two apart from the result alone. Refusal is the answer the matcher
+		// already has a way to state - it is how a post-only order that would cross is turned away.
+		IsTrue(result.IsRejected,
+			$"an empty book gave this order no market to take from, yet the matcher answered a plain {result.FinalState}");
+		IsFalse(result.RejectionReason.IsEmpty(), "and a refusal that states no reason leaves the caller where it started");
+	}
+
+	[TestMethod]
+	public void Match_MarketOrder_OnlyOwnSideInBook_IsRefusedWithAReason()
+	{
+		// Bids, and nothing offered: a buyer takes from the asks, so this book offers it nothing.
+		var book = new OrderBook(CreateSecId());
+		book.UpdateLevel(Sides.Buy, 100, 10);
+
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Balance = 5,
+			Volume = 5,
+			OrderType = OrderTypes.Market,
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		IsFalse(result.HasTrades);
+		AreEqual(5m, result.RemainingVolume);
+
+		// The side the order takes from is the only side that counts. Reading "the book holds quotes"
+		// as "there is a market" is what lets this case through while the empty book is caught.
+		IsTrue(result.IsRejected,
+			$"only the buyer's own side is quoted, so there is nothing to buy from, yet the matcher answered a plain {result.FinalState}");
+		IsFalse(result.RejectionReason.IsEmpty(), "and a refusal that states no reason leaves the caller where it started");
+	}
+
+	[TestMethod]
+	public void Match_MarketOrder_PartialLiquidity_IsNotRefused()
+	{
+		var book = CreateBookWithSpread(bid: 100, ask: 101, volume: 3);
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Balance = 10, // Wants ten, three are offered
+			Volume = 10,
+			OrderType = OrderTypes.Market,
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		// The edge a refusal must not swallow: this order did find a market and did trade in it. Its
+		// unfillable remainder rests nowhere and is cancelled with the order, which is the venue's
+		// answer rather than a failure.
+		IsTrue(result.HasTrades);
+		AreEqual(3m, result.Trades.Sum(t => t.Volume));
+		AreEqual(7m, result.RemainingVolume);
+		IsFalse(result.ShouldPlaceInBook);
 		AreEqual(OrderStates.Done, result.FinalState);
+		IsFalse(result.IsRejected, $"part of this order traded, so it was not refused: {result.RejectionReason}");
 	}
 
 	[TestMethod]
@@ -270,6 +395,74 @@ public class OrderMatcherTests : BaseTestClass
 		AreEqual(10m, result.RemainingVolume); // Full volume rejected
 		AreEqual(OrderStates.Done, result.FinalState);
 		IsFalse(result.ShouldPlaceInBook);
+
+		// FOK contract: an order that cannot be filled completely must be cancelled
+		// without any market impact. The ask@101 liquidity must be left untouched.
+		AreEqual(3m, book.GetVolumeAtPrice(Sides.Sell, 101));
+		IsNotNull(book.BestAsk);
+		AreEqual(101m, book.BestAsk.Value.price);
+		AreEqual(3m, book.BestAsk.Value.volume);
+	}
+
+	[TestMethod]
+	public void Match_MarketFOK_PartialLiquidity_KillsWithoutTouchingTheBook()
+	{
+		var book = CreateBookWithSpread(bid: 100, ask: 101, volume: 3);
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 0, // Market order, no price
+			Balance = 10, // Needs 10, only 3 offered
+			Volume = 10,
+			OrderType = OrderTypes.Market,
+			TimeInForce = TimeInForce.MatchOrCancel, // FOK
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		// Fill-or-kill is a property of the order, not of the price it names: a market order the book
+		// cannot fill in full is killed whole, exactly as the limit FOK path kills it. Anything else
+		// hands the caller a part fill it explicitly refused to take.
+		IsFalse(result.HasTrades);
+		AreEqual(10m, result.RemainingVolume);
+		AreEqual(OrderStates.Done, result.FinalState);
+		IsFalse(result.ShouldPlaceInBook);
+
+		// Killed means no market impact: the three lots offered are still offered.
+		AreEqual(3m, book.GetVolumeAtPrice(Sides.Sell, 101));
+		IsNotNull(book.BestAsk);
+		AreEqual(3m, book.BestAsk.Value.volume);
+	}
+
+	[TestMethod]
+	public void Match_MarketFOK_FullLiquidity_FillsEntirely()
+	{
+		var book = CreateBookWithSpread(bid: 100, ask: 101, volume: 10);
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 0, // Market order, no price
+			Balance = 10, // Exactly what the ask offers
+			Volume = 10,
+			OrderType = OrderTypes.Market,
+			TimeInForce = TimeInForce.MatchOrCancel, // FOK
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		// The other half of the same contract: fill-or-kill on a market order that the book can fill
+		// in full has to fill it, not be refused for naming no price.
+		IsTrue(result.HasTrades);
+		AreEqual(0m, result.RemainingVolume);
+		AreEqual(OrderStates.Done, result.FinalState);
+		IsFalse(result.ShouldPlaceInBook);
+		AreEqual(10m, result.Trades.Sum(t => t.Volume));
 	}
 
 	[TestMethod]
@@ -405,6 +598,14 @@ public class OrderMatcherTests : BaseTestClass
 		AreEqual(5m, result.Trades[0].Volume);
 		AreEqual(102m, result.Trades[1].Price);
 		AreEqual(7m, result.Trades[1].Volume);
+
+		// Level 101 is fully consumed and must be removed from the book.
+		// No ghost empty level should remain: best ask is now 102 with the
+		// untouched remainder (10 - 7 = 3).
+		IsFalse(book.HasLevel(Sides.Sell, 101));
+		IsNotNull(book.BestAsk);
+		AreEqual(102m, book.BestAsk.Value.price);
+		AreEqual(3m, book.BestAsk.Value.volume);
 	}
 
 	[TestMethod]

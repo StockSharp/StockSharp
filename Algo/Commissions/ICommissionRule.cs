@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Commissions;
 /// <summary>
 /// The commission calculating rule interface.
 /// </summary>
-public interface ICommissionRule : IPersistable
+public interface ICommissionRule : IAsyncPersistable
 {
 	/// <summary>
 	/// Title.
@@ -16,6 +16,11 @@ public interface ICommissionRule : IPersistable
 	Unit Value { get; }
 
 	/// <summary>
+	/// Lower bound on a charge this rule produces. Zero means no bound.
+	/// </summary>
+	decimal Min { get; }
+
+	/// <summary>
 	/// To reset the state.
 	/// </summary>
 	void Reset();
@@ -24,8 +29,9 @@ public interface ICommissionRule : IPersistable
 	/// To calculate commission.
 	/// </summary>
 	/// <param name="message">The message containing the information about the order or own trade.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
-	decimal? Process(ExecutionMessage message);
+	ValueTask<decimal?> ProcessAsync(ExecutionMessage message, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -63,6 +69,28 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 		}
 	}
 
+	private decimal _min;
+
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MinimumKey,
+		Description = LocalizedStrings.MinCommissionKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public decimal Min
+	{
+		get => _min;
+		set
+		{
+			if (value < 0m)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_min = value;
+			NotifyChanged();
+		}
+	}
+
 	/// <summary>
 	/// Get title.
 	/// </summary>
@@ -93,24 +121,51 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	}
 
 	/// <inheritdoc />
-	public abstract decimal? Process(ExecutionMessage message);
+	public async ValueTask<decimal?> ProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+	{
+		var value = await OnProcessAsync(message, cancellationToken);
+
+		// A rule that says nothing charges nothing, and the bound must not turn that into a
+		// charge. Applied only when there is one, so a rebate expressed as a negative value is
+		// not raised to zero by a rule that has no minimum.
+		if (value is not decimal charge || Min <= 0m || charge >= Min)
+			return value;
+
+		return Min;
+	}
+
+	/// <summary>
+	/// To calculate commission, before <see cref="Min"/> is applied.
+	/// </summary>
+	/// <param name="message">The message containing the information about the order or own trade.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+	protected abstract ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		Value = storage.GetValue<Unit>(nameof(Value));
+		Value = await storage.GetValueAsync<Unit>(nameof(Value), cancellationToken: cancellationToken);
+		Min = storage.GetValue(nameof(Min), Min);
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Value), Value);
+		storage.SetValue(nameof(Min), Min);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>

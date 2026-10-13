@@ -74,7 +74,7 @@ public abstract class PerPeriodBaseTradeParameter(StatisticParameterTypes type) 
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set("CurrStart", _currStart)
@@ -82,16 +82,16 @@ public abstract class PerPeriodBaseTradeParameter(StatisticParameterTypes type) 
 			.Set("CurrCount", _currCount)
 		;
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_currStart = storage.GetValue<DateTime>("CurrStart");
 		_periodsCount = storage.GetValue<int>("PeriodsCount");
 		_currCount = storage.GetValue<int>("CurrCount");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

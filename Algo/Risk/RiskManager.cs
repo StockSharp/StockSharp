@@ -41,29 +41,37 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var rules = new List<IRiskRule>();
+
+		foreach (var s in storage.GetValue<SettingsStorage[]>(nameof(Rules)))
+			rules.Add(await s.LoadEntireAsync<IRiskRule>(cancellationToken));
+
 		Rules.Clear();
-		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<IRiskRule>()));
+		Rules.AddRange(rules);
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
+		var rules = new List<SettingsStorage>();
 
-		base.Save(storage);
+		foreach (var rule in Rules)
+			rules.Add(await rule.SaveEntireAsync(false, cancellationToken));
+
+		storage.SetValue(nameof(Rules), rules.ToArray());
+
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public IRiskManager Clone()
+	public async ValueTask<IRiskManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new RiskManager();
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

@@ -71,7 +71,7 @@ static class Program
 			Console.WriteLine($"Downloaded [{secMsg.SecurityId}]");
 		}
 
-		var securities = securityStorage.LookupAll();
+		var securities = await securityStorage.LookupAllAsync().ToArrayAsync(token);
 
 		foreach (var sec in securities)
 		{

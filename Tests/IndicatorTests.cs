@@ -1,24 +1,24 @@
 ﻿namespace StockSharp.Tests;
 
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-using Ecng.Reflection;
-
-using StockSharp.Algo.Candles.Compression;
-using StockSharp.Algo.Gpu;
-using StockSharp.Algo.Gpu.Indicators;
-using DataType = StockSharp.Messages.DataType;
-
+/// <summary>
+/// Indicator tests. Split by theme into IndicatorTests.*.cs; this part holds the value and comparison helpers they share.
+/// </summary>
 [TestClass]
-public class IndicatorTests : BaseTestClass
+public partial class IndicatorTests : BaseTestClass
 {
-	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
+	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10, Random rnd = null)
 	{
 		var time = now + tf.Multiply(idx);
 
+		// When a seeded Random is supplied the value stream becomes reproducible; otherwise fall
+		// back to the global RandomGen. RandomGen.GetInt(min, max) has an inclusive upper bound,
+		// so the local path adds 1 to match it exactly.
 		int getRnd()
-			=> diffLimit > 0 ? RandomGen.GetInt(1, diffLimit) : RandomGen.GetInt(diffLimit, 0);
+			=> rnd is null
+				? (diffLimit > 0 ? RandomGen.GetInt(1, diffLimit) : RandomGen.GetInt(diffLimit, 0))
+				: (diffLimit > 0 ? rnd.Next(1, diffLimit + 1) : rnd.Next(diffLimit, 1));
 
 		ICandleMessage createCandle()
 		{
@@ -30,7 +30,11 @@ public class IndicatorTests : BaseTestClass
 				ClosePrice = (100.5m + getRnd()).Max(1),
 				OpenTime = time,
 				CloseTime = time + tf,
-				TotalVolume = RandomGen.GetInt(1, 1000),
+				// From the seeded stream when one is given, so the whole series is reproducible.
+				// Volume was the one field still drawn from the global generator, which left the
+				// indicators that read it - NVI moves only when volume falls - deciding by chance
+				// whether a run had anything to react to.
+				TotalVolume = rnd is null ? RandomGen.GetInt(1, 1000) : rnd.Next(1, 1000),
 				SecurityId = secId,
 				TypedArg = tf,
 				State = CandleStates.Finished,
@@ -55,15 +59,20 @@ public class IndicatorTests : BaseTestClass
 			throw new InvalidOperationException(input.ToString());
 	}
 
-	private async ValueTask<TimeFrameCandleMessage[]> LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
+	// Seven tests in this class run over the same Resources/ohlcv.txt, so the file is read and parsed once
+	// and the rows are then shared. Only the candle messages are rebuilt per call: they carry a per-test
+	// security id, start time and time frame, and every test keeps its own instances - nothing mutable is
+	// handed between tests.
+	private static Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> _ohlcvRows;
+	private static readonly Lock _ohlcvLock = new();
+
+	private static async Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> ReadOhlcvRows(CancellationToken cancellationToken)
 	{
 		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
 		using var reader = new StreamReader(path, Encoding.UTF8);
 		var csv = new FastCsvReader(reader, Environment.NewLine) { ColumnSeparator = ',' };
 
-		var cancellationToken = CancellationToken;
-		var list = new List<TimeFrameCandleMessage>();
-		var t = time;
+		var list = new List<(decimal open, decimal high, decimal low, decimal close, decimal volume)>();
 
 		while (await csv.NextLineAsync(cancellationToken))
 		{
@@ -73,7 +82,32 @@ public class IndicatorTests : BaseTestClass
 			var close = csv.ReadDecimal();
 			var volume = csv.ReadDecimal();
 
-			list.Add(new()
+			list.Add((open, high, low, close, volume));
+		}
+
+		// Guard the shared parse: every test in this class depends on it, and an empty read would
+		// otherwise turn them into silent no-ops instead of failures.
+		list.Count.AssertGreater(0, path);
+
+		return [.. list];
+	}
+
+	private async ValueTask<TimeFrameCandleMessage[]> LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
+	{
+		Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> rowsTask;
+
+		using (_ohlcvLock.EnterScope())
+			rowsTask = _ohlcvRows ??= ReadOhlcvRows(CancellationToken);
+
+		var rows = await rowsTask;
+		var candles = new TimeFrameCandleMessage[rows.Length];
+		var t = time;
+
+		for (var i = 0; i < rows.Length; i++)
+		{
+			var (open, high, low, close, volume) = rows[i];
+
+			candles[i] = new()
 			{
 				TypedArg = tf,
 				SecurityId = secId,
@@ -85,15 +119,64 @@ public class IndicatorTests : BaseTestClass
 				ClosePrice = close,
 				TotalVolume = volume,
 				State = CandleStates.Finished,
-			});
+			};
 
 			t += tf;
 		}
 
-		return [.. list];
+		return candles;
 	}
 
-	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended, bool gpuTolerance = false)
+	// float32 keeps 24 significant bits, so a single operation rounds at about 1.2e-7 of the magnitude it
+	// works on.
+	private const decimal _float32Epsilon = 1.1920929e-7m;
+
+	// A windowed kernel rounds once per bar it accumulates, and each bar costs a few roundings beyond that
+	// one: reading the candle, the running division, the store back to float32.
+	private const decimal _gpuRoundingsPerBar = 8m;
+
+	/// <summary>
+	/// Absolute allowance for a GPU (float32) value compared against the CPU (decimal) reference.
+	/// </summary>
+	/// <param name="scale">Largest magnitude the kernel works on - the prices it reads, or the values it
+	/// produces when those are larger.</param>
+	/// <param name="window">Number of bars accumulated before a value is produced.</param>
+	/// <returns>Largest difference float32 arithmetic can account for.</returns>
+	private static decimal GpuTolerance(decimal scale, int window)
+		=> _gpuRoundingsPerBar * _float32Epsilon * window.Max(1) * scale.Abs();
+
+	/// <summary>
+	/// Largest magnitude a series of indicator values reaches, across every column of every bar.
+	/// </summary>
+	/// <param name="values">Series to measure.</param>
+	/// <returns>Largest absolute value found, or zero when the series carries none.</returns>
+	private static decimal ValuesScale(IIndicatorValue[] values)
+	{
+		ArgumentNullException.ThrowIfNull(values);
+
+		var max = 0m;
+
+		void walk(IEnumerable<object> vals)
+		{
+			foreach (var v in vals)
+			{
+				if (v is IEnumerable<object> nested)
+					walk(nested);
+				else if (v is decimal d)
+					max = max.Max(d.Abs());
+			}
+		}
+
+		foreach (var value in values)
+		{
+			if (value?.IsFormed == true)
+				walk(value.ToValues());
+		}
+
+		return max;
+	}
+
+	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended, decimal? gpuTolerance = null)
 	{
 		if (checkExtended)
 			actual.IsFinal.AssertEqual(expected.IsFinal, indName);
@@ -121,9 +204,9 @@ public class IndicatorTests : BaseTestClass
 						compare(ae, (IEnumerable<object>)ev, indName);
 					else if (av is bool b1)
 					{
-						// GPU float32 precision can flip boolean trend direction near thresholds
-						if (!gpuTolerance)
-							b1.AssertEqual((bool)ev, indName);
+						// A flag is not an approximation: an inverted trend direction is wrong whatever the
+						// arithmetic, so it is compared exactly in every tolerance mode.
+						b1.AssertEqual((bool)ev, indName);
 					}
 					else if (av is int i1)
 						i1.AssertEqual((int)ev, indName);
@@ -133,11 +216,12 @@ public class IndicatorTests : BaseTestClass
 						var dE = (decimal)ev;
 						var diff = (dA - dE).Abs();
 
-						if (gpuTolerance)
+						if (gpuTolerance is decimal tol)
 						{
-							// GPU uses float32 (~7 sig digits), use relative tolerance
-							var maxAbs = dA.Abs().Max(dE.Abs());
-							var tol = 1.01m.Max(maxAbs * 0.025m);
+							// The allowance is absolute and comes from the magnitudes the kernel works on,
+							// not from the value in hand: a band taken from the compared value collapses to
+							// nothing where a result crosses zero, and inflates without limit where the
+							// result is a ratio with a small denominator.
 							(diff <= tol).AssertTrue($"{indName} GPU={dA} CPU={dE} diff={diff} tol={tol}");
 						}
 						else
@@ -152,7 +236,7 @@ public class IndicatorTests : BaseTestClass
 		}
 	}
 
-	private static void CompareValues(IIndicatorValue[] actual, IIndicatorValue[] expected, string indName, bool checkExtended, bool gpuTolerance = false)
+	private static void CompareValues(IIndicatorValue[] actual, IIndicatorValue[] expected, string indName, bool checkExtended, decimal? gpuTolerance = null)
 	{
 		ArgumentNullException.ThrowIfNull(actual);
 		ArgumentNullException.ThrowIfNull(expected);
@@ -168,1333 +252,5 @@ public class IndicatorTests : BaseTestClass
 		IIndicatorProvider provider = new IndicatorProvider();
 		provider.Init();
 		return provider.All.Where(t => t.Indicator != typeof(CandlePatternIndicator));
-	}
-
-	[TestMethod]
-	public void StateNonFinalInput()
-	{
-		var now = DateTime.UtcNow;
-		var secId = Helper.CreateSecurityId();
-		var tf = TimeSpan.FromDays(1);
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator = type.CreateIndicator();
-			indicator.IsFormed.AssertFalse();
-
-			static void stateEquals(object a, object b)
-			{
-				if (a == null && b == null)
-					return;
-				else if (a == null || b == null)
-					Fail();
-				else if (a.GetType() != b.GetType())
-					Fail();
-				else if (a is IIndicator indA && b is IIndicator indB)
-				{
-					foreach (var field in a.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-					{
-						var va = field.GetValue(indA);
-						var vb = field.GetValue(indB);
-
-						stateEquals(va, vb);
-					}
-
-					return;
-				}
-				else if (a is System.Collections.IEnumerable ea && b is System.Collections.IEnumerable eb && a is not string)
-				{
-					var enumA = ea.Cast<object>().ToArray();
-					var enumB = eb.Cast<object>().ToArray();
-
-					if (enumA.Length != enumB.Length)
-						Fail();
-
-					for (var i = 0; i < enumA.Length; i++)
-					{
-						stateEquals(enumA[i], enumB[i]);
-					}
-
-					return;
-				}
-
-				a.AssertEqual(b);
-			}
-
-			var before = indicator.TypedClone();
-
-			for (var i = 0; i < 100; i++)
-			{
-				var value = CreateValue(type, indicator, secId, now, i, tf, false, RandomGen.GetBool());
-
-				indicator.Process(value).ValidateValue();
-				indicator.IsFormed.AssertFalse();
-
-				stateEquals(before, indicator);
-			}
-		}
-	}
-
-	[TestMethod]
-	public void ComplexValues()
-	{
-		foreach (var type in GetIndicatorTypes())
-			type.OutputValue.Is<IComplexIndicatorValue>().AssertEqual(type.IsComplex);
-	}
-
-	[TestMethod]
-	public void NumValuesToInitialize()
-	{
-		var now = DateTime.UtcNow;
-		var secId = Helper.CreateSecurityId();
-		var tf = TimeSpan.FromDays(1);
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			// non deterministic indicators
-			if (type.Indicator == typeof(AdaptiveLaguerreFilter) ||
-				type.Indicator == typeof(DemandIndex))
-				continue;
-
-			var indicator = type.CreateIndicator();
-
-			var k = 0;
-
-			do
-			{
-				indicator.NumValuesToInitialize.AssertGreater(0, indicator.ToString());
-				indicator.IsFormed.AssertFalse(indicator.ToString());
-
-				var finalCount = 0;
-				var i = 0;
-
-				while (!indicator.IsFormed)
-				{
-					var isFinal = RandomGen.GetBool();
-
-					if (isFinal)
-						finalCount++;
-
-					var value = CreateValue(type, indicator, secId, now, i, tf, isFinal, false);
-					indicator.Process(value).ValidateValue();
-
-					finalCount.AssertLess(1000, indicator.ToString());
-
-					i++;
-				}
-
-				finalCount.AssertEqual(indicator.NumValuesToInitialize, indicator.ToString());
-
-				for (var n = 0; n < 100; n++)
-				{
-					var value = CreateValue(type, indicator, secId, now, i + n, tf, RandomGen.GetBool(), false);
-					indicator.Process(value).ValidateValue();
-
-					indicator.IsFormed.AssertTrue(indicator.ToString());
-				}
-
-				// test 5 times to ensure the same final count
-				for (var j = 0; j < 5; j++)
-				{
-					// Reset
-					indicator.Reset();
-					indicator.IsFormed.AssertFalse(indicator.ToString());
-
-					indicator.NumValuesToInitialize.AssertEqual(finalCount, indicator.ToString());
-
-					var finalCount2 = 0;
-
-					while (!indicator.IsFormed)
-					{
-						var isFinal = RandomGen.GetBool();
-
-						if (isFinal)
-							finalCount2++;
-
-						var value = CreateValue(type, indicator, secId, now, i, tf, isFinal, false);
-						indicator.Process(value).ValidateValue();
-
-						i++;
-					}
-
-					finalCount.AssertEqual(finalCount2, indicator.ToString());
-				}
-
-				var isAnySet = false;
-				SetRandom(indicator, () => isAnySet = true);
-
-				if (!isAnySet)
-					indicator.Reset();
-			}
-			while (++k < 5);
-		}
-	}
-
-	[TestMethod]
-	public void NonFinalValueChanges()
-	{
-		var now = DateTime.UtcNow;
-		var secId = Helper.CreateSecurityId();
-		var tf = TimeSpan.FromDays(1);
-
-		var invalid = new List<Type>();
-
-		// hard to test
-		var skipTypes = new List<Type>
-		{
-			typeof(VolumeProfileIndicator),
-			typeof(Peak),
-			typeof(Trough),
-			typeof(ParabolicSar),
-			typeof(Median),
-			typeof(Fractals),
-		};
-
-		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))
-		{
-			var indicator = type.CreateIndicator();
-
-			IIndicatorValue lastFinal = null;
-
-			var i = 0;
-			var extra = 10;
-
-			while (!indicator.IsFormed || extra > 0)
-			{
-				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false);
-				lastFinal = indicator.Process(value);
-				lastFinal.ValidateValue();
-
-				if (indicator.IsFormed)
-					extra--;
-			}
-
-			var wasChanged = false;
-
-			for (int k = 0; k < 200; k++)
-			{
-				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, (RandomGen.GetBool() ? -1 : 1) * k * 10);
-				var nonFinalResult = indicator.Process(nonFinalValue);
-				nonFinalResult.ValidateValue();
-
-				if (!lastFinal.ToValues().SequenceEqual(nonFinalResult.ToValues()))
-				{
-					wasChanged = true;
-					break;
-				}
-			}
-
-			wasChanged.AssertTrue(indicator.ToString());
-		}
-	}
-
-	private static readonly HashSet<string> _ignoreProps =
-	[
-		nameof(IIndicator.Name),
-		nameof(IIndicator.Container),
-		nameof(IIndicator.Source),
-		nameof(IComplexIndicator.InnerIndicators),
-	];
-
-	private static IEnumerable<PropertyInfo> GetProps(Type type)
-		=> [..
-		type
-			.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => !_ignoreProps.Contains(p.Name))
-			.Where(p => p.IsBrowsable())
-		];
-
-	private static void SetRandom(IIndicator indicator, Action check)
-	{
-		if (indicator is AwesomeOscillator ao)
-		{
-			ao.ShortMa.Length = RandomGen.GetInt(5, 20);
-			ao.LongMa.Length = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is OscillatorOfMovingAverage oma)
-		{
-			oma.ShortPeriod = RandomGen.GetInt(5, 20);
-			oma.LongPeriod = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is KasePeakOscillator kpo)
-		{
-			kpo.ShortPeriod = RandomGen.GetInt(5, 20);
-			kpo.LongPeriod = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is MovingAverageRibbon mar)
-		{
-			mar.ShortPeriod = RandomGen.GetInt(5, 20);
-			mar.LongPeriod = RandomGen.GetInt(20, 50);
-			mar.RibbonCount = RandomGen.GetInt(2, 10);
-			check();
-		}
-		else if (indicator is RangeActionVerificationIndex ravi)
-		{
-			ravi.ShortSma.Length = RandomGen.GetInt(5, 20);
-			ravi.LongSma.Length = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is KaufmanAdaptiveMovingAverage kama)
-		{
-			kama.FastSCPeriod = RandomGen.GetInt(5, 20);
-			kama.SlowSCPeriod = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is Ichimoku i)
-		{
-			i.Tenkan.Length = RandomGen.GetInt(5, 10);
-			i.Kijun.Length = RandomGen.GetInt(10, 20);
-			i.SenkouB.Length = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is MovingAverageConvergenceDivergence macd)
-		{
-			macd.ShortMa.Length = RandomGen.GetInt(5, 20);
-			macd.LongMa.Length = RandomGen.GetInt(20, 50);
-			check();
-		}
-		else if (indicator is MovingAverageConvergenceDivergenceHistogram hist)
-		{
-			hist.Macd.ShortMa.Length = RandomGen.GetInt(5, 20);
-			hist.Macd.LongMa.Length = RandomGen.GetInt(20, 50);
-			hist.SignalMa.Length = RandomGen.GetInt(5, 20);
-			check();
-		}
-		else if (indicator is RainbowCharts rc)
-		{
-			rc.Lines = RandomGen.GetInt(5, 20);
-			check();
-		}
-		else
-			SetRandomPropsRecursive(indicator, check);
-	}
-
-	private static void SetRandomPropsRecursive(IIndicator indicator, Action check)
-	{
-		ArgumentNullException.ThrowIfNull(indicator);
-
-		var type = indicator.GetType();
-		var props = GetProps(type);
-
-		foreach (var prop in props)
-		{
-			var propType = prop.PropertyType.GetUnderlyingType() ?? prop.PropertyType;
-
-			if (propType.Is<IIndicator>())
-			{
-				var nested = (IIndicator)prop.GetValue(indicator);
-
-				if (nested is not null)
-				{
-					SetRandom(nested, check);
-				}
-			}
-			else
-			{
-				if (!prop.IsModifiable())
-					continue;
-
-				object value;
-
-				if (indicator is Fractals f && prop.Name == nameof(f.Length))
-				{
-					f.Length = 39;
-					continue;
-				}
-				else
-				{
-					var rangeAttr = prop.GetAttribute<RangeAttribute>();
-
-					if (rangeAttr is not null)
-					{
-						var minObj = rangeAttr.Minimum;
-						var maxObj = rangeAttr.Maximum;
-
-						// convert to target type
-						var min = minObj.To(propType);
-						var max = maxObj.To(propType);
-
-						// choose random within [min; max]
-						if (propType == typeof(int) || propType == typeof(short) || propType == typeof(sbyte) || propType == typeof(byte) || propType == typeof(ushort) || propType == typeof(uint))
-						{
-							var minI = min.To<int>();
-							var maxI = max.To<int>();
-							value = RandomGen.GetInt(minI, maxI).To(propType);
-						}
-						else if (propType == typeof(long))
-						{
-							var minL = min.To<long>();
-							var maxL = max.To<long>();
-							var rnd = RandomGen.GetDouble();
-							var v = minL + (long)((maxL - minL) * rnd).Round();
-							value = v;
-						}
-						else if (propType == typeof(double))
-						{
-							var minD = min.To<double>();
-							var maxD = max.To<double>();
-							value = minD + (maxD - minD) * RandomGen.GetDouble();
-						}
-						else if (propType == typeof(float))
-						{
-							var minF = min.To<float>();
-							var maxF = max.To<float>();
-							value = (float)(minF + (maxF - minF) * RandomGen.GetDouble());
-						}
-						else if (propType == typeof(decimal))
-						{
-							var minM = min.To<decimal>();
-							var maxM = max.To<decimal>();
-							value = minM + (decimal)RandomGen.GetDouble() * (maxM - minM);
-						}
-						else
-						{
-							// fallback to numeric conversion if possible
-							if (propType.IsNumeric())
-							{
-								var minD = min.To<double>();
-								var maxD = max.To<double>();
-								var d = minD + (maxD - minD) * RandomGen.GetDouble();
-								value = d.To(propType);
-							}
-							else
-							{
-								// if not numeric, skip
-								continue;
-							}
-						}
-
-						prop.SetValue(indicator, value);
-						check();
-						continue;
-					}
-
-					if (propType == typeof(int))
-						value = RandomGen.GetInt(10, 100);
-					else if (propType == typeof(decimal))
-						value = (decimal)RandomGen.GetInt(1, 100) / 10;
-					else if (propType == typeof(bool))
-						value = RandomGen.GetBool();
-					else if (propType == typeof(string))
-						value = RandomGen.GetString(5, 10);
-					else if (propType.IsEnum)
-						value = RandomGen.GetEnum(propType);
-					else if (propType == typeof(Unit))
-						value = new Unit { Value = RandomGen.GetInt(1, 100), Type = RandomGen.GetEnum<UnitTypes>() };
-					else if (propType.IsNumeric())
-						value = RandomGen.GetInt(1, 100).To(propType);
-					else
-						continue;
-				}
-
-				prop.SetValue(indicator, value);
-				
-				check();
-			}
-		}
-	}
-
-	[TestMethod]
-	public void SaveLoad()
-	{
-		void ComparePropsRecursive(IIndicator obj1, IIndicator obj2)
-		{
-			ArgumentNullException.ThrowIfNull(obj1);
-			ArgumentNullException.ThrowIfNull(obj2);
-
-			var props = GetProps(obj1.GetType());
-
-			foreach (var prop in props)
-			{
-				var propType = prop.PropertyType.GetUnderlyingType() ?? prop.PropertyType;
-
-				if (propType.Is<IIndicator>())
-				{
-					var nested1 = (IIndicator)prop.GetValue(obj1);
-					var nested2 = (IIndicator)prop.GetValue(obj2);
-
-					if (obj1 is not null && obj2 is not null)
-						ComparePropsRecursive(nested1, nested2);
-				}
-				else
-				{
-					var v1 = prop.GetValue(obj1);
-					var v2 = prop.GetValue(obj2);
-					v1.AssertEqual(v2);
-				}
-			}
-		}
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			for (var i = 0; i < 100; i++)
-			{
-				var reseted = false;
-				void OnReseted() => reseted = true;
-
-				var indicator = type.CreateIndicator();
-				indicator.Reseted += OnReseted;
-
-				SetRandom(indicator, () =>
-				{
-					reseted.AssertTrue();
-					reseted = false;
-				});
-
-				var storage = indicator.Save();
-
-				var restoredIndicator = type.CreateIndicator();
-				restoredIndicator.Load(storage);
-
-				ComparePropsRecursive(indicator, restoredIndicator);
-			}
-		}
-	}
-
-	[TestMethod]
-	public async Task Process()
-	{
-		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
-		var tf = TimeSpan.FromDays(1);
-		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = await LoadCandles(secId, time, tf);
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator = type.CreateIndicator();
-			var inputType = type.InputValue;
-
-			if (inputType == typeof(DecimalIndicatorValue))
-				indicator.Check(candles, data => data.ClosePrice);
-			else if (inputType == typeof(CandleIndicatorValue))
-				indicator.Check(candles, data => data);
-			else
-				throw new InvalidOperationException(inputType.To<string>());
-		}
-	}
-
-	[TestMethod]
-	public void DocUrlUnique()
-	{
-		var duplicates = GetIndicatorTypes()
-			.Select(t => t.DocUrl)
-			.Where(url => !url.IsEmpty())
-			.Select(url => url.ToLowerInvariant())
-			.GroupBy(x => x)
-			.Where(g => g.Count() > 1)
-			.Select(g => g.Key)
-			.ToArray();
-
-		if (duplicates.Any())
-			Fail($"Duplicate DocUrl(s) found: {duplicates.JoinCommaSpace()}");
-	}
-
-	[TestMethod]
-	public void NameUnique()
-	{
-		var duplicates = GetIndicatorTypes()
-			.Select(t => t.Name)
-			.Select(n => n.ToLowerInvariant())
-			.GroupBy(x => x)
-			.Where(g => g.Count() > 1)
-			.Select(g => g.Key)
-			.ToArray();
-
-		if (duplicates.Any())
-			Fail($"Duplicate Names(s) found: {duplicates.JoinCommaSpace()}");
-	}
-
-	[TestMethod]
-	public void DescriptionUnique()
-	{
-		var duplicates = GetIndicatorTypes()
-			.Select(t => t.Description)
-			.Where(n => !n.IsEmpty())
-			.Select(n => n.ToLowerInvariant())
-			.GroupBy(x => x)
-			.Where(g => g.Count() > 1)
-			.Select(g => g.Key)
-			.ToArray();
-
-		if (duplicates.Any())
-			Fail($"Duplicate Descriptions(s) found: {duplicates.JoinCommaSpace()}");
-	}
-
-	[TestMethod]
-	public void RequiredAttributes()
-	{
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicatorType = type.Indicator;
-
-			// Check [IndicatorIn]
-			var inAttr = indicatorType.GetAttribute<IndicatorInAttribute>();
-			inAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [IndicatorIn] attribute.");
-
-			// Check [IndicatorOut]
-			var outAttr = indicatorType.GetAttribute<IndicatorOutAttribute>();
-			outAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [IndicatorOut] attribute.");
-
-			// Check [Doc]
-			var docAttr = indicatorType.GetAttribute<DocAttribute>();
-			docAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [Doc] attribute.");
-		}
-	}
-
-	[TestMethod]
-	public async Task GpuIndicators()
-	{
-		async Task<ICandleMessage[][]> loadCandles()
-		{
-			var start = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
-			var baseTf = TimeSpan.FromMinutes(1);
-			var secId = Helper.CreateSecurityId();
-
-			// 1m base candles from storage
-			var baseCandles = (await LoadCandles(secId, start, baseTf))
-				.Cast<ICandleMessage>()
-				.ToArray();
-
-			var result = new List<ICandleMessage[]> { baseCandles };
-
-			// Build bigger TF series from 1m via compressor
-			var provider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
-			var builder = provider.Get(typeof(TimeFrameCandleMessage));
-			var biggerTfs = new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromHours(1) };
-
-			foreach (var tf in biggerTfs)
-			{
-				var subBig = new Subscription(tf.TimeFrame(), new SecurityMessage { SecurityId = secId });
-				var mdBig = subBig.MarketData;
-				mdBig.IsFinishedOnly = false;
-				mdBig.AllowBuildFromSmallerTimeFrame = true;
-
-				var compressor = new BiggerTimeFrameCandleCompressor(mdBig, builder, baseTf.TimeFrame());
-				var list = new List<ICandleMessage>();
-
-				foreach (var c in baseCandles)
-				{
-					var messages = compressor.Process((CandleMessage)c);
-
-					foreach (var m in messages)
-					{
-						if (m is TimeFrameCandleMessage tfMsg && tfMsg.State == CandleStates.Finished)
-							list.Add(tfMsg);
-					}
-				}
-
-				result.Add([.. list]);
-			}
-
-			return [.. result];
-		}
-
-		static IIndicatorValue[] runCpu(IIndicator indicator, ICandleMessage[] candles)
-		{
-			var res = new IIndicatorValue[candles.Length];
-
-			for (var i = 0; i < candles.Length; i++)
-				res[i] = indicator.Process(candles[i]);
-
-			return res;
-		}
-
-		static IGpuIndicatorParams[] randomIndicators(IIndicator[] indicators, Type paramType)
-		{
-			var parameters = new IGpuIndicatorParams[indicators.Length];
-
-			for (var i = 0; i < indicators.Length; i++)
-			{
-				var prm = paramType.CreateInstance<IGpuIndicatorParams>();
-				prm.FromIndicator(indicators[i]);
-
-				parameters[i] = prm;
-			}
-
-			return parameters;
-		}
-
-		var msgSeries = await loadCandles(); // multiple TF series
-		var gpuSeries = msgSeries
-			.Select(series => series.Select(c => new GpuCandle(c.OpenTime, c.OpenPrice, c.HighPrice, c.LowPrice, c.ClosePrice, c.TotalVolume)).ToArray())
-			.ToArray();
-
-		var provider = new GpuIndicatorCalculatorProvider();
-		provider.Init();
-
-		var invalid = new List<(Type type, Exception error)>();
-
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-
-		using (ctx)
-		using (acc)
-		{
-			foreach (var (indicatorType, calculatorType) in provider.All)
-			{
-				var calculator = provider.Create(ctx, acc, calculatorType);
-				calculator.AssertNotNull();
-
-				// build N parameter variations from randomized indicators
-				const int variations = 10;
-				var indicators = new IIndicator[variations];
-
-				for (var i = 0; i < indicators.Length; i++)
-				{
-					var indicator = indicatorType.CreateInstance<IIndicator>();
-					// Randomize indicator settings using existing helper
-					SetRandom(indicator, () => { });
-
-					indicators[i] = indicator;
-				}
-
-				var parameters = randomIndicators(indicators, calculator.ParameterType);
-
-				// calculate via interface for all TF series and all params
-				var gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
-
-				try
-				{
-					for (var s = 0; s < msgSeries.Length; s++)
-					{
-						for (var p = 0; p < indicators.Length; p++)
-						{
-							var gpuOut = gpuAll[s][p];
-
-							// fresh indicator instance for CPU with same settings
-							var indCpu = indicators[p].TypedClone();
-							var cpu = runCpu(indCpu, msgSeries[s]);
-
-							CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true, gpuTolerance: true);
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					invalid.Add((indicatorType, ex));
-				}
-			}
-		}
-
-		if (invalid.Count > 0)
-		{
-			var msg = invalid.Select(x => $"{x.type.Name}: {x.error.Message}").JoinN();
-			Fail($"GPU indicators failed ({invalid.Count}):{Environment.NewLine}{msg}");
-		}
-	}
-
-	[TestMethod]
-	public void GpuProviderInit()
-	{
-		var provider = new GpuIndicatorCalculatorProvider();
-		provider.Init();
-
-		// Must discover at least the built-in GPU calculators
-		provider.All.Keys.Count(k => k == typeof(SimpleMovingAverage)).AssertEqual(1, "SMA calculator not discovered");
-		provider.All.Keys.Count(k => k == typeof(AverageDirectionalIndex)).AssertEqual(1, "ADX calculator not discovered");
-	}
-
-	[TestMethod]
-	public void GpuProviderTryGet()
-	{
-		var provider = new GpuIndicatorCalculatorProvider();
-		provider.Init();
-
-		var indType = typeof(SimpleMovingAverage);
-
-		provider.TryGetCalculatorType(indType, out var calcType).AssertTrue();
-		calcType.Is<IGpuIndicatorCalculator>().AssertTrue();
-
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-		using (ctx)
-		using (acc)
-		{
-			var calc = provider.Create(ctx, acc, calcType);
-			calc.AssertNotNull();
-			calc.IndicatorType.AssertEqual(indType);
-		}
-	}
-
-	[TestMethod]
-	public void GpuProviderRegisterUnregister()
-	{
-		var provider = new GpuIndicatorCalculatorProvider();
-		provider.Init();
-
-		var unkIndicator = typeof(CandlePatternIndicator); // Assume no built-in GPU calculator for this indicator
-		var unkCalcType = typeof(GpuSmaCalculator);
-
-		// Unknown indicator should not exist initially
-		provider.TryGetCalculatorType(unkIndicator, out _).AssertFalse();
-
-		// Register a mapping (for test purposes, map Acceleration -> GpuSmaCalculator)
-		provider.Register(unkIndicator, unkCalcType);
-		provider.TryGetCalculatorType(unkIndicator, out var calcType).AssertTrue();
-		calcType.AssertEqual(unkCalcType);
-
-		// Create should return a calculator instance
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-		using (ctx)
-		using (acc)
-		{
-			var calc = provider.Create(ctx, acc, unkCalcType);
-			calc.AssertNotNull();
-		}
-
-		// Unregister
-		provider.Unregister(unkIndicator).AssertTrue();
-		provider.TryGetCalculatorType(unkIndicator, out _).AssertFalse();
-
-		// Clear
-		provider.Clear();
-		provider.All.Count.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public async Task IndicatorValues_Roundtrip()
-	{
-		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
-		var tf = TimeSpan.FromMinutes(1);
-		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = await LoadCandles(secId, time, tf);
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator = type.CreateIndicator();
-			var outputs = new List<IIndicatorValue>(candles.Length);
-
-			// feed all candles
-			foreach (var c in candles)
-			{
-				IIndicatorValue input = type.InputValue == typeof(DecimalIndicatorValue)
-					? new DecimalIndicatorValue(indicator, c.ClosePrice, c.OpenTime) { IsFinal = true }
-					: new CandleIndicatorValue(indicator, c) { IsFinal = true };
-
-				var outVal = indicator.Process(input);
-				outputs.Add(outVal);
-			}
-
-			// roundtrip each produced value
-			for (var i = 0; i < outputs.Count; i++)
-			{
-				var original = outputs[i];
-				
-				var factory = type.CreateIndicator();
-
-				var restored = factory.CreateValue(original.Time, [.. original.ToValues()]);
-
-				CompareValue(restored, original, factory.ToString(), false);
-			}
-		}
-	}
-
-	[TestMethod]
-	public async Task Preload()
-	{
-		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
-		var tf = TimeSpan.FromMinutes(1);
-		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = await LoadCandles(secId, time, tf);
-		var halfCount = candles.Length / 2;
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator1 = type.CreateIndicator();
-			var indicator2 = type.CreateIndicator();
-
-			var name = indicator1.ToString();
-
-			var preloadData = new List<(IIndicatorValue input, IIndicatorValue output)>();
-
-			// Process first half with indicator1 and collect data for preloading
-			for (var i = 0; i < halfCount; i++)
-			{
-				var c = candles[i];
-
-				indicator1.Process(c);
-
-				var (input, output) = indicator1.Container.GetValue(0);
-
-				if (!input.IsFinal || !output.IsFinal)
-					continue;
-
-				var outputClone = indicator2.CreateValue(output.Time, [.. output.ToValues()]);
-				outputClone.IsFinal = true;
-
-				CompareValue(output, outputClone, name, true);
-
-				preloadData.Add((input, outputClone));
-			}
-
-			// Preload indicator2 with collected data
-			indicator2.Preload(preloadData);
-
-			// Verify that indicator2 is in the same state as indicator1
-			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, name);
-			indicator2.IsPreloaded.AssertTrue(name);
-
-			indicator1.Reset();
-			indicator1.IsFormed.AssertFalse(name);
-			indicator1.IsPreloaded.AssertFalse(name);
-
-			for (var i = 0; i < halfCount; i++)
-			{
-				var c = candles[i];
-
-				var output1 = indicator1.Process(c);
-				var output2 = indicator2.Process(c);
-
-				CompareValue(output2, output1, name, true);
-			}
-
-			{
-				var c = candles[halfCount];
-				var output1 = indicator1.Process(c);
-				ThrowsExactly<NotSupportedException>(() => indicator2.Process(c));
-			}
-		}
-	}
-
-	[TestMethod]
-	public async Task Preload_WithValues()
-	{
-		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
-		var tf = TimeSpan.FromMinutes(1);
-		var secId = Helper.CreateSecurity().ToSecurityId();
-		var candles = await LoadCandles(secId, time, tf);
-
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator1 = type.CreateIndicator();
-			var indicator2 = type.CreateIndicator();
-
-			var name = indicator1.ToString();
-
-			var preloadData = new List<(DateTime, object[])>();
-
-			// Process first half with indicator1 and collect output values
-			var halfCount = candles.Length / 2;
-			for (var i = 0; i < halfCount; i++)
-			{
-				var c = candles[i];
-
-				var output = indicator1.Process(c);
-				preloadData.Add((output.Time, [.. output.ToValues()]));
-			}
-
-			// Preload indicator2 with collected values
-			indicator2.Preload(preloadData);
-
-			// Verify that indicator2 is in the same state as indicator1
-			indicator1.IsFormed.AssertEqual(indicator2.IsFormed, name);
-			indicator2.IsPreloaded.AssertTrue(name);
-
-			indicator1.Reset();
-			indicator1.IsFormed.AssertFalse(name);
-			indicator1.IsPreloaded.AssertFalse(name);
-
-			for (var i = 0; i < halfCount; i++)
-			{
-				var c = candles[i];
-
-				var output1 = indicator1.Process(c);
-				var output2 = indicator2.Process(c);
-
-				CompareValue(output2, output1, name, true);
-			}
-		}
-	}
-
-	[TestMethod]
-	public void Preload_AlreadyPreloaded()
-	{
-		var type = GetIndicatorTypes().First();
-		var indicator = type.CreateIndicator();
-
-		var preloadData = new List<(DateTime time, object[] values)>
-		{
-			(DateTime.UtcNow, new object[] { 100m })
-		};
-
-		indicator.Preload(preloadData);
-		indicator.IsPreloaded.AssertTrue();
-
-		try
-		{
-			indicator.Preload(preloadData);
-			Fail("Expected InvalidOperationException");
-		}
-		catch (InvalidOperationException ex)
-		{
-			ex.Message.AssertEqual("Indicator is already preloaded.");
-		}
-	}
-
-	[TestMethod]
-	public void IndicatorValues_Standard()
-	{
-		var ind = new PassThroughIndicator();
-		var t = DateTime.UtcNow;
-		var tf = TimeSpan.FromMinutes(1);
-
-		// DecimalIndicatorValue
-		{
-			var v1 = new DecimalIndicatorValue(ind, 123.45m, t) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new DecimalIndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			v2.Value.AssertEqual(123.45m);
-
-			// empty
-			var vEmpty = new DecimalIndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new DecimalIndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// CandleIndicatorValue
-		{
-			var c = new TimeFrameCandleMessage
-			{
-				OpenTime = t,
-				CloseTime = t + tf,
-				OpenPrice = 100m,
-				HighPrice = 105m,
-				LowPrice = 95m,
-				ClosePrice = 102m,
-				TotalVolume = 1000m,
-				State = CandleStates.Finished,
-				TypedArg = tf,
-			};
-
-			var v1 = new CandleIndicatorValue(ind, c);
-			var arr = v1.ToValues().ToArray();
-			var v2 = new CandleIndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-
-			var c2 = v2.Value;
-			c2.OpenPrice.AssertEqual(c.OpenPrice);
-			c2.HighPrice.AssertEqual(c.HighPrice);
-			c2.LowPrice.AssertEqual(c.LowPrice);
-			c2.ClosePrice.AssertEqual(c.ClosePrice);
-			c2.TotalVolume.AssertEqual(c.TotalVolume);
-
-			// empty
-			var vEmpty = new CandleIndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new CandleIndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// MarketDepthIndicatorValue
-		{
-			var depth = new QuoteChangeMessage
-			{
-				ServerTime = t,
-				Bids = [new QuoteChange(100m, 10m)],
-				Asks = [new QuoteChange(101m, 11m)]
-			};
-
-			var v1 = new MarketDepthIndicatorValue(ind, depth) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new MarketDepthIndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			v2.Value.GetBestBid()?.Price.AssertEqual(100m);
-			v2.Value.GetBestAsk()?.Price.AssertEqual(101m);
-
-			// empty
-			var vEmpty = new MarketDepthIndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new MarketDepthIndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// Level1IndicatorValue
-		{
-			var l1 = new Level1ChangeMessage { ServerTime = t };
-			l1.Add(Level1Fields.LastTradePrice, 77m);
-			l1.Add(Level1Fields.Volume, 555m);
-
-			var v1 = new Level1IndicatorValue(ind, l1) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new Level1IndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			((decimal?)v2.Value.TryGet(Level1Fields.LastTradePrice)).AssertEqual(77m);
-			((decimal?)v2.Value.TryGet(Level1Fields.Volume)).AssertEqual(555m);
-
-			// empty
-			var vEmpty = new Level1IndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new Level1IndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// TickIndicatorValue
-		{
-			var tick = new ExecutionMessage
-			{
-				ServerTime = t,
-				TradePrice = 12.34m,
-				TradeVolume = 9.87m,
-				DataTypeEx = DataType.Ticks
-			};
-
-			var v1 = new TickIndicatorValue(ind, tick) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new TickIndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			v2.Value.Price.AssertEqual(12.34m);
-			v2.Value.Volume.AssertEqual(9.87m);
-
-			// empty
-			var vEmpty = new TickIndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new TickIndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// PairIndicatorValue<decimal>
-		{
-			var p = (1.23m, 4.56m);
-			var v1 = new PairIndicatorValue<decimal>(ind, p, t) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new PairIndicatorValue<decimal>(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			v2.Value.Item1.AssertEqual(1.23m);
-			v2.Value.Item2.AssertEqual(4.56m);
-
-			// empty
-			var vEmpty = new PairIndicatorValue<decimal>(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new PairIndicatorValue<decimal>(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-
-		// ShiftedIndicatorValue (extends SingleIndicatorValue<decimal> with extra Shift)
-		{
-			var v1 = new ShiftedIndicatorValue(ind, 999m, 5, t) { IsFinal = true };
-			var arr = v1.ToValues().ToArray();
-			var v2 = new ShiftedIndicatorValue(ind, t);
-			v2.FromValues(arr);
-			v2.IsEmpty.AssertFalse();
-			v2.Value.AssertEqual(999m);
-			v2.Shift.AssertEqual(5);
-
-			// empty
-			var vEmpty = new ShiftedIndicatorValue(ind, t);
-			var arrEmpty = vEmpty.ToValues().ToArray();
-			var vEmpty2 = new ShiftedIndicatorValue(ind, t);
-			vEmpty2.FromValues(arrEmpty);
-			vEmpty2.IsEmpty.AssertTrue();
-		}
-	}
-}
-
-static class IndicatorDataRunner
-{
-	private class TestIndicatorValue<TInner> : IIndicatorValue
-	{
-		private readonly TInner _value;
-
-		public TestIndicatorValue(IIndicator indicator, DateTime time, TInner value, TInner initFrom = default)
-		{
-			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
-			_value = value is ICloneable cl ? (TInner)cl.Clone() : value;
-
-			if (initFrom is ICandleMessage initCandle && _value is ICandleMessage candle)
-			{
-				candle.OpenTime = initCandle.OpenTime;
-				candle.CloseTime = initCandle.CloseTime;
-			}
-
-			Time = time;
-		}
-
-		public IIndicator Indicator { get; }
-		public bool IsFinal { get; set; }
-		public DateTime Time { get; }
-		bool IIndicatorValue.IsFormed { get; set; }
-		bool IIndicatorValue.IsEmpty => false;
-
-		T IIndicatorValue.GetValue<T>(Level1Fields? field)
-		{
-			if (_value is T t)
-				return t;
-			else if (typeof(T).Is<ICandleMessage>())
-			{
-				var dec = _value.To<decimal>();
-
-				return new TimeFrameCandleMessage
-				{
-					OpenPrice = dec,
-					HighPrice = dec,
-					LowPrice = dec,
-					ClosePrice = dec,
-					OpenTime = DateTime.UtcNow,
-				}.To<T>();
-			}
-			else if (typeof(T) == typeof(decimal))
-			{
-				var c = _value.To<ICandleMessage>();
-				return c.ClosePrice.To<T>();
-			}
-			else
-				throw new NotSupportedException();
-		}
-
-		int IComparable<IIndicatorValue>.CompareTo(IIndicatorValue other)
-			=> throw new NotSupportedException();
-
-		int IComparable.CompareTo(object obj)
-			=> throw new NotSupportedException();
-
-		IEnumerable<object> IIndicatorValue.ToValues()
-			=> throw new NotSupportedException();
-
-		void IIndicatorValue.FromValues(object[] values)
-			=> throw new NotSupportedException();
-	}
-
-	private class IndicatorData
-	{
-		public int Line { get; init; }
-		public CandleMessage Candle { get; init; }
-		public decimal?[] Values { get; init; }
-	}
-
-	public static void Check<T>(this IIndicator indicator, CandleMessage[] candles, Func<ICandleMessage, T> getValue)
-	{
-		ArgumentNullException.ThrowIfNull(indicator);
-		ArgumentNullException.ThrowIfNull(getValue);
-
-		var values = new List<IndicatorData>();
-
-		var epsilon = indicator.Measure switch
-		{
-			IndicatorMeasures.MinusOnePlusOne => 0.001m,
-			IndicatorMeasures.Percent or IndicatorMeasures.Price or IndicatorMeasures.Volume => 0.1m,
-			_ => throw new NotSupportedException(indicator.Measure.ToString()),
-		};
-
-		var data = Do.Invariant(() => File.ReadAllLines(Path.Combine(Helper.ResFolder, "IndicatorsData", $"{indicator.GetType().Name}.txt")).Select((line, idx) =>
-		{
-			var parts = line.SplitByComma();
-
-			return new IndicatorData
-			{
-				Line = idx,
-				Candle = candles[idx],
-				Values = [.. parts.Select(p => p.To<decimal?>())],
-			};
-		}).ToArray());
-
-		for (var i = 0; i < data.Length; i++)
-		{
-			values.Add(data[i]);
-
-			var inputValues = new List<TestIndicatorValue<T>>
-			{
-				new(indicator, data[i].Candle.OpenTime, getValue(data[i].Candle)) { IsFinal = true }
-			};
-
-			var numNonFinals = RandomGen.GetInt(10);
-			for (var j = 0; j < numNonFinals; ++j)
-			{
-				var i2 = 0.Max((data.Length - 1).Min(i + RandomGen.GetInt(-5, 5)));
-				inputValues.Add(new(indicator, data[i2].Candle.OpenTime, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
-			}
-
-			void CheckValue(IIndicatorValue value, int column)
-			{
-				if (!indicator.IsFormed)
-					return;
-
-				var data = values[values.Count - 1];
-
-				if (value.IsEmpty)
-				{
-					//testValue.AssertNull();
-				}
-				else
-				{
-					var testValue = data.Values[column];
-
-					testValue.AssertNotNull();
-
-					var indValue = value.ToDecimal().Round(2);
-
-					((testValue.Value - indValue).Abs() < epsilon).AssertTrue();
-				}
-			}
-
-			foreach (var inputValue in inputValues)
-			{
-				var value = indicator.Process(inputValue);
-
-				ValidateValue(value);
-
-				if (!inputValue.IsFinal)
-					continue;
-
-				value
-					.Plain()
-					.Select((sv, idx) => (v: sv, column: idx))
-					.ForEach(p => CheckValue(p.v, p.column));
-			}
-		}
-
-		indicator.IsFormed.AssertTrue();
-	}
-
-	private static readonly SynchronizedDictionary<IndicatorMeasures, Range<decimal>> _validators = [];
-
-	public static void ValidateValue(this IIndicatorValue value)
-	{
-		ArgumentNullException.ThrowIfNull(value);
-
-		if (value is IComplexIndicatorValue complex)
-		{
-			if (complex.InnerValues.Count > 0)
-			{
-				var allFinal = complex.InnerValues.Values.All(v => v.IsFinal);
-				complex.IsFinal.AssertEqual(allFinal, $"IComplexIndicatorValue.IsFinal={complex.IsFinal}, but inner values: [{complex.InnerValues.Values.Select(v => v.IsFinal.ToString()).JoinCommaSpace()}]");
-			}
-		}
-
-		value.Plain().ForEach(v =>
-		{
-			if (v.IsEmpty)
-				return;
-
-			var dec = v.ToDecimal();
-			var range = _validators.SafeAdd(v.Indicator.Measure);
-			range.Contains(dec).AssertTrue();
-		});
-	}
-
-	public static IEnumerable<IIndicatorValue> Plain(this IIndicatorValue val)
-	{
-		if (val is not IComplexIndicatorValue civ)
-		{
-			yield return val;
-		}
-		else
-		{
-			foreach (var v in civ.InnerValues.SelectMany(kv => Plain(kv.Value)))
-				yield return v;
-		}
 	}
 }

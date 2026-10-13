@@ -1,5 +1,8 @@
 namespace StockSharp.Tests;
 
+using System.IO.Packaging;
+
+using StockSharp.Fix;
 using StockSharp.Messages;
 
 [TestClass]
@@ -386,8 +389,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 	#endregion
 
 	#region CreateErrorResponse
-
-	private sealed class TestReceiver : TestLogReceiver { }
 
 	[TestMethod]
 	public void CreateErrorResponse_ConnectMessage_ReturnsConnectError()
@@ -1086,16 +1087,25 @@ public class ExtensionsMethodsTests : BaseTestClass
 	public void ApplyNewBalance_NegativeBalance_LogsError()
 	{
 		var logger = new TestReceiver();
-		((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
-		IsTrue(logger.Logs.Count >= 1);
+		var result = ((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
+
+		result.AssertEqual(-1m);
+		logger.Logs.Count.AssertEqual(1);
+		logger.Logs[0].Level.AssertEqual(LogLevels.Error);
+		logger.Logs[0].Message.Contains("-1").AssertTrue();
 	}
 
 	[TestMethod]
 	public void ApplyNewBalance_IncreasingBalance_LogsError()
 	{
 		var logger = new TestReceiver();
-		((decimal?)5m).ApplyNewBalance(10m, 1, logger);
-		IsTrue(logger.Logs.Count >= 1);
+		var result = ((decimal?)5m).ApplyNewBalance(10m, 1, logger);
+
+		result.AssertEqual(10m);
+		logger.Logs.Count.AssertEqual(1);
+		logger.Logs[0].Level.AssertEqual(LogLevels.Error);
+		logger.Logs[0].Message.Contains("5").AssertTrue();
+		logger.Logs[0].Message.Contains("10").AssertTrue();
 	}
 
 	#endregion
@@ -1164,6 +1174,87 @@ public class ExtensionsMethodsTests : BaseTestClass
 	public void IsAllSecurity_Specific_ReturnsFalse()
 	{
 		Helper.CreateSecurityId().IsAllSecurity().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsAllSecurity_SecurityWithTheIdInAnotherCase_ReturnsTrue()
+	{
+		new Security { Id = EntitiesExtensions.AllSecurity.Id.ToLowerInvariant() }.IsAllSecurity().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsAllSecurity_SecurityWhoseIdDiffersByAnInvisibleCharacter_ReturnsFalse()
+	{
+		new Security { Id = EntitiesExtensions.AllSecurity.Id + "\u00AD" }.IsAllSecurity().AssertFalse();
+	}
+
+	#endregion
+
+	#region ToSecurityId
+
+	[TestMethod]
+	public void ToSecurityId_CodeInAnotherCase_KeepsTheCaseOfTheCode()
+	{
+		new Security { Id = "SBER@TQBR", Code = "Sber" }.ToSecurityId().SecurityCode.AssertEqual("Sber");
+	}
+
+	[TestMethod]
+	public void ToSecurityId_CodeWithAnInvisibleCharacter_KeepsTheCodeOfTheId()
+	{
+		new Security { Id = "SBER@TQBR", Code = "SB\u00ADER" }.ToSecurityId().SecurityCode.AssertEqual("SBER");
+	}
+
+	#endregion
+
+	#region MicexCurrencyName
+
+	[TestMethod]
+	public void ToMicexCurrencyName_Rub_ReturnsSur()
+	{
+		CurrencyTypes.RUB.ToMicexCurrencyName().AssertEqual("SUR");
+	}
+
+	[TestMethod]
+	public void ToMicexCurrencyName_Other_ReturnsIsoCode()
+	{
+		CurrencyTypes.USD.ToMicexCurrencyName().AssertEqual("USD");
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Sur_ReturnsRub()
+	{
+		"SUR".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.RUB);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Rur_ReturnsRub()
+	{
+		"RUR".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.RUB);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_IsoCode_ReturnsSameCurrency()
+	{
+		"USD".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.USD);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Empty_ReturnsNothing()
+	{
+		var (currency, error) = string.Empty.FromMicexCurrencyName();
+
+		currency.AssertNull();
+		error.AssertNull();
+	}
+
+	/// <summary>
+	/// The pair carries the rouble under a name of its own, so what one writes the other has to read back.
+	/// </summary>
+	[TestMethod]
+	public void MicexCurrencyName_RoundTrips()
+	{
+		foreach (var currency in new[] { CurrencyTypes.RUB, CurrencyTypes.USD, CurrencyTypes.EUR })
+			currency.ToMicexCurrencyName().FromMicexCurrencyName().currency.AssertEqual(currency);
 	}
 
 	#endregion
@@ -1400,40 +1491,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 		result.Asks[0].Volume.AssertEqual(15m);
 	}
 
-	[TestMethod]
-	public void Join_DuplicatePrices_KeepsBothQuotes()
-	{
-		// Note: Join does NOT merge quotes with same price - it keeps both.
-		// This test documents this behavior.
-		var secId = Helper.CreateSecurityId();
-		var original = new QuoteChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = DateTime.UtcNow,
-			Bids = [new QuoteChange(100m, 10)],
-			Asks = [new QuoteChange(101m, 10)],
-		};
-		var rare = new QuoteChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = DateTime.UtcNow,
-			Bids = [new QuoteChange(100m, 5)], // same price!
-			Asks = [new QuoteChange(101m, 5)], // same price!
-		};
-
-		var result = original.Join(rare);
-
-		// Both quotes with same price are kept (not merged)
-		result.Bids.Length.AssertEqual(2);
-		result.Bids[0].Price.AssertEqual(100m);
-		result.Bids[1].Price.AssertEqual(100m);
-		// Volumes are NOT merged
-		(result.Bids[0].Volume + result.Bids[1].Volume).AssertEqual(15m);
-		result.Asks.Length.AssertEqual(2);
-		result.Asks[0].Price.AssertEqual(101m);
-		result.Asks[1].Price.AssertEqual(101m);
-	}
-
 	#endregion
 
 	#region IsHalfEmpty
@@ -1499,8 +1556,10 @@ public class ExtensionsMethodsTests : BaseTestClass
 	#region CreateReply / CreateOrderReply
 
 	[TestMethod]
-	public void CreateReply_NoError_ReturnsPendingReply()
+	public void CreateReply_NullErrorThrows()
 	{
+		// The method builds a rejection, and a rejection without a reason is not one. A reply that
+		// carries no error is CreateOrderReply.
 		var reg = new OrderRegisterMessage
 		{
 			TransactionId = 42,
@@ -1511,13 +1570,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 			PortfolioName = "pf",
 		};
 
-		var reply = reg.CreateReply();
-
-		reply.OriginalTransactionId.AssertEqual(42L);
-		reply.DataTypeEx.AssertEqual(DataType.Transactions);
-		reply.HasOrderInfo.AssertTrue();
-		reply.Error.AssertNull();
-		reply.OrderState.AssertNull();
+		Throws<ArgumentNullException>(() => reg.CreateReply(null));
 	}
 
 	[TestMethod]
@@ -1539,6 +1592,22 @@ public class ExtensionsMethodsTests : BaseTestClass
 		reply.OriginalTransactionId.AssertEqual(42L);
 		reply.Error.AssertEqual(ex);
 		reply.OrderState.AssertEqual(OrderStates.Failed);
+	}
+
+	[TestMethod]
+	public void CreateReply_OrderStatusThrows()
+	{
+		// OrderStatusMessage derives from OrderCancelMessage, so it reaches this method as a cancel
+		// would. It asks for a snapshot and names no order: its refusal is a subscription response,
+		// and building an execution for it hands the receiver an order nobody placed.
+		var status = new OrderStatusMessage
+		{
+			TransactionId = 44,
+			SecurityId = Helper.CreateSecurityId(),
+			PortfolioName = "pf",
+		};
+
+		Throws<ArgumentException>(() => status.CreateReply(new InvalidOperationException("test")));
 	}
 
 	[TestMethod]
@@ -2165,10 +2234,14 @@ public class ExtensionsMethodsTests : BaseTestClass
 	public void LoopBack_SetsBackModeAndAdapter()
 	{
 		var msg = new TimeMessage();
-		var adapter = new IncrementalIdGenerator();
-		// We need a real adapter, but we can test the method conceptually
-		// by checking IsBack
-		// LoopBack requires IMessageAdapter so skip if no mock available
+		using var adapter = new RecordingMessageAdapter();
+
+		var result = msg.LoopBack(adapter);
+
+		result.AssertSame(msg);
+		msg.BackMode.AssertEqual(MessageBackModes.Direct);
+		msg.Adapter.AssertSame(adapter);
+		msg.IsBack().AssertTrue();
 	}
 
 	[TestMethod]
@@ -3264,6 +3337,62 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#endregion
 
+	#region GetAnsweredSubscriptionIds
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_PrefersSubscriptionIds()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11, SubscriptionId = 22, SubscriptionIds = [77] };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([77L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_ReturnsEveryTaggedSubscription()
+	{
+		var msg = new TimeFrameCandleMessage { SubscriptionIds = [1L, 2L, 3L] };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([1L, 2L, 3L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_FallsBackToSubscriptionId()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11, SubscriptionId = 22 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([22L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_FallsBackToOriginalTransactionId()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([11L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_NotSubscriptionIdMessage_UsesOriginalTransactionId()
+	{
+		var msg = new SubscriptionOnlineMessage { OriginalTransactionId = 5 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([5L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_NoIds_ReturnsEmpty()
+	{
+		new TimeFrameCandleMessage().GetAnsweredSubscriptionIds().Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_Null_Throws()
+	{
+		Throws<ArgumentNullException>(() => ((Message)null).GetAnsweredSubscriptionIds());
+	}
+
+	#endregion
+
 	#region HasOrderId (OrderStatusMessage)
 
 	[TestMethod]
@@ -3459,7 +3588,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken) => default;
 
-		public override IMessageAdapter Clone() => new TestMessageAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestMessageAdapter());
 	}
 
 	#endregion
@@ -3519,6 +3649,30 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 		"test_icon".MakeVectorIconUri().ToString().AssertEqual($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
 	}
+
+	[TestMethod]
+	public void MakeVectorIconPath_NamesTheSameDrawingWithoutThePackScheme()
+	{
+		_ = PackUriHelper.UriSchemePack;
+
+		var path = "test_icon".MakeVectorIconPath();
+
+		path.IsAbsoluteUri.AssertFalse();
+		path.ToString().AssertEqual("/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
+		"test_icon".MakeVectorIconUri().ToString().AssertEqual($"pack://application:,,,{path}");
+	}
+
+	[TestMethod]
+	public void TryGetIconPath_AddressesADrawingTheWayEveryPlatformReadsIt()
+	{
+		typeof(WithDrawing).TryGetIconPath().ToString().AssertEqual("/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
+		typeof(WithoutIcon).TryGetIconPath().AssertNull();
+	}
+
+	[VectorIcon("test_icon")]
+	private sealed class WithDrawing;
+
+	private sealed class WithoutIcon;
 
 	#endregion
 
@@ -3668,6 +3822,802 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var adapter = new TestMessageAdapter();
 		adapter.IsSupportSecuritiesLookupAll().AssertFalse();
+	}
+
+	#endregion
+
+	#region ReRegisterClone
+
+	// An order carrying a distinct, non-default value in EVERY writable property: the ones that
+	// describe HOW it is to be executed, the ones only the exchange fills in once it lives there, and
+	// the bookkeeping the caller attaches to it. Sweeps compare it against a blank order first, so a
+	// property added to Order and not given a value here is reported rather than silently skipped.
+	private static Order CreateLivingOrder() => new()
+	{
+		Security = Helper.CreateSecurity(),
+		Portfolio = Helper.CreatePortfolio(),
+		Side = Sides.Sell,
+		Type = OrderTypes.Limit,
+		Price = 101.5m,
+		Volume = 20m,
+		TimeInForce = TimeInForce.MatchOrCancel,
+		ExpiryDate = new DateTime(2025, 6, 15, 10, 30, 0, DateTimeKind.Utc),
+		VisibleVolume = 5m,
+		MinVolume = 2m,
+		PostOnly = true,
+		PositionEffect = OrderPositionEffects.CloseOnly,
+		MarginMode = MarginModes.Isolated,
+		Leverage = 10,
+		BrokerCode = "BRK",
+		ClientCode = "CLI",
+		StrategyId = "STRAT",
+		IsManual = true,
+		IsMarketMaker = true,
+		Condition = new FixOrderCondition { StopLoss = 95m, TakeProfit = 110m },
+
+		// What the exchange, not the caller, put on the order.
+		Id = 777,
+		StringId = "EXCH-777",
+		BoardId = "BRD-777",
+		TransactionId = 42,
+		State = OrderStates.Active,
+		Balance = 12m,
+		Status = 5,
+		IsSystem = false,
+		Time = new DateTime(2025, 6, 15, 10, 30, 2, DateTimeKind.Utc),
+		ServerTime = new DateTime(2025, 6, 15, 10, 31, 0, DateTimeKind.Utc),
+		LocalTime = new DateTime(2025, 6, 15, 10, 31, 1, DateTimeKind.Utc),
+		MatchedTime = new DateTime(2025, 6, 15, 10, 32, 0, DateTimeKind.Utc),
+		CancelledTime = new DateTime(2025, 6, 15, 10, 33, 0, DateTimeKind.Utc),
+		AveragePrice = 101.4m,
+		MarketPrice = 101.6m,
+		Slippage = 0.3m,
+		Yield = 4.5m,
+		Commission = 0.7m,
+		CommissionCurrency = "USD",
+		Currency = CurrencyTypes.USD,
+		LatencyRegistration = TimeSpan.FromMilliseconds(15),
+		LatencyCancellation = TimeSpan.FromMilliseconds(16),
+		LatencyEdition = TimeSpan.FromMilliseconds(17),
+		SeqNum = 9,
+
+		// What the caller attached to it for its own bookkeeping.
+		Comment = "the reason this order exists",
+		UserOrderId = "USER-777",
+	};
+
+	[TestMethod]
+	public void ReRegisterClone_CarriesEveryExecutionInstruction()
+	{
+		// The replacement is sent to the exchange in place of the original, so every constraint the
+		// original was accepted under has to travel with it. A dropped one is not a lost annotation:
+		// a post-only order that comes back as an ordinary limit crosses the spread and pays the
+		// taker fee, and a close-only order that loses PositionEffect opens a fresh position.
+		var old = CreateLivingOrder();
+		var clone = old.ReRegisterClone();
+
+		clone.Security.AssertSame(old.Security);
+		clone.Portfolio.AssertSame(old.Portfolio);
+		clone.Side.AssertEqual(old.Side);
+		clone.Type.AssertEqual(old.Type);
+		clone.Price.AssertEqual(old.Price);
+		clone.Volume.AssertEqual(old.Volume);
+		clone.TimeInForce.AssertEqual(old.TimeInForce);
+		clone.ExpiryDate.AssertEqual(old.ExpiryDate);
+		clone.VisibleVolume.AssertEqual(old.VisibleVolume);
+		clone.MinVolume.AssertEqual(old.MinVolume);
+		clone.PostOnly.AssertEqual(old.PostOnly);
+		clone.PositionEffect.AssertEqual(old.PositionEffect);
+		clone.MarginMode.AssertEqual(old.MarginMode);
+		clone.Leverage.AssertEqual(old.Leverage);
+		clone.BrokerCode.AssertEqual(old.BrokerCode);
+		clone.ClientCode.AssertEqual(old.ClientCode);
+		clone.StrategyId.AssertEqual(old.StrategyId);
+		clone.IsManual.AssertEqual(old.IsManual);
+		clone.IsMarketMaker.AssertEqual(old.IsMarketMaker);
+	}
+
+	[TestMethod]
+	public void ReRegisterClone_LeavesTheExchangeLifeOfTheOldOrderBehind()
+	{
+		// The clone has not been sent anywhere yet: it has no identity at the exchange and no
+		// execution history. Carrying either over would make the new order look already registered
+		// and partly filled - Balance 12 of Volume 20 says 8 lots are done that never traded.
+		var clone = CreateLivingOrder().ReRegisterClone();
+
+		clone.Id.AssertNull();
+		clone.StringId.AssertNull();
+		clone.BoardId.AssertNull();
+		clone.TransactionId.AssertEqual(0L);
+		clone.State.AssertEqual(OrderStates.None);
+		clone.Balance.AssertEqual(0m);
+		clone.Status.AssertNull();
+		clone.ServerTime.AssertEqual(default(DateTime));
+		clone.LocalTime.AssertEqual(default(DateTime));
+		clone.MatchedTime.AssertNull();
+		clone.CancelledTime.AssertNull();
+		clone.AveragePrice.AssertNull();
+		clone.Commission.AssertNull();
+		clone.LatencyRegistration.AssertNull();
+		clone.SeqNum.AssertEqual(0L);
+	}
+
+	[TestMethod]
+	public void ReRegisterClone_GivesTheNewOrderItsOwnCondition()
+	{
+		// A condition is mutable and the caller edits the clone's before sending it - that is the
+		// point of taking a copy. Sharing one instance would rewrite the live order's stop level
+		// while it still sits at the exchange under the old one.
+		var old = CreateLivingOrder();
+		var clone = old.ReRegisterClone();
+
+		var cloned = (FixOrderCondition)clone.Condition;
+		cloned.AssertNotSame(old.Condition);
+		cloned.StopLoss.AssertEqual(95m);
+		cloned.TakeProfit.AssertEqual(110m);
+
+		cloned.StopLoss = 90m;
+		((FixOrderCondition)old.Condition).StopLoss.AssertEqual(95m);
+	}
+
+	[TestMethod]
+	public void ReRegisterClone_ReplacesOnlyThePriceAndVolumeAsked()
+	{
+		// The two arguments are the whole reason to re-register; an omitted one keeps the original
+		// value rather than resetting the order to nothing.
+		var old = CreateLivingOrder();
+
+		var both = old.ReRegisterClone(102.5m, 30m);
+		both.Price.AssertEqual(102.5m);
+		both.Volume.AssertEqual(30m);
+
+		var priceOnly = old.ReRegisterClone(newPrice: 102.5m);
+		priceOnly.Price.AssertEqual(102.5m);
+		priceOnly.Volume.AssertEqual(20m);
+
+		var volumeOnly = old.ReRegisterClone(newVolume: 30m);
+		volumeOnly.Price.AssertEqual(101.5m);
+		volumeOnly.Volume.AssertEqual(30m);
+	}
+
+	#endregion
+
+	#region ToOrder
+
+	// One execution report about one order, as the exchange sends them: an acknowledgement, then a
+	// fill, then the close. Reports after the first identify the order by id and need not repeat the
+	// account, so portfolioName is left free for the caller to omit.
+	private static ExecutionMessage CreateOrderReport(Security security, string portfolioName, OrderStates state, decimal balance) => new()
+	{
+		DataTypeEx = DataType.Transactions,
+		HasOrderInfo = true,
+		SecurityId = security.ToSecurityId(),
+		OrderId = 777,
+		TransactionId = 42,
+		PortfolioName = portfolioName,
+		Side = Sides.Buy,
+		OrderPrice = 100m,
+		OrderVolume = 10m,
+		Balance = balance,
+		OrderState = state,
+		ServerTime = new DateTime(2025, 6, 15, 10, 31, 0, DateTimeKind.Utc),
+	};
+
+	[TestMethod]
+	public void ToOrder_KeepsThePortfolioEntityTheOrderWasGiven()
+	{
+		// The order handed in already carries the Portfolio it was registered against, and that
+		// object is the account itself - balances live on it and every consumer holds it by
+		// reference. A report about that same order must fill the order in, not swap its account
+		// for a fresh stand-in that knows no balance and nobody else is holding.
+		var security = Helper.CreateSecurity();
+		var portfolio = Helper.CreatePortfolio();
+		var order = new Order { Security = security, Portfolio = portfolio };
+
+		CreateOrderReport(security, portfolio.Name, OrderStates.Active, 10m).ToOrder(order);
+
+		order.Portfolio.AssertSame(portfolio);
+	}
+
+	[TestMethod]
+	public void ToOrder_GivesTwoReportsOnOneOrderTheSamePortfolio()
+	{
+		// Whatever portfolio the first report produced is the order's account from then on. A
+		// second report naming the same account must find that one, not build a second object for
+		// it: two Portfolio instances under one name split every position and P&L total keyed on
+		// the account, and neither half is the truth.
+		var security = Helper.CreateSecurity();
+		var order = new Order { Security = security };
+
+		CreateOrderReport(security, "PF-1", OrderStates.Active, 10m).ToOrder(order);
+		var afterAck = order.Portfolio;
+
+		CreateOrderReport(security, "PF-1", OrderStates.Done, 0m).ToOrder(order);
+
+		order.Portfolio.AssertSame(afterAck);
+	}
+
+	[TestMethod]
+	public void ToOrder_DoesNotDropThePortfolioWhenTheReportNamesNone()
+	{
+		// A fill or cancel report names the order, not the account. Saying nothing about the
+		// portfolio means it did not change - it does not mean the order has no account. An order
+		// left holding a nameless portfolio can no longer be cancelled or attributed to anyone.
+		var security = Helper.CreateSecurity();
+		var portfolio = Helper.CreatePortfolio();
+		var order = new Order { Security = security, Portfolio = portfolio };
+
+		CreateOrderReport(security, null, OrderStates.Done, 0m).ToOrder(order);
+
+		order.Portfolio.AssertSame(portfolio);
+	}
+
+	[TestMethod]
+	public void ToOrder_WithoutSecurityDoesNotLeakNullReference()
+	{
+		// ToOrder(message, order) is public and states no requirement on the order's Security, yet
+		// it dereferences it to stamp a board on the portfolio it builds. Whether the right answer
+		// is to refuse the argument or to leave the board unset is the library's to choose; a
+		// NullReferenceException is neither, and tells the caller nothing about what was wrong.
+		var order = new Order();
+		var report = CreateOrderReport(Helper.CreateSecurity(), "PF-1", OrderStates.Active, 10m);
+
+		try
+		{
+			report.ToOrder(order);
+		}
+		catch (NullReferenceException)
+		{
+			Fail($"{nameof(EntitiesExtensions.ToOrder)} threw NullReferenceException for an order with no Security instead of naming the argument at fault.");
+		}
+		catch (ArgumentException)
+		{
+			// Refusing the argument is a legitimate answer. The unhandled dereference is not.
+		}
+	}
+
+	/// <summary>
+	/// Done is a terminal state: the exchange has closed the order and nothing reopens it. A report
+	/// that says otherwise is either about a different order or corrupt, and an order that quietly
+	/// goes back to Active is worse than either - it is shown to the user as live, it is cancelled
+	/// and amended as live, and the money behind it is counted twice. The transition table refuses
+	/// Done -> Active, so this conversion must either refuse the report or leave the state as it
+	/// found it. It cannot do neither: nothing on this path is given a log receiver, so "applied and
+	/// warned about" is not among the answers a caller can see.
+	/// </summary>
+	[TestMethod]
+	public void ToOrder_InvalidStateTransition_IsNotAppliedSilently()
+	{
+		var security = Helper.CreateSecurity();
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = Helper.CreatePortfolio(),
+			State = OrderStates.Done,
+		};
+
+		try
+		{
+			CreateOrderReport(security, "PF-1", OrderStates.Active, 10m).ToOrder(order);
+		}
+		catch (InvalidOperationException)
+		{
+			// Refusing the report outright is a legitimate answer.
+			return;
+		}
+
+		order.State.AssertEqual(OrderStates.Done, $"{nameof(EntitiesExtensions.ToOrder)} moved an order from {OrderStates.Done} back to {OrderStates.Active} - a transition the state table refuses - without refusing the report and without anywhere to report it.");
+	}
+
+	// Properties of Order that no execution report has a field for, so a round trip through one
+	// cannot be asked to bring them back. Everything else Order declares is compared below.
+	private static readonly HashSet<string> _orderFieldsNoReportCarries =
+	[
+		// Both travel as identifiers - SecurityId and PortfolioName - and the entity behind the
+		// identifier is the receiver's to resolve rather than the report's to carry.
+		nameof(Order.Security),
+		nameof(Order.Portfolio),
+
+		// The report timestamps itself (ServerTime, LocalTime). It has no field for when the order
+		// was originally placed, nor for when it was matched or cancelled.
+		nameof(Order.Time),
+		nameof(Order.MatchedTime),
+		nameof(Order.CancelledTime),
+
+		// The report carries a single Latency and does not say which of the three it measured.
+		nameof(Order.LatencyRegistration),
+		nameof(Order.LatencyCancellation),
+		nameof(Order.LatencyEdition),
+	];
+
+	/// <summary>
+	/// An order becomes an execution report whenever it has to cross a boundary - the snapshot a new
+	/// transaction subscription is answered with is built exactly this way - and the far side rebuilds
+	/// the order from that report. Whatever the report leaves behind, the far side never learns: a
+	/// stop order that loses its condition arrives as a plain limit order, and a client cannot see the
+	/// stop level of its own live order. The two halves of the conversion live in two different
+	/// methods, so a field added to one and forgotten in the other stays invisible until something
+	/// downstream reads a null. This walks every writable property of an order and requires each one
+	/// either to survive the round trip or to be named as one no report has a field for.
+	/// </summary>
+	[TestMethod]
+	public void OrderMessageRoundTripFillsEveryScalarProperty()
+	{
+		var order = CreateLivingOrder();
+
+		var compared = typeof(Order)
+			.GetModifiableProps()
+			.Where(p => !_orderFieldsNoReportCarries.Contains(p.Name))
+			.OrderBy(p => p.Name)
+			.ToArray();
+
+		// A property left at its default compares equal however the conversion behaves, so the
+		// fixture is required to have given every compared property a value of its own first.
+		var blank = new Order();
+
+		var unfilled = compared
+			.Where(p => Equals(p.GetValue(order), p.GetValue(blank)))
+			.Select(p => p.Name)
+			.ToArray();
+
+		unfilled.IsEmpty().AssertTrue($"{nameof(CreateLivingOrder)} leaves these properties at their default, so the round trip below proves nothing about them: {unfilled.JoinComma()}");
+
+		var restored = order.ToMessage().ToOrder(new Order { Security = order.Security });
+		restored.Condition.AssertNotSame(order.Condition, "the report and the restored order must not share the caller's mutable condition");
+
+		var lost = compared
+			.Where(p => !OrderPropertyEquals(p, order, restored))
+			.Select(p => $"{p.Name}: {p.GetValue(order) ?? "null"} -> {p.GetValue(restored) ?? "null"}")
+			.ToArray();
+
+		lost.IsEmpty().AssertTrue($"{lost.Length} of {compared.Length} properties did not survive Order -> ExecutionMessage -> Order:{Environment.NewLine}{lost.JoinN()}");
+	}
+
+	private static bool OrderPropertyEquals(PropertyInfo property, Order expected, Order actual)
+	{
+		var expectedValue = property.GetValue(expected);
+		var actualValue = property.GetValue(actual);
+
+		if (expectedValue is not OrderCondition expectedCondition || actualValue is not OrderCondition actualCondition)
+			return Equals(expectedValue, actualValue);
+
+		return expectedCondition.GetType() == actualCondition.GetType()
+			&& expectedCondition.Parameters.Count == actualCondition.Parameters.Count
+			&& expectedCondition.Parameters.All(p => actualCondition.Parameters.TryGetValue(p.Key, out var value) && Equals(p.Value, value));
+	}
+
+	#endregion
+
+	#region Order transaction messages
+
+	/// <summary>
+	/// This message is the order: what it says is what the exchange is asked to do, and the order
+	/// object stays behind on this side. An instruction that does not make it into the message is
+	/// not a lost annotation - a post-only order sent as an ordinary limit crosses the spread and
+	/// pays the taker fee, and a close-only order that loses its position effect opens a new
+	/// position instead of closing one.
+	/// </summary>
+	[TestMethod]
+	public void CreateRegisterMessage_CarriesEveryInstructionTheOrderWasGiven()
+	{
+		var order = CreateLivingOrder();
+
+		var msg = order.CreateRegisterMessage();
+
+		msg.TransactionId.AssertEqual(order.TransactionId);
+		msg.SecurityId.AssertEqual(order.Security.ToSecurityId());
+		msg.PortfolioName.AssertEqual(order.Portfolio.Name);
+
+		msg.Side.AssertEqual(order.Side);
+		msg.OrderType.AssertEqual(order.Type);
+		msg.Price.AssertEqual(order.Price);
+		msg.Volume.AssertEqual(order.Volume);
+		msg.VisibleVolume.AssertEqual(order.VisibleVolume);
+		msg.MinOrderVolume.AssertEqual(order.MinVolume);
+		msg.TimeInForce.AssertEqual(order.TimeInForce);
+		msg.TillDate.AssertEqual(order.ExpiryDate);
+		msg.PostOnly.AssertEqual(order.PostOnly);
+		msg.PositionEffect.AssertEqual(order.PositionEffect);
+		msg.MarginMode.AssertEqual(order.MarginMode);
+		msg.Leverage.AssertEqual(order.Leverage);
+		msg.IsMarketMaker.AssertEqual(order.IsMarketMaker);
+		msg.IsManual.AssertEqual(order.IsManual);
+		msg.Slippage.AssertEqual(order.Slippage);
+
+		msg.Comment.AssertEqual(order.Comment);
+		msg.UserOrderId.AssertEqual(order.UserOrderId);
+		msg.StrategyId.AssertEqual(order.StrategyId);
+		msg.BrokerCode.AssertEqual(order.BrokerCode);
+		msg.ClientCode.AssertEqual(order.ClientCode);
+	}
+
+	/// <summary>
+	/// The currency the order is placed in is checked separately from the sweep above because it is
+	/// the one instruction an order and an instrument both have an opinion about. The caller set it
+	/// on the order, so that is the answer; an instrument that says nothing about its currency
+	/// cannot be the reason the order is sent without one.
+	/// </summary>
+	[TestMethod]
+	public void CreateRegisterMessage_KeepsTheCurrencyTheOrderNames()
+	{
+		var order = CreateLivingOrder();
+
+		order.Security.Currency.AssertNull($"{nameof(Helper.CreateSecurity)} now names a currency, so this test no longer separates the order's answer from the instrument's");
+
+		order.CreateRegisterMessage().Currency.AssertEqual(order.Currency, "the order names the currency it is placed in and the instrument names none, so the instrument cannot be the one that decides");
+	}
+
+	/// <summary>
+	/// A condition is mutable and the caller goes on holding the order after sending it - moving a
+	/// stop level is an ordinary thing to do. The message is already on its way, so it has to carry
+	/// its own copy; sharing one would rewrite an instruction the exchange has already been given.
+	/// </summary>
+	[TestMethod]
+	public void CreateRegisterMessage_GivesTheMessageItsOwnCopyOfTheCondition()
+	{
+		var order = CreateLivingOrder();
+
+		var msg = order.CreateRegisterMessage();
+
+		msg.Condition.AssertNotNull();
+		msg.Condition.AssertNotSame(order.Condition);
+
+		((FixOrderCondition)order.Condition).StopLoss = 1m;
+
+		((FixOrderCondition)msg.Condition).StopLoss.AssertEqual(95m, "editing the order after it was sent must not rewrite the instruction already given");
+	}
+
+	/// <summary>
+	/// A cancellation is itself a transaction: it has its own number, by which its acknowledgement
+	/// or rejection comes back, and it names the order to cancel by that order's number. Confusing
+	/// the two leaves the user with a cancel whose fate cannot be tracked, or with a cancel aimed at
+	/// nothing. The identity of the order is filled in first and the instrument's fields are copied
+	/// over the message afterwards, so what is under test is that the target survives that copy.
+	/// </summary>
+	[TestMethod]
+	public void CreateCancelMessage_NamesTheOrderToCancelAndCarriesItsOwnTransaction()
+	{
+		var order = CreateLivingOrder();
+		var securityId = order.Security.ToSecurityId();
+
+		const long cancelTransactionId = 4242;
+
+		var msg = order.CreateCancelMessage(securityId, cancelTransactionId);
+
+		msg.TransactionId.AssertEqual(cancelTransactionId);
+		msg.OriginalTransactionId.AssertEqual(order.TransactionId);
+
+		msg.OrderId.AssertEqual(order.Id);
+		msg.OrderStringId.AssertEqual(order.StringId);
+		msg.SecurityId.AssertEqual(securityId);
+		msg.PortfolioName.AssertEqual(order.Portfolio.Name);
+
+		msg.OrderType.AssertEqual(order.Type);
+		msg.Side.AssertEqual(order.Side);
+		msg.Volume.AssertEqual(order.Volume);
+		msg.Balance.AssertEqual(order.Balance);
+		msg.MarginMode.AssertEqual(order.MarginMode);
+
+		msg.UserOrderId.AssertEqual(order.UserOrderId);
+		msg.StrategyId.AssertEqual(order.StrategyId);
+		msg.BrokerCode.AssertEqual(order.BrokerCode);
+		msg.ClientCode.AssertEqual(order.ClientCode);
+	}
+
+	/// <summary>
+	/// A replace is one transaction naming two orders: the one to withdraw and the one to put in its
+	/// place. Taking the terms from the wrong side of that pair sends the old price and volume back
+	/// to the exchange - the amendment appears to be accepted and changes nothing - while naming the
+	/// wrong order to withdraw leaves the original live alongside its replacement.
+	/// </summary>
+	[TestMethod]
+	public void CreateReplaceMessage_NamesTheOrderItWithdrawsAndCarriesTheNewTerms()
+	{
+		var old = CreateLivingOrder();
+
+		var replacement = old.ReRegisterClone(102.5m, 30m);
+		replacement.TransactionId = old.TransactionId + 1;
+
+		var securityId = old.Security.ToSecurityId();
+
+		var msg = old.CreateReplaceMessage(replacement, securityId);
+
+		// The order being withdrawn.
+		msg.OriginalTransactionId.AssertEqual(old.TransactionId);
+		msg.OldOrderId.AssertEqual(old.Id);
+		msg.OldOrderStringId.AssertEqual(old.StringId);
+		msg.OldOrderPrice.AssertEqual(old.Price);
+		msg.OldOrderVolume.AssertEqual(old.Volume);
+
+		// The order taking its place.
+		msg.TransactionId.AssertEqual(replacement.TransactionId);
+		msg.SecurityId.AssertEqual(securityId);
+		msg.PortfolioName.AssertEqual(replacement.Portfolio.Name);
+		msg.Price.AssertEqual(102.5m);
+		msg.Volume.AssertEqual(30m);
+		msg.Side.AssertEqual(replacement.Side);
+		msg.OrderType.AssertEqual(replacement.Type);
+		msg.VisibleVolume.AssertEqual(replacement.VisibleVolume);
+		msg.MinOrderVolume.AssertEqual(replacement.MinVolume);
+		msg.TimeInForce.AssertEqual(replacement.TimeInForce);
+		msg.TillDate.AssertEqual(replacement.ExpiryDate);
+		msg.PostOnly.AssertEqual(replacement.PostOnly);
+		msg.PositionEffect.AssertEqual(replacement.PositionEffect);
+		msg.MarginMode.AssertEqual(replacement.MarginMode);
+		msg.Leverage.AssertEqual(replacement.Leverage);
+		msg.IsMarketMaker.AssertEqual(replacement.IsMarketMaker);
+		msg.IsManual.AssertEqual(replacement.IsManual);
+		msg.Slippage.AssertEqual(replacement.Slippage);
+
+		// Bookkeeping follows the order being amended.
+		msg.UserOrderId.AssertEqual(old.UserOrderId);
+		msg.StrategyId.AssertEqual(old.StrategyId);
+		msg.BrokerCode.AssertEqual(old.BrokerCode);
+		msg.ClientCode.AssertEqual(old.ClientCode);
+	}
+
+	/// <summary>
+	/// The same promise the registration message keeps, for the same reason: the replacement's
+	/// condition is the caller's to go on editing, and the message has already been handed over.
+	/// </summary>
+	[TestMethod]
+	public void CreateReplaceMessage_GivesTheMessageItsOwnCopyOfTheCondition()
+	{
+		var old = CreateLivingOrder();
+
+		var replacement = old.ReRegisterClone();
+		replacement.TransactionId = old.TransactionId + 1;
+
+		var msg = old.CreateReplaceMessage(replacement, old.Security.ToSecurityId());
+
+		msg.Condition.AssertNotNull();
+		msg.Condition.AssertNotSame(replacement.Condition);
+
+		((FixOrderCondition)replacement.Condition).StopLoss = 1m;
+
+		((FixOrderCondition)msg.Condition).StopLoss.AssertEqual(95m, "editing the replacement after it was sent must not rewrite the instruction already given");
+	}
+
+	#endregion
+
+	#region Lookup criteria
+
+	/// <summary>
+	/// A criteria object and a lookup message are the same request in two shapes - the user fills in
+	/// one on a search panel, the adapter is handed the other - so a field that does not survive the
+	/// trip quietly widens the search: asking for stocks named "Sber" on one board and receiving
+	/// every instrument the venue lists is not the answer to the question asked.
+	/// </summary>
+	[TestMethod]
+	public void ASecurityLookupSurvivesTheTripThroughACriteriaObject()
+	{
+		var secId = "SBER@TQBR".ToSecurityId();
+
+		var message = new SecurityLookupMessage
+		{
+			SecurityId = secId,
+			Name = "Sberbank",
+			SecurityType = SecurityTypes.Stock,
+			Currency = CurrencyTypes.RUB,
+		};
+
+		var criteria = message.ToLookupCriteria(new InMemoryExchangeInfoProvider());
+
+		criteria.Code.AssertEqual(secId.SecurityCode);
+		criteria.Board.AssertNotNull();
+		criteria.Board.Code.AssertEqual(secId.BoardCode);
+		criteria.Name.AssertEqual(message.Name);
+		criteria.Type.AssertEqual(message.SecurityType);
+		criteria.Currency.AssertEqual(message.Currency);
+
+		var back = criteria.ToLookupMessage();
+
+		back.SecurityId.AssertEqual(secId);
+		back.Name.AssertEqual(message.Name);
+		back.SecurityType.AssertEqual(message.SecurityType);
+		back.Currency.AssertEqual(message.Currency);
+	}
+
+	/// <summary>
+	/// A criteria carrying nothing means "everything", and that has to be recognised as such: a
+	/// request that instead travels as a filter matching nothing answers a user who asked for the
+	/// whole instrument list with an empty one.
+	/// </summary>
+	[TestMethod]
+	public void AnEmptySecurityLookupAsksForEverything()
+	{
+		var criteria = Helper.LookupAll.ToLookupCriteria(new InMemoryExchangeInfoProvider());
+
+		criteria.IsLookupAll().AssertTrue();
+		criteria.ToLookupMessage().IsLookupAll().AssertTrue();
+	}
+
+	/// <summary>
+	/// A criteria that names the instrument outright asks for that one instrument. The identifier is
+	/// the whole request here, so it has to be split into code and board rather than travel as text
+	/// nothing downstream compares against.
+	/// </summary>
+	[TestMethod]
+	public void ToLookupMessage_ACriteriaNamingOneInstrumentAsksForThatOne()
+	{
+		var secId = "SBER@TQBR".ToSecurityId();
+
+		var message = new Security { Id = secId.ToStringId() }.ToLookupMessage();
+
+		message.SecurityId.AssertEqual(secId);
+		message.IsLookupAll().AssertFalse("a criteria naming one instrument is not a request for every instrument");
+	}
+
+	/// <summary>
+	/// The account filter is what limits a portfolio request to the accounts the user asked about,
+	/// and it is a subscription rather than a one-off read: a request that forgets to say so is
+	/// answered once and never again, and the balances on screen stop moving.
+	/// </summary>
+	[TestMethod]
+	public void ToLookupCriteria_APortfolioFilterKeepsEveryFieldItFiltersOn()
+	{
+		var criteria = new Portfolio
+		{
+			Name = "PF-1",
+			Board = ExchangeBoard.Test,
+			Currency = CurrencyTypes.EUR,
+			ClientCode = "CLI",
+		};
+
+		var message = criteria.ToLookupCriteria();
+
+		message.IsSubscribe.AssertTrue();
+		message.PortfolioName.AssertEqual(criteria.Name);
+		message.BoardCode.AssertEqual(criteria.Board.Code);
+		message.Currency.AssertEqual(criteria.Currency);
+		message.ClientCode.AssertEqual(criteria.ClientCode);
+	}
+
+	/// <summary>
+	/// The order filter is how a client asks "what of mine is still live": every field it names
+	/// narrows the answer, and the volume and side are given separately because an order object has
+	/// no way to say "either side". A dropped field returns somebody else's orders, or the whole
+	/// book of them.
+	/// </summary>
+	[TestMethod]
+	public void ToLookupCriteria_AnOrderFilterKeepsEveryFieldItFiltersOn()
+	{
+		var criteria = CreateLivingOrder();
+
+		var message = criteria.ToLookupCriteria(15m, Sides.Buy);
+
+		message.IsSubscribe.AssertTrue();
+		message.SecurityId.AssertEqual(criteria.Security.ToSecurityId());
+		message.PortfolioName.AssertEqual(criteria.Portfolio.Name);
+		message.OrderId.AssertEqual(criteria.Id);
+		message.OrderStringId.AssertEqual(criteria.StringId);
+		message.OrderType.AssertEqual(criteria.Type);
+		message.UserOrderId.AssertEqual(criteria.UserOrderId);
+		message.StrategyId.AssertEqual(criteria.StrategyId);
+		message.BrokerCode.AssertEqual(criteria.BrokerCode);
+		message.ClientCode.AssertEqual(criteria.ClientCode);
+
+		// The two the caller states separately rather than through the order.
+		message.Volume.AssertEqual(15m);
+		message.Side.AssertEqual(Sides.Buy);
+	}
+
+	#endregion
+
+	#region Portfolio and news conversions
+
+	/// <summary>
+	/// The account object is held by reference all over the application - balances hang off it and
+	/// every position points at it - so an update has to be applied to the one the caller passed in,
+	/// not to a fresh copy nobody else can see.
+	/// </summary>
+	[TestMethod]
+	public void ToPortfolio_UpdatesTheAccountItWasGiven()
+	{
+		var portfolio = new Portfolio { Name = "PF-1" };
+
+		var message = new PortfolioMessage
+		{
+			PortfolioName = "PF-1",
+			BoardCode = ExchangeBoard.Test.Code,
+			Currency = CurrencyTypes.EUR,
+			ClientCode = "CLI",
+		};
+
+		var updated = message.ToPortfolio(portfolio, new InMemoryExchangeInfoProvider());
+
+		updated.AssertSame(portfolio);
+
+		portfolio.Board.AssertNotNull();
+		portfolio.Board.Code.AssertEqual(ExchangeBoard.Test.Code);
+		portfolio.Currency.AssertEqual(CurrencyTypes.EUR);
+		portfolio.ClientCode.AssertEqual("CLI");
+	}
+
+	/// <summary>
+	/// An update that says nothing about a field is not an instruction to clear it. Portfolio
+	/// messages arrive repeatedly and most of them carry only what changed, so treating silence as
+	/// "erase" would strip the account of its board and currency on the second message.
+	/// </summary>
+	[TestMethod]
+	public void ToPortfolio_LeavesAloneWhatTheMessageSaysNothingAbout()
+	{
+		var portfolio = new Portfolio
+		{
+			Name = "PF-1",
+			Board = ExchangeBoard.Test,
+			Currency = CurrencyTypes.EUR,
+			ClientCode = "CLI",
+		};
+
+		new PortfolioMessage { PortfolioName = "PF-1" }.ToPortfolio(portfolio, new InMemoryExchangeInfoProvider());
+
+		portfolio.Board.AssertSame(ExchangeBoard.Test);
+		portfolio.Currency.AssertEqual(CurrencyTypes.EUR);
+		portfolio.ClientCode.AssertEqual("CLI");
+	}
+
+	/// <summary>
+	/// A news item is read, filtered and stored by what it carries: the headline and story the user
+	/// sees, the time it is filed under, the source it is attributed to, and the sequence number by
+	/// which a gap in the feed is noticed. A field lost here is lost for good - nothing downstream
+	/// goes back to the message for it.
+	/// </summary>
+	[TestMethod]
+	public void ToNews_CarriesEveryFieldTheServerSent()
+	{
+		var serverTime = new DateTime(2026, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var message = new NewsMessage
+		{
+			Id = "N-1",
+			Source = "Some agency",
+			Headline = "Rates unchanged",
+			Story = "The full text of the story.",
+			Url = "https://example.com/n1",
+			BoardCode = ExchangeBoard.Test.Code,
+			ServerTime = serverTime,
+			LocalTime = serverTime.AddMilliseconds(30),
+			Priority = NewsPriorities.High,
+			Language = "en",
+			ExpiryDate = serverTime.AddDays(1),
+			SeqNum = 9,
+		};
+
+		var news = message.ToNews(new InMemoryExchangeInfoProvider());
+
+		news.Id.AssertEqual(message.Id);
+		news.Source.AssertEqual(message.Source);
+		news.Headline.AssertEqual(message.Headline);
+		news.Story.AssertEqual(message.Story);
+		news.Url.AssertEqual(message.Url);
+		news.ServerTime.AssertEqual(message.ServerTime);
+		news.LocalTime.AssertEqual(message.LocalTime);
+		news.Priority.AssertEqual(message.Priority);
+		news.Language.AssertEqual(message.Language);
+		news.ExpiryDate.AssertEqual(message.ExpiryDate);
+		news.SeqNum.AssertEqual(message.SeqNum);
+
+		news.Board.AssertNotNull();
+		news.Board.Code.AssertEqual(message.BoardCode);
+	}
+
+	/// <summary>
+	/// News attached to an instrument is shown next to that instrument and filtered by it. The
+	/// instrument is named by code and board together, and a code on its own is a different
+	/// instrument: the same ticker trades on more than one board, and an identifier missing its
+	/// board resolves to the associated-board instrument instead of the one the story is about.
+	/// </summary>
+	[TestMethod]
+	public void ToNews_NamesTheInstrumentTheServerSent()
+	{
+		var secId = "SBER@TQBR".ToSecurityId();
+
+		var news = new NewsMessage { Id = "N-1", SecurityId = secId }.ToNews(new InMemoryExchangeInfoProvider());
+
+		news.Security.AssertNotNull();
+		news.Security.Id.AssertEqual(secId.ToStringId(), "the instrument the story is about must come back as the one the server named");
+		news.Security.ToSecurityId().AssertEqual(secId);
 	}
 
 	#endregion

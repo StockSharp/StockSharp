@@ -16,7 +16,19 @@ public static class Paths
 	static Paths()
 	{
 		var companyPath = PathsHolder.CompanyPath ?? ConfigManager.TryGet<string>("companyPath");
-		CompanyPath = companyPath.IsEmpty() ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp") : companyPath.ToFullPathIfNeed();
+
+		// ToFullPathIfNeed expands the %Documents% variable; despite the name it does not make a
+		// path absolute. It can also expand to nothing, because GetFolderPath answers with an empty
+		// string when the platform cannot name the folder - a container with no HOME, which is what
+		// a CI runner usually is. The same emptiness reaches the default below as a bare
+		// "StockSharp". Every other path is built from this one, so it is settled against the
+		// current directory here rather than letting a relative name travel: the data would
+		// otherwise land wherever the process happened to start.
+		var configured = companyPath.IsEmpty() ? null : companyPath.ToFullPathIfNeed();
+
+		CompanyPath = Path.GetFullPath(configured.IsEmpty()
+			? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp")
+			: configured);
 
 		CredentialsFile = Path.Combine(CompanyPath, $"credentials{DefaultSettingsExt}");
 
@@ -127,7 +139,17 @@ public static class Paths
 	/// <summary>
 	/// App title with version.
 	/// </summary>
+	[Obsolete("Blocking sync-over-async wrapper. Use GetAppNameWithVersionAsync instead.")]
 	public static string AppNameWithVersion => $"{AppName} v{InstalledVersion}";
+
+	/// <summary>
+	/// App title with version.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>App title with version.</returns>
+	public static async ValueTask<string> GetAppNameWithVersionAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
+		=> $"{AppName} v{await GetInstalledVersionAsync(fileSystem, cancellationToken)}";
 
 	/// <summary>
 	/// The path to directory with all applications.
@@ -230,15 +252,10 @@ public static class Paths
 	public const string SetupName = "stocksharp_setup";
 
 	/// <summary>
-	/// Web site domain.
-	/// </summary>
-	public static string Domain => LocalizedStrings.StockSharpDomain;
-
-	/// <summary>
 	/// Get website url.
 	/// </summary>
 	/// <returns>Localized url.</returns>
-	public static string GetWebSiteUrl() => $"https://stocksharp.{Domain}";
+	public static string GetWebSiteUrl() => "https://stocksharp.com";
 
 	/// <summary>
 	/// Get logo url.
@@ -247,9 +264,35 @@ public static class Paths
 	public static string GetLogoUrl() => $"{GetWebSiteUrl()}/images/logo.png";
 
 	/// <summary>
-	/// Chat in Telegram.
+	/// Chat on the web site.
 	/// </summary>
-	public static string Chat => LocalizedStrings.StockSharpChatUrl;
+	public static string Chat => GetSitePageUrl("chat");
+
+	/// <summary>
+	/// Languages the web site is published in.
+	/// </summary>
+	/// <remarks>
+	/// The site itself reads them from its domain rows, which nothing outside it can reach; kept in step with
+	/// that list by hand. A language missing from here is shown in English rather than 404.
+	/// </remarks>
+	private static readonly string[] _siteLanguages = ["en", "ru", "zh", "es", "de", "pt", "ja"];
+
+	/// <summary>
+	/// Language segment the site expects in its addresses, for the language the application is running in.
+	/// </summary>
+	public static string SiteLanguage
+	{
+		get
+		{
+			var lang = LocalizedStrings.ActiveLanguage;
+
+			return _siteLanguages.Any(l => l.EqualsIgnoreCase(lang)) ? lang.ToLowerInvariant() : LocalizedStrings.EnCode;
+		}
+	}
+
+	// Every page on the site lives under its language; only files do not, and they are addressed from the root.
+	private static string GetSitePageUrl(string path)
+		=> $"{GetWebSiteUrl()}/{SiteLanguage}/{path}/";
 
 	/// <summary>
 	/// Bot in Telegram.
@@ -309,7 +352,11 @@ public static class Paths
 	/// <returns>Localized url.</returns>
 	public static string GetPageUrl(long id, object urlPart = default)
 	{
-		var url = GetWebSiteUrl() + "/";
+		// A file is served from the root whatever one is reading in: sending it through the language would only
+		// bounce back here, so it is the one page id that keeps the bare address.
+		var url = id == Pages.File
+			? GetWebSiteUrl() + "/"
+			: $"{GetWebSiteUrl()}/{SiteLanguage}/";
 
 		url += id switch
 		{
@@ -355,7 +402,28 @@ public static class Paths
 	/// </summary>
 	/// <param name="docUrl">Help topic.</param>
 	/// <returns>Localized url.</returns>
-	public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{Domain}/{docUrl}";
+	public static string GetDocUrl(string docUrl)
+	{
+		var path = docUrl?.TrimStart('/') ?? string.Empty;
+
+		// Some paths arrive with the language already on them - the server stores its topic links that way - and
+		// prefixing those again asks for "/ru/ru/topics/...", which is nowhere.
+		var prefix = HasLanguagePrefix(path) ? string.Empty : $"{SiteLanguage}/";
+
+		return $"https://doc.stocksharp.com/{prefix}{path}";
+	}
+
+	private static bool HasLanguagePrefix(string path)
+	{
+		var slash = path.IndexOf('/');
+
+		if (slash < 0)
+			return false;
+
+		var head = path[..slash];
+
+		return _siteLanguages.Any(l => l.EqualsIgnoreCase(head));
+	}
 
 	/// <summary>
 	/// Entry assembly.
@@ -364,29 +432,37 @@ public static class Paths
 
 	private static string _installedVersion;
 
+	private static string AssemblyVersion => EntryAssembly?.GetName().Version.To<string>();
+
 	/// <summary>
 	/// Installed version of the product.
 	/// </summary>
+	[Obsolete("Blocking sync-over-async wrapper. Use GetInstalledVersionAsync instead.")]
 	public static string InstalledVersion
+		=> _installedVersion ?? AsyncHelper.Run(() => GetInstalledVersionAsync(FileSystem, default));
+
+	/// <summary>
+	/// Installed version of the product.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The installed version.</returns>
+	public static async ValueTask<string> GetInstalledVersionAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
-		get
-		{
-			if (_installedVersion != null)
-				return _installedVersion;
-
-			static string GetAssemblyVersion() => EntryAssembly?.GetName().Version.To<string>();
-
-			try
-			{
-				_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory(), FileSystem).IsEmpty(ConfigManager.TryGet("actualVersion", "5.0.0").IsEmpty(GetAssemblyVersion()));
-			}
-			catch
-			{
-				_installedVersion = GetAssemblyVersion();
-			}
-
+		if (_installedVersion != null)
 			return _installedVersion;
+
+		try
+		{
+			_installedVersion = (await TryGetInstalledVersionAsync(Directory.GetCurrentDirectory(), fileSystem, cancellationToken))
+				.IsEmpty(ConfigManager.TryGet("actualVersion", "5.0.0").IsEmpty(AssemblyVersion));
 		}
+		catch (Exception error) when (error is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+		{
+			_installedVersion = AssemblyVersion;
+		}
+
+		return _installedVersion;
 	}
 
 	/// <summary>
@@ -400,17 +476,12 @@ public static class Paths
 	public static string BuildVersion
 		=> EntryAssembly?.GetAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-	private static readonly Lock _installationsLock = new();
-
-	private static SettingsStorage[] GetInstallations(IFileSystem fileSystem)
+	private static async ValueTask<SettingsStorage[]> GetInstallationsAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
 		if (!InstallerInstallationsConfigPath.IsConfigExists(fileSystem))
 			return null;
 
-		SettingsStorage storage;
-
-		using (_installationsLock.EnterScope())
-			storage = InstallerInstallationsConfigPath.DeserializeInvariant(fileSystem);
+		var storage = await InstallerInstallationsConfigPath.DeserializeInvariantAsync(fileSystem, cancellationToken);
 
 		if (storage is null)
 			return null;
@@ -428,9 +499,20 @@ public static class Paths
 	/// <param name="productId">Identifier.</param>
 	/// <param name="fileSystem">File system.</param>
 	/// <returns>Installed path.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use TryGetInstalledPathAsync instead.")]
 	public static string TryGetInstalledPath(long productId, IFileSystem fileSystem)
+		=> AsyncHelper.Run(() => TryGetInstalledPathAsync(productId, fileSystem, default));
+
+	/// <summary>
+	/// Try get installed path by product id.
+	/// </summary>
+	/// <param name="productId">Identifier.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Installed path.</returns>
+	public static async ValueTask<string> TryGetInstalledPathAsync(long productId, IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
-		var installations = GetInstallations(fileSystem);
+		var installations = await GetInstallationsAsync(fileSystem, cancellationToken);
 		if (installations == null)
 			return null;
 
@@ -447,12 +529,23 @@ public static class Paths
 	/// <param name="productInstallPath">File system path to product installation.</param>
 	/// <param name="fileSystem">File system.</param>
 	/// <returns>Installed version of the product.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use TryGetInstalledVersionAsync instead.")]
 	public static string TryGetInstalledVersion(string productInstallPath, IFileSystem fileSystem)
+		=> AsyncHelper.Run(() => TryGetInstalledVersionAsync(productInstallPath, fileSystem, default));
+
+	/// <summary>
+	/// Get currently installed version of the product.
+	/// </summary>
+	/// <param name="productInstallPath">File system path to product installation.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Installed version of the product.</returns>
+	public static async ValueTask<string> TryGetInstalledVersionAsync(string productInstallPath, IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
 		if (productInstallPath.IsEmpty())
 			throw new ArgumentException(nameof(productInstallPath));
 
-		var installations = GetInstallations(fileSystem);
+		var installations = await GetInstallationsAsync(fileSystem, cancellationToken);
 		if (installations == null)
 			return null;
 
@@ -593,8 +686,20 @@ public static class Paths
 	/// <param name="value">Value.</param>
 	/// <param name="bom">Serializer adds UTF8 BOM preamble.</param>
 	/// <returns><see cref="string"/> value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use SerializeToStringAsync instead.")]
 	public static string SerializeToString<T>(this T value, bool bom = true)
-		=> Serialize(value, bom).UTF8();
+		=> AsyncHelper.Run(() => value.SerializeToStringAsync(bom, default));
+
+	/// <summary>
+	/// Serialize <paramref name="value"/> state into <see cref="string"/> value.
+	/// </summary>
+	/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
+	/// <param name="value">Value.</param>
+	/// <param name="bom">Serializer adds UTF8 BOM preamble.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="string"/> value.</returns>
+	public static async ValueTask<string> SerializeToStringAsync<T>(this T value, bool bom, CancellationToken cancellationToken)
+		=> (await value.SerializeAsync(bom, cancellationToken)).UTF8();
 
 	/// <summary>
 	/// Deserialize <paramref name="value"/> state from <paramref name="str"/>.
@@ -602,9 +707,22 @@ public static class Paths
 	/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
 	/// <param name="value">Value.</param>
 	/// <param name="str"><see cref="string"/> value.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use DeserializeFromStringAsync instead.")]
 	public static void DeserializeFromString<T>(this T value, string str)
-		where T : IPersistable
-		=> value.Load(Deserialize<SettingsStorage>(str.UTF8()));
+		where T : IAsyncPersistable
+		=> AsyncHelper.Run(() => value.DeserializeFromStringAsync(str, default));
+
+	/// <summary>
+	/// Deserialize <paramref name="value"/> state from <paramref name="str"/>.
+	/// </summary>
+	/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
+	/// <param name="value">Value.</param>
+	/// <param name="str"><see cref="string"/> value.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public static async ValueTask DeserializeFromStringAsync<T>(this T value, string str, CancellationToken cancellationToken)
+		where T : IAsyncPersistable
+		=> await value.LoadAsync(await str.UTF8().DeserializeAsync<SettingsStorage>(cancellationToken), cancellationToken);
 
 	/// <summary>
 	/// Serialize value into the specified file.
@@ -624,8 +742,24 @@ public static class Paths
 	/// <param name="value">Value.</param>
 	/// <param name="bom">Add UTF8 BOM preamble.</param>
 	/// <returns>Serialized data.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use SerializeAsync instead.")]
 	public static byte[] Serialize<T>(this T value, bool bom = true)
-		=> CreateSerializer<T>(bom).Serialize(value);
+		=> AsyncHelper.Run(() => value.SerializeAsync(bom, default));
+
+	/// <summary>
+	/// Serialize value into byte array.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="value">Value.</param>
+	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Serialized data.</returns>
+	public static async ValueTask<byte[]> SerializeAsync<T>(this T value, bool bom, CancellationToken cancellationToken)
+	{
+		using var stream = new MemoryStream();
+		await CreateSerializer<T>(bom).SerializeAsync(value, stream, cancellationToken);
+		return stream.ToArray();
+	}
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -675,8 +809,22 @@ public static class Paths
 	/// <typeparam name="T">Value type.</typeparam>
 	/// <param name="data">Serialized data.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use DeserializeAsync instead.")]
 	public static T Deserialize<T>(this byte[] data)
-		=> Deserialize<T>(new MemoryStream(data));
+		=> AsyncHelper.Run(() => data.DeserializeAsync<T>(default));
+
+	/// <summary>
+	/// Deserialize value from the serialized data.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="data">Serialized data.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value.</returns>
+	public static async ValueTask<T> DeserializeAsync<T>(this byte[] data, CancellationToken cancellationToken)
+	{
+		using var stream = new MemoryStream(data);
+		return await stream.DeserializeAsync<T>(cancellationToken);
+	}
 
 	/// <summary>
 	/// Deserialize value from the serialized data.
@@ -684,15 +832,26 @@ public static class Paths
 	/// <typeparam name="T">Value type.</typeparam>
 	/// <param name="data">Serialized data.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use DeserializeAsync instead.")]
 	public static T Deserialize<T>(this Stream data)
+		=> AsyncHelper.Run(() => data.DeserializeAsync<T>(default));
+
+	/// <summary>
+	/// Deserialize value from the serialized data.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="data">Serialized data.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value, or the default when the data cannot be read; the failure is logged.</returns>
+	public static async ValueTask<T> DeserializeAsync<T>(this Stream data, CancellationToken cancellationToken)
 	{
 		var serializer = CreateSerializer<T>();
 
 		try
 		{
-			return serializer.Deserialize(data);
+			return await serializer.DeserializeAsync(data, cancellationToken);
 		}
-		catch (Exception e)
+		catch (Exception e) when (e is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
 		{
 			e.LogError();
 		}
@@ -708,7 +867,21 @@ public static class Paths
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="filePath">File path.</param>
 	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use SerializeAsync instead.")]
 	public static void Serialize<T>(this T value, IFileSystem fileSystem, string filePath, bool bom = true)
+		=> AsyncHelper.Run(() => value.SerializeAsync(fileSystem, filePath, bom, default));
+
+	/// <summary>
+	/// Serialize value into the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="value">Value.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public static async ValueTask SerializeAsync<T>(this T value, IFileSystem fileSystem, string filePath, bool bom, CancellationToken cancellationToken)
 	{
 		if (fileSystem is null)
 			throw new ArgumentNullException(nameof(fileSystem));
@@ -716,10 +889,18 @@ public static class Paths
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
 
-		var bytes = value.Serialize(bom);
+		var bytes = await value.SerializeAsync(bom, cancellationToken);
 
-		using var stream = fileSystem.OpenWrite(filePath);
-		stream.Write(bytes, 0, bytes.Length);
+		// OpenWrite (like File.Open) does not create missing parent folders, so create the directory.
+		var dir = Path.GetDirectoryName(filePath);
+		if (!dir.IsEmpty() && !fileSystem.DirectoryExists(dir))
+			fileSystem.CreateDirectory(dir);
+
+		cancellationToken.ThrowIfCancellationRequested();
+
+		// Opening the file empties it, so the write that follows is not cancelled: it would leave the file empty.
+		await using var stream = fileSystem.OpenWrite(filePath);
+		await stream.WriteAsync(bytes, CancellationToken.None);
 	}
 
 	/// <summary>
@@ -729,24 +910,9 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <param name="fileSystem">File system.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use DeserializeAsync instead.")]
 	public static T Deserialize<T>(this string filePath, IFileSystem fileSystem)
-	{
-		if (filePath.IsEmpty())
-			throw new ArgumentNullException(nameof(filePath));
-
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
-		try
-		{
-			return filePath.DeserializeOrThrow<T>(fileSystem);
-		}
-		catch (Exception e)
-		{
-			new Exception($"Error deserializing '{filePath}'", e).LogError();
-			return default;
-		}
-	}
+		=> AsyncHelper.Run(() => filePath.DeserializeAsync<T>(fileSystem, default));
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -755,22 +921,9 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <param name="fileSystem">File system.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use DeserializeOrThrowAsync instead.")]
 	public static T DeserializeOrThrow<T>(this string filePath, IFileSystem fileSystem)
-	{
-		if (filePath.IsEmpty())
-			throw new ArgumentNullException(nameof(filePath));
-
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
-		var defFile = Path.ChangeExtension(filePath, Paths.DefaultSettingsExt);
-
-		if (!fileSystem.FileExists(defFile))
-			throw new FileNotFoundException($"file not found: '{defFile}'");
-
-		using var stream = fileSystem.OpenRead(defFile);
-		return CreateSerializer<T>().Deserialize(stream);
-	}
+		=> AsyncHelper.Run(() => filePath.DeserializeOrThrowAsync<T>(fileSystem, default));
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -792,7 +945,7 @@ public static class Paths
 		{
 			return await filePath.DeserializeOrThrowAsync<T>(fileSystem, cancellationToken);
 		}
-		catch (Exception e)
+		catch (Exception e) when (e is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
 		{
 			new Exception($"Error deserializing '{filePath}'", e).LogError();
 			return default;

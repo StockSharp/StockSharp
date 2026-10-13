@@ -9,30 +9,37 @@ public interface ISnapshotStorage
 	/// To get all the dates for which market data are recorded.
 	/// </summary>
 	IEnumerable<DateTime> Dates { get; }
-	
+
 	/// <summary>
 	/// Clear storage.
 	/// </summary>
-	void ClearAll();
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask ClearAllAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Remove snapshot for the specified key.
 	/// </summary>
 	/// <param name="key">Key.</param>
-	void Clear(object key);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask ClearAsync(object key, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Update snapshot.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	void Update(Message message);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask UpdateAsync(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get snapshot for the specified key.
 	/// </summary>
 	/// <param name="key">Key.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Snapshot.</returns>
-	Message Get(object key);
+	ValueTask<Message> GetAsync(object key, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get all snapshots.
@@ -40,7 +47,7 @@ public interface ISnapshotStorage
 	/// <param name="from">Start date, from which data needs to be retrieved.</param>
 	/// <param name="to">End date, until which data needs to be retrieved.</param>
 	/// <returns>All snapshots.</returns>
-	IEnumerable<Message> GetAll(DateTime? from = null, DateTime? to = null);
+	IAsyncEnumerable<Message> GetAllAsync(DateTime? from = null, DateTime? to = null);
 }
 
 /// <summary>
@@ -55,14 +62,17 @@ public interface ISnapshotStorage<TKey, TMessage> : ISnapshotStorage
 	/// Remove snapshot for the specified key.
 	/// </summary>
 	/// <param name="key">Key.</param>
-	void Clear(TKey key);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask ClearAsync(TKey key, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get snapshot for the specified key.
 	/// </summary>
 	/// <param name="key">Key.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Snapshot.</returns>
-	TMessage Get(TKey key);
+	ValueTask<TMessage> GetAsync(TKey key, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get all snapshots.
@@ -70,5 +80,5 @@ public interface ISnapshotStorage<TKey, TMessage> : ISnapshotStorage
 	/// <param name="from">Start date, from which data needs to be retrieved.</param>
 	/// <param name="to">End date, until which data needs to be retrieved.</param>
 	/// <returns>All snapshots.</returns>
-	new IEnumerable<TMessage> GetAll(DateTime? from = null, DateTime? to = null);
+	new IAsyncEnumerable<TMessage> GetAllAsync(DateTime? from = null, DateTime? to = null);
 }

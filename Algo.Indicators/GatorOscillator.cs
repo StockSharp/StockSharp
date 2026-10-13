@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.GatorKey,
 	Description = LocalizedStrings.GatorOscillatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/gator_oscillator.html")]
 [IndicatorOut(typeof(IGatorOscillatorValue))]
 public class GatorOscillator : BaseComplexIndicator<IGatorOscillatorValue>

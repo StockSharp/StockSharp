@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SecurityNativeIdManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private sealed class MockNativeIdStorage : INativeIdStorage
 	{
 		private readonly SynchronizedDictionary<SecurityId, object> _bySecurityId = [];
@@ -19,17 +15,17 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 			return new([.. _bySecurityId.Select(p => (p.Key, p.Value))]);
 		}
 
-		public ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default)
+		public async ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default)
 		{
 			if (_bySecurityId.ContainsKey(securityId) || _byNativeId.ContainsKey(nativeId))
-				return new(false);
+				return false;
 
 			_bySecurityId[securityId] = nativeId;
 			_byNativeId[nativeId] = securityId;
 
-			Added?.Invoke(securityId, nativeId, cancellationToken);
+			await Added.InvokeAsync(securityId, nativeId, cancellationToken);
 
-			return new(true);
+			return true;
 		}
 
 		public ValueTask<SecurityId?> TryGetByNativeIdAsync(object nativeId, CancellationToken cancellationToken = default)
@@ -122,11 +118,40 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
 		await manager.InitializeAsync("TestAdapter", token);
 
+		var secId = new SecurityId { SecurityCode = "RESET", BoardCode = "TEST" };
+		var nativeId = "native_reset";
+
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
+
 		var (toInner, toOut) = await manager.ProcessInMessageAsync(new ResetMessage(), token);
 
 		toInner.Length.AssertEqual(1);
 		toInner[0].Type.AssertEqual(MessageTypes.Reset);
 		toOut.Length.AssertEqual(0);
+
+		var (_, releasedOut, _) = await manager.ProcessOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, token);
+		releasedOut.Length.AssertEqual(0);
+
+		var releaseId = secId;
+		releaseId.Native = nativeId;
+		var (releasedIn, _) = await manager.ProcessInMessageAsync(new ProcessSuspendedMessage(releaseId), token);
+		releasedIn.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -207,24 +232,47 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task ProcessOutMessage_Connect_LoadsNativeIds()
+	public async Task ProcessOutMessage_Connect_ReleasesResolvableSuspendedMessages()
 	{
 		var token = CancellationToken;
 		var logReceiver = new TestReceiver();
 		var storageProvider = new MockNativeIdStorageProvider();
 
+		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
+		await manager.InitializeAsync("TestAdapter", token);
+
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var nativeId = 12345L;
+
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
 
 		var storage = storageProvider.GetStorage("TestAdapter");
 		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
 
-		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
-		await manager.InitializeAsync("TestAdapter", token);
+		var connect = new ConnectMessage();
+		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(connect, token);
 
-		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(new ConnectMessage(), token);
-
-		forward.Type.AssertEqual(MessageTypes.Connect);
+		forward.AssertSame(connect);
+		extraOut.Length.AssertEqual(1);
+		((Level1ChangeMessage)extraOut[0]).SecurityId.AssertEqual(secId);
+		loopbackIn.Length.AssertEqual(1);
+		var releasedOrder = (OrderRegisterMessage)loopbackIn[0];
+		releasedOrder.SecurityId.SecurityCode.AssertEqual(secId.SecurityCode);
+		releasedOrder.SecurityId.BoardCode.AssertEqual(secId.BoardCode);
+		releasedOrder.SecurityId.Native.AssertEqual(nativeId);
 	}
 
 	[TestMethod]
@@ -423,13 +471,10 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		var secId = new SecurityId { SecurityCode = "AMZN", BoardCode = "NASDAQ" };
 		var nativeId = "native_amzn";
 
-		var storage = storageProvider.GetStorage("TestAdapter");
-		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
-
 		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
 		await manager.InitializeAsync("TestAdapter", token);
 
-		var execMsg = new ExecutionMessage
+		var tracked = new ExecutionMessage
 		{
 			SecurityId = new SecurityId { Native = nativeId },
 			DataTypeEx = DataType.Transactions,
@@ -439,11 +484,30 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 			OrderState = OrderStates.Active
 		};
 
-		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(execMsg, token);
+		var (forward1, _, _) = await manager.ProcessOutMessageAsync(tracked, token);
+		forward1.AssertNull();
 
-		forward.AssertNotNull();
-		var result = (ExecutionMessage)forward;
-		result.SecurityId.SecurityCode.AssertEqual("AMZN");
+		var followUp = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = tracked.TransactionId,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 101,
+			TradeVolume = 1,
+		};
+
+		var (forward2, _, _) = await manager.ProcessOutMessageAsync(followUp, token);
+		forward2.AssertNull();
+
+		var (_, extraOut, _) = await manager.ProcessOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, token);
+
+		var released = extraOut.OfType<ExecutionMessage>().ToArray();
+		released.Length.AssertEqual(2);
+		released.All(m => m.SecurityId == secId).AssertTrue();
+		released.Single(m => m.TradePrice != null).OriginalTransactionId.AssertEqual(tracked.TransactionId);
 	}
 
 	[TestMethod]
@@ -490,6 +554,8 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		toInner2.Length.AssertEqual(1);
 		var releasedOrder = (OrderRegisterMessage)toInner2[0];
 		releasedOrder.SecurityId.SecurityCode.AssertEqual("FB");
+		releasedOrder.SecurityId.BoardCode.AssertEqual("NASDAQ");
+		releasedOrder.SecurityId.Native.AssertEqual(nativeId);
 	}
 
 	[TestMethod]
@@ -518,5 +584,88 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		var storedSecId = await storage.TryGetByNativeIdAsync(nativeId, token);
 		storedSecId.AssertNotNull();
 		storedSecId.Value.SecurityCode.AssertEqual("SYM2");
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_SuspendedQuoteIncrements_AreAllReleasedInOrder()
+	{
+		// An incremental book is only meaningful as the whole sequence, so increments held back while
+		// the native id is unknown must all be released, in arrival order, once it becomes known.
+		var token = CancellationToken;
+		var logReceiver = new TestReceiver();
+		var storageProvider = new MockNativeIdStorageProvider();
+
+		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
+		await manager.InitializeAsync("TestAdapter", token);
+
+		var nativeId = "native_incr";
+
+		for (var i = 0; i < 3; i++)
+		{
+			var quotesMsg = new QuoteChangeMessage
+			{
+				SecurityId = new SecurityId { Native = nativeId },
+				ServerTime = DateTime.UtcNow,
+				State = QuoteChangeStates.Increment,
+				Bids = [new QuoteChange(100 + i, 1 + i)],
+			};
+
+			var (forward, extraOut, _) = await manager.ProcessOutMessageAsync(quotesMsg, token);
+
+			forward.AssertNull("Increment must be suspended while the native id is unknown");
+			extraOut.Length.AssertEqual(0);
+		}
+
+		var secMsg = new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR", Native = nativeId },
+		};
+
+		var (_, released, _) = await manager.ProcessOutMessageAsync(secMsg, token);
+
+		var books = released.OfType<QuoteChangeMessage>().ToArray();
+		books.Length.AssertEqual(3, "Every suspended increment must be released, not only the last one");
+
+		books[0].Bids[0].Price.AssertEqual(100m);
+		books[1].Bids[0].Price.AssertEqual(101m);
+		books[2].Bids[0].Price.AssertEqual(102m);
+
+		foreach (var book in books)
+		{
+			book.SecurityId.SecurityCode.AssertEqual("SBER");
+			book.SecurityId.BoardCode.AssertEqual("TQBR");
+		}
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_CodeWithoutBoard_ResolvesToTheOnlyKnownBoard()
+	{
+		// A message that names a code but no board is completed from the mapping table, matching the
+		// code case-insensitively, when exactly one known security carries that code.
+		var token = CancellationToken;
+		var logReceiver = new TestReceiver();
+		var storageProvider = new MockNativeIdStorageProvider();
+
+		var storage = storageProvider.GetStorage("TestAdapter");
+		await storage.TryAddAsync(new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" }, "native_msft", cancellationToken: token);
+
+		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
+		await manager.InitializeAsync("TestAdapter", token);
+
+		var level1Msg = new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "msft" },
+			ServerTime = DateTime.UtcNow,
+		};
+		level1Msg.Add(Level1Fields.LastTradePrice, 100m);
+
+		var (forward, extraOut, _) = await manager.ProcessOutMessageAsync(level1Msg, token);
+
+		forward.AssertNotNull();
+		extraOut.Length.AssertEqual(0);
+
+		var result = (Level1ChangeMessage)forward;
+		result.SecurityId.SecurityCode.AssertEqual("MSFT");
+		result.SecurityId.BoardCode.AssertEqual("NASDAQ");
 	}
 }

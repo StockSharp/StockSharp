@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class SnapshotHolderTests : BaseTestClass
@@ -9,6 +9,32 @@ public class SnapshotHolderTests : BaseTestClass
 
 	#region Level1SnapshotHolder Tests
 
+	[TestMethod]
+	public void Level1_Diff_KeepsWhatTheMessageIsAnsweringFor()
+	{
+		// A venue that answers a subscription names it and needs name nothing else: the subscription
+		// already says which security it is for. A diff that drops the id leaves the message answering
+		// nothing, and a router with no security to go on has nowhere to send it.
+		const long subscriptionId = 4321L;
+
+		var holder = new Level1SnapshotHolder();
+
+		Level1ChangeMessage Quote(decimal bid)
+			=> new Level1ChangeMessage
+			{
+				OriginalTransactionId = subscriptionId,
+				ServerTime = _now,
+				LocalTime = _now,
+			}
+			.TryAdd(Level1Fields.BestBidPrice, bid);
+
+		holder.Process(Quote(99m)).OriginalTransactionId.AssertEqual(subscriptionId);
+
+		var diff = holder.Process(Quote(100m));
+
+		diff.Changes[Level1Fields.BestBidPrice].AssertEqual(100m);
+		diff.OriginalTransactionId.AssertEqual(subscriptionId);
+	}
 	[TestMethod]
 	public void Level1_FirstProcess_CreatesSnapshot()
 	{
@@ -47,8 +73,10 @@ public class SnapshotHolderTests : BaseTestClass
 		snapshot.AssertNotNull();
 		snapshot.Changes[Level1Fields.LastTradePrice].AssertEqual(100m);
 
-		// Verify it's a clone
-		snapshot.AssertNotSame(msg);
+		holder.TryGetSnapshot(_secId1, out var snapshot2).AssertTrue();
+		snapshot.AssertNotSame(snapshot2);
+		snapshot.Changes[Level1Fields.LastTradePrice] = 999m;
+		snapshot2.Changes[Level1Fields.LastTradePrice].AssertEqual(100m);
 	}
 
 	[TestMethod]
@@ -93,7 +121,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Level1_Process_NeedResponse_False_ReturnsNull_ForOptimization()
+	public void Level1_Process_ReturnsDiff()
 	{
 		// Now: always return diff (possibly empty), even when needResponse=false.
 		var holder = new Level1SnapshotHolder();
@@ -348,6 +376,35 @@ public class SnapshotHolderTests : BaseTestClass
 	#region Additional OrderBook tests
 
 	[TestMethod]
+	public void OrderBook_Delta_KeepsWhatTheMessageIsAnsweringFor()
+	{
+		// A book answers the subscription that asked for it, and the delta between two of them
+		// answers the same one: a reader that routes by subscription has nothing else to go on.
+		const long subscriptionId = 4321L;
+
+		var holder = new OrderBookSnapshotHolder();
+
+		QuoteChangeMessage Book(decimal bid)
+			=> new()
+			{
+				SecurityId = _secId1,
+				OriginalTransactionId = subscriptionId,
+				ServerTime = _now,
+				LocalTime = _now,
+				State = null,
+				Bids = [new QuoteChange(bid, 10)],
+				Asks = [new QuoteChange(bid + 1m, 10)],
+			};
+
+		holder.Process(Book(100m)).OriginalTransactionId.AssertEqual(subscriptionId);
+
+		var delta = holder.Process(Book(101m));
+
+		delta.AssertNotNull();
+		delta.OriginalTransactionId.AssertEqual(subscriptionId);
+	}
+
+	[TestMethod]
 	public void OrderBook_NewFullSnapshot_ReturnsCorrectDelta()
 	{
 		var holder = new OrderBookSnapshotHolder();
@@ -374,8 +431,12 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var delta = holder.Process(snap2);
 		delta.AssertNotNull();
-		// GetDelta returns increment with changes
 		delta.State.AssertEqual(QuoteChangeStates.Increment);
+		delta.Bids.Length.AssertEqual(3);
+		delta.Bids.Single(q => q.Price == 100m).Volume.AssertEqual(15m);
+		delta.Bids.Single(q => q.Price == 99m).Volume.AssertEqual(0m);
+		delta.Bids.Single(q => q.Price == 98m).Volume.AssertEqual(3m);
+		delta.Asks.Length.AssertEqual(0);
 
 		// Ensure error counter reset to 0
 		var err = holder.GetErrorCount(_secId1);
@@ -396,16 +457,10 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		// First increment without prior snapshot - builder may build snapshot or return null
 		var res = holder.Process(inc);
-
-		// If result is not null, it must be a SnapshotComplete (builder constructed snapshot from increment)
-		if (res != null)
-		{
-			res.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
-			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-			snap.AssertNotNull();
-		}
+		res.AssertNull();
+		holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
+		snap.AssertNull();
 	}
 
 	[TestMethod]
@@ -451,7 +506,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderBook_InvalidFullSnapshot_ThrowsOrCreatesSnapshot()
+	public void OrderBook_InvalidFullSnapshot_Throws()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -466,31 +521,9 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		Exception caught = null;
-		QuoteChangeMessage result = null;
-
-		try
-		{
-			result = holder.Process(fullWithPositions);
-		}
-		catch (InvalidOperationException ex)
-		{
-			caught = ex;
-		}
-
-		// Either throws InvalidOperationException OR creates snapshot - but must be one of these
-		if (caught != null)
-		{
-			// If it throws, no snapshot should exist
-			holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
-		}
-		else
-		{
-			// If it doesn't throw, result must be valid and snapshot must exist
-			result.AssertNotNull();
-			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-			snap.AssertNotNull();
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(fullWithPositions));
+		holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
+		snap.AssertNull();
 	}
 
 	[TestMethod]
@@ -685,6 +718,83 @@ public class SnapshotHolderTests : BaseTestClass
 		holder.TryGetSnapshot(_secId1, out var obSnap1).AssertTrue();
 		obSnap1.AssertNotNull();
 		obSnap1.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
+		holder.TryGetSnapshot(_secId1, out var obSnap2).AssertTrue();
+		obSnap1.AssertNotSame(obSnap2);
+		obSnap1.Bids = [new QuoteChange(999m, 1m)];
+		obSnap2.Bids.Single().Price.AssertEqual(100m);
+	}
+
+	/// <summary>
+	/// The holder keeps a book of its own. A book that already states it is complete is stored as it
+	/// arrives, so without a copy the holder would keep the caller's instance - and the caller goes on
+	/// filling those same arrays for the next book, quietly rewriting the snapshot every later
+	/// subscriber is served from.
+	/// </summary>
+	[TestMethod]
+	public void OrderBook_FirstMessage_IsCloned()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Already complete, so nothing on the way in has a reason to copy it.
+		var original = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		};
+
+		holder.Process(original);
+
+		holder.TryPeekSnapshot(_secId1, out var stored).AssertTrue();
+		stored.AssertNotSame(original, "the holder has to hold a book of its own");
+
+		// The caller reuses its message, the way a feed building the next book does.
+		original.Bids[0].Volume = 999m;
+		original.Bids = [new QuoteChange(1m, 1m)];
+
+		stored.Bids.Length.AssertEqual(1);
+		stored.Bids[0].Price.AssertEqual(100m);
+		stored.Bids[0].Volume.AssertEqual(10m, "what the holder keeps is the book it was handed, not the one the caller went on to build");
+	}
+
+	/// <summary>
+	/// And the same for a book that replaces one the holder already had: it is stored too, so it has
+	/// to be stored as a copy, or from the second book onwards the holder shares arrays with whoever
+	/// sent it.
+	/// </summary>
+	[TestMethod]
+	public void OrderBook_ReplacementSnapshot_IsCloned()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		});
+
+		var replacement = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(99m, 20m)],
+			Asks = [new QuoteChange(102m, 7m)],
+		};
+
+		holder.Process(replacement);
+
+		holder.TryPeekSnapshot(_secId1, out var stored).AssertTrue();
+		stored.AssertNotSame(replacement, "the replacement is held as a book of the holder's own");
+
+		replacement.Bids[0].Volume = 999m;
+
+		stored.Bids[0].Volume.AssertEqual(20m, "the replacement kept is the one that arrived");
 	}
 
 	[TestMethod]
@@ -766,6 +876,218 @@ public class SnapshotHolderTests : BaseTestClass
 		obSnap4.AssertNull();
 		holder.TryGetSnapshot(_secId2, out var obSnap5).AssertFalse();
 		obSnap5.AssertNull();
+	}
+
+	private static QuoteChangeMessage Book(QuoteChangeStates? state, QuoteChange[] bids, QuoteChange[] asks, int seconds = 0) => new()
+	{
+		SecurityId = _secId1,
+		ServerTime = _now.AddSeconds(seconds),
+		State = state,
+		Bids = bids,
+		Asks = asks,
+	};
+
+	private static string Levels(QuoteChange[] quotes)
+		=> quotes.Select(q => FormattableString.Invariant($"{q.Price}:{q.Volume}")).JoinComma();
+
+	[TestMethod]
+	public void OrderBook_AfterIncrements_TheSnapshotIsTheBookTheyLeave()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 10), new(99m, 5)], [new(101m, 20)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 0), new(98m, 7)], [new(102m, 3)], 1));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(99m, 6)], [], 2));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var snapshot));
+
+		AreEqual("99:6,98:7", Levels(snapshot.Bids));
+		AreEqual("101:20,102:3", Levels(snapshot.Asks));
+		AreEqual(_now.AddSeconds(2), snapshot.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, snapshot.State);
+	}
+
+	// A reader that was handed the holder's own book keeps looking at the book as it was: a change that comes
+	// after must not move the levels under it.
+	[TestMethod]
+	public void OrderBook_APeekedSnapshot_IsNotMovedByALaterIncrement()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 10)], [new(101m, 20)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(99m, 5)], [], 1));
+
+		IsTrue(holder.TryPeekSnapshot(_secId1, out var peeked));
+		AreEqual("100:10,99:5", Levels(peeked.Bids));
+
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 0)], [new(101m, 0), new(102m, 1)], 2));
+
+		AreEqual("100:10,99:5", Levels(peeked.Bids));
+		AreEqual("101:20", Levels(peeked.Asks));
+
+		IsTrue(holder.TryPeekSnapshot(_secId1, out var later));
+		AreEqual("99:5", Levels(later.Bids));
+		AreEqual("102:1", Levels(later.Asks));
+	}
+
+	[TestMethod]
+	public void OrderBook_HasSnapshot_SaysWhetherABookIsHeld()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		IsFalse(holder.HasSnapshot(_secId1));
+
+		// An increment with no book to land in builds none.
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 10)], []));
+		IsFalse(holder.HasSnapshot(_secId1));
+
+		holder.Process(Book(null, [new(100m, 10)], [new(101m, 20)]));
+
+		IsTrue(holder.HasSnapshot(_secId1));
+		IsFalse(holder.HasSnapshot(_secId2));
+
+		holder.ResetSnapshot(_secId1);
+		IsFalse(holder.HasSnapshot(_secId1));
+	}
+
+	[TestMethod]
+	public void OrderBook_TryGetSnapshot_CutToADepth_StatesTheBestLevels()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5), new(103m, 6)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100.5m, 9)], [new(101m, 0)], 1));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+
+		AreEqual("100.5:9,100:1", Levels(best.Bids));
+		AreEqual("102:5,103:6", Levels(best.Asks));
+		AreEqual(_secId1, best.SecurityId);
+		AreEqual(_now.AddSeconds(1), best.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, best.State);
+
+		// What is handed out is the caller's to change.
+		best.Bids[0] = new(1m, 1);
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var again));
+		AreEqual("100.5:9,100:1", Levels(again.Bids));
+
+		IsFalse(holder.TryGetSnapshot(_secId2, 2, out var none));
+		IsNull(none);
+	}
+
+	[TestMethod]
+	public void OrderBook_TryGetSnapshot_CutToADepth_OfABookNoIncrementTouched()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5)]));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 1, out var best));
+
+		AreEqual("100:1", Levels(best.Bids));
+		AreEqual("101:4", Levels(best.Asks));
+	}
+
+	// A snapshot sent in parts takes the book apart as it comes: until it is complete, the book that stands is
+	// the last whole one, read whole or cut to a depth.
+	[TestMethod]
+	public void OrderBook_WhileASnapshotComesInParts_TheLastWholeBookIsStated()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100.5m, 9)], [], 1));
+
+		holder.Process(Book(QuoteChangeStates.SnapshotStarted, [new(50m, 1)], [new(60m, 1)], 2));
+		holder.Process(Book(QuoteChangeStates.SnapshotBuilding, [new(49m, 1)], [new(61m, 1)], 3));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var whole));
+		AreEqual("100.5:9,100:1,99:2,98:3", Levels(whole.Bids));
+		AreEqual("101:4,102:5", Levels(whole.Asks));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+		AreEqual("100.5:9,100:1", Levels(best.Bids));
+		AreEqual("101:4,102:5", Levels(best.Asks));
+		AreEqual(_now.AddSeconds(1), best.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, best.State);
+	}
+
+	// A change by position can be taken by one side of the book and refused by the other. The book stated after
+	// it is the last whole one, not the half that was changed.
+	[TestMethod]
+	public void OrderBook_APositionalChangeTheBookRefuses_LeavesTheLastWholeBookStated()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			HasPositions = true,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 0 }],
+			Asks = [new QuoteChange(101m, 1) { Action = QuoteChangeActions.New, StartPosition = 0 }],
+		});
+
+		IsNotNull(holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(99m, 2) { Action = QuoteChangeActions.New, StartPosition = 1 }],
+			Asks = [],
+		}));
+
+		IsNull(holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(98m, 3) { Action = QuoteChangeActions.New, StartPosition = 2 }],
+			Asks = [new QuoteChange(105m, 1) { Action = QuoteChangeActions.Update, StartPosition = 7 }],
+		}));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var whole));
+		AreEqual("100:1,99:2", Levels(whole.Bids));
+		AreEqual("101:1", Levels(whole.Asks));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 5, out var best));
+		AreEqual("100:1,99:2", Levels(best.Bids));
+		AreEqual("101:1", Levels(best.Asks));
+	}
+
+	// What keeping a deep book up to date costs must not grow with the book.
+	[TestMethod]
+	public void OrderBook_AnIncrement_DoesNotCostTheWholeBook()
+	{
+		const int depth = 20000;
+
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null,
+			[.. Enumerable.Range(0, depth).Select(i => new QuoteChange(100000 - i, 1))],
+			[.. Enumerable.Range(1, depth).Select(i => new QuoteChange(100000 + i, 1))]));
+
+		var increment = Book(QuoteChangeStates.Increment, [new(100000m, 2), new(100000.5m, 1)], [new(100001m, 0)], 1);
+
+		holder.Process(increment);
+
+		var before = GC.GetAllocatedBytesForCurrentThread();
+
+		for (var i = 0; i < 100; i++)
+			holder.Process(increment);
+
+		var perIncrement = (GC.GetAllocatedBytesForCurrentThread() - before) / 100;
+
+		IsTrue(perIncrement < 16 * 1024, $"One increment into a book of {depth} levels a side allocated {perIncrement} bytes.");
+
+		// And the book is still there for whoever asks.
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+		AreEqual("100000.5:1,100000:2", Levels(best.Bids));
+		AreEqual("100002:1,100003:1", Levels(best.Asks));
 	}
 
 	[TestMethod]
@@ -1131,6 +1453,84 @@ public class SnapshotHolderTests : BaseTestClass
 		res.AssertNotSame(snap);
 	}
 
+	[TestMethod]
+	public void OrderBook_FirstSnapshotComplete_IsNotKeptAsCallerInstance()
+	{
+		// A book handed to the holder stays the caller's to reuse: the holder must keep its own
+		// copy, as it already does when State is null, instead of serving the caller's arrays back.
+		var holder = new OrderBookSnapshotHolder();
+
+		var book = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 20)],
+		};
+
+		holder.Process(book).AssertNotNull();
+
+		// the caller reuses its own message for the next book it builds
+		book.Bids[0] = new QuoteChange(999m, 1);
+
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		snap.Bids.Length.AssertEqual(1);
+		snap.Bids[0].Price.AssertEqual(100m, "the holder served the book the caller had already overwritten");
+		snap.Bids[0].Volume.AssertEqual(10m);
+
+		holder.TryPeekSnapshot(_secId1, out var peeked).AssertTrue();
+		peeked.AssertNotSame(book);
+	}
+
+	[TestMethod]
+	public void OrderBook_ReplacementSnapshotComplete_IsNotKeptAsCallerInstance()
+	{
+		// The same for a book that replaces an existing snapshot: the next delta is measured
+		// against the replacement as it arrived, not against whatever the caller wrote into it after.
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = null,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 20)],
+		}).AssertNotNull();
+
+		var replacement = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(102m, 5)],
+			Asks = [new QuoteChange(103m, 7)],
+		};
+
+		holder.Process(replacement).AssertNotNull();
+
+		// the caller reuses its own message again
+		replacement.Bids[0] = new QuoteChange(999m, 1);
+
+		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+		snap.Bids[0].Price.AssertEqual(102m, "the holder served the book the caller had already overwritten");
+
+		// an identical book that follows changes nothing, so its delta is empty
+		var delta = holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(102m, 5)],
+			Asks = [new QuoteChange(103m, 7)],
+		});
+
+		delta.AssertNotNull();
+		delta.Bids.Length.AssertEqual(0, "the delta was measured against a book the caller had overwritten");
+		delta.Asks.Length.AssertEqual(0);
+	}
+
 	#endregion
 
 	[TestMethod]
@@ -1188,7 +1588,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderBook_SnapshotAndBuilderOutOfSync()
+	public void OrderBook_FailedFullSnapshot_DoesNotCorruptBuilderState()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -1215,15 +1615,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-			// BUG: info.Snapshot now points to snap2, but builder still has snap1 state
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Send simple update increment without positions
 		var inc = new QuoteChangeMessage
@@ -1235,20 +1627,12 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		var res = holder.Process(inc);
-
-		// After increment, check snapshot
+		holder.Process(inc).AssertNotNull();
 		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-
-		// EXPECTED: Should have bid at 101:25 (from snap2 base + increment)
-		// BUG: Will have wrong state because builder has snap1 state but snapshot has snap2
-		// The exact result depends on builder behavior, but state is corrupted
-
-		// At minimum, errorCount should be > 0 if subsequent processing fails
-		var errorCount = holder.GetErrorCount(_secId1);
-		errorCount.AssertNotNull();
-
-		// This test may be flaky depending on builder, but demonstrates the issue
+		snap.Bids.Length.AssertEqual(3);
+		snap.Bids.Single(q => q.Price == 101m).Volume.AssertEqual(25m);
+		snap.Bids.Single(q => q.Price == 100m).Volume.AssertEqual(10m);
+		snap.Bids.Single(q => q.Price == 99m).Volume.AssertEqual(5m);
 	}
 
 	[TestMethod]
@@ -1289,9 +1673,7 @@ public class SnapshotHolderTests : BaseTestClass
 		var errorCount = holder.GetErrorCount(_secId1);
 		errorCount.AssertNotNull();
 
-		// BUG: ErrorCount = 105 (continues to grow)
-		// EXPECTED: ErrorCount should be capped at 100
-		errorCount.Value.AssertEqual(100); // FAILS - will be 105
+		errorCount.Value.AssertEqual(100);
 	}
 
 	[TestMethod]
@@ -1337,9 +1719,7 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var errorCount2 = holder.GetErrorCount(_secId1);
 
-		// BUG: ErrorCount = 101 (incremented again)
-		// EXPECTED: Should stay at 100
-		errorCount2.Value.AssertEqual(100); // FAILS - will be 101
+		errorCount2.Value.AssertEqual(100);
 	}
 
 	[TestMethod]
@@ -1392,26 +1772,17 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Check ErrorCount after failed full snapshot
 		var errorCountAfter = holder.GetErrorCount(_secId1);
 		errorCountAfter.AssertNotNull();
 
-		// BUG: ErrorCount = 1 (was reset to 0, then incremented)
-		// EXPECTED: ErrorCount = 6 (old value 5 + 1)
-		errorCountAfter.Value.AssertEqual(6); // FAILS - will be 1
+		errorCountAfter.Value.AssertEqual(6);
 	}
 
 	[TestMethod]
-	public void OrderBook_SnapshotUpdated_ButBuilderNotReinitialized()
+	public void OrderBook_FailedFullSnapshot_DoesNotReplaceSnapshot()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -1441,24 +1812,12 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-			// BUG: info.Snapshot was ALREADY set to snap2 (with bid at 200)
-			// but builder was NOT reinitialized, still thinks bid is at 100
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Now TryGetSnapshot should return what's in info.Snapshot
 		holder.TryGetSnapshot(_secId1, out var snapAfter).AssertTrue();
 
-		// BUG: snapAfter will have bid at 200 (from failed snap2)
-		// EXPECTED: Should still have bid at 100 (from snap1)
-		// Because snap2 processing failed, state should not have changed
-		snapAfter.Bids[0].Price.AssertEqual(100m); // FAILS - will be 200m
+		snapAfter.Bids[0].Price.AssertEqual(100m);
 	}
 
 	#region OrderSnapshotHolder Tests
@@ -1720,7 +2079,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Order_Process_DoneState_StopsUpdating()
+	public void Order_Lifecycle_PendingActiveDone()
 	{
 		var holder = new OrderSnapshotHolder();
 
@@ -1863,6 +2222,28 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task Order_SaveLoad_PreservesThrowOnInvalidStateTransition(bool value)
+	{
+		var holder = new OrderSnapshotHolder
+		{
+			ThrowOnInvalidStateTransition = value,
+		};
+
+		var settings = new SettingsStorage();
+		await holder.SaveAsync(settings, CancellationToken);
+
+		var restored = new OrderSnapshotHolder
+		{
+			ThrowOnInvalidStateTransition = !value,
+		};
+		await restored.LoadAsync(settings, CancellationToken);
+
+		restored.ThrowOnInvalidStateTransition.AssertEqual(value);
+	}
+
+	[TestMethod]
 	public void Order_StateTransition_DoneToPending_ThrowsWhenEnabled()
 	{
 		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
@@ -2000,6 +2381,38 @@ public class SnapshotHolderTests : BaseTestClass
 		};
 
 		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_PendingToDone_IsAcceptedForImmediateFill()
+	{
+		// An IOC order is acknowledged as Pending and reported filled in the next report, with no resting
+		// Active in between. The holder must fold that into a Done snapshot rather than reject the venue's
+		// own answer - refusing it turns every immediately filled order into an exception here.
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			Balance = 10m,
+		});
+
+		var snapshot = holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 0m,
+		});
+
+		snapshot.OrderState.AssertEqual(OrderStates.Done);
+		snapshot.Balance.AssertEqual(0m);
 	}
 
 	[TestMethod]

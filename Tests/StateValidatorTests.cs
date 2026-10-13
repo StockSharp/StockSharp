@@ -49,9 +49,28 @@ public class StateValidatorTests : BaseTestClass
 		StateValidator.IsValid(OrderStates.Active, OrderStates.Pending).AssertFalse();
 		StateValidator.IsValid(OrderStates.Active, OrderStates.Failed).AssertFalse();
 
-		// Pending can only go to Active or Failed
+		// Pending never goes back to None - the order has already been sent.
 		StateValidator.IsValid(OrderStates.Pending, OrderStates.None).AssertFalse();
-		StateValidator.IsValid(OrderStates.Pending, OrderStates.Done).AssertFalse();
+	}
+
+	[TestMethod]
+	public void OrderStates_PendingToDone_IsValid()
+	{
+		// The venue's answer to a pending order can finish it in one step - an IOC/FOK acknowledged and
+		// then filled or killed without ever resting, or a cancel that lands before it rests. FIX reads
+		// the same way: PendingNew is followed by Filled, Canceled or Expired with no New in between.
+		StateValidator.IsValid(OrderStates.Pending, OrderStates.Done).AssertTrue();
+
+		// An order that skipped Pending may already reach Done; one that passed through it is not worse.
+		StateValidator.IsValid(OrderStates.None, OrderStates.Done).AssertTrue();
+	}
+
+	[TestMethod]
+	public void OrderStates_Validate_PendingToDone_DoesNotThrow()
+	{
+		// The same step through the throwing overload: this is the one OrderSnapshotHolder calls when
+		// ThrowOnInvalidStateTransition is on, so an immediately filled order must not become an exception.
+		StateValidator.Validate(OrderStates.Pending, OrderStates.Done, "test", null, throwOnInvalid: true).AssertTrue();
 	}
 
 	[TestMethod]
@@ -139,14 +158,25 @@ public class StateValidatorTests : BaseTestClass
 	[TestMethod]
 	public void ChannelStates_InvalidTransitions()
 	{
-		// Stopped -> Started (must go through Starting)
-		StateValidator.IsValid(ChannelStates.Stopped, ChannelStates.Started).AssertFalse();
+		var valid = new HashSet<(ChannelStates from, ChannelStates to)>
+		{
+			(ChannelStates.Stopped, ChannelStates.Starting),
+			(ChannelStates.Starting, ChannelStates.Stopped),
+			(ChannelStates.Starting, ChannelStates.Started),
+			(ChannelStates.Started, ChannelStates.Stopping),
+			(ChannelStates.Started, ChannelStates.Suspending),
+			(ChannelStates.Suspending, ChannelStates.Suspended),
+			(ChannelStates.Suspended, ChannelStates.Starting),
+			(ChannelStates.Suspended, ChannelStates.Stopping),
+			(ChannelStates.Stopping, ChannelStates.Stopped),
+		};
 
-		// Started -> Stopped (must go through Stopping)
-		StateValidator.IsValid(ChannelStates.Started, ChannelStates.Stopped).AssertFalse();
-
-		// Started -> Suspended (must go through Suspending)
-		StateValidator.IsValid(ChannelStates.Started, ChannelStates.Suspended).AssertFalse();
+		foreach (var from in Enum.GetValues<ChannelStates>())
+		foreach (var to in Enum.GetValues<ChannelStates>())
+		{
+			if (from != to && !valid.Contains((from, to)))
+				StateValidator.IsValid(from, to).AssertFalse($"{from} -> {to} must be invalid.");
+		}
 	}
 
 	[TestMethod]
@@ -269,6 +299,9 @@ public class StateValidatorTests : BaseTestClass
 	[TestMethod]
 	public void SessionStates_InvalidTransitions()
 	{
+		StateValidator.IsValid(SessionStates.Active, SessionStates.Assigned).AssertFalse();
+		StateValidator.IsValid(SessionStates.Paused, SessionStates.Assigned).AssertFalse();
+
 		// ForceStopped is terminal
 		StateValidator.IsValid(SessionStates.ForceStopped, SessionStates.Assigned).AssertFalse();
 		StateValidator.IsValid(SessionStates.ForceStopped, SessionStates.Active).AssertFalse();
@@ -323,7 +356,9 @@ public class StateValidatorTests : BaseTestClass
 
 		OrderStates? pending = OrderStates.Pending;
 		pending.VerifyOrderState(OrderStates.Active, 123, null).AssertTrue();
-		pending.VerifyOrderState(OrderStates.Done, 123, null).AssertFalse();
+
+		OrderStates? done = OrderStates.Done;
+		done.VerifyOrderState(OrderStates.Active, 123, null).AssertFalse();
 	}
 
 	[TestMethod]

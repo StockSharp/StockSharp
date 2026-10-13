@@ -41,6 +41,29 @@ public class StrategyPositionManagerTests : BaseTestClass
 		return (order, sec, pf);
 	}
 
+	// Same order as it arrives through a second route: a new instance carrying the same
+	// transaction id and the same cumulative state.
+	private static Order Resend(Order order)
+	{
+		return new Order
+		{
+			Security = order.Security,
+			Portfolio = order.Portfolio,
+			Side = order.Side,
+			Type = order.Type,
+			Price = order.Price,
+			Volume = order.Volume,
+			Balance = order.Balance,
+			AveragePrice = order.AveragePrice,
+			Commission = order.Commission,
+			State = order.State,
+			Time = order.Time,
+			LocalTime = order.LocalTime,
+			ServerTime = order.ServerTime,
+			TransactionId = order.TransactionId,
+		};
+	}
+
 	[TestMethod]
 	public void IncrementalAveragePnLCommissionFlow()
 	{
@@ -521,13 +544,13 @@ public class StrategyPositionManagerTests : BaseTestClass
 
 		var (order, sec, pf) = CreateOrder(Sides.Buy, 10m);
 		order.Balance = 0m;
-		order.AveragePrice = null; // Null price
+		order.AveragePrice = null;
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.NoMarketPrice);
 
-		lastPos.CurrentValue.AssertEqual(10m);
-		(lastPos.AveragePrice ?? 0m).AssertEqual(0m); // Should default to 0
-		AssertCalcFieldsNonNull(lastPos);
+		lastPos.AssertNull();
+		mgr.TryGetPosition(sec, pf).AssertNull();
+		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1035,6 +1058,78 @@ public class StrategyPositionManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ExecPrice_Zero_Order_Price_Is_Not_A_Fill_Price()
+	{
+		// A conditional order keeps its trigger in the condition and leaves Price at zero, so the
+		// fallback to Price has nothing to fall back to. Nothing ever fills at zero: the manager may
+		// price the fill from the last price or refuse it, but it must not book stock at a zero basis.
+		var mgr = new StrategyPositionManager(() => "PRICE_ZERO");
+
+		var (order, sec, pf) = CreateOrder(Sides.Buy, 5m);
+
+		var now = DateTime.UtcNow;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 10m, now, now);
+
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+		order.AveragePrice = null; // provider reported no average
+		order.Type = OrderTypes.Conditional;
+		order.Price = 0m; // price lives in Condition, not here
+
+		mgr.ProcessOrder(order);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		var qty = position is null ? 0m : position.CurrentValue ?? 0m;
+		var avg = position is null ? 0m : position.AveragePrice ?? 0m;
+
+		(qty == 0m || avg > 0m).AssertTrue();
+	}
+
+	[TestMethod]
+	public void ExecPrice_Limit_Fallback_Never_Prices_A_Slice_Beyond_The_Limit()
+	{
+		// A buy limit can only fill at or below its limit price. When an earlier snapshot reported a
+		// better average and a later one drops it, the fallback recomputes the whole order cost at the
+		// limit and charges the difference to the new slice, pricing it above the limit the order set.
+		var mgr = new StrategyPositionManager(() => "PRICE_LIMIT_BAND");
+
+		// Open a short 2 @ 100 so the buy below closes against a known basis.
+		var (sell, sec, pf) = CreateOrder(Sides.Sell, 2m);
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m;
+		sell.Type = OrderTypes.Limit;
+		sell.Price = 100m;
+		sell.AveragePrice = 100m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var (buy, _, _) = CreateOrder(Sides.Buy, 5m);
+		buy.Security = sec;
+		buy.Portfolio = pf;
+		buy.Type = OrderTypes.Limit;
+		buy.Price = 100m;
+
+		// First lot filled with price improvement, and the provider says so.
+		buy.State = OrderStates.Active;
+		buy.Balance = 4m; // matched 1
+		buy.AveragePrice = 90m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		// Final snapshot arrives without the average; the remaining 4 lots are unpriced.
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m; // matched 5
+		buy.AveragePrice = null;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(3m);
+
+		// Whatever the unreported lots filled at, it was not above 100, so the long that remains
+		// cannot have cost more than 100 and buying the last short lot back cannot have lost money.
+		((position.AveragePrice ?? 0m) <= 100m).AssertTrue();
+		((position.RealizedPnL ?? 0m) >= 10m).AssertTrue();
+	}
+
+	[TestMethod]
 	public void ExecPrice_Market_Uses_LastPrice_When_No_Average()
 	{
 		var mgr = new StrategyPositionManager(() => "PRICE_MARKET_LAST");
@@ -1064,7 +1159,7 @@ public class StrategyPositionManagerTests : BaseTestClass
 		var events = 0;
 		mgr.PositionProcessed += (p, _) => { last = p; events++; };
 
-		var (order, _, _) = CreateOrder(Sides.Buy, 3m);
+		var (order, sec, pf) = CreateOrder(Sides.Buy, 3m);
 		order.State = OrderStates.Done;
 		order.Balance = 0m;
 		order.AveragePrice = null; // no avg
@@ -1075,6 +1170,9 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// No position should be created since there is no way to determine exec price
 		events.AssertEqual(0);
 		last.AssertNull();
+		mgr.Positions.Length.AssertEqual(0);
+		mgr.TryGetPosition(sec, pf).AssertNull();
+		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1096,5 +1194,696 @@ public class StrategyPositionManagerTests : BaseTestClass
 		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
 
 		last.AveragePrice.AssertEqual(9.99m);
+	}
+
+	[TestMethod]
+	public void RepeatedFinalSnapshotChangesNothing()
+	{
+		// Orders arrive as cumulative snapshots, and the same final snapshot can arrive more than once.
+		// Every call after the first one carries no new execution, so it must leave the position alone.
+		var mgr = new StrategyPositionManager(() => "REPEATED_DONE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 4m);
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(4m);
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(4m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0).AssertEqual(0.5m);
+		(position.RealizedPnL ?? 0).AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void FinalSnapshotAppliesLateCommissionCorrectionWithoutRepeatingTheFill()
+	{
+		var mgr = new StrategyPositionManager(() => "LATE_COMMISSION");
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 4m);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var correction = Resend(buy);
+		correction.Commission = 0.75m;
+
+		mgr.ProcessOrder(correction).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(correction).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(4m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.75m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void FinalSnapshotWithoutCommissionDoesNotEraseKnownCommission()
+	{
+		var mgr = new StrategyPositionManager(() => "MISSING_COMMISSION");
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 2m);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var replay = Resend(buy);
+		replay.Commission = null;
+
+		mgr.ProcessOrder(replay).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(2m);
+		(position.Commission ?? 0m).AssertEqual(0.5m);
+	}
+
+	[TestMethod]
+	public void FinishedReplayStateCanBePrunedWithTheOrderRetentionWindow()
+	{
+		var mgr = new StrategyPositionManager(() => "FINISHED_RETENTION");
+		var (buy, _, _) = CreateOrder(Sides.Buy, 1m);
+		var orderTime = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		buy.Time = orderTime;
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.TrackedFinishedOrdersCount.AssertEqual(1);
+
+		mgr.RemoveFinishedBefore(orderTime.AddTicks(1));
+
+		mgr.TrackedFinishedOrdersCount.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void RepeatedFinalSnapshotDoesNotReverseThePosition()
+	{
+		// The doubling this guards against is not visible on one order: a repeated snapshot of the
+		// closing order reopened the position on the other side and every following order doubled again.
+		var mgr = new StrategyPositionManager(() => "REPEATED_DONE_CLOSE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 2m);
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var (sell, _, _) = CreateOrder(Sides.Sell, 2m);
+		sell.Security = sec;
+		sell.Portfolio = pf;
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m;
+		sell.AveragePrice = 110m;
+
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(0m);
+
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0).AssertEqual(20m);
+	}
+
+	[TestMethod]
+	public void PartiallyFilledActiveSnapshotDeliveredTwiceChangesNothing()
+	{
+		// A snapshot of a partially filled order repeats whenever the order is reported twice.
+		// Nothing the caller reads off the position may move on the second delivery.
+		var mgr = new StrategyPositionManager(() => "DUP_ACTIVE");
+		Position processed = null;
+		mgr.PositionProcessed += (p, _) => processed = p;
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 6m; // matched 4
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.4m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.AssertNotNull();
+		processed.AssertSame(position);
+		position.CurrentValue.AssertEqual(4m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.4m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+
+		mgr.ProcessOrder(buy);
+
+		position.CurrentValue.AssertEqual(4m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.4m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(6m);
+		position.BuyOrdersCount.AssertEqual(1);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedDoneSnapshotOnShortChangesNothingHoweverManyTimes()
+	{
+		// The final snapshot of a sell can be replayed any number of times and the short stays
+		// the one short that was actually filled.
+		var mgr = new StrategyPositionManager(() => "DUP_DONE_SELL");
+
+		var (sell, sec, pf) = CreateOrder(Sides.Sell, 6m);
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m;
+		sell.AveragePrice = 100m;
+		sell.Commission = 0.6m;
+
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(-6m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.6m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		position.SellOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedDoneCancelWithPartialFillChangesNothing()
+	{
+		// A cancelled order still carries the volume it managed to fill. Replaying that final
+		// snapshot must not add the fill again, nor block volume for an order that is over.
+		var mgr = new StrategyPositionManager(() => "DUP_DONE_CANCEL");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 4m; // matched 6
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.6m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		// cancelled with 6 of 10 filled
+		buy.State = OrderStates.Done;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(6m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.6m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		position.BuyOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedIntermediateSnapshotDoesNotDisturbLaterFills()
+	{
+		// An order filling in steps: repeating one step leaves the position where it was, and the
+		// step after it is counted from that point instead of being added on top of a doubled one.
+		var mgr = new StrategyPositionManager(() => "DUP_STEPS");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 7m; // matched 3 @100
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.3m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(3m);
+
+		mgr.ProcessOrder(buy);
+		position.CurrentValue.AssertEqual(3m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.3m);
+
+		buy.Balance = 2m; // matched 8, cumulative average (3*100 + 5*110)/8
+		buy.AveragePrice = 106.25m;
+		buy.Commission = 0.8m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		position.CurrentValue.AssertEqual(8m);
+		position.AveragePrice.AssertEqual(106.25m);
+		(position.Commission ?? 0m).AssertEqual(0.8m);
+
+		mgr.ProcessOrder(buy);
+		position.CurrentValue.AssertEqual(8m);
+		position.AveragePrice.AssertEqual(106.25m);
+		(position.Commission ?? 0m).AssertEqual(0.8m);
+
+		buy.Balance = 0m; // matched 10, last 2 @110
+		buy.AveragePrice = 107m;
+		buy.Commission = 1m;
+		buy.State = OrderStates.Done;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(107m);
+		(position.Commission ?? 0m).AssertEqual(1m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void ReactivatedOrderContinuesFromWhereItStopped()
+	{
+		// An order that comes back to life after a final snapshot keeps what it had already filled,
+		// so the fills that follow count from that point and not from zero.
+		var mgr = new StrategyPositionManager(() => "REACTIVATED");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 7m; // matched 3 @100
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.3m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(3m);
+
+		// finishes with 3 of 10 filled
+		buy.State = OrderStates.Done;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		position.CurrentValue.AssertEqual(3m);
+
+		// and is reported active again with the very same cumulative fill
+		buy.State = OrderStates.Active;
+		mgr.ProcessOrder(buy);
+		position.CurrentValue.AssertEqual(3m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.3m);
+
+		// 5 more at 110 make 8 at 106.25 - not 13 and not a fresh basis
+		buy.Balance = 2m;
+		buy.AveragePrice = 106.25m;
+		buy.Commission = 0.8m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		position.CurrentValue.AssertEqual(8m);
+		position.AveragePrice.AssertEqual(106.25m);
+		(position.Commission ?? 0m).AssertEqual(0.8m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void SameOrderFromAnotherRouteChangesNothing()
+	{
+		// The same order can arrive as a different Order instance with the same transaction id and
+		// the same cumulative state; the instance identity must not turn it into a new fill.
+		var mgr = new StrategyPositionManager(() => "DUP_INSTANCE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 8m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 3m; // matched 5 @100
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(5m);
+
+		mgr.ProcessOrder(Resend(buy));
+		position.CurrentValue.AssertEqual(5m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.5m);
+		position.BlockedValue.AssertEqual(3m);
+		position.BuyOrdersCount.AssertEqual(1);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m; // matched 8, cumulative average 101
+		buy.AveragePrice = 101m;
+		buy.Commission = 0.8m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		position.CurrentValue.AssertEqual(8m);
+
+		mgr.ProcessOrder(Resend(buy)).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(8m);
+		position.AveragePrice.AssertEqual(101m);
+		(position.Commission ?? 0m).AssertEqual(0.8m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		position.BuyOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedClosingDoneSnapshotDoesNotReopenLong()
+	{
+		// The closing order is where a repeat costs most: selling the same volume twice takes the
+		// position through flat into a short that was never ordered.
+		var mgr = new StrategyPositionManager(() => "DUP_CLOSE_LONG");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 1m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var (sell, _, _) = CreateOrder(Sides.Sell, 10m);
+		sell.Security = sec;
+		sell.Portfolio = pf;
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m;
+		sell.AveragePrice = 110m;
+		sell.Commission = 1m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(2m);
+
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(2m);
+		(position.AveragePrice ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		position.SellOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedClosingDoneSnapshotDoesNotReopenShort()
+	{
+		// The same promise from the short side: covering twice must not leave a long behind.
+		var mgr = new StrategyPositionManager(() => "DUP_CLOSE_SHORT");
+
+		var (sell, sec, pf) = CreateOrder(Sides.Sell, 10m);
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m;
+		sell.AveragePrice = 100m;
+		sell.Commission = 1m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var (buy, _, _) = CreateOrder(Sides.Buy, 10m);
+		buy.Security = sec;
+		buy.Portfolio = pf;
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 90m;
+		buy.Commission = 1m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(100m);
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(2m);
+		(position.AveragePrice ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		position.BuyOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedActiveSnapshotDuringPartialCloseKeepsRealizedPnLAndCommission()
+	{
+		// Realized PnL and commission are as cumulative as the quantity: a repeated snapshot of a
+		// partially filled closing order must not realize the same profit or charge the same fee twice.
+		var mgr = new StrategyPositionManager(() => "DUP_CLOSE_ACTIVE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 1m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var (sell, _, _) = CreateOrder(Sides.Sell, 10m);
+		sell.Security = sec;
+		sell.Portfolio = pf;
+		sell.State = OrderStates.Active;
+		sell.Balance = 6m; // matched 4 @110
+		sell.AveragePrice = 110m;
+		sell.Commission = 0.4m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(6m);
+		(position.RealizedPnL ?? 0m).AssertEqual(40m);
+		(position.Commission ?? 0m).AssertEqual(1.4m);
+
+		mgr.ProcessOrder(sell);
+		mgr.ProcessOrder(Resend(sell));
+
+		position.CurrentValue.AssertEqual(6m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.RealizedPnL ?? 0m).AssertEqual(40m);
+		(position.Commission ?? 0m).AssertEqual(1.4m);
+
+		// the rest of the close still lands exactly once
+		sell.Balance = 0m; // matched 10 @110
+		sell.Commission = 1m;
+		sell.State = OrderStates.Done;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(2m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void StaleSnapshotWithLowerMatchedVolumeChangesNothing()
+	{
+		// Snapshots can overtake each other. One reporting less filled than is already applied
+		// describes the past: it must neither unwind the position nor re-block the volume it names.
+		var mgr = new StrategyPositionManager(() => "STALE_ACTIVE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 7m; // matched 3 @100
+		buy.AveragePrice = 100m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var stale = Resend(buy);
+
+		buy.Balance = 2m; // matched 8 @106.25
+		buy.AveragePrice = 106.25m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(8m);
+
+		mgr.ProcessOrder(stale).AssertEqual(StrategyPositionManager.OrderResults.Inconsistent);
+
+		position.CurrentValue.AssertEqual(8m);
+		position.AveragePrice.AssertEqual(106.25m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(2m);
+		position.BuyOrdersCount.AssertEqual(1);
+
+		// the next real fill still applies from 8, not from the stale 3
+		buy.Balance = 0m; // matched 10 @107
+		buy.AveragePrice = 107m;
+		buy.State = OrderStates.Done;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(107m);
+		position.BlockedValue.AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void StaleActiveSnapshotAfterDoneChangesNothing()
+	{
+		// A late Active snapshot of an order that has already finished repeats fills that are
+		// applied and volume that is no longer blocked, and so must a repeat of the final one
+		// arriving behind it.
+		var mgr = new StrategyPositionManager(() => "STALE_AFTER_DONE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 4m; // matched 6 @100
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.6m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var done = Resend(buy);
+		done.State = OrderStates.Done;
+		done.Balance = 0m; // matched 10 @100
+		done.Commission = 1m;
+		mgr.ProcessOrder(done).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(10m);
+		(position.Commission ?? 0m).AssertEqual(1m);
+
+		// the earlier snapshot finally arrives
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.Inconsistent);
+
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(1m);
+		position.BlockedValue.AssertEqual(0m);
+		position.BuyOrdersCount.AssertEqual(0);
+
+		// and the final snapshot repeats behind it
+		mgr.ProcessOrder(done);
+
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(1m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedDoneSnapshotWithLowerMatchedVolumeChangesNothing()
+	{
+		// A final snapshot repeating with less filled than was applied is a stale copy of the
+		// order's own history and must not take part of the position back.
+		var mgr = new StrategyPositionManager(() => "STALE_DONE");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 4m; // matched 6 @100
+		buy.AveragePrice = 100m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var stalePartial = Resend(buy);
+		stalePartial.State = OrderStates.Done;
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m; // matched 10 @100
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(10m);
+
+		mgr.ProcessOrder(stalePartial).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		position.BlockedValue.AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void RepeatedMarketOrderDoneSnapshotDoesNotRefillAtNewPrice()
+	{
+		// A market order with no average price of its own is valued at the last known price.
+		// Replaying its final snapshot after the market moved must not fill it again at the new one.
+		var mgr = new StrategyPositionManager(() => "DUP_MARKET");
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 5m);
+		var now = DateTime.UtcNow;
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 100m, now, now);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.Type = OrderTypes.Market;
+		buy.AveragePrice = null;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(5m);
+		position.AveragePrice.AssertEqual(100m);
+
+		var later = now.AddMinutes(1);
+		mgr.UpdateCurrentPrice(sec.ToSecurityId(), 200m, later, later);
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		position.CurrentValue.AssertEqual(5m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+		AssertCalcFieldsNonNull(position);
+	}
+
+	[TestMethod]
+	public void DuplicatedSnapshotsThroughoutRoundTripEndFlat()
+	{
+		// The property end to end: every snapshot of an open-and-close round trip delivered twice.
+		// The result must be the flat position, PnL and commission of a single round trip.
+		var mgr = new StrategyPositionManager(() => "DUP_ROUND_TRIP");
+		Position processed = null;
+		mgr.PositionProcessed += (p, _) => processed = p;
+
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 10m);
+		buy.State = OrderStates.Active;
+		buy.Balance = 6m; // matched 4 @100
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.4m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(Resend(buy));
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m; // matched 10 @100
+		buy.Commission = 1m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(Resend(buy)).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(10m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(1m);
+
+		var (sell, _, _) = CreateOrder(Sides.Sell, 10m);
+		sell.Security = sec;
+		sell.Portfolio = pf;
+		sell.State = OrderStates.Active;
+		sell.Balance = 4m; // matched 6 @120
+		sell.AveragePrice = 120m;
+		sell.Commission = 0.6m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(Resend(sell));
+
+		position.CurrentValue.AssertEqual(4m);
+		(position.RealizedPnL ?? 0m).AssertEqual(120m);
+
+		sell.State = OrderStates.Done;
+		sell.Balance = 0m; // matched 10 @120
+		sell.Commission = 1m;
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(Resend(sell)).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+		mgr.ProcessOrder(sell).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		mgr.Positions.Length.AssertEqual(1);
+		processed.AssertSame(position);
+		position.CurrentValue.AssertEqual(0m);
+		(position.AveragePrice ?? 0m).AssertEqual(0m);
+		(position.RealizedPnL ?? 0m).AssertEqual(200m);
+		(position.Commission ?? 0m).AssertEqual(2m);
+		position.BlockedValue.AssertEqual(0m);
+		position.BuyOrdersCount.AssertEqual(0);
+		position.SellOrdersCount.AssertEqual(0);
+		AssertCalcFieldsNonNull(position);
 	}
 }

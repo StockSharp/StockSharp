@@ -15,6 +15,7 @@ public static class Extensions
 			.GetAttribute<ProductIdAttribute>()?
 			.ProductId;
 
+	// Our own libraries that carry no adapter, so a scan does not open them for nothing.
 	private static readonly HashSet<string> _nonAdapters = new(StringComparer.InvariantCultureIgnoreCase)
 	{
 		"StockSharp.Alerts",
@@ -56,7 +57,6 @@ public static class Extensions
 		"StockSharp.Server.Core",
 		"StockSharp.Server.Fix",
 		"StockSharp.Server.Utils",
-		"StockSharp.Tests",
 	};
 
 

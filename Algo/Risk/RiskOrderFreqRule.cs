@@ -102,7 +102,11 @@ public class RiskOrderFreqRule : RiskRule
 					_current = 1;
 
 					//LogDebug("EndTime={0}", _endTime);
-					return false;
+					if (_current < Count)
+						return false;
+
+					_endTime = null;
+					return true;
 				}
 
 				if (time < _endTime)
@@ -135,18 +139,18 @@ public class RiskOrderFreqRule : RiskRule
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Count), Count);
 		storage.SetValue(nameof(Interval), Interval);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Count = storage.GetValue<int>(nameof(Count));
 		Interval = storage.GetValue<TimeSpan>(nameof(Interval));

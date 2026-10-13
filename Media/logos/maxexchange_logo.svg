@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<defs>
+		<linearGradient id="maxexchange-gradient" x1="9" y1="55" x2="55" y2="9" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#1477D4"/>
+			<stop offset="1" stop-color="#20A9E0"/>
+		</linearGradient>
+	</defs>
+	<path fill="url(#maxexchange-gradient)" d="M32 2 58 17v30L32 62 6 47V17z"/>
+	<path fill="#fff" d="m16 21 8-4 8 8 8-8 8 4-16 17zm0 12 8-4 8 8 8-8 8 4-16 17z"/>
+</svg>

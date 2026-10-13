@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Xaml.Charting.Avalonia" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>

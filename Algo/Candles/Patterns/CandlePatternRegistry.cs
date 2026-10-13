@@ -5,6 +5,8 @@
 /// </summary>
 public static class CandlePatternRegistry
 {
+	// The built-in formulas are compiled when the pattern that owns them is prepared, so listing
+	// the registry or touching a single pattern does not pay for every pattern in it.
 	private static ExpressionCandlePattern Create(string name, params string[] expressions) => new(name, expressions.Select(e => new CandleExpressionCondition(Paths.FileSystem, e)));
 
 	/// <summary>

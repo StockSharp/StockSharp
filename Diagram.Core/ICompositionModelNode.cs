@@ -5,8 +5,15 @@ using System.Drawing;
 /// <summary>
 /// Node.
 /// </summary>
-public interface ICompositionModelNode : ICloneable
+public interface ICompositionModelNode
 {
+	/// <summary>
+	/// Create a copy of the node together with its element.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ICompositionModelNode> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Key.
 	/// </summary>
@@ -28,6 +35,12 @@ public interface ICompositionModelNode : ICloneable
 	Guid TypeId { get; set; }
 
 	/// <summary>
+	/// Settings of the element the node stands for, while <see cref="Element"/> is not loaded: its type was
+	/// not known when the composition was read, or its settings could not be read. A save writes them back.
+	/// </summary>
+	SettingsStorage ElementSettings { get; set; }
+
+	/// <summary>
 	/// Figure id.
 	/// </summary>
 	string Figure { get; set; }
@@ -39,9 +52,9 @@ public interface ICompositionModelNode : ICloneable
 }
 
 /// <summary>
-/// Dummy implementation of <see cref="ICompositionModelNode"/>.
+/// In-memory implementation of <see cref="ICompositionModelNode"/>.
 /// </summary>
-public class DummyCompositionModelNode : ICompositionModelNode
+public class InMemoryCompositionModelNode : ICompositionModelNode
 {
 	/// <inheritdoc/>
 	public string Key { get; set; }
@@ -51,21 +64,24 @@ public class DummyCompositionModelNode : ICompositionModelNode
 	public PointF Location { get; set; }
 	/// <inheritdoc/>
 	public Guid TypeId { get; set; }
+	/// <inheritdoc/>
+	public SettingsStorage ElementSettings { get; set; }
 
 	/// <inheritdoc/>
 	public string Figure { get; set; }
 	/// <inheritdoc/>
 	public string Text { get; set; }
 
-	object ICloneable.Clone()
+	/// <inheritdoc />
+	public async ValueTask<ICompositionModelNode> CloneAsync(CancellationToken cancellationToken)
 	{
 		if (Element is null)
 			throw new InvalidOperationException(LocalizedStrings.ElementNotLoaded.Put(Text));
 
-		return new DummyCompositionModelNode
+		return new InMemoryCompositionModelNode
 		{
 			Key = Key,
-			Element = Element.Clone(),
+			Element = await Element.CloneAsync(true, cancellationToken),
 			Location = Location,
 			TypeId = TypeId,
 			Figure = Figure,

@@ -41,6 +41,28 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 		return writer.WriteAttributeStringAsync(null, name, null, str);
 	}
 
+	private static async Task WriteCDataAsync(XmlWriter writer, string text)
+	{
+		const string terminator = "]]>";
+		var offset = 0;
+
+		while (true)
+		{
+			var index = text.IndexOf(terminator, offset, StringComparison.Ordinal);
+
+			if (index < 0)
+			{
+				await writer.WriteCDataAsync(text[offset..]);
+				return;
+			}
+
+			// Keep the two closing brackets in this section and start the next one with '>'.
+			// Adjacent CDATA nodes then have exactly the same combined text without containing "]]>".
+			await writer.WriteCDataAsync(text[offset..(index + 2)]);
+			offset = index + 2;
+		}
+	}
+
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
@@ -195,15 +217,18 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 			if (depth.SeqNum != default)
 				await WriteAttrAsync(writer, "seqNum", depth.SeqNum);
 
-			var bids = new HashSet<QuoteChange>(depth.Bids);
+			var quotes = depth.Bids
+				.Select(q => (Quote: q, Side: Sides.Buy))
+				.Concat(depth.Asks.Select(q => (Quote: q, Side: Sides.Sell)))
+				.OrderByDescending(p => p.Quote.Price);
 
-			foreach (var quote in depth.Bids.Concat(depth.Asks).OrderByDescending(q => q.Price))
+			foreach (var (quote, side) in quotes)
 			{
 				await writer.WriteStartElementAsync(null, "quote", null);
 
 				await WriteAttrAsync(writer, "price", quote.Price);
 				await WriteAttrAsync(writer, "volume", quote.Volume);
-				await WriteAttrAsync(writer, "side", bids.Contains(quote) ? Sides.Buy : Sides.Sell);
+				await WriteAttrAsync(writer, "side", side);
 
 				if (quote.OrdersCount != default)
 					await WriteAttrAsync(writer, "ordersCount", quote.OrdersCount.Value);
@@ -377,11 +402,12 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 			if (n.ExpiryDate != null)
 				await WriteAttrAsync(writer, "expiry", n.ExpiryDate.Value);
 
-			if (!n.Story.IsEmpty())
-				await writer.WriteCDataAsync(n.Story);
-
 			if (n.SeqNum != default)
 				await WriteAttrAsync(writer, "seqNum", n.SeqNum);
+
+			// The story is the element content, and no attribute may follow content.
+			if (!n.Story.IsEmpty())
+				await WriteCDataAsync(writer, n.Story);
 
 			await writer.WriteEndElementAsync();
 		}, cancellationToken);

@@ -37,17 +37,14 @@ public class Shift : DecimalLengthIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		try
-		{
-			if (IsFormed)
-				return new DecimalIndicatorValue(this, input.ToDecimal(Source), input.Time);
+		// The value being processed is one of the Length values counted, so it is served as soon as it
+		// completes the count: a length of one passes the very first value through.
+		if (input.IsFinal && _left > 0)
+			_left--;
 
-			return new DecimalIndicatorValue(this, input.Time);
-		}
-		finally
-		{
-			if (input.IsFinal)
-				_left--;
-		}
+		if (IsFormed)
+			return new DecimalIndicatorValue(this, input.ToDecimal(Source), input.Time);
+
+		return new DecimalIndicatorValue(this, input.Time);
 	}
 }

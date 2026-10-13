@@ -9,7 +9,7 @@ using Ecng.Drawing;
 /// </summary>
 [IndicatorIn(typeof(DecimalIndicatorValue))]
 [IndicatorOut(typeof(DecimalIndicatorValue))]
-public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
+public abstract class BaseIndicator : IIndicator
 {
 	private class InnerIndicatorResetScope
 	{
@@ -68,6 +68,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		get => _source;
 		set
 		{
+			// Reading the same price as before asks for nothing to change, so the accumulated values
+			// stay: a settings round-trip writes every property, the untouched ones included.
+			if (_source == value)
+				return;
+
 			_source = value;
 
 			Reset();
@@ -164,18 +169,26 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		SaveValues(storage);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		LoadValues(storage);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
@@ -226,12 +239,10 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		if (IsPreloaded)
 			throw new InvalidOperationException("Indicator is already preloaded.");
 
-		_preloaded = [];
-
-		var numToInitLeft = NumValuesToInitialize;
-
-		if (numToInitLeft <= 0)
-			numToInitLeft = 1;
+		// The whole batch is checked and indexed before any of it is kept, so a load that reports
+		// failure has taken no effect: the indicator can be loaded again or fed the ordinary way.
+		var preloaded = new Dictionary<DateTime, (IIndicatorValue input, IIndicatorValue output)>();
+		var pairs = new List<(IIndicatorValue input, IIndicatorValue output)>();
 
 		foreach (var (input, output) in values)
 		{
@@ -244,18 +255,31 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 			if (!output.IsFinal)
 				throw new ArgumentException($"Output value {output.Time} is not final.", nameof(values));
 
+			if (!preloaded.TryAdd(input.Time, (input, output)))
+				throw new ArgumentException($"Value {input.Time} is specified more than once.", nameof(values));
+
+			pairs.Add((input, output));
+		}
+
+		var numToInitLeft = NumValuesToInitialize;
+
+		if (numToInitLeft <= 0)
+			numToInitLeft = 1;
+
+		foreach (var (input, output) in pairs)
+		{
 			if (numToInitLeft > 0)
 				numToInitLeft--;
-			
+
 			if (numToInitLeft == 0)
 				output.IsFormed = true;
-
-			_preloaded.Add(input.Time, (input, output));
 
 			Container.AddValue(input, output);
 
 			OnPreload(input, output);
 		}
+
+		_preloaded = preloaded;
 
 		IsFormed = numToInitLeft == 0;
 	}
@@ -266,6 +290,9 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <param name="input">Original input.</param>
 	/// <param name="output">Preloaded output.</param>
 	protected virtual void OnPreload(IIndicatorValue input, IIndicatorValue output) { }
+
+	/// <inheritdoc />
+	public virtual ValueTask PrepareAsync(CancellationToken cancellationToken) => default;
 
 	/// <inheritdoc />
 	public virtual IIndicatorValue Process(IIndicatorValue input)
@@ -331,9 +358,14 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <summary>
 	/// Create a copy of <see cref="IIndicator"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IIndicator Clone()
-		=> PersistableHelper.Clone(this);
+	public virtual async ValueTask<IIndicator> CloneAsync(CancellationToken cancellationToken)
+	{
+		var clone = GetType().CreateInstance<IIndicator>();
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
+		return clone;
+	}
 
 	/// <inheritdoc />
 	public override string ToString() => Name;

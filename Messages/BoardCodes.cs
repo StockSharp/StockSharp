@@ -581,6 +581,12 @@ public static class BoardCodes
 	public const string Nasdaq = "NASDAQ";
 
 	/// <summary>
+	/// <see cref="Opra"/>. The consolidated tape of the American option exchanges, which is where a
+	/// listed option is quoted regardless of which of them it happens to trade on.
+	/// </summary>
+	public const string Opra = "OPRA";
+
+	/// <summary>
 	/// <see cref="Nqlx"/>.
 	/// </summary>
 	public const string Nqlx = "NQLX";
@@ -701,6 +707,26 @@ public static class BoardCodes
 	public const string Set = "SET";
 
 	/// <summary>
+	/// Thailand Futures Exchange.
+	/// </summary>
+	public const string Tfex = "TFEX";
+
+	/// <summary>
+	/// Ho Chi Minh Stock Exchange.
+	/// </summary>
+	public const string Hose = "HOSE";
+
+	/// <summary>
+	/// Hanoi Stock Exchange.
+	/// </summary>
+	public const string Hnx = "HNX";
+
+	/// <summary>
+	/// Unlisted Public Company Market.
+	/// </summary>
+	public const string Upcom = "UPCOM";
+
+	/// <summary>
 	/// <see cref="Cse"/>.
 	/// </summary>
 	public const string Cse = "CSE";
@@ -804,6 +830,26 @@ public static class BoardCodes
 	/// <see cref="Fxcm"/>.
 	/// </summary>
 	public const string Fxcm = "FXCM";
+
+	/// <summary>
+	/// FXOpen TickTrader markets.
+	/// </summary>
+	public const string FXOpen = "FXOPEN";
+
+	/// <summary>
+	/// StocksTrader markets.
+	/// </summary>
+	public const string StocksTrader = "STTR";
+
+	/// <summary>
+	/// MetaApi markets.
+	/// </summary>
+	public const string MetaApi = "METAAPI";
+
+	/// <summary>
+	/// MetaTrader 5 terminal markets.
+	/// </summary>
+	public const string MetaTrader5 = "MT5";
 
 	/// <summary>
 	/// <see cref="Poloniex"/>.
@@ -924,6 +970,11 @@ public static class BoardCodes
 	/// <see cref="Exmo"/>.
 	/// </summary>
 	public const string Exmo = "EXMO";
+
+	/// <summary>
+	/// Deriv Options markets.
+	/// </summary>
+	public const string Deriv = "DERIV";
 
 	/// <summary>
 	/// <see cref="Deribit"/>.
@@ -1289,6 +1340,891 @@ public static class BoardCodes
 	/// <see cref="AsterDerivatives"/>
 	/// </summary>
 	public const string AsterDerivatives = "ASTDR";
+
+	/// <summary>
+	/// <see cref="Toobit"/> spot market.
+	/// </summary>
+	public const string Toobit = "TOOBT";
+
+	/// <summary>
+	/// <see cref="ToobitFutures"/> derivatives market.
+	/// </summary>
+	public const string ToobitFutures = "TOOBF";
+
+	/// <summary>
+	/// <see cref="CryptoCom"/> spot market.
+	/// </summary>
+	public const string CryptoCom = "CRCOM";
+
+	/// <summary>
+	/// <see cref="CryptoComDerivatives"/> derivatives market.
+	/// </summary>
+	public const string CryptoComDerivatives = "CRCOD";
+
+	/// <summary>
+	/// <see cref="WhiteBit"/> spot market.
+	/// </summary>
+	public const string WhiteBit = "WBIT";
+
+	/// <summary>
+	/// <see cref="WhiteBitMargin"/> collateral spot market.
+	/// </summary>
+	public const string WhiteBitMargin = "WBIM";
+
+	/// <summary>
+	/// <see cref="WhiteBitFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WhiteBitFutures = "WBIF";
+
+	/// <summary>
+	/// <see cref="Weex"/> spot market.
+	/// </summary>
+	public const string Weex = "WEEX";
+
+	/// <summary>
+	/// <see cref="WeexFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WeexFutures = "WEEXF";
+
+	/// <summary>
+	/// <see cref="CoinW"/> spot market.
+	/// </summary>
+	public const string CoinW = "COINW";
+
+	/// <summary>
+	/// <see cref="CoinWFutures"/> perpetual futures market.
+	/// </summary>
+	public const string CoinWFutures = "CNWF";
+
+	/// <summary>
+	/// <see cref="Pionex"/> spot market.
+	/// </summary>
+	public const string Pionex = "PIONX";
+
+	/// <summary>
+	/// <see cref="PionexFutures"/> perpetual futures market.
+	/// </summary>
+	public const string PionexFutures = "PNXF";
+
+	/// <summary>
+	/// ProBit Global spot market.
+	/// </summary>
+	public const string ProBit = "PROBIT";
+
+	/// <summary>
+	/// <see cref="Xt"/> spot market.
+	/// </summary>
+	public const string Xt = "XTCOM";
+
+	/// <summary>
+	/// <see cref="XtFutures"/> perpetual futures market.
+	/// </summary>
+	public const string XtFutures = "XTCMF";
+
+	/// <summary>
+	/// <see cref="Phemex"/> spot market.
+	/// </summary>
+	public const string Phemex = "PHMEX";
+
+	/// <summary>
+	/// <see cref="PhemexFutures"/> linear perpetual futures market.
+	/// </summary>
+	public const string PhemexFutures = "PHMXF";
+
+	/// <summary>
+	/// <see cref="Bullish"/> spot market.
+	/// </summary>
+	public const string Bullish = "BULL";
+
+	/// <summary>
+	/// <see cref="BullishDerivatives"/> derivatives market.
+	/// </summary>
+	public const string BullishDerivatives = "BULLD";
+
+	/// <summary>
+	/// <see cref="Ourbit"/> spot market.
+	/// </summary>
+	public const string Ourbit = "OURBT";
+
+	/// <summary>
+	/// <see cref="OurbitFutures"/> perpetual futures market.
+	/// </summary>
+	public const string OurbitFutures = "OURBF";
+
+	/// <summary>
+	/// <see cref="Bitunix"/> spot market.
+	/// </summary>
+	public const string Bitunix = "BTUNX";
+
+	/// <summary>
+	/// <see cref="BitunixFutures"/> perpetual futures market.
+	/// </summary>
+	public const string BitunixFutures = "BTUXF";
+
+	/// <summary>
+	/// <see cref="BloFin"/> perpetual futures market.
+	/// </summary>
+	public const string BloFin = "BLOFN";
+
+	/// <summary>
+	/// DeepBook on-chain order-book markets.
+	/// </summary>
+	public const string DeepBook = "DEEPB";
+
+	/// <summary>
+	/// <see cref="Deepcoin"/> spot and perpetual markets.
+	/// </summary>
+	public const string Deepcoin = "DEEP";
+
+	/// <summary>
+	/// <see cref="Bitrue"/> spot market.
+	/// </summary>
+	public const string Bitrue = "BTRUE";
+
+	/// <summary>
+	/// <see cref="BitrueFutures"/> USDT-margined perpetual futures market.
+	/// </summary>
+	public const string BitrueFutures = "BTRUF";
+
+	/// <summary>
+	/// <see cref="WooX"/> spot market.
+	/// </summary>
+	public const string WooX = "WOOX";
+
+	/// <summary>
+	/// <see cref="WooXFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WooXFutures = "WOOXF";
+
+	/// <summary>
+	/// <see cref="Backpack"/> spot market.
+	/// </summary>
+	public const string Backpack = "BACKP";
+
+	/// <summary>
+	/// <see cref="BackpackFutures"/> perpetual futures market.
+	/// </summary>
+	public const string BackpackFutures = "BACKPF";
+
+	/// <summary>
+	/// <see cref="Btse"/> spot market.
+	/// </summary>
+	public const string Btse = "BTSE";
+
+	/// <summary>
+	/// <see cref="BtseFutures"/> futures and perpetual markets.
+	/// </summary>
+	public const string BtseFutures = "BTSEF";
+
+	/// <summary>
+	/// Bit2Me Pro spot market.
+	/// </summary>
+	public const string Bit2Me = "BIT2ME";
+
+	/// <summary>
+	/// BitoPro spot market.
+	/// </summary>
+	public const string BitoPro = "BITOPRO";
+
+	/// <summary>
+	/// BigONE spot and contract markets.
+	/// </summary>
+	public const string BigOne = "BIGONE";
+
+	/// <summary>
+	/// MAX Exchange (MaiCoin) spot market.
+	/// </summary>
+	public const string MaxExchange = "MAX";
+
+	/// <summary>
+	/// Tokocrypto MAIN spot market.
+	/// </summary>
+	public const string Tokocrypto = "TOKOCR";
+
+	/// <summary>
+	/// BtcTurk Kripto spot market.
+	/// </summary>
+	public const string BtcTurk = "BTCTURK";
+
+	/// <summary>
+	/// Buda.com Latin American crypto spot market.
+	/// </summary>
+	public const string Buda = "BUDA";
+
+	/// <summary>
+	/// zondacrypto European crypto spot market.
+	/// </summary>
+	public const string ZondaCrypto = "ZONDA";
+
+	/// <summary>
+	/// CoinTR spot market.
+	/// </summary>
+	public const string CoinTR = "COINTR";
+
+	/// <summary>
+	/// CoinCatch spot market.
+	/// </summary>
+	public const string CoinCatch = "COINCATCH";
+
+	/// <summary>
+	/// Coinmetro European crypto spot market.
+	/// </summary>
+	public const string Coinmetro = "COINMETRO";
+
+	/// <summary>
+	/// LCX regulated crypto spot market.
+	/// </summary>
+	public const string Lcx = "LCX";
+
+	/// <summary>
+	/// WazirX Indian crypto spot market.
+	/// </summary>
+	public const string WazirX = "WAZIRX";
+
+	/// <summary>
+	/// Delta Exchange India crypto derivatives market.
+	/// </summary>
+	public const string DeltaExchangeIndia = "DELTAINDIA";
+
+	/// <summary>
+	/// Coincall crypto options market.
+	/// </summary>
+	public const string CoincallOptions = "COINCALL_OPT";
+
+	/// <summary>
+	/// Coincall futures and perpetual contracts market.
+	/// </summary>
+	public const string CoincallFutures = "COINCALL_FUT";
+
+	/// <summary>
+	/// CoinPaprika aggregated cryptocurrency market data.
+	/// </summary>
+	public const string CoinPaprika = "COINPAPRIKA";
+
+	/// <summary>
+	/// CoinGlass aggregated cryptocurrency market analytics.
+	/// </summary>
+	public const string CoinGlass = "COINGLASS";
+
+	/// <summary>
+	/// Coinalyze aggregated cryptocurrency market analytics.
+	/// </summary>
+	public const string Coinalyze = "COINALYZE";
+
+	/// <summary>
+	/// DEX Screener multi-chain liquidity-pool market data.
+	/// </summary>
+	public const string DexScreener = "DEXSCREENER";
+
+	/// <summary>
+	/// Birdeye multi-chain token market data.
+	/// </summary>
+	public const string Birdeye = "BIRDEYE";
+
+	/// <summary>
+	/// CoinCatch USDT-margined futures market.
+	/// </summary>
+	public const string CoinCatchFutUsdt = "COINCATCH_USDT";
+
+	/// <summary>
+	/// CoinCatch coin-margined futures market.
+	/// </summary>
+	public const string CoinCatchFutCoin = "COINCATCH_COIN";
+
+	/// <summary>
+	/// CoinSpot Australian crypto spot market.
+	/// </summary>
+	public const string CoinSpot = "COINSPOT";
+
+	/// <summary>
+	/// CoinSwitch PRO spot, futures and options markets.
+	/// </summary>
+	public const string CoinSwitch = "COINSWITCH";
+
+	/// <summary>
+	/// Coinstore spot market.
+	/// </summary>
+	public const string Coinstore = "COINSTORE";
+
+	/// <summary>
+	/// AscendEX spot, margin and perpetual futures markets.
+	/// </summary>
+	public const string AscendEx = "ASCENDEX";
+
+	/// <summary>
+	/// AltCoinTrader South African spot market.
+	/// </summary>
+	public const string AltCoinTrader = "ALTCOINTRADER";
+
+	/// <summary>
+	/// NovaDAX Brazilian spot market.
+	/// </summary>
+	public const string NovaDax = "NOVADAX";
+
+	/// <summary>
+	/// Quidax African crypto and fiat spot market.
+	/// </summary>
+	public const string Quidax = "QUIDAX";
+
+	/// <summary>
+	/// Bitvavo spot market.
+	/// </summary>
+	public const string Bitvavo = "BITVAVO";
+
+	/// <summary>
+	/// Gemini spot and perpetual markets.
+	/// </summary>
+	public const string Gemini = "GEMINI";
+
+	/// <summary>
+	/// Bitpanda Fusion aggregated crypto market.
+	/// </summary>
+	public const string BitpandaFusion = "BPFUSION";
+
+	/// <summary>
+	/// HashKey Global spot market.
+	/// </summary>
+	public const string HashKey = "HASHKEY";
+
+	/// <summary>
+	/// HashKey Global perpetual futures market.
+	/// </summary>
+	public const string HashKeyFutures = "HASHKEYF";
+
+	/// <summary>
+	/// Bitso spot market.
+	/// </summary>
+	public const string Bitso = "BITSO";
+
+	/// <summary>
+	/// Bitkub spot market.
+	/// </summary>
+	public const string Bitkub = "BITKUB";
+
+	/// <summary>
+	/// CoinDCX spot market.
+	/// </summary>
+	public const string CoinDCX = "COINDCX";
+
+	/// <summary>
+	/// Coins.ph spot market.
+	/// </summary>
+	public const string CoinsPh = "COINSPH";
+
+	/// <summary>
+	/// bitFlyer spot and Crypto CFD markets.
+	/// </summary>
+	public const string BitFlyer = "BITFLYER";
+
+	/// <summary>
+	/// Coinone spot market.
+	/// </summary>
+	public const string Coinone = "COINONE";
+
+	/// <summary>
+	/// GMO Coin spot and margin markets.
+	/// </summary>
+	public const string GmoCoin = "GMOCOIN";
+
+	/// <summary>
+	/// Mercado Bitcoin spot market.
+	/// </summary>
+	public const string MercadoBitcoin = "MERCADOBITCOIN";
+
+	/// <summary>
+	/// VALR spot, margin, and perpetual futures markets.
+	/// </summary>
+	public const string Valr = "VALR";
+
+	/// <summary>
+	/// Luno Exchange spot markets.
+	/// </summary>
+	public const string Luno = "LUNO";
+
+	/// <summary>
+	/// Independent Reserve spot markets.
+	/// </summary>
+	public const string IndependentReserve = "INDEPENDENTRESERVE";
+
+	/// <summary>
+	/// BTC Markets spot markets.
+	/// </summary>
+	public const string BTCMarkets = "BTCMARKETS";
+
+	/// <summary>
+	/// CoinJar Exchange spot markets.
+	/// </summary>
+	public const string CoinJar = "COINJAR";
+
+	/// <summary>
+	/// Korbit spot markets.
+	/// </summary>
+	public const string Korbit = "KORBIT";
+
+	/// <summary>
+	/// Pintu Pro spot markets.
+	/// </summary>
+	public const string PintuPro = "PINTUPRO";
+
+	/// <summary>
+	/// Indodax spot markets.
+	/// </summary>
+	public const string Indodax = "INDODAX";
+
+	/// <summary>
+	/// Coinhako spot markets.
+	/// </summary>
+	public const string Coinhako = "COINHAKO";
+
+	/// <summary>
+	/// Foxbit spot markets.
+	/// </summary>
+	public const string Foxbit = "FOXBIT";
+
+	/// <summary>
+	/// Rain spot markets.
+	/// </summary>
+	public const string Rain = "RAIN";
+
+	/// <summary>
+	/// NDAX spot markets.
+	/// </summary>
+	public const string NDAX = "NDAX";
+
+	/// <summary>
+	/// OSL Global spot markets.
+	/// </summary>
+	public const string OSL = "OSL";
+
+	/// <summary>
+	/// BYDFi perpetual futures markets.
+	/// </summary>
+	public const string BYDFi = "BYDFI";
+
+	/// <summary>
+	/// Zoomex Spot markets.
+	/// </summary>
+	public const string Zoomex = "ZOOMEX";
+
+	/// <summary>
+	/// Zoomex USDT perpetual markets.
+	/// </summary>
+	public const string ZoomexLinear = "ZOOMEX_LIN";
+
+	/// <summary>
+	/// Zoomex inverse perpetual markets.
+	/// </summary>
+	public const string ZoomexInverse = "ZOOMEX_INV";
+
+	/// <summary>
+	/// Tapbit Spot markets.
+	/// </summary>
+	public const string Tapbit = "TAPBIT";
+
+	/// <summary>
+	/// Tapbit USDT perpetual futures markets.
+	/// </summary>
+	public const string TapbitFutures = "TAPBIT_FUT";
+
+	/// <summary>
+	/// Uniswap AMM markets.
+	/// </summary>
+	public const string Uniswap = "UNISWAP";
+
+	/// <summary>
+	/// PancakeSwap AMM markets.
+	/// </summary>
+	public const string PancakeSwap = "PANCAKE";
+
+	/// <summary>
+	/// PumpSwap AMM markets.
+	/// </summary>
+	public const string PumpSwap = "PUMPSWAP";
+
+	/// <summary>
+	/// Aerodrome Finance pools on Base.
+	/// </summary>
+	public const string Aerodrome = "AERODROME";
+
+	/// <summary>
+	/// Orca Whirlpools on Solana.
+	/// </summary>
+	public const string Orca = "ORCA";
+
+	/// <summary>
+	/// Manifest Trade order-book markets on Solana.
+	/// </summary>
+	public const string ManifestTrade = "MANIFEST";
+
+	/// <summary>
+	/// Meteora DLMM pools on Solana.
+	/// </summary>
+	public const string Meteora = "METEORA";
+
+	/// <summary>
+	/// Fluid DEX T1 pools on supported EVM chains.
+	/// </summary>
+	public const string FluidDex = "FLUIDDEX";
+
+	/// <summary>
+	/// Raydium routed liquidity markets on Solana.
+	/// </summary>
+	public const string Raydium = "RAYDIUM";
+
+	/// <summary>
+	/// Curve AMM pools on Ethereum.
+	/// </summary>
+	public const string Curve = "CURVE";
+
+	/// <summary>
+	/// Jupiter routed spot and perpetual markets on Solana.
+	/// </summary>
+	public const string Jupiter = "JUPITER";
+
+	/// <summary>
+	/// THORChain native Layer-1 liquidity markets.
+	/// </summary>
+	public const string THORChain = "THORCHAIN";
+
+	/// <summary>
+	/// SUN.io liquidity markets on TRON.
+	/// </summary>
+	public const string SunIo = "SUNIO";
+
+	/// <summary>
+	/// QuickSwap liquidity markets on Polygon PoS.
+	/// </summary>
+	public const string QuickSwap = "QUICKSWAP";
+
+	/// <summary>
+	/// Osmosis native liquidity markets.
+	/// </summary>
+	public const string Osmosis = "OSMOSIS";
+
+	/// <summary>
+	/// Cetus concentrated-liquidity markets on Sui.
+	/// </summary>
+	public const string Cetus = "CETUS";
+
+	/// <summary>
+	/// LFJ Liquidity Book markets on Avalanche C-Chain.
+	/// </summary>
+	public const string Lfj = "LFJ";
+
+	/// <summary>
+	/// CoW Protocol batch-auction markets.
+	/// </summary>
+	public const string CowProtocol = "COW";
+
+	/// <summary>
+	/// 1inch aggregated-liquidity markets.
+	/// </summary>
+	public const string OneInch = "1INCH";
+
+	/// <summary>
+	/// KyberSwap aggregated-liquidity markets.
+	/// </summary>
+	public const string KyberSwap = "KYBERSWAP";
+
+	/// <summary>
+	/// GRVT markets.
+	/// </summary>
+	public const string Grvt = "GRVT";
+
+	/// <summary>
+	/// ApeX Omni markets.
+	/// </summary>
+	public const string ApexOmni = "APEXOMNI";
+
+	/// <summary>
+	/// Variational Omni perpetual markets.
+	/// </summary>
+	public const string VariationalOmni = "VAROMNI";
+
+	/// <summary>
+	/// StandX perpetual futures.
+	/// </summary>
+	public const string StandX = "STANDX";
+
+	/// <summary>
+	/// GMTrade perpetual markets on Solana.
+	/// </summary>
+	public const string GMTrade = "GMTRADE";
+
+	/// <summary>
+	/// QFEX perpetual futures.
+	/// </summary>
+	public const string QFEX = "QFEX";
+
+	/// <summary>
+	/// Pacifica perpetual futures.
+	/// </summary>
+	public const string Pacifica = "PACIFICA";
+
+	/// <summary>
+	/// Extended spot and perpetual markets.
+	/// </summary>
+	public const string Extended = "EXTENDED";
+
+	/// <summary>
+	/// Nado spot and perpetual markets.
+	/// </summary>
+	public const string Nado = "NADO";
+
+	/// <summary>
+	/// Avantis cross-asset perpetual markets.
+	/// </summary>
+	public const string Avantis = "AVANTIS";
+
+	/// <summary>
+	/// dYdX Chain perpetual markets.
+	/// </summary>
+	public const string DydxChain = "DYDX";
+
+	/// <summary>
+	/// Orderly Network perpetual markets.
+	/// </summary>
+	public const string OrderlyNetwork = "ORDERLY";
+
+	/// <summary>
+	/// Reya decentralized exchange.
+	/// </summary>
+	public const string Reya = "REYA";
+
+	/// <summary>
+	/// GMX decentralized exchange.
+	/// </summary>
+	public const string Gmx = "GMX";
+
+	/// <summary>
+	/// Drift Protocol decentralized exchange.
+	/// </summary>
+	public const string Drift = "DRIFT";
+
+	/// <summary>
+	/// Aevo decentralized derivatives exchange.
+	/// </summary>
+	public const string Aevo = "AEVO";
+
+	/// <summary>
+	/// Bluefin Pro perpetual markets.
+	/// </summary>
+	public const string Bluefin = "BLFN";
+
+	/// <summary>
+	/// Injective spot and derivative markets.
+	/// </summary>
+	public const string Injective = "INJ";
+
+	/// <summary>
+	/// Ostium cross-asset perpetual markets.
+	/// </summary>
+	public const string Ostium = "OSTIUM";
+
+	/// <summary>
+	/// SynFutures V3 perpetual markets on Base.
+	/// </summary>
+	public const string SynFutures = "SYNFUT";
+
+	/// <summary>
+	/// Synthetix perpetual futures on Ethereum mainnet.
+	/// </summary>
+	public const string Synthetix = "SYNTX";
+
+	/// <summary>
+	/// Gains Network gTrade perpetual markets.
+	/// </summary>
+	public const string GainsNetwork = "GAINS";
+
+	/// <summary>
+	/// Polymarket prediction-market outcome tokens.
+	/// </summary>
+	public const string Polymarket = "POLYMARKET";
+
+	/// <summary>
+	/// Kalshi event contracts.
+	/// </summary>
+	public const string Kalshi = "KALSHI";
+
+	/// <summary>
+	/// Balancer decentralized liquidity pools.
+	/// </summary>
+	public const string Balancer = "BALANCER";
+
+	/// <summary>
+	/// Fireblocks custody workspace assets.
+	/// </summary>
+	public const string Fireblocks = "FIREBLOCKS";
+
+	/// <summary>
+	/// Talos institutional digital-asset platform.
+	/// </summary>
+	public const string Talos = "TALOS";
+
+	/// <summary>
+	/// FalconX institutional digital-asset platform.
+	/// </summary>
+	public const string FalconX = "FALCONX";
+
+	/// <summary>
+	/// Zero Hash central limit order book.
+	/// </summary>
+	public const string ZeroHash = "ZEROHASH";
+
+	/// <summary>
+	/// 0x aggregated-liquidity markets.
+	/// </summary>
+	public const string ZeroX = "0X";
+
+	/// <summary>
+	/// BitGo Prime institutional digital-asset trading.
+	/// </summary>
+	public const string BitGo = "BITGO";
+
+	/// <summary>
+	/// Copper custody and ClearLoop assets.
+	/// </summary>
+	public const string Copper = "COPPER";
+
+	/// <summary>
+	/// Anchorage Digital institutional trading and custody assets.
+	/// </summary>
+	public const string Anchorage = "ANCHORAGE";
+
+	/// <summary>
+	/// Paxos crypto brokerage and custody assets.
+	/// </summary>
+	public const string Paxos = "PAXOS";
+
+	/// <summary>
+	/// CoinGecko aggregated crypto assets.
+	/// </summary>
+	public const string CoinGecko = "COINGECKO";
+
+	/// <summary>
+	/// CoinGecko and GeckoTerminal on-chain pools.
+	/// </summary>
+	public const string CoinGeckoOnChain = "CGONCHAIN";
+
+	/// <summary>
+	/// CoinMarketCap aggregated cryptocurrency assets.
+	/// </summary>
+	public const string CoinMarketCap = "CMC";
+
+	/// <summary>
+	/// Kaiko institutional cryptocurrency market data.
+	/// </summary>
+	public const string Kaiko = "KAIKO";
+
+	/// <summary>
+	/// CoinAPI normalized cryptocurrency market data.
+	/// </summary>
+	public const string CoinApi = "COINAPI";
+
+	/// <summary>
+	/// MarketData.app US stock, option, index, and fund data.
+	/// </summary>
+	public const string MarketDataApp = "MDAPP";
+
+	/// <summary>
+	/// U.S. SEC EDGAR issuers and filings.
+	/// </summary>
+	public const string SecEdgar = "SECEDGAR";
+
+	/// <summary>
+	/// OpenFIGI global instrument reference data.
+	/// </summary>
+	public const string OpenFigi = "OPENFIGI";
+
+	/// <summary>
+	/// SimFin equity and fundamental data.
+	/// </summary>
+	public const string SimFin = "SIMFIN";
+
+	/// <summary>
+	/// TraderMade foreign-exchange and CFD market data.
+	/// </summary>
+	public const string TraderMade = "TRADERMADE";
+
+	/// <summary>
+	/// Finage foreign-exchange market data.
+	/// </summary>
+	public const string Finage = "FINAGE";
+
+	/// <summary>
+	/// Amberdata normalized cryptocurrency market data.
+	/// </summary>
+	public const string Amberdata = "AMBERDATA";
+
+	/// <summary>
+	/// Coin Metrics market and network data.
+	/// </summary>
+	public const string CoinMetrics = "COINMETRICS";
+
+	/// <summary>
+	/// Glassnode digital-asset data.
+	/// </summary>
+	public const string Glassnode = "GLASSNODE";
+
+	/// <summary>
+	/// CryptoQuant digital-asset data.
+	/// </summary>
+	public const string CryptoQuant = "CRYPTOQUANT";
+
+	/// <summary>
+	/// Tardis.dev normalized market data.
+	/// </summary>
+	public const string Tardis = "TARDIS";
+
+	/// <summary>
+	/// Velo Data market analytics.
+	/// </summary>
+	public const string VeloData = "VELODATA";
+
+	/// <summary>
+	/// Velodrome Finance markets on Optimism.
+	/// </summary>
+	public const string Velodrome = "VELO";
+
+	/// <summary>
+	/// Velora aggregated-liquidity markets.
+	/// </summary>
+	public const string Velora = "VELORA";
+
+	/// <summary>
+	/// Pyth Pro market data.
+	/// </summary>
+	public const string Pyth = "PYTH";
+
+	/// <summary>
+	/// Pendle yield markets.
+	/// </summary>
+	public const string Pendle = "PENDLE";
+
+	/// <summary>
+	/// Chainflip cross-chain liquidity network.
+	/// </summary>
+	public const string Chainflip = "CHAINFLIP";
+
+	/// <summary>
+	/// Dexalot on-chain central limit order book.
+	/// </summary>
+	public const string Dexalot = "DEXALOT";
+
+	/// <summary>
+	/// STON.fi automated market maker on TON.
+	/// </summary>
+	public const string StonFi = "STONFI";
+
+	/// <summary>
+	/// XRP Ledger decentralized exchange.
+	/// </summary>
+	public const string Xrpl = "XRPL";
+
+	/// <summary>
+	/// Chainlink Data Streams market data.
+	/// </summary>
+	public const string ChainlinkDataStreams = "CHAINLINKDS";
 
 	/// <summary>
 	/// <see cref="EdgeXSpot"/>

@@ -1,0 +1,7 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <mask id="mastertrust-mark" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
+    <rect width="32" height="32" fill="white"/>
+    <path d="M5.2 26 10.8 6 16 24.5 21.2 6l5.6 20" stroke="black" stroke-width="2.6" stroke-linejoin="miter"/>
+  </mask>
+  <ellipse cx="16" cy="16" rx="15" ry="10" fill="#147FC3" mask="url(#mastertrust-mark)"/>
+</svg>

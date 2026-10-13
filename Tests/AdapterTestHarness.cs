@@ -42,5 +42,10 @@ class RecordingPassThroughMessageAdapter : PassThroughMessageAdapter
 		InMessages.Add(message);
 		return base.SendInMessageAsync(message, cancellationToken);
 	}
+
+	// The base implementation reconstructs the adapter from its (IdGenerator) constructor, which
+	// this one does not have; a copy gets the same configuration and a recording list of its own.
+	public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new(new RecordingPassThroughMessageAdapter(_supportedMarketDataTypes, _supportedOrderBookDepths, _createOrderLogMarketDepthBuilder));
 }
 

@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -22,6 +23,8 @@ using StockSharp.Xaml;
 public partial class MainWindow
 {
 	private readonly ChannelExecutor _executor;
+	private bool _isClosing;
+	private bool _isReleased;
 
 	public MainWindow()
 	{
@@ -61,13 +64,37 @@ public partial class MainWindow
 		return new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, exchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer());
 	}
 
-	protected override void OnClosing(CancelEventArgs e)
+	protected override async void OnClosing(CancelEventArgs e)
 	{
-		MainPanel.Close();
+		if (_isReleased)
+		{
+			base.OnClosing(e);
+			return;
+		}
 
-		AsyncHelper.Run(_executor.DisposeAsync);
+		// the window stays open until the queued writes are on the disk
+		e.Cancel = true;
 
-		base.OnClosing(e);
+		if (_isClosing)
+			return;
+
+		_isClosing = true;
+		IsEnabled = false;
+
+		try
+		{
+			MainPanel.Close();
+
+			await _executor.DisposeAsync();
+		}
+		finally
+		{
+			_isReleased = true;
+
+			// a window refuses Close while it is still handling the first attempt to close it
+			await Dispatcher.Yield();
+			Close();
+		}
 	}
 
 	private void OnLoaded(object sender, RoutedEventArgs e)

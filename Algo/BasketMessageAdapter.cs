@@ -218,11 +218,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// Extended info storage.
-	/// </summary>
-	public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
-
-	/// <summary>
 	/// Orders registration delay calculation manager.
 	/// </summary>
 	public ILatencyManager LatencyManager { get; set; }
@@ -302,8 +297,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates(subscription));
 
 	bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels(subscription));
-
-	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
 
@@ -498,7 +491,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			CommissionManager = CommissionManager,
 			NativeIdStorage = NativeIdStorage,
 			MappingProvider = MappingProvider,
-			ExtendedInfoStorage = ExtendedInfoStorage,
 			StorageProcessor = StorageProcessor,
 			Buffer = Buffer,
 			FillGapsBehaviour = FillGapsBehaviour,
@@ -684,7 +676,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private async ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
 	{
-		if (message.Adapter != null)
+		if (message.Adapter != null && message is not ISubscriptionMessage)
 		{
 			await message.Adapter.SendInMessageAsync(message, cancellationToken);
 			return;
@@ -907,8 +899,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
-			var (outMsgs, pendingToLoopback, notSupported) = _routingManager.ProcessConnect(
-				underlyingAdapter, wrapper, innerAdapter.SupportedInMessages, error);
+			var (outMsgs, pendingToLoopback, notSupported) = await _routingManager.ProcessConnectAsync(
+				underlyingAdapter, wrapper, innerAdapter.SupportedInMessages, error, cancellationToken);
 
 			extra.AddRange(outMsgs);
 			extra.AddRange(pendingToLoopback.Select(m => m.LoopBack(this)));
@@ -916,7 +908,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		}
 
 		foreach (var notSupportedMsg in notSupportedMsgs)
-			await SendOutErrorAsync(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type)), cancellationToken);
+		{
+			// A message held while the adapters connected and then left with nowhere to go is answered on
+			// its own terms - an order by its transaction, a subscription by its response - because a bare
+			// error names nothing and leaves the caller waiting for an answer that never comes.
+			var noAdapter = new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type));
+
+			await SendOutMessageAsync(notSupportedMsg.CreateErrorResponse(noAdapter, this, _routingManager.GetSubscribers), cancellationToken);
+		}
 
 		message.Adapter = underlyingAdapter;
 	}
@@ -954,7 +953,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	protected virtual ValueTask OnSendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		message.Adapter ??= this;
-		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	private void SecurityAdapterProviderOnChanged((SecurityId, DataType) key, Guid adapterId, bool isAdd)
@@ -966,39 +965,58 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			id => InnerAdapters.SyncGet(c => c.FindById(id)));
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		(IMessageAdapter adapter, int priority)[] adapters;
+
 		using (InnerAdapters.EnterScope())
+			adapters = [.. InnerAdapters.Select(a => (a, InnerAdapters[a]))];
+
+		var settings = new List<SettingsStorage>();
+
+		foreach (var (adapter, priority) in adapters)
 		{
-			storage.SetValue(nameof(InnerAdapters), InnerAdapters.Select(a =>
-			{
-				var s = new SettingsStorage();
-				s.SetValue("AdapterType", a.GetType().GetTypeName(false));
-				s.SetValue("AdapterSettings", a.Save());
-				s.SetValue("Priority", InnerAdapters[a]);
-				return s;
-			}).ToArray());
+			var s = new SettingsStorage();
+			s.SetValue("AdapterType", adapter.GetType().GetTypeName(false));
+			s.SetValue("AdapterSettings", await adapter.SaveAsync(cancellationToken));
+			s.SetValue("Priority", priority);
+			settings.Add(s);
 		}
 
-		base.Save(storage);
+		storage.SetValue(nameof(InnerAdapters), settings.ToArray());
+
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var loaded = new List<(IMessageAdapter adapter, int priority)>();
+		var adapters = new Dictionary<Guid, IMessageAdapter>();
+
+		foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
+		{
+			try
+			{
+				var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
+				await adapter.LoadAsync(s, "AdapterSettings", cancellationToken);
+				loaded.Add((adapter, s.GetValue<int>("Priority")));
+			}
+			catch (Exception e) when (e is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+			{
+				LogError(e);
+			}
+		}
+
 		using (InnerAdapters.EnterScope())
 		{
 			InnerAdapters.Clear();
 
-			var adapters = new Dictionary<Guid, IMessageAdapter>();
-
-			foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
+			foreach (var (adapter, priority) in loaded)
 			{
 				try
 				{
-					var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
-					adapter.Load(s, "AdapterSettings");
-					InnerAdapters[adapter] = s.GetValue<int>("Priority");
+					InnerAdapters[adapter] = priority;
 					adapters.Add(adapter.Id, adapter);
 				}
 				catch (Exception e)
@@ -1018,7 +1036,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					.Select(p => (p.Key, adapters[p.Value])));
 		}
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <summary>
@@ -1035,11 +1053,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="BasketMessageAdapter"/>.
 	/// </summary>
-	public IMessageAdapter Clone()
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider, Buffer)
 		{
-			ExtendedInfoStorage = ExtendedInfoStorage,
 			SupportCandlesCompression = SupportCandlesCompression,
 			Level1Extend = Level1Extend,
 			SuppressReconnectingErrors = SuppressReconnectingErrors,
@@ -1059,9 +1078,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
 		};
 
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

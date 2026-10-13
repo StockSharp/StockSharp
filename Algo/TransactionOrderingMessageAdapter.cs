@@ -83,9 +83,10 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="TransactionOrderingMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new TransactionOrderingMessageAdapter(InnerAdapter.TypedClone());
+		return new TransactionOrderingMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

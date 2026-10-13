@@ -127,24 +127,26 @@ public class GpuVolumeWeightedAveragePriceCalculator : GpuIndicatorCalculatorBas
 		var candle = flatCandles[globalIdx];
 		var resIndex = paramIdx * flatCandles.Length + globalIdx;
 
-		var cumulativeVolume = 0f;
-		var cumulativePriceVolume = 0f;
+		// The sums run over the whole series with no reset, and a float32 running total loses accuracy
+		// with every bar added, without bound as the series grows - so they are accumulated in double.
+		var cumulativeVolume = 0d;
+		var cumulativePriceVolume = 0d;
 		for (var i = 0; i <= candleIdx; i++)
 		{
 			var current = flatCandles[offset + i];
-			var typicalPrice = (current.High + current.Low + current.Close) / 3f;
-			var volume = current.Volume;
+			var typicalPrice = ((double)current.High + current.Low + current.Close) / 3d;
+			var volume = (double)current.Volume;
 
 			cumulativeVolume += volume;
 			cumulativePriceVolume += typicalPrice * volume;
 		}
 
-		if (cumulativeVolume > 0f)
+		if (cumulativeVolume > 0d)
 		{
 			flatResults[resIndex] = new()
 			{
 				Time = candle.Time,
-				Value = cumulativePriceVolume / cumulativeVolume,
+				Value = (float)(cumulativePriceVolume / cumulativeVolume),
 				IsFormed = 1,
 			};
 		}

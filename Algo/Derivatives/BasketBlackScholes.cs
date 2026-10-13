@@ -126,51 +126,62 @@ public class BasketBlackScholes : BlackScholes
 	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
 		var pos = PositionProvider.Positions.Where(p => p.Security == UnderlyingAsset).Sum(p => p.CurrentValue);
-		return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice)) + pos;
+		return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice), deviation, true) + pos;
 	}
 
 	/// <inheritdoc />
 	public override decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice));
+		return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice), deviation, true);
 	}
 
 	/// <inheritdoc />
 	public override decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice));
+		return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice), deviation, true);
 	}
 
 	/// <inheritdoc />
 	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice));
+		return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice), deviation, true);
 	}
 
 	/// <inheritdoc />
 	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice));
+		return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice), deviation, true);
 	}
 
 	/// <inheritdoc />
 	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice));
+		return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice), deviation, true);
 	}
 
 	/// <inheritdoc />
 	public override decimal? ImpliedVolatility(DateTime currentTime, decimal premium)
 	{
-		return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), false);
+		return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), null, false);
 	}
 
-	private decimal? ProcessOptions(Func<BlackScholes, decimal?> func, bool usePos = true)
+	/// <summary>
+	/// To sum a value over the options of the basket.
+	/// </summary>
+	/// <param name="func">The value of one option.</param>
+	/// <param name="deviation">The standard deviation the caller supplied for the whole basket, or <see langword="null" /> when each option is priced by its own quoted volatility.</param>
+	/// <param name="usePos">To weight each value by the position in that option.</param>
+	/// <returns>The sum over the options the model can price.</returns>
+	private decimal? ProcessOptions(Func<BlackScholes, decimal?> func, decimal? deviation, bool usePos)
 	{
 		return _innerModels.Cache.Sum(m =>
 		{
-			var iv = (decimal?)DataProvider.GetSecurityValue(m.Option, Level1Fields.ImpliedVolatility);
-			return iv == null ? null : func(m) * (usePos ? PositionProvider.Positions.Where(p => p.Security == m.Option).Sum(p => p.CurrentValue) : 1);
+			// An option is priced only when its volatility is known: the caller either states one for
+			// the whole basket, or the provider quotes one for that option.
+			if (deviation is null && DataProvider.GetSecurityValue(m.Option, Level1Fields.ImpliedVolatility) is null)
+				return null;
+
+			return func(m) * (usePos ? PositionProvider.Positions.Where(p => p.Security == m.Option).Sum(p => p.CurrentValue) : 1);
 		});
 	}
 }

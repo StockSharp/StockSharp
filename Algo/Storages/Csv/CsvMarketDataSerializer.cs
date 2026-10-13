@@ -39,17 +39,34 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 			var firstTimeRead = false;
 			string lastLine = null;
 
+			// The incremental flag sits far to the right of the row and rows written by older
+			// versions may not carry that column at all, so it is probed on the last row only -
+			// which is the single case where the row text has to be kept while scanning.
+			var keepLastLine = readIncrementalOnly is not null;
+
 			using var reader = stream.CreateCsvReader(_encoding);
 
 			while (await reader.NextLineAsync(cancellationToken))
 			{
-				lastLine = reader.CurrentLine;
+				if (keepLastLine)
+					lastLine = reader.CurrentLine;
+
+				// The reader is forward-only, so the times and the id are taken from this single
+				// pass: materializing every row and re-parsing the last one through a second
+				// reader cost a string per row plus that reader's own buffers per file.
+				var time = reader.ReadTime(Date);
 
 				if (!firstTimeRead)
 				{
-					FirstTime = reader.ReadTime(Date);
+					FirstTime = time;
 					firstTimeRead = true;
 				}
+
+				LastTime = time;
+
+				// the id column is present on every row, so the last read value simply survives the loop
+				if (readId is not null)
+					_lastId = readId(reader);
 
 				count++;
 			}
@@ -63,9 +80,10 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 				if (!await lastLineReader.NextLineAsync(cancellationToken))
 					throw new InvalidOperationException();
 
-				LastTime = lastLineReader.ReadTime(Date);
-				_lastId = readId?.Invoke(lastLineReader);
-				IncrementalOnly = readIncrementalOnly?.Invoke(lastLineReader);
+				// the flag is read relative to the columns the time occupies
+				lastLineReader.ReadTime(Date);
+
+				IncrementalOnly = readIncrementalOnly(lastLineReader);
 			}
 
 			stream.Position = 0;

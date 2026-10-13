@@ -2,6 +2,8 @@ namespace StockSharp.MatchingEngine;
 
 using System.Threading.Tasks;
 
+using StockSharp.Localization;
+
 /// <summary>
 /// Message-based matching engine adapter.
 /// Contains pure matching logic without emulation (no random, no candle matching, no commissions).
@@ -10,8 +12,11 @@ using System.Threading.Tasks;
 public class MatchingEngineAdapter : IMessageTransport
 {
 	private readonly Dictionary<SecurityId, SecurityState> _securityStates = [];
-	private IPortfolioManager _portfolioManager = new EmulatedPortfolioManager();
+	private readonly EmulatedPortfolioManager _portfolioManager = new();
 	private readonly IStopOrderManager _stopOrderManager = new StopOrderManager();
+
+	// The floating profit each position was last reported with; a position is reported again only when it moves.
+	private readonly Dictionary<PositionInfo, decimal> _reportedUnrealizedPnL = [];
 
 	private IncrementalIdGenerator _orderIdGenerator = new();
 	private IncrementalIdGenerator _tradeIdGenerator = new();
@@ -24,6 +29,10 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// </summary>
 	public MatchingEngineAdapter()
 	{
+		_portfolioManager.MarginController = new MarginController();
+
+		// Open positions are revalued against the engine's own order books.
+		_portfolioManager.MarkPrices = new BookMarkPrices(this);
 	}
 
 	/// <summary>
@@ -52,11 +61,29 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// <summary>
 	/// Portfolio manager for handling portfolio state.
 	/// </summary>
-	public IPortfolioManager PortfolioManager
+	public virtual EmulatedPortfolioManager PortfolioManager => _portfolioManager;
+
+	/// <summary>
+	/// Forgets the book stated so far for <paramref name="securityId"/>, so an incremental feed has
+	/// to state a whole one again before its increments are folded in. Used when a venue has gone
+	/// quiet on depth: what it sends after the break describes a market its old base no longer holds.
+	/// </summary>
+	/// <param name="securityId">Security whose stated book is forgotten.</param>
+	public void ForgetBook(SecurityId securityId)
 	{
-		get => _portfolioManager;
-		set => _portfolioManager = value ?? throw new ArgumentNullException(nameof(value));
+		if (_securityStates.TryGetValue(securityId, out var state))
+			state.ForgetBook();
 	}
+
+	/// <summary>
+	/// Every security the venue has stated a definition for.
+	/// </summary>
+	/// <remarks>
+	/// The engine is told what an instrument is before anything is matched on it, so this is the
+	/// list of what the venue trades - and the answer to a client asking the same question.
+	/// </remarks>
+	public IEnumerable<SecurityMessage> Securities
+		=> _securityStates.Values.Select(s => s.Definition).Where(d => d is not null);
 
 	/// <summary>
 	/// Stop order manager (read-only access).
@@ -109,6 +136,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		try
 		{
 			ProcessMessage(message, results);
+			AddPositionRevaluations(message.LocalTime, results);
 		}
 		catch (Exception ex)
 		{
@@ -203,97 +231,114 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		var state = GetSecurityState(msg.SecurityId);
 
-		var bidPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
-		var askPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
-		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume);
-		if (bidVol == 0) bidVol = null;
-		bidVol ??= 1m;
-
-		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume);
-		if (askVol == 0) askVol = null;
-		askVol ??= 1m;
-
-		state.UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
-
-		if (bidPrice.HasValue)
-			state.OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol.Value);
-
-		if (askPrice.HasValue)
-			state.OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol.Value);
-
-		if (state.HasDepthSubscription)
-		{
-			results.Add(state.OrderBook.ToMessage(msg.LocalTime, msg.ServerTime));
-		}
+		// A quote says where the market is and nothing about what rests behind it, so the only thing
+		// the engine takes from one is whether the instrument may be traded at all.
+		if (msg.Changes.TryGetValue(Level1Fields.State) is SecurityStates tradingState)
+			state.ProcessTradingState(tradingState);
 	}
 
-	private void ProcessTick(ExecutionMessage tick, List<Message> results)
+	// Tells an order the engine is being told about from one it is being asked to place. Only the
+	// side that already holds it can say all three: that it is active, the identity it is known by,
+	// and how much of it is left.
+	private static bool IsAlreadyActive(ExecutionMessage execMsg)
+		=> execMsg.OrderState == OrderStates.Active
+			&& AdoptedTransactionId(execMsg) != 0
+			&& execMsg.Balance is > 0;
+
+	// Which field carries the registration id depends on what the report is. The row that
+	// registered the order carries it as its own transaction; a later state report carries it as
+	// the transaction it answers. Both describe the same order, and reading only one of them would
+	// leave the other quietly treated as a fresh request.
+	private static long AdoptedTransactionId(ExecutionMessage execMsg)
+		=> execMsg.OriginalTransactionId != 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId;
+
+	/// <summary>
+	/// Takes an order that is already standing somewhere else into this book, exactly as it is.
+	/// </summary>
+	/// <remarks>
+	/// Nothing is reported back: the order was not registered here, so there is no request to
+	/// answer, and an owner that receives a registration report for an order it has held for hours
+	/// would reasonably treat it as a new one. Margin is reserved for what is left of it, because
+	/// the account is carrying that exposure whether or not this process was running when it was
+	/// placed. An identity already in the book is left alone rather than duplicated - being told
+	/// twice about the same order is ordinary, and the second telling must change nothing.
+	/// </remarks>
+	private void AdoptActiveOrder(ExecutionMessage execMsg, Sides side, List<Message> results)
 	{
-		var state = GetSecurityState(tick.SecurityId);
+		var state = GetSecurityState(execMsg.SecurityId);
 
-		var tradePrice = tick.TradePrice ?? 0;
-		var tradeVolume = tick.TradeVolume ?? 1m;
+		var transactionId = AdoptedTransactionId(execMsg);
 
-		state.UpdateSteps(tradePrice, tradeVolume);
-
-		if (tradePrice <= 0)
+		if (state.OrderManager.TryGetOrder(transactionId, out _))
 			return;
 
-		var priceStep = state.PriceStep;
-		var spread = priceStep * Settings.SpreadSize;
-
-		var bestBid = state.OrderBook.BestBid;
-		var bestAsk = state.OrderBook.BestAsk;
-
-		Sides originSide;
-		if (tick.OriginSide.HasValue)
-			originSide = tick.OriginSide.Value.Invert();
-		else if (bestBid.HasValue && !bestAsk.HasValue)
-			originSide = Sides.Sell;
-		else if (bestAsk.HasValue && !bestBid.HasValue)
-			originSide = Sides.Buy;
-		else
-			originSide = Sides.Sell;
-
-		if (state.OrderBook.BidLevels == 0 && state.OrderBook.AskLevels == 0)
+		var order = new EmulatorOrder
 		{
-			state.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			var oppositePrice = tradePrice + spread * (originSide == Sides.Buy ? 1 : -1);
-			if (oppositePrice > 0)
-				state.OrderBook.UpdateLevel(originSide.Invert(), oppositePrice, tradeVolume);
-		}
-		else
+			TransactionId = transactionId,
+			OrderId = execMsg.OrderId,
+			Side = side,
+			Price = execMsg.OrderPrice,
+			Volume = execMsg.OrderVolume ?? execMsg.Balance.Value,
+			Balance = execMsg.Balance.Value,
+			PortfolioName = execMsg.PortfolioName,
+			TimeInForce = execMsg.TimeInForce,
+			OrderType = execMsg.OrderType ?? OrderTypes.Limit,
+			ExpiryDate = execMsg.ExpiryDate,
+			ServerTime = execMsg.ServerTime,
+			LocalTime = execMsg.LocalTime,
+			MarginPrice = execMsg.OrderPrice,
+		};
+
+		state.OrderBook.AddQuote(order);
+		state.OrderManager.RegisterOrder(order, execMsg.LocalTime);
+
+		if (!execMsg.PortfolioName.IsEmpty())
 		{
-			if (bestBid.HasValue && tradePrice <= bestBid.Value.price)
-			{
-				state.OrderBook.UpdateLevel(Sides.Sell, tradePrice, tradeVolume);
-			}
-			else if (bestAsk.HasValue && tradePrice >= bestAsk.Value.price)
-			{
-				state.OrderBook.UpdateLevel(Sides.Buy, tradePrice, tradeVolume);
-			}
-			else
-			{
-				state.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			}
+			var portfolio = GetPortfolio(execMsg.PortfolioName);
+			portfolio.ProcessOrderRegistration(execMsg.SecurityId, order.Side, order.Balance, order.Price);
+			AddPortfolioUpdate(portfolio, execMsg.LocalTime, results);
 		}
 
 		if (state.HasDepthSubscription)
-		{
-			results.Add(state.OrderBook.ToMessage(tick.LocalTime, tick.ServerTime));
-		}
+			results.Add(state.OrderBook.ToMessage(execMsg.LocalTime, execMsg.ServerTime));
 	}
 
 	private void ProcessExecution(ExecutionMessage execMsg, List<Message> results)
 	{
 		if (execMsg.DataType == DataType.Transactions && execMsg.HasOrderInfo())
 		{
+			// An order that is already live elsewhere arrives as state, not as a request. Putting
+			// it through registration would charge the account a second time for something it
+			// already owns, hand it a new identity, and cross it against the book on the way in -
+			// the engine would then be holding an order that does not exist anywhere else.
+			// Everything below treats the message as an order, and an order naming no side can
+			// neither join a book that has two halves nor be placed into one. Nothing downstream
+			// can pick one, and picking one here would place an order nobody asked for.
+			if (execMsg.Side is not Sides side)
+			{
+				var fail = execMsg.TransactionId.CreateOrderReply(execMsg.LocalTime);
+
+				fail.SecurityId = execMsg.SecurityId;
+				fail.PortfolioName = execMsg.PortfolioName;
+				fail.OrderState = OrderStates.Failed;
+				fail.Error = new InvalidOperationException($"Order {execMsg.TransactionId}: {nameof(execMsg.Side)} is not specified.");
+
+				results.Add(fail);
+				return;
+			}
+
+			if (IsAlreadyActive(execMsg))
+			{
+				AdoptActiveOrder(execMsg, side, results);
+				return;
+			}
+
 			var regMsg = new OrderRegisterMessage
 			{
 				TransactionId = execMsg.TransactionId,
 				SecurityId = execMsg.SecurityId,
 				PortfolioName = execMsg.PortfolioName,
-				Side = execMsg.Side,
+				Side = side,
 				Price = execMsg.OrderPrice,
 				Volume = execMsg.OrderVolume ?? 0,
 				OrderType = execMsg.OrderType ?? OrderTypes.Limit,
@@ -306,7 +351,8 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 		else if (execMsg.DataType == DataType.Ticks)
 		{
-			ProcessTick(execMsg, results);
+			// A print is news about a trade that happened, not about the book: it says nothing about
+			// what is resting behind the touch, so the book it is matched against is left alone.
 			if (execMsg.TradePrice is { } tickPrice)
 				CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
 		}
@@ -318,10 +364,21 @@ public class MatchingEngineAdapter : IMessageTransport
 	public void ProcessOrderRegister(OrderRegisterMessage regMsg, List<Message> results)
 	{
 		// Intercept conditional (stop) orders
-		if (regMsg.OrderType == OrderTypes.Conditional && regMsg.Condition is IStopLossOrderCondition stopCond)
+		if (regMsg.OrderType == OrderTypes.Conditional)
 		{
-			RegisterStopOrder(regMsg, stopCond, results);
-			return;
+			var stopInfo = CreateStopInfo(regMsg, out var stopError);
+
+			if (stopInfo is not null)
+			{
+				RegisterStopOrder(regMsg, stopInfo, results);
+				return;
+			}
+
+			if (stopError is not null)
+			{
+				results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: new InvalidOperationException(stopError)));
+				return;
+			}
 		}
 
 		var state = GetSecurityState(regMsg.SecurityId);
@@ -329,7 +386,8 @@ public class MatchingEngineAdapter : IMessageTransport
 		var serverTime = regMsg.LocalTime;
 
 		// Validate registration
-		var error = ValidateRegistration(regMsg);
+		var chargedPrice = GetChargedPrice(regMsg, state);
+		var error = ValidateRegistration(regMsg, chargedPrice);
 		if (error != null)
 		{
 			results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: error));
@@ -344,13 +402,17 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			PortfolioName = regMsg.PortfolioName,
+			Side = regMsg.Side,
+			// Report acceptance as Active; a reject, expiry or full fill overwrites this below, but an
+			// order that fills immediately still passes through Active so every order reports acceptance.
+			OrderState = OrderStates.Active,
 		};
 		results.Add(replyMsg);
 
-		// Use market price for margin calculation
-		var marginPrice = regMsg.Side == Sides.Buy
-			? state.OrderBook.BestBid?.price ?? 0
-			: state.OrderBook.BestAsk?.price ?? 0;
+		// The account is held at the price the registration was checked against: a limit can never
+		// trade past the price it names, and a market order is checked against the best it would take.
+		var marginPrice = chargedPrice ?? 0m;
 
 		// Create emulator order
 		var order = new EmulatorOrder
@@ -384,6 +446,17 @@ public class MatchingEngineAdapter : IMessageTransport
 			return;
 		}
 
+		// An order that is already past its lifetime never becomes live and therefore never reserves
+		// funds or reaches the matcher. Letting it trade first and changing the first Active row to Done
+		// would also publish a terminal state before the fills that supposedly produced it.
+		if (regMsg.TillDate is DateTime till && till <= regMsg.LocalTime)
+		{
+			replyMsg.Balance = regMsg.Volume;
+			replyMsg.OrderVolume = regMsg.Volume;
+			replyMsg.OrderState = OrderStates.Done;
+			return;
+		}
+
 		// Increase depth volume if needed
 		if (Settings.IncreaseDepthVolume)
 		{
@@ -405,6 +478,36 @@ public class MatchingEngineAdapter : IMessageTransport
 		var matchResult = matcher.Match(order, state.OrderBook, matchSettings);
 
 		// Process result
+		EmitRegistrationResult(regMsg, order, matchResult, replyMsg, null, results);
+	}
+
+	/// <summary>
+	/// Turn a match into the messages it owes: the order rows, the trades, the maker side of each
+	/// fill, the positions and the portfolio updates.
+	/// </summary>
+	/// <remarks>
+	/// Shared with emulation. How a match was decided differs; what it owes does not.
+	/// </remarks>
+	/// <param name="regMsg">The registration this is answering.</param>
+	/// <param name="order">The order as the matcher saw it.</param>
+	/// <param name="matchResult">What the matcher decided.</param>
+	/// <param name="replyMsg">The acceptance row already published, mutated when the order ends here.</param>
+	/// <param name="chargeCommission">Prices a trade before the position is booked from it, or null.</param>
+	/// <param name="results">Where the messages go.</param>
+	public void EmitRegistrationResult(
+		OrderRegisterMessage regMsg,
+		EmulatorOrder order,
+		MatchResult matchResult,
+		ExecutionMessage replyMsg,
+		Func<ExecutionMessage, decimal?> chargeCommission,
+		List<Message> results)
+	{
+		var state = GetSecurityState(regMsg.SecurityId);
+		var portfolio = GetPortfolio(regMsg.PortfolioName);
+		var serverTime = regMsg.LocalTime;
+		var orderId = order.OrderId;
+		var marginPrice = order.MarginPrice;
+
 		if (matchResult.IsRejected)
 		{
 			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
@@ -418,6 +521,9 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		var isIOC = regMsg.TimeInForce == TimeInForce.CancelBalance;
 		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
+		// A market order names no price, so nothing of it can rest in the book: what the book could
+		// not fill is cancelled with the order, the same way as for IOC and FOK.
+		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var hasTrades = matchResult.Trades.Count > 0;
 
 		var marketPrice = regMsg.Side == Sides.Buy
@@ -425,24 +531,6 @@ public class MatchingEngineAdapter : IMessageTransport
 			: state.OrderBook.BestBid?.price;
 
 		// For IOC/FOK with trades, send Done message BEFORE trades
-		if ((isIOC || isFOK) && hasTrades)
-		{
-			results.Add(new ExecutionMessage
-			{
-				LocalTime = regMsg.LocalTime,
-				SecurityId = regMsg.SecurityId,
-				OrderId = orderId,
-				OriginalTransactionId = regMsg.TransactionId,
-				Balance = matchResult.RemainingVolume,
-				OrderVolume = regMsg.Volume,
-				OrderState = OrderStates.Done,
-				PortfolioName = regMsg.PortfolioName,
-				DataTypeEx = DataType.Transactions,
-				HasOrderInfo = true,
-				ServerTime = serverTime,
-			});
-		}
-
 		// Generate trades
 		foreach (var trade in matchResult.Trades)
 		{
@@ -460,96 +548,137 @@ public class MatchingEngineAdapter : IMessageTransport
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
+				PortfolioName = regMsg.PortfolioName,
 				MarketPrice = marketPrice,
 			};
 
-			var (realizedPnL, positionChange, position) = portfolio.ProcessTrade(
-				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, tradeMsg.Commission);
+			tradeMsg.Commission = chargeCommission?.Invoke(tradeMsg);
 
-			// For non-IOC/FOK orders: send order state update in trade loop
-			if (!isIOC && !isFOK)
+			portfolio.ProcessTrade(
+				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, tradeMsg.Commission, order.MarginPrice);
+
+			// The fill before the state it produced: a reader releasing per-order state on a final
+			// state must still hold it when the trade arrives.
+			results.Add(tradeMsg);
+
+			// Position change. Named after the traded instrument, not money: the value carried
+			// here is a lot quantity, and the account's cash follows on its own row just below.
+			results.Add(CreatePositionUpdate(portfolio, regMsg.SecurityId, serverTime, regMsg.LocalTime));
+
+			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
+
+			// Generate trades for the resting orders this trade actually took from
+			foreach (var fill in trade.CounterFills)
 			{
+				var counterOrder = fill.Order;
+
+				if (!counterOrder.IsUserOrder)
+					continue;
+
+				var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
+
+				var counterMarketPrice = counterOrder.Side == Sides.Buy
+					? state.OrderBook.BestAsk?.price
+					: state.OrderBook.BestBid?.price;
+
+				var counterTradeMsg = new ExecutionMessage
+				{
+					DataTypeEx = DataType.Transactions,
+					SecurityId = regMsg.SecurityId,
+					LocalTime = regMsg.LocalTime,
+					ServerTime = serverTime,
+					OriginalTransactionId = counterOrder.TransactionId,
+					OrderId = counterOrder.OrderId,
+					TradeId = tradeId,
+					TradePrice = trade.Price,
+					TradeVolume = fill.Volume,
+					Side = counterOrder.Side,
+					PortfolioName = counterOrder.PortfolioName,
+					MarketPrice = counterMarketPrice,
+				};
+
+				// Both halves of a fill are trades and both book a position, so both are priced
+				// through the same seam; what it charges either side is its own business.
+				counterTradeMsg.Commission = chargeCommission?.Invoke(counterTradeMsg);
+
+				counterPortfolio.ProcessTrade(
+					regMsg.SecurityId, counterOrder.Side, trade.Price, fill.Volume, counterTradeMsg.Commission, counterOrder.MarginPrice);
+
+				results.Add(counterTradeMsg);
+
+				// The maker's state follows its trade, the same order the taker's rows use.
 				results.Add(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					LocalTime = regMsg.LocalTime,
 					ServerTime = serverTime,
 					SecurityId = regMsg.SecurityId,
-					OrderId = orderId,
-					OriginalTransactionId = regMsg.TransactionId,
-					Balance = matchResult.RemainingVolume,
-					OrderVolume = regMsg.Volume,
-					OrderState = matchResult.FinalState,
-					PortfolioName = regMsg.PortfolioName,
+					OrderId = counterOrder.OrderId,
+					OriginalTransactionId = counterOrder.TransactionId,
+					Balance = fill.Remaining,
+					OrderVolume = counterOrder.Volume,
+					OrderState = fill.Remaining <= 0 ? OrderStates.Done : OrderStates.Active,
+					Side = counterOrder.Side,
+					PortfolioName = counterOrder.PortfolioName,
 					HasOrderInfo = true,
 				});
-			}
 
-			results.Add(tradeMsg);
+				results.Add(CreatePositionUpdate(counterPortfolio, regMsg.SecurityId, serverTime, regMsg.LocalTime));
 
-			// Position change
-			results.Add(new PositionChangeMessage
-			{
-				SecurityId = SecurityId.Money,
-				ServerTime = serverTime,
-				LocalTime = regMsg.LocalTime,
-				PortfolioName = regMsg.PortfolioName,
-			}
-			.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
-			.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+				AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
 
-			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
-
-			// Generate trades for matched counter orders
-			foreach (var counterOrder in trade.CounterOrders)
-			{
-				if (counterOrder.IsUserOrder)
-				{
-					var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
-					var counterVolume = trade.Volume.Min(counterOrder.Balance);
-
-					var counterMarketPrice = counterOrder.Side == Sides.Buy
-						? state.OrderBook.BestAsk?.price
-						: state.OrderBook.BestBid?.price;
-
-					var counterTradeMsg = new ExecutionMessage
-					{
-						DataTypeEx = DataType.Transactions,
-						SecurityId = regMsg.SecurityId,
-						LocalTime = regMsg.LocalTime,
-						ServerTime = serverTime,
-						OriginalTransactionId = counterOrder.TransactionId,
-						TradeId = tradeId,
-						TradePrice = trade.Price,
-						TradeVolume = counterVolume,
-						Side = counterOrder.Side,
-						MarketPrice = counterMarketPrice,
-					};
-
-					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
-						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterTradeMsg.Commission);
-
-					results.Add(counterTradeMsg);
-
-					results.Add(new PositionChangeMessage
-					{
-						SecurityId = SecurityId.Money,
-						ServerTime = serverTime,
-						LocalTime = regMsg.LocalTime,
-						PortfolioName = counterOrder.PortfolioName,
-					}
-					.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
-					.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
-
-					AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
-				}
+				// A maker consumed in full leaves the book; it must leave the active orders with it.
+				if (fill.Remaining <= 0)
+					state.OrderManager.TryRemoveOrder(counterOrder.TransactionId, out _);
 			}
 		}
 
-		// Handle IOC/FOK cancelled portion
+		// The matcher can sweep several price levels, but they are fills of one order and produce one
+		// state transition. Publishing the final state after every level finishes the order more than
+		// once and claims it is already done while later fills are still being delivered.
+		if (!isIOC && !isFOK && hasTrades)
+		{
+			results.Add(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				LocalTime = regMsg.LocalTime,
+				ServerTime = serverTime,
+				SecurityId = regMsg.SecurityId,
+				OrderId = orderId,
+				OriginalTransactionId = regMsg.TransactionId,
+				Balance = matchResult.RemainingVolume,
+				OrderVolume = regMsg.Volume,
+				OrderState = matchResult.FinalState,
+				Side = regMsg.Side,
+				PortfolioName = regMsg.PortfolioName,
+				HasOrderInfo = true,
+			});
+		}
+
+		// After the fills, not before them - see the taker rows above.
+		if ((isIOC || isFOK) && hasTrades)
+		{
+			results.Add(new ExecutionMessage
+			{
+				LocalTime = regMsg.LocalTime,
+				SecurityId = regMsg.SecurityId,
+				OrderId = orderId,
+				OriginalTransactionId = regMsg.TransactionId,
+				Balance = matchResult.RemainingVolume,
+				OrderVolume = regMsg.Volume,
+				OrderState = OrderStates.Done,
+				Side = regMsg.Side,
+				PortfolioName = regMsg.PortfolioName,
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				ServerTime = serverTime,
+			});
+		}
+
+		// Handle the cancelled portion of an order that cannot rest
 		var isCancelled = matchResult.FinalState == OrderStates.Done && matchResult.RemainingVolume > 0;
 
-		if ((isIOC || isFOK) && isCancelled)
+		if ((isIOC || isFOK || isMarket) && isCancelled)
 		{
 			if (!hasTrades)
 			{
@@ -562,6 +691,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					Balance = matchResult.RemainingVolume,
 					OrderVolume = regMsg.Volume,
 					OrderState = OrderStates.Done,
+					Side = regMsg.Side,
 					PortfolioName = regMsg.PortfolioName,
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
@@ -590,6 +720,9 @@ public class MatchingEngineAdapter : IMessageTransport
 				replyMsg.OrderState = OrderStates.Done;
 				replyMsg.Balance = matchResult.RemainingVolume;
 				replyMsg.OrderVolume = regMsg.Volume;
+
+				portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, matchResult.RemainingVolume, marginPrice);
+				AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 			}
 			else
 			{
@@ -606,6 +739,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 	}
 
+
 	/// <summary>
 	/// Process order cancellation.
 	/// </summary>
@@ -615,15 +749,23 @@ public class MatchingEngineAdapter : IMessageTransport
 		var serverTime = cancelMsg.LocalTime;
 
 		// Try cancelling stop order first
-		if (_stopOrderManager.Cancel(cancelMsg.OriginalTransactionId, out _))
+		if (_stopOrderManager.Cancel(cancelMsg.OriginalTransactionId, out var cancelledStopInfo))
 		{
+			// A stop that was taken back and one the market reached both end Done on the same
+			// transaction. What tells them apart is the instrument and the balance left: a cancelled
+			// stop never traded, so all of it is still outstanding.
 			results.Add(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
+				SecurityId = cancelledStopInfo.SecurityId,
 				LocalTime = cancelMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = cancelMsg.OriginalTransactionId,
+				PortfolioName = cancelledStopInfo.PortfolioName,
 				OrderState = OrderStates.Done,
+				Side = cancelledStopInfo.Side,
+				OrderVolume = cancelledStopInfo.Volume,
+				Balance = cancelledStopInfo.Volume,
 				HasOrderInfo = true,
 			});
 			return;
@@ -638,6 +780,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = cancelMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = cancelMsg.TransactionId,
+				PortfolioName = cancelMsg.PortfolioName,
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException($"Order {cancelMsg.OriginalTransactionId} not found"),
 				HasOrderInfo = true,
@@ -656,7 +799,9 @@ public class MatchingEngineAdapter : IMessageTransport
 			LocalTime = cancelMsg.LocalTime,
 			ServerTime = serverTime,
 			OriginalTransactionId = cancelMsg.OriginalTransactionId,
+			PortfolioName = order.PortfolioName,
 			OrderState = OrderStates.Done,
+			Side = order.Side,
 			Balance = order.Balance,
 			OrderVolume = order.Volume,
 			HasOrderInfo = true,
@@ -682,26 +827,34 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = replaceMsg.LocalTime,
 				ServerTime = replaceMsg.LocalTime,
 				OriginalTransactionId = replaceMsg.OriginalTransactionId,
+				PortfolioName = oldStopInfo.PortfolioName,
 				OrderState = OrderStates.Done,
+				Side = oldStopInfo.Side,
 				Balance = oldStopInfo.Volume,
 				OrderVolume = oldStopInfo.Volume,
 			});
 
-			if (replaceMsg.Condition is IStopLossOrderCondition stopCond)
+			var stopRegMsg = new OrderRegisterMessage
 			{
-				var stopRegMsg = new OrderRegisterMessage
-				{
-					SecurityId = replaceMsg.SecurityId,
-					LocalTime = replaceMsg.LocalTime,
-					TransactionId = replaceMsg.TransactionId,
-					Side = replaceMsg.Side,
-					Volume = replaceMsg.Volume > 0 ? replaceMsg.Volume : oldStopInfo.Volume,
-					OrderType = OrderTypes.Conditional,
-					Condition = replaceMsg.Condition,
-					PortfolioName = replaceMsg.PortfolioName ?? oldStopInfo.PortfolioName,
-				};
+				SecurityId = replaceMsg.SecurityId,
+				LocalTime = replaceMsg.LocalTime,
+				TransactionId = replaceMsg.TransactionId,
+				Side = replaceMsg.Side,
+				Volume = replaceMsg.Volume > 0 ? replaceMsg.Volume : oldStopInfo.Volume,
+				OrderType = OrderTypes.Conditional,
+				Condition = replaceMsg.Condition,
+				PortfolioName = replaceMsg.PortfolioName ?? oldStopInfo.PortfolioName,
+			};
 
-				RegisterStopOrder(stopRegMsg, stopCond, results);
+			var newStopInfo = CreateStopInfo(stopRegMsg, out var stopError);
+
+			if (newStopInfo is not null)
+			{
+				RegisterStopOrder(stopRegMsg, newStopInfo, results);
+			}
+			else if (stopError is not null)
+			{
+				results.Add(CreateOrderResponse(stopRegMsg, OrderStates.Failed, error: new InvalidOperationException(stopError)));
 			}
 			else
 			{
@@ -728,23 +881,10 @@ public class MatchingEngineAdapter : IMessageTransport
 		var state = GetSecurityState(replaceMsg.SecurityId);
 		var serverTime = replaceMsg.LocalTime;
 
-		if (!state.OrderManager.TryRemoveOrder(replaceMsg.OriginalTransactionId, out var oldOrder))
+		// The order is only looked up here: nothing of it is given up until the replacement is known
+		// to be good, so a refusal leaves the caller with the order it already had.
+		if (!state.OrderManager.TryGetOrder(replaceMsg.OriginalTransactionId, out var oldOrder))
 		{
-			var error = new InvalidOperationException($"Order {replaceMsg.OriginalTransactionId} not found for replace");
-
-			results.Add(new ExecutionMessage
-			{
-				DataTypeEx = DataType.Transactions,
-				SecurityId = replaceMsg.SecurityId,
-				LocalTime = replaceMsg.LocalTime,
-				ServerTime = serverTime,
-				OriginalTransactionId = replaceMsg.OriginalTransactionId,
-				OrderState = OrderStates.Done,
-				Balance = 0,
-				OrderVolume = 0,
-				HasOrderInfo = true,
-			});
-
 			results.Add(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
@@ -752,31 +892,15 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = replaceMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = replaceMsg.TransactionId,
+				PortfolioName = replaceMsg.PortfolioName,
 				OrderState = OrderStates.Failed,
-				Error = error,
+				Error = new InvalidOperationException($"Order {replaceMsg.OriginalTransactionId} not found for replace"),
 				HasOrderInfo = true,
 			});
 			return;
 		}
 
-		state.OrderBook.RemoveQuote(oldOrder.TransactionId, oldOrder.Side, oldOrder.Price);
-
 		var portfolio = GetPortfolio(oldOrder.PortfolioName);
-		portfolio.ProcessOrderCancellation(replaceMsg.SecurityId, oldOrder.Side, oldOrder.Balance, oldOrder.MarginPrice);
-
-		results.Add(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			LocalTime = replaceMsg.LocalTime,
-			ServerTime = serverTime,
-			OriginalTransactionId = replaceMsg.OriginalTransactionId,
-			OrderState = OrderStates.Done,
-			Balance = oldOrder.Balance,
-			OrderVolume = oldOrder.Volume,
-			HasOrderInfo = true,
-		});
-
-		AddPortfolioUpdate(portfolio, replaceMsg.LocalTime, results);
 
 		var newRegMsg = new OrderRegisterMessage
 		{
@@ -792,6 +916,38 @@ public class MatchingEngineAdapter : IMessageTransport
 			PostOnly = replaceMsg.PostOnly ?? oldOrder.PostOnly,
 			TillDate = replaceMsg.TillDate ?? oldOrder.ExpiryDate,
 		};
+
+		// The replacement is checked with what the original holds already released, so the account is
+		// not asked to fund both orders at once.
+		portfolio.ProcessOrderCancellation(replaceMsg.SecurityId, oldOrder.Side, oldOrder.Balance, oldOrder.MarginPrice);
+
+		if (ValidateRegistration(newRegMsg, GetChargedPrice(newRegMsg, state)) is { } error)
+		{
+			portfolio.ProcessOrderRegistration(replaceMsg.SecurityId, oldOrder.Side, oldOrder.Balance, oldOrder.MarginPrice);
+
+			results.Add(CreateOrderResponse(newRegMsg, OrderStates.Failed, error: error));
+			return;
+		}
+
+		state.OrderManager.RemoveOrder(oldOrder.TransactionId);
+		state.OrderBook.RemoveQuote(oldOrder.TransactionId, oldOrder.Side, oldOrder.Price);
+
+		results.Add(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = replaceMsg.SecurityId,
+			LocalTime = replaceMsg.LocalTime,
+			ServerTime = serverTime,
+			OriginalTransactionId = replaceMsg.OriginalTransactionId,
+			PortfolioName = oldOrder.PortfolioName,
+			OrderState = OrderStates.Done,
+			Side = oldOrder.Side,
+			Balance = oldOrder.Balance,
+			OrderVolume = oldOrder.Volume,
+			HasOrderInfo = true,
+		});
+
+		AddPortfolioUpdate(portfolio, replaceMsg.LocalTime, results);
 
 		ProcessOrderRegister(newRegMsg, results);
 	}
@@ -873,12 +1029,32 @@ public class MatchingEngineAdapter : IMessageTransport
 						? state.OrderBook.BestAsk?.price
 						: state.OrderBook.BestBid?.price;
 
-					if (bestPrice.HasValue)
+					if (!bestPrice.HasValue)
+					{
+						// Answered by silence the caller reads the close as carried out and its risk
+						// as flat, while the position still stands.
+						results.Add(new ExecutionMessage
+						{
+							DataTypeEx = DataType.Transactions,
+							SecurityId = securityId,
+							LocalTime = groupMsg.LocalTime,
+							ServerTime = groupMsg.LocalTime,
+							OriginalTransactionId = groupMsg.TransactionId,
+							PortfolioName = portfolio.Name,
+							OrderState = OrderStates.Failed,
+							Error = new InvalidOperationException($"Position {volume} in {securityId} cannot be closed: the {closeSide.Invert()} side is empty."),
+							HasOrderInfo = true,
+						});
+					}
+					else
 					{
 						var closeMsg = new OrderRegisterMessage
 						{
 							SecurityId = securityId,
 							LocalTime = groupMsg.LocalTime,
+							// One request closes every position the account holds, and each close is an
+							// order of its own: sharing the request's id would make two orders standing at
+							// once indistinguishable, and fills keyed by it would book against a single one.
 							TransactionId = TransactionIdGenerator.GetNextId(),
 							Side = closeSide,
 							Price = bestPrice.Value,
@@ -887,10 +1063,37 @@ public class MatchingEngineAdapter : IMessageTransport
 							PortfolioName = portfolio.Name,
 						};
 
+						var firstRow = results.Count;
+
 						ProcessOrderRegister(closeMsg, results);
+						NameAccountOn(results, firstRow, closeMsg);
 					}
 				}
 			}
+		}
+	}
+
+	/// <summary>
+	/// States the account and the instrument on each transactional row from <paramref name="from"/>
+	/// onwards that is missing them.
+	/// </summary>
+	/// <remarks>
+	/// An order the engine materialised on its own behalf crossed no caller on its way in, so no
+	/// map anywhere holds the account to put back on its rows afterwards - unattributed, they are
+	/// booked against nobody.
+	/// </remarks>
+	private static void NameAccountOn(List<Message> results, int from, OrderRegisterMessage regMsg)
+	{
+		for (var i = from; i < results.Count; i++)
+		{
+			if (results[i] is not ExecutionMessage row)
+				continue;
+
+			if (row.PortfolioName.IsEmpty())
+				row.PortfolioName = regMsg.PortfolioName;
+
+			if (row.SecurityId == default)
+				row.SecurityId = regMsg.SecurityId;
 		}
 	}
 
@@ -909,7 +1112,9 @@ public class MatchingEngineAdapter : IMessageTransport
 
 			foreach (var order in orders)
 			{
-				if (statusMsg.OrderId.HasValue && order.TransactionId != statusMsg.OrderId.Value)
+				// The number asked by is the one the venue issued, which comes from a different
+				// generator than the transaction the caller issued.
+				if (statusMsg.OrderId.HasValue && order.OrderId != statusMsg.OrderId.Value)
 					continue;
 
 				results.Add(new ExecutionMessage
@@ -955,20 +1160,12 @@ public class MatchingEngineAdapter : IMessageTransport
 				OriginalTransactionId = lookupMsg.TransactionId,
 			});
 
-			foreach (var (securityId, volume, avgPrice) in portfolio.GetPositions())
+			foreach (var (securityId, volume, _) in portfolio.GetPositions())
 			{
 				if (volume == 0)
 					continue;
 
-				results.Add(new PositionChangeMessage
-				{
-					SecurityId = securityId,
-					ServerTime = lookupMsg.LocalTime,
-					LocalTime = lookupMsg.LocalTime,
-					PortfolioName = portfolio.Name,
-				}
-				.Add(PositionChangeTypes.CurrentValue, volume)
-				.TryAdd(PositionChangeTypes.AveragePrice, avgPrice));
+				results.Add(CreatePositionUpdate(portfolio, securityId, lookupMsg.LocalTime, lookupMsg.LocalTime));
 			}
 		}
 
@@ -989,7 +1186,12 @@ public class MatchingEngineAdapter : IMessageTransport
 		{
 			var beginValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue);
 			if (beginValue.HasValue)
-				portfolio.SetPosition(posMsg.SecurityId, beginValue.Value);
+			{
+				// Keep the average price the opening state was given. Without it the position
+				// starts at 0 and the first close realizes the whole notional as profit.
+				var avgPrice = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice);
+				portfolio.SetPosition(posMsg.SecurityId, beginValue.Value, avgPrice ?? 0m);
+			}
 
 			var leverage = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage);
 			if (leverage.HasValue)
@@ -1003,7 +1205,12 @@ public class MatchingEngineAdapter : IMessageTransport
 		results.Add(posMsg.Clone());
 	}
 
-	private void ProcessTime(DateTime time, List<Message> results)
+	/// <summary>
+	/// Retire orders whose expiry has been reached and release the reservation held by their balance.
+	/// </summary>
+	/// <param name="time">Current engine time.</param>
+	/// <param name="results">Where generated lifecycle and portfolio messages are added.</param>
+	public void ProcessTime(DateTime time, List<Message> results)
 	{
 		foreach (var state in _securityStates.Values)
 		{
@@ -1021,30 +1228,119 @@ public class MatchingEngineAdapter : IMessageTransport
 					OriginalTransactionId = order.TransactionId,
 					OrderId = order.OrderId,
 					OrderState = OrderStates.Done,
+					Side = order.Side,
 					Balance = order.Balance,
 					OrderVolume = order.Volume,
 					PortfolioName = order.PortfolioName,
 					HasOrderInfo = true,
 				});
+
+				// Nothing of the order is live any more, so what its balance held is the account's
+				// again - no cancel can reach an order that is already gone.
+				if (order.PortfolioName.IsEmpty())
+					continue;
+
+				var portfolio = GetPortfolio(order.PortfolioName);
+				portfolio.ProcessOrderCancellation(state.SecurityId, order.Side, order.Balance, order.MarginPrice);
+				AddPortfolioUpdate(portfolio, time, results);
 			}
 		}
 	}
 
-	private void RegisterStopOrder(OrderRegisterMessage regMsg, IStopLossOrderCondition stopCond, List<Message> results)
+	/// <summary>
+	/// The price the instrument last traded at, as far as this engine has been told.
+	/// </summary>
+	/// <param name="securityId">Instrument to read.</param>
+	/// <returns>The price, or <see langword="null"/> when the venue has stated none.</returns>
+	private decimal? TryGetLastTradePrice(SecurityId securityId)
+		// Asking must not create a state for an instrument the engine has never seen.
+		=> _securityStates.TryGetValue(securityId, out var state) ? state.LastTradePrice : null;
+
+	/// <summary>
+	/// The level a stop rests at when its activation price states a distance from the market rather
+	/// than a price of its own: that far above the market for one that fires on a rise, that far
+	/// below it for one that fires on a fall.
+	/// </summary>
+	/// <param name="marketPrice">Price the instrument is at.</param>
+	/// <param name="percent">Distance from it, in percent.</param>
+	/// <param name="side">Order side.</param>
+	/// <param name="invertTrigger">Whether the stop fires on the opposite move, as a take-profit does.</param>
+	/// <returns>The absolute level.</returns>
+	private static decimal ResolveActivationPercent(decimal marketPrice, decimal percent, Sides side, bool invertTrigger)
 	{
-		var info = new StopOrderInfo
+		// The same pairing of side and direction the trigger itself reads, so the level a stop is
+		// armed at is on the side the price has to move to reach it.
+		var firesOnRise = invertTrigger ? side == Sides.Sell : side == Sides.Buy;
+
+		return marketPrice * (firesOnRise ? 1m + percent / 100m : 1m - percent / 100m);
+	}
+
+	/// <summary>
+	/// Reads the stop the registration's condition describes, or <see langword="null"/> when it
+	/// describes none and the order is an ordinary one.
+	/// </summary>
+	/// <param name="regMsg">Registration to read.</param>
+	/// <param name="error">Why the condition describes a stop that cannot be placed, or
+	/// <see langword="null"/> when it describes one that can, or none at all.</param>
+	/// <returns>The stop to rest, or <see langword="null"/>.</returns>
+	/// <remarks>
+	/// A condition can carry both halves of a protective pair, so which half this order is, is told
+	/// by the one that names an activation price: read as the other it would rest at 0, a level every
+	/// price is already past, and fire on the first quote it sees. A take-profit rests exactly as a
+	/// stop-loss does, and differs only in the direction the price has to move to reach it.
+	/// </remarks>
+	private StopOrderInfo CreateStopInfo(OrderRegisterMessage regMsg, out string error)
+	{
+		error = null;
+
+		var stopCond = regMsg.Condition as IStopLossOrderCondition;
+		var takeCond = regMsg.Condition as ITakeProfitOrderCondition;
+
+		var isTake = stopCond?.ActivationPrice is null && takeCond?.ActivationPrice is not null;
+
+		if (!isTake && stopCond is null)
+			return null;
+
+		var activationPrice = (isTake ? takeCond.ActivationPrice : stopCond.ActivationPrice) ?? 0;
+		var percent = regMsg.Condition as IPercentStopOrderCondition;
+
+		if (percent?.IsActivationPricePercent == true)
+		{
+			// The condition states a distance from the market, so the price the instrument is at is
+			// snapshotted here and the stop rests at the absolute that distance resolves to. It is
+			// taken from the price stops are measured against, which is the one the venue prints: an
+			// instrument it has never printed states no such price, and the stop cannot be armed at
+			// all - arming it at the raw number would put it at a level the first print is past.
+			if (TryGetLastTradePrice(regMsg.SecurityId) is not decimal marketPrice)
+			{
+				error = $"Order {regMsg.TransactionId}: activation price is a percent of the market, and {regMsg.SecurityId} has no traded price to take it from.";
+				return null;
+			}
+
+			activationPrice = ResolveActivationPercent(marketPrice, activationPrice, regMsg.Side, isTake);
+		}
+
+		return new()
 		{
 			TransactionId = regMsg.TransactionId,
 			SecurityId = regMsg.SecurityId,
 			Side = regMsg.Side,
 			Volume = regMsg.Volume,
 			PortfolioName = regMsg.PortfolioName,
-			StopPrice = stopCond.ActivationPrice ?? 0,
-			LimitPrice = stopCond.ClosePositionPrice,
-			IsTrailing = stopCond.IsTrailing,
-			TrailingOffset = stopCond is StopOrderCondition soc ? soc.TrailingOffset : null,
+			StopPrice = activationPrice,
+			LimitPrice = isTake ? takeCond.ClosePositionPrice : stopCond.ClosePositionPrice,
+			InvertTrigger = isTake,
+			IsTrailing = !isTake && stopCond.IsTrailing,
+			TrailingOffset = regMsg.Condition is StopOrderCondition soc ? soc.TrailingOffset : null,
+			// A price stated as a percent stays a percent here; resolved to an absolute only when the
+			// stop fires, against the level it fired at.
+			IsLimitPricePercent = percent?.IsClosePositionPricePercent == true,
+			IsTrailingOffsetPercent = percent?.IsTrailingOffsetPercent == true,
 		};
+	}
 
+	private void RegisterStopOrder(OrderRegisterMessage regMsg, StopOrderInfo info, List<Message> results)
+	{
 		_stopOrderManager.Register(info);
 
 		results.Add(new ExecutionMessage
@@ -1070,23 +1366,17 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// </summary>
 	public void CheckStopOrders(SecurityId securityId, decimal price, DateTime time, List<Message> results)
 	{
+		// Every price a stop is measured against arrives here, so this is also where the instrument's
+		// own price is kept: a distance stated as a percent of the market is then resolved from the
+		// same stream that later reaches it.
+		GetSecurityState(securityId).ProcessTradePrice(price);
+
 		var triggers = _stopOrderManager.CheckPrice(securityId, price, time);
 
 		foreach (var trigger in triggers)
 		{
-			results.Add(new ExecutionMessage
-			{
-				DataTypeEx = DataType.Transactions,
-				HasOrderInfo = true,
-				SecurityId = securityId,
-				LocalTime = time,
-				ServerTime = time,
-				OriginalTransactionId = trigger.Info.TransactionId,
-				OrderState = OrderStates.Done,
-				Balance = 0,
-				OrderVolume = trigger.Info.Volume,
-			});
-
+			// The derived order carries the stop's own transaction id, so the rows it raises are the
+			// stop's own lifecycle from here on.
 			ProcessOrderRegister(trigger.ResultingOrder, results);
 		}
 	}
@@ -1095,6 +1385,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		_securityStates.Clear();
 		_portfolioManager.Clear();
+		_reportedUnrealizedPnL.Clear();
 		_stopOrderManager.Clear();
 		_lastInputTime = default;
 
@@ -1104,24 +1395,65 @@ public class MatchingEngineAdapter : IMessageTransport
 		results.Add(new ResetMessage());
 	}
 
-	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
+	/// <summary>
+	/// Check whether the registration is allowed: the instrument is trading, there is a market to
+	/// price the order at, and the account can afford it.
+	/// </summary>
+	/// <param name="regMsg">Registration to check.</param>
+	/// <param name="chargedPrice">Price the order will actually be charged at, or <see langword="null"/> when the book offers none.</param>
+	/// <returns>The reason the registration must be refused, or <see langword="null"/> when it is allowed.</returns>
+	public InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg, decimal? chargedPrice)
 	{
-		if (Settings.CheckMoney)
+		if (regMsg is null)
+			throw new ArgumentNullException(nameof(regMsg));
+
+		// A halted instrument takes no orders at all, whatever the account can pay for.
+		if (Settings.CheckTradingState && GetSecurityState(regMsg.SecurityId).TradingState == SecurityStates.Stoped)
+			return new InvalidOperationException(LocalizedStrings.SecurityStopped.Put(regMsg.SecurityId));
+
+		// A market order names no price, so only the book can give it one: nothing quoted on the side
+		// it takes from means there is no market for it to trade at, and whether the account could
+		// pay for it never arises. Letting it through finishes it untraded and says nothing.
+		if (chargedPrice is not decimal price)
+			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to trade at, the {regMsg.Side.Invert()} side of the book is empty.");
+
+		if (!Settings.CheckMoney)
+			return null;
+
+		return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, price, regMsg.Volume);
+	}
+
+	/// <summary>
+	/// Price the order will be charged at: its own price when it names one, the opposite best for a market order.
+	/// </summary>
+	private static decimal? GetChargedPrice(OrderRegisterMessage regMsg, SecurityState state)
+	{
+		if (regMsg.OrderType != OrderTypes.Market)
+			return regMsg.Price;
+
+		return regMsg.Side == Sides.Buy
+			? state.OrderBook.BestAsk?.price
+			: state.OrderBook.BestBid?.price;
+	}
+
+	/// <summary>
+	/// The engine's own books, read as the price an open position could be closed at.
+	/// </summary>
+	private sealed class BookMarkPrices(MatchingEngineAdapter engine) : IMarkPrices
+	{
+		public decimal? TryGetClosePrice(SecurityId securityId, Sides closeSide)
 		{
-			EnsureMarginController();
-			return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, regMsg.Price, regMsg.Volume);
+			// Asking must not create a state for an instrument the engine has never seen.
+			if (!engine._securityStates.TryGetValue(securityId, out var state))
+				return null;
+
+			return closeSide == Sides.Sell
+				? state.OrderBook.BestBid?.price
+				: state.OrderBook.BestAsk?.price;
 		}
-
-		return null;
 	}
 
-	private void EnsureMarginController()
-	{
-		if (_portfolioManager is EmulatedPortfolioManager epm && epm.MarginController is null)
-			epm.MarginController = new MarginController();
-	}
-
-	private IPortfolio GetPortfolio(string name)
+	private EmulatedPortfolio GetPortfolio(string name)
 	{
 		return _portfolioManager.GetPortfolio(name);
 	}
@@ -1137,9 +1469,11 @@ public class MatchingEngineAdapter : IMessageTransport
 			return;
 
 		var bestOppPrice = oppositeBest.Value.price;
-		var canMatch = regMsg.Side == Sides.Buy
+
+		// A market order names no price and crosses by definition, on either side.
+		var canMatch = regMsg.OrderType == OrderTypes.Market || (regMsg.Side == Sides.Buy
 			? regMsg.Price >= bestOppPrice
-			: regMsg.Price <= bestOppPrice;
+			: regMsg.Price <= bestOppPrice);
 
 		var quotesVolume = regMsg.Side == Sides.Buy
 			? state.OrderBook.TotalAskVolume
@@ -1160,10 +1494,17 @@ public class MatchingEngineAdapter : IMessageTransport
 		var lastPrice = worstLevel.Value.price;
 		var priceStep = state.PriceStep;
 
-		while (leftVolume > 0 && lastPrice != 0)
+		while (leftVolume > 0)
 		{
+			var nextPrice = lastPrice + priceStep * (oppositeSide == Sides.Buy ? -1 : 1);
+
+			// Every level the book gains has to be a price someone could really have traded at, so
+			// the walk stops before it reaches zero rather than handing lots away for nothing.
+			if (nextPrice <= 0)
+				break;
+
 			lastVolume *= 2;
-			lastPrice += priceStep * (oppositeSide == Sides.Buy ? -1 : 1);
+			lastPrice = nextPrice;
 			leftVolume -= lastVolume;
 			state.OrderBook.UpdateLevel(oppositeSide, lastPrice, lastVolume);
 		}
@@ -1191,12 +1532,22 @@ public class MatchingEngineAdapter : IMessageTransport
 		};
 	}
 
-	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+	/// <summary>
+	/// The money row stating what an account holds: its realized and unrealized result, what its
+	/// working orders hold, and what it can trade with now.
+	/// </summary>
+	/// <param name="portfolio">The account the row is about.</param>
+	/// <param name="time">Time to stamp the row with.</param>
+	/// <returns>The row.</returns>
+	public static PositionChangeMessage CreatePortfolioUpdate(EmulatedPortfolio portfolio, DateTime time)
 	{
-		var unrealizedPnL = 0m;
+		if (portfolio is null)
+			throw new ArgumentNullException(nameof(portfolio));
+
+		var unrealizedPnL = portfolio.UnrealizedPnL;
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
 
-		results.Add(new PositionChangeMessage
+		return new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = time,
@@ -1208,12 +1559,75 @@ public class MatchingEngineAdapter : IMessageTransport
 		.Add(PositionChangeTypes.VariationMargin, totalPnL)
 		.Add(PositionChangeTypes.CurrentValue, portfolio.CurrentMoney)
 		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
-		.Add(PositionChangeTypes.Commission, portfolio.Commission));
+		.Add(PositionChangeTypes.Commission, portfolio.Commission);
+	}
+
+	private static void AddPortfolioUpdate(EmulatedPortfolio portfolio, DateTime time, List<Message> results)
+		=> results.Add(CreatePortfolioUpdate(portfolio, time));
+
+	/// <summary>
+	/// Create the message that reports one position of an account: its size, entry price and floating profit.
+	/// </summary>
+	/// <param name="portfolio">The account.</param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="serverTime">Server time.</param>
+	/// <param name="localTime">Local time.</param>
+	/// <returns>The position update.</returns>
+	public PositionChangeMessage CreatePositionUpdate(EmulatedPortfolio portfolio, SecurityId securityId, DateTime serverTime, DateTime localTime)
+	{
+		if (portfolio is null)
+			throw new ArgumentNullException(nameof(portfolio));
+
+		var position = portfolio.GetPosition(securityId);
+
+		return CreatePositionUpdate(portfolio, securityId, position, position is null ? 0m : portfolio.GetUnrealizedPnL(position), serverTime, localTime);
+	}
+
+	private PositionChangeMessage CreatePositionUpdate(EmulatedPortfolio portfolio, SecurityId securityId, PositionInfo position, decimal? unrealizedPnL, DateTime serverTime, DateTime localTime)
+	{
+		if (position is not null && unrealizedPnL is decimal reported)
+			_reportedUnrealizedPnL[position] = reported;
+
+		return new PositionChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = serverTime,
+			LocalTime = localTime,
+			PortfolioName = portfolio.Name,
+		}
+		.Add(PositionChangeTypes.CurrentValue, position?.CurrentValue ?? 0m)
+		.TryAdd(PositionChangeTypes.AveragePrice, position?.AveragePrice)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true);
+	}
+
+	/// <summary>
+	/// Report again every open position whose floating profit the market has moved since it was last reported.
+	/// </summary>
+	/// <param name="time">Time of the move.</param>
+	/// <param name="results">Messages to add the reports to.</param>
+	public void AddPositionRevaluations(DateTime time, List<Message> results)
+	{
+		if (results is null)
+			throw new ArgumentNullException(nameof(results));
+
+		foreach (var portfolio in _portfolioManager.GetAllPortfolios())
+		{
+			foreach (var position in portfolio.GetAllPositions())
+			{
+				if (position.CurrentValue == 0 || portfolio.GetUnrealizedPnL(position) is not decimal unrealizedPnL)
+					continue;
+
+				if (_reportedUnrealizedPnL.TryGetValue(position, out var reported) && reported == unrealizedPnL)
+					continue;
+
+				results.Add(CreatePositionUpdate(portfolio, position.SecurityId, position, unrealizedPnL, time, time));
+			}
+		}
 	}
 
 	/// <summary>
 	/// Send out message.
 	/// </summary>
 	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
-		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		=> NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 }

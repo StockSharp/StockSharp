@@ -56,15 +56,23 @@ public class DriveCacheTests : BaseTestClass
 		using var cache = new DriveCache(fs);
 
 		var drive1 = cache.GetDrive(fs.GetSubTemp());
-		cache.GetDrive(fs.GetSubTemp());
+		var drive2 = cache.GetDrive(fs.GetSubTemp());
 
 		var deleted = 0;
-		cache.DriveDeleted += _ => deleted++;
+		IMarketDataDrive deletedDrive = null;
+		cache.DriveDeleted += drive =>
+		{
+			deleted++;
+			deletedDrive = drive;
+		};
 
 		cache.DeleteDrive(drive1);
 
 		deleted.AssertEqual(1);
-		cache.Drives.OfType<LocalMarketDataDrive>().Count().AssertEqual(1);
+		deletedDrive.AssertSame(drive1);
+		cache.Drives.Contains(drive1).AssertFalse();
+		cache.Drives.Contains(drive2).AssertTrue();
+		cache.Drives.Single().AssertSame(drive2);
 	}
 
 	[TestMethod]
@@ -82,7 +90,7 @@ public class DriveCacheTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad_Roundtrip_PreservesDrives()
+	public async Task SaveLoad_Roundtrip_PreservesDrives()
 	{
 		var fs = Helper.MemorySystem;
 		using var cache = new DriveCache(fs);
@@ -95,10 +103,10 @@ public class DriveCacheTests : BaseTestClass
 		IsTrue(remoteDrive is RemoteMarketDataDrive, $"Expected RemoteMarketDataDrive for '{remotePath}', got '{remoteDrive?.GetType().FullName}' (Path='{remoteDrive?.Path}').");
 
 		var storage = new SettingsStorage();
-		cache.Save(storage);
+		await cache.SaveAsync(storage, CancellationToken);
 
 		using var cache2 = new DriveCache(fs);
-		cache2.Load(storage);
+		await cache2.LoadAsync(storage, CancellationToken);
 
 		var loaded = cache2.Drives.ToArray();
 		var localFullPath = localPath.ToFullPath();

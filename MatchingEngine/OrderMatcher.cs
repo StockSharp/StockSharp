@@ -29,6 +29,27 @@ public class OrderMatcher : IOrderMatcher
 			};
 		}
 
+		// A market order names no price, so only the book can give it one: nothing quoted on the side
+		// it takes from means there is no market for it, and a plain Done would be indistinguishable
+		// from an order filled as far as it asked.
+		if (order.OrderType == OrderTypes.Market && GetMarketPrice(order.Side, book) is null)
+		{
+			return new MatchResult
+			{
+				Order = order,
+				IsRejected = true,
+				RejectionReason = $"No market for the {order.Side} market order: the {order.Side.Invert()} side of the book is empty.",
+				FinalState = OrderStates.Done,
+				RemainingVolume = order.Balance,
+				ShouldPlaceInBook = false,
+			};
+		}
+
+		// Fill-or-kill is a property of the order, not of the price it names, so a market order
+		// carrying it is killed whole exactly as a limit one is.
+		if (order.TimeInForce == TimeInForce.MatchOrCancel)
+			return MatchFOK(order, book, settings);
+
 		var trades = new List<MatchTrade>();
 		var matchedOrders = new List<EmulatorOrder>();
 
@@ -53,18 +74,16 @@ public class OrderMatcher : IOrderMatcher
 		var remaining = order.Balance;
 
 		// Consume from opposite side at any price
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, null, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, null, remaining))
 		{
 			var consumed = volume.Min(remaining);
-			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			trades.Add(new MatchTrade(price, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)
 				break;
 		}
-
-		var hasExecution = trades.Count > 0;
 
 		return new MatchResult
 		{
@@ -89,20 +108,19 @@ public class OrderMatcher : IOrderMatcher
 		var limitPrice = order.Price;
 
 		// Get matchable volume
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = volume.Min(remaining);
 			// Use order price for candle-based matching
 			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
-			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)
 				break;
 		}
 
-		var hasExecution = trades.Count > 0;
 		var isFullyMatched = remaining <= 0;
 
 		// Determine final state based on TimeInForce
@@ -119,12 +137,6 @@ public class OrderMatcher : IOrderMatcher
 				break;
 
 			case TimeInForce.MatchOrCancel: // FOK
-				if (!isFullyMatched)
-				{
-					// Rollback - don't execute any trades
-					// Actually we need to not consume at all, so let's rebuild
-					return MatchFOK(order, book, settings);
-				}
 				finalState = OrderStates.Done;
 				break;
 
@@ -148,17 +160,22 @@ public class OrderMatcher : IOrderMatcher
 	private static MatchResult MatchFOK(EmulatorOrder order, IOrderBook book, MatchingSettings settings)
 	{
 		var oppositeSide = order.Side.Invert();
-		var limitPrice = order.Price;
+
+		// A market order names no price, so no level in the book is out of its reach.
+		var limitPrice = order.OrderType == OrderTypes.Market ? null : (decimal?)order.Price;
 
 		// Check if we can fill entire order without actually consuming
 		var availableVolume = 0m;
 		foreach (var level in book.GetLevels(oppositeSide))
 		{
 			// Check price
-			if (order.Side == Sides.Buy && level.Price > limitPrice)
-				break;
-			if (order.Side == Sides.Sell && level.Price < limitPrice)
-				break;
+			if (limitPrice is decimal limit)
+			{
+				if (order.Side == Sides.Buy && level.Price > limit)
+					break;
+				if (order.Side == Sides.Sell && level.Price < limit)
+					break;
+			}
 
 			availableVolume += level.Volume;
 			if (availableVolume >= order.Balance)
@@ -184,11 +201,12 @@ public class OrderMatcher : IOrderMatcher
 		var matchedOrders = new List<EmulatorOrder>();
 		var remaining = order.Balance;
 
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = volume.Min(remaining);
-			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			var tradePrice = settings.UseOrderPriceForLimitTrades && limitPrice is decimal orderPrice ? orderPrice : price;
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)

@@ -33,6 +33,10 @@ public abstract class BasketTestBase : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
+		// Supports downloading the full securities list, so a lookup-all request can be routed here.
+		public override bool IsAllDownloadingSupported(DataType dataType)
+			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+
 		public IReadOnlyList<Message> ReceivedMessages => [.. _inMessages];
 		public IEnumerable<T> GetMessages<T>() where T : Message => _inMessages.OfType<T>();
 		public bool AutoRespond { get; set; } = true;
@@ -145,7 +149,8 @@ public abstract class BasketTestBase : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone() => new TestBasketInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestBasketInnerAdapter(TransactionIdGenerator));
 	}
 
 	protected static readonly SecurityId SecId1 = "AAPL@NASDAQ".ToSecurityId();

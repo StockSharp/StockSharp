@@ -68,9 +68,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 		if (info == null)
 			return;
 
-		if (info.SecurityId == default)
-			info.SecurityId = message.SecurityId;
-		else
+		if (info.SecurityId != default)
 			message.SecurityId = info.SecurityId;
 
 		if (info.DataType is null)
@@ -82,9 +80,10 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// <summary>
 	/// Create a copy of <see cref="CandleHolderMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new CandleHolderMessageAdapter(InnerAdapter.TypedClone());
+		return new CandleHolderMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

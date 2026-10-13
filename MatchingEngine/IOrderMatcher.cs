@@ -59,11 +59,15 @@ public class MatchResult
 /// <summary>
 /// Trade resulting from order matching.
 /// </summary>
+/// <param name="Price">Price the trade was done at.</param>
+/// <param name="Volume">Traded volume.</param>
+/// <param name="InitiatorSide">Side of the order that initiated the trade.</param>
+/// <param name="CounterFills">Volume this trade took from each resting order on the other side.</param>
 public record MatchTrade(
 	decimal Price,
 	decimal Volume,
 	Sides InitiatorSide,
-	IReadOnlyList<EmulatorOrder> CounterOrders
+	IReadOnlyList<MatchFill> CounterFills
 );
 
 /// <summary>
@@ -90,11 +94,6 @@ public class MatchingSettings
 	/// Maximum depth of the order book.
 	/// </summary>
 	public int MaxDepth { get; init; } = 10;
-
-	/// <summary>
-	/// Whether to match market orders at any price.
-	/// </summary>
-	public bool AllowMarketOrdersWithoutBook { get; init; } = true;
 
 	/// <summary>
 	/// When true, use order price instead of market price for limit order trades.

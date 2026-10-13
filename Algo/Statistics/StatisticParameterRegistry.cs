@@ -49,9 +49,12 @@ public static class StatisticParameterRegistry
 			new ExpectancyParameter(),
 			new GrossLossParameter(),
 			new GrossProfitParameter(),
+			new LargestTradeShareParameter(),
 
 			new MaxLongPositionParameter(),
 			new MaxShortPositionParameter(),
+			new TimeInMarketParameter(),
+			new AverageHoldingTimeParameter(),
 
 			new MaxLatencyRegistrationParameter(),
 			new MinLatencyRegistrationParameter(),

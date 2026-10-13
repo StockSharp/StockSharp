@@ -8,6 +8,9 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 	// Use a fixed weekday date (Monday) to avoid weekend failures
 	private static readonly DateTime TestDate = new(2024, 1, 15); // Monday
 
+	// Same weekday, but inside the daylight saving period of the northern hemisphere
+	private static readonly DateTime SummerTestDate = new(2024, 7, 15); // Monday
+
 	private static TradingTimeLineGenerator CreateGenerator() => new();
 
 	private static BoardMessage CreateBoard(string code, TimeZoneInfo timeZone = null, params (TimeSpan from, TimeSpan to)[] workingTimes)
@@ -128,7 +131,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		ranges.Count.AssertEqual(1);
 		ranges[0].range.Min.AssertEqual(TimeSpan.Zero);
-		// LessOneDay is 23:59:59.9999999
+		ranges[0].range.Max.AssertEqual(TimeHelper.LessOneDay);
 	}
 
 	#endregion
@@ -189,8 +192,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		var messages = generator.GetPostTradeTimeMessages(date, lastTime, interval, count).ToList();
 
-		// Should stop before exceeding day boundary
-		(messages.Count < count).AssertTrue();
+		messages.Count.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -235,10 +237,61 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
 
-		// Should have at least start and end times
-		(messages.Count >= 2).AssertTrue();
+		messages.Count.AssertEqual(2);
 		messages[0].ServerTime.TimeOfDay.AssertEqual(TimeSpan.FromHours(9));
 		messages[1].ServerTime.TimeOfDay.AssertEqual(TimeSpan.FromHours(18));
+	}
+
+	[TestMethod]
+	public void GetSimpleTimeLine_DstBoard_WinterDate_UsesStandardOffset()
+	{
+		// A 09:30-16:00 session on a board in a daylight saving zone must be emitted
+		// in UTC with the offset that zone has on the requested date (-5 in January).
+		var generator = CreateGenerator();
+		var board = CreateBoard("TEST", TimeHelper.Est, (new TimeSpan(9, 30, 0), TimeSpan.FromHours(16)));
+		var boards = new[] { board };
+
+		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
+
+		messages.Count.AssertEqual(2);
+		messages[0].ServerTime.AssertEqual(new DateTime(2024, 1, 15, 14, 30, 0));
+		messages[1].ServerTime.AssertEqual(new DateTime(2024, 1, 15, 21, 0, 0));
+	}
+
+	[TestMethod]
+	public void GetSimpleTimeLine_DstBoard_SummerDate_UsesDaylightOffset()
+	{
+		// The very same session on a summer date must shift by one hour in UTC,
+		// because the board's zone is on the daylight offset (-4) in July.
+		var generator = CreateGenerator();
+		var board = CreateBoard("TEST", TimeHelper.Est, (new TimeSpan(9, 30, 0), TimeSpan.FromHours(16)));
+		var boards = new[] { board };
+
+		var messages = generator.GetSimpleTimeLine(boards, SummerTestDate, TimeSpan.FromSeconds(1)).ToList();
+
+		messages.Count.AssertEqual(2);
+		messages[0].ServerTime.AssertEqual(new DateTime(2024, 7, 15, 13, 30, 0));
+		messages[1].ServerTime.AssertEqual(new DateTime(2024, 7, 15, 20, 0, 0));
+	}
+
+	[TestMethod]
+	public void GetSimpleTimeLine_NightSession_KeepsUtcDayOfEveningPart()
+	{
+		// A board trading 22:00-02:00 in its own zone: the evening part of the trading date
+		// falls on the next UTC day, so its messages must carry that day, not the requested one.
+		var generator = CreateGenerator();
+		var board = CreateBoard("NIGHT", TimeHelper.Est,
+			(TimeSpan.Zero, TimeSpan.FromHours(2)),
+			(TimeSpan.FromHours(22), new TimeSpan(23, 59, 0)));
+		var boards = new[] { board };
+
+		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
+
+		messages.Count.AssertEqual(4);
+		messages[0].ServerTime.AssertEqual(new DateTime(2024, 1, 15, 5, 0, 0));
+		messages[1].ServerTime.AssertEqual(new DateTime(2024, 1, 15, 7, 0, 0));
+		messages[2].ServerTime.AssertEqual(new DateTime(2024, 1, 16, 3, 0, 0));
+		messages[3].ServerTime.AssertEqual(new DateTime(2024, 1, 16, 4, 59, 0));
 	}
 
 	[TestMethod]

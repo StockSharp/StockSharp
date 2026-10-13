@@ -26,7 +26,10 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 
 	string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
-	byte[] ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Serialize(Version version, QuoteChangeMessage message)
+	ValueTask<byte[]> ISnapshotSerializer<SecurityId, QuoteChangeMessage>.SerializeAsync(Version version, QuoteChangeMessage message, CancellationToken cancellationToken)
+		=> new(Serialize(version, message));
+
+	private byte[] Serialize(Version version, QuoteChangeMessage message)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
@@ -97,7 +100,10 @@ public class QuotesBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Qu
 		return writer.GetWrittenSpan().ToArray();
 	}
 
-	QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Deserialize(Version version, byte[] buffer)
+	ValueTask<QuoteChangeMessage> ISnapshotSerializer<SecurityId, QuoteChangeMessage>.DeserializeAsync(Version version, byte[] buffer, CancellationToken cancellationToken)
+		=> new(Deserialize(version, buffer));
+
+	private static QuoteChangeMessage Deserialize(Version version, byte[] buffer)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));

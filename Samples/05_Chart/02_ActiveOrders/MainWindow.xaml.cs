@@ -283,27 +283,27 @@ public partial class MainWindow
 		Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order));
 	}
 
-	private void Load_Click(object sender, RoutedEventArgs e)
+	private async void Load_Click(object sender, RoutedEventArgs e)
 	{
 		var filePath = AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}";
 
 		if (!_fileSystem.FileExists(filePath))
 			return;
 
-		var settingsStorage = filePath.Deserialize<SettingsStorage>(_fileSystem);
+		var settingsStorage = await filePath.DeserializeAsync<SettingsStorage>(_fileSystem, default);
 
-		Chart.LoadIfNotNull(settingsStorage);
+		await Chart.LoadIfNotNullAsync(settingsStorage, default);
 
 		_area = Chart.Areas.First();
 		_candleElement = Chart.GetElements<IChartCandleElement>().First();
 		_activeOrdersElement = Chart.GetElements<IChartActiveOrdersElement>().First();
 	}
 
-	private void Save_Click(object sender, RoutedEventArgs e)
+	private async void Save_Click(object sender, RoutedEventArgs e)
 	{
 		var settingsStorage = new SettingsStorage();
 		Chart.Save(settingsStorage);
-		settingsStorage.Serialize(_fileSystem, AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}");
+		await settingsStorage.SerializeAsync(_fileSystem, AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}", true, default);
 	}
 
 	private void Cancel_Click(object sender, RoutedEventArgs e)

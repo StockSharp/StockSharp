@@ -1,6 +1,7 @@
-namespace StockSharp.Algo.Testing;
+﻿namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Testing.Generation;
+
 using System.Runtime.CompilerServices;
 
 /// <summary>
@@ -8,6 +9,8 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 {
+	private const int _maxGeneratedPerStep = 1000;
+
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
 	private readonly List<(IMarketDataStorage storage, long subscriptionId)> _actions = [];
 	private readonly AutoResetEvent _syncRoot = new(false);
@@ -187,7 +190,7 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	{
 		return Impl();
 
-		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var dataTypes = new HashSet<DataType>();
 
@@ -220,88 +223,112 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		var startDateTime = StartDate;
 		var stopDateTime = StopDate;
 
-		IsStarted = true;
-
 		return Impl();
 
 		async IAsyncEnumerable<Message> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			while (!IsDisposed && !cancellationToken.IsCancellationRequested)
+			IsStarted = true;
+
+			try
 			{
-				// Use timeout to allow cancellation check and prevent deadlock if no subscriptions arrive
-				if (!_syncRoot.WaitOne(TimeSpan.FromMilliseconds(100)))
-					continue;
-
-				_isChanged = false;
-
-				foreach (var (storage, subscriptionId) in _actions.CopyAndClear())
+				while (!IsDisposed && !cancellationToken.IsCancellationRequested)
 				{
-					if (storage != null)
-						_basketStorage.InnerStorages.Add(storage, subscriptionId);
-					else
-						_basketStorage.InnerStorages.Remove(subscriptionId);
-				}
+					// Use timeout to allow cancellation check and prevent deadlock if no subscriptions arrive
+					if (!_syncRoot.WaitOne(TimeSpan.FromMilliseconds(100)))
+						continue;
 
-				var currentTime = _currentTime == default ? startDateTime : _currentTime;
-				var loadDateInUtc = currentTime.Date;
-				var stopDateInUtc = stopDateTime.Date;
+					_isChanged = false;
 
-				var checkDates = CheckTradableDates && boardsArray.Length > 0;
-
-				while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
-				{
-					if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, currentTime))
+					foreach (var (storage, subscriptionId) in _actions.CopyAndClear())
 					{
-						IAsyncEnumerable<Message> messages;
-						bool noData;
-
-						if (AdapterCache is not null)
-						{
-							messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
-							noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
-						}
+						if (storage != null)
+							_basketStorage.InnerStorages.Add(storage, subscriptionId);
 						else
-						{
-							var enu = _basketStorage.LoadAsync(loadDateInUtc);
-							var dataTypes = await enu.GetDataTypesAsync(cancellationToken);
-							noData = !dataTypes.Except(messageTypes).Any();
-							messages = enu;
-						}
-
-						var source = noData
-							? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime))
-							: messages;
-
-						await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
-						{
-							LoadedMessageCount++;
-
-							if (msg.TryGetServerTime(out var serverTime))
-								_currentTime = serverTime;
-
-							yield return msg;
-
-							if (_isChanged)
-								break;
-						}
+							_basketStorage.InnerStorages.Remove(subscriptionId);
 					}
 
-					loadDateInUtc += TimeSpan.FromDays(1);
-				}
+					var currentTime = _currentTime == default ? startDateTime : _currentTime;
+					var loadDateInUtc = currentTime.Date;
+					var stopDateInUtc = stopDateTime.Date;
 
-				if (!_isChanged)
-				{
-					yield return new EmulationStateMessage
+					var checkDates = CheckTradableDates && boardsArray.Length > 0;
+
+					while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
 					{
-						LocalTime = stopDateTime,
-						State = ChannelStates.Stopping,
-					};
+						// The replay moves _currentTime forward as messages go out, so each day is judged and
+						// filtered against where the run has actually got to. Reusing the value captured before
+						// the loop stands a closed day's synthetic timeline at the range's first moment, which
+						// the emulator refuses as time running backwards.
+						var dayTime = _currentTime == default ? currentTime : _currentTime;
 
-					break;
+						if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, loadDateInUtc))
+						{
+							IAsyncEnumerable<Message> messages;
+							bool noData;
+
+							if (AdapterCache is not null)
+							{
+								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
+								noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
+							}
+							else
+							{
+								var enu = _basketStorage.LoadAsync(loadDateInUtc);
+								var dataTypes = await enu.GetDataTypesAsync(cancellationToken);
+								noData = !dataTypes.Except(messageTypes).Any();
+								messages = enu;
+							}
+
+							var source = noData
+								? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, loadDateInUtc))
+								: messages;
+
+							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, dayTime).WithCancellation(cancellationToken))
+							{
+								if (msg.TryGetServerTime(out var serverTime))
+								{
+									_currentTime = serverTime;
+
+									// Drive the registered generators up to the current replay time and
+									// interleave their output ahead of the triggering message (same time).
+									if (_generators.Count > 0)
+									{
+										foreach (var generated in DriveGenerators(msg, serverTime))
+										{
+											LoadedMessageCount++;
+											yield return generated;
+										}
+									}
+								}
+
+								LoadedMessageCount++;
+
+								yield return msg;
+
+								if (_isChanged)
+									break;
+							}
+						}
+
+						loadDateInUtc += TimeSpan.FromDays(1);
+					}
+
+					if (!_isChanged)
+					{
+						yield return new EmulationStateMessage
+						{
+							LocalTime = stopDateTime,
+							State = ChannelStates.Stopping,
+						};
+
+						break;
+					}
 				}
 			}
-
-			IsStarted = false;
+			finally
+			{
+				IsStarted = false;
+			}
 		}
 	}
 
@@ -316,6 +343,8 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	public void Reset()
 	{
 		_generators.Clear();
+		_actions.Clear();
+		_isChanged = false;
 		_currentTime = default;
 		_basketStorage.InnerStorages.Clear();
 		LoadedMessageCount = 0;
@@ -360,6 +389,62 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 				break;
 
 			yield return msg;
+		}
+	}
+
+	/// <summary>
+	/// Drives the registered generators with the replay clock and same-security data, returning any
+	/// generated messages (interleaved by the caller at the same server time). A time signal advances
+	/// time-based generation for every generator; the triggering message feeds the generators of its own
+	/// security, and each generated message is chained into the other same-security generators, so a
+	/// generated tick drives that security's order-book generator. Generators ignore their own output
+	/// type, so the chain terminates.
+	/// </summary>
+	/// <param name="trigger">The replayed message that advanced the clock.</param>
+	/// <param name="time">The current replay server time.</param>
+	/// <returns>The generated messages, if any.</returns>
+	private IEnumerable<Message> DriveGenerators(Message trigger, DateTime time)
+	{
+		if (_generators.Count == 0)
+			yield break;
+
+		var generators = _generators.Values.Select(v => v.generator).ToArray();
+
+		var feeds = new Queue<Message>();
+		feeds.Enqueue(new TimeMessage { ServerTime = time, LocalTime = time });
+
+		if (trigger.Type != MessageTypes.Time && trigger is ISecurityIdMessage)
+			feeds.Enqueue(trigger);
+
+		var produced = 0;
+
+		while (feeds.Count > 0)
+		{
+			var feed = feeds.Dequeue();
+			var isTime = feed.Type == MessageTypes.Time;
+			var feedSecId = (feed as ISecurityIdMessage)?.SecurityId;
+
+			foreach (var generator in generators)
+			{
+				// A security-bearing feed only drives generators of the same security; a time signal
+				// drives all of them.
+				if (!isTime && feedSecId != generator.SecurityId)
+					continue;
+
+				var output = generator.Process(feed);
+
+				if (output is null)
+					continue;
+
+				output.LocalTime = time;
+				yield return output;
+
+				// Chain the generated message into the other same-security generators.
+				feeds.Enqueue(output);
+
+				if (++produced > _maxGeneratedPerStep)
+					yield break;
+			}
 		}
 	}
 

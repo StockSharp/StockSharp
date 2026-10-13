@@ -3,7 +3,7 @@ namespace StockSharp.MatchingEngine;
 /// <summary>
 /// Default implementation of <see cref="IMarginController"/>.
 /// Leverage is taken from <see cref="PositionInfo.Leverage"/> (default 1).
-/// Margin call/stop-out levels are taken from <see cref="IPortfolio"/>.
+/// Margin call/stop-out levels are taken from <see cref="EmulatedPortfolio"/>.
 /// </summary>
 public class MarginController : IMarginController
 {
@@ -18,7 +18,7 @@ public class MarginController : IMarginController
 	}
 
 	/// <inheritdoc />
-	public InvalidOperationException ValidateOrder(IPortfolio portfolio, decimal price, decimal volume, PositionInfo position)
+	public InvalidOperationException ValidateOrder(EmulatedPortfolio portfolio, decimal price, decimal volume, PositionInfo position)
 	{
 		if (portfolio is null)
 			throw new ArgumentNullException(nameof(portfolio));
@@ -32,7 +32,7 @@ public class MarginController : IMarginController
 	}
 
 	/// <inheritdoc />
-	public decimal CheckMarginLevel(IPortfolio portfolio, decimal unrealizedPnL)
+	public decimal CheckMarginLevel(EmulatedPortfolio portfolio, decimal unrealizedPnL)
 	{
 		if (portfolio is null)
 			throw new ArgumentNullException(nameof(portfolio));
@@ -45,10 +45,10 @@ public class MarginController : IMarginController
 	}
 
 	/// <inheritdoc />
-	public bool IsMarginCall(IPortfolio portfolio, decimal unrealizedPnL)
+	public bool IsMarginCall(EmulatedPortfolio portfolio, decimal unrealizedPnL)
 		=> CheckMarginLevel(portfolio, unrealizedPnL) <= portfolio.MarginCallLevel;
 
 	/// <inheritdoc />
-	public bool IsStopOut(IPortfolio portfolio, decimal unrealizedPnL)
+	public bool IsStopOut(EmulatedPortfolio portfolio, decimal unrealizedPnL)
 		=> portfolio.EnableStopOut && CheckMarginLevel(portfolio, unrealizedPnL) <= portfolio.StopOutLevel;
 }

@@ -96,7 +96,9 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				if (message is ConnectionRestoredMessage restoredMsg && !restoredMsg.IsResetState)
 					break;
 
-				await ClearState(cancellationToken);
+				using (await _sync.LockAsync(cancellationToken))
+					_state.EndWithConnection();
+
 				break;
 			}
 
@@ -110,25 +112,31 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					if (responseMsg.IsOk())
 					{
-						if (_state.TryGetSubscriptionById(originTransId, out var info))
-						{
-							if (!ChangeState(info, originTransId, _state.ContainsUnsubscribeRequest(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active))
-								return (null, []);
-						}
+						// A hist+live child's confirmation says nothing of the shared stream and is its own
+						// subscriber's to see: above this manager a subscription counts as started from its
+						// confirmation, and the rows of one that never got it are dropped there.
+						if (_state.TryGetSubscriptionById(originTransId, out var info) && !info.HistLive.Contains(originTransId))
+							ChangeState(info, originTransId, _state.ContainsUnsubscribeRequest(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active);
 					}
 					else
 					{
-						if (_state.TryGetAndRemoveSubscriptionById(originTransId, out var info))
+						if (_state.TryGetAndRemoveSubscriber(originTransId, out var info))
 						{
+							var isHistLive = info.HistLive.Contains(originTransId);
+
 							info.OnlineSubscribers.Remove(originTransId);
 							info.Subscribers.Remove(originTransId);
+							info.ExtraFilters.Remove(originTransId);
+							info.HistLive.Remove(originTransId);
+
+							if (isHistLive)
+								break;
+
 							notifySubscribers = info.Subscribers.CachedKeys;
+							RemoveSubscriptionIds(info);
 
 							if (!ChangeState(info, originTransId, SubscriptionStates.Error))
-							{
-								info.HistLive.Remove(originTransId);
 								return (null, []);
-							}
 						}
 					}
 				}
@@ -247,10 +255,23 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							}
 						}
 
-						// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers
-						var ids = info.IsMarketData && info.State == SubscriptionStates.Online
-							? info.OnlineSubscribers.Cache
-							: info.Subscribers.CachedKeys;
+						var explicitSubId = subscrMsg.OriginalTransactionId;
+
+						long[] ids;
+
+						// Hist+live child history is private backfill and must not be broadcast to already-online subscribers.
+						if (explicitSubId != 0 && info.HistLive.Contains(explicitSubId))
+							ids = [explicitSubId];
+						// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers.
+						else if (info.IsMarketData && info.State == SubscriptionStates.Online)
+							ids = info.OnlineSubscribers.Cache;
+						// The shared stream has a history phase of its own and has not finished it yet: that
+						// backfill belongs to the subscriber that asked for it, not to those who joined for
+						// live data only and are waiting to be put online with the stream.
+						else if (info.Subscription.From is not null && info.State != SubscriptionStates.Online)
+							ids = [info.Subscription.TransactionId];
+						else
+							ids = info.Subscribers.CachedKeys;
 
 						if (info.ExtraFilters.Count > 0)
 						{
@@ -291,20 +312,32 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 		if (!state.IsActive())
 		{
-			_state.RemoveSubscriptionByKeyValue(info);
+			_state.StopSubscription(info);
 			_logReceiver.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 		}
 
 		return true;
 	}
 
+	private void RemoveSubscriptionIds(ISubscriptionOnlineInfo info)
+		=> _state.DiscardSubscription(info);
+
 	private void TryAddOrderTransaction(ISubscriptionOnlineInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 	{
+		// statusInfo can arrive as a linked view (looked up via an existing
+		// per-order TxId entry in _subscriptionsById). The order is then
+		// already tracked through the main OrderStatus subscription — adding
+		// another linked alias keyed by another TxId duplicates state, and
+		// statusInfo.Linked.Add below would throw CheckOnLinked anyway. Bail
+		// silently — the message will still be forwarded by the caller.
+		if (statusInfo.IsLinked)
+			return;
+
 		if (!_state.ContainsSubscriptionById(transactionId))
 		{
 			var orderSubscription = _state.CreateLinkedSubscriptionInfo(statusInfo);
 
-			_state.AddSubscriptionById(transactionId, orderSubscription);
+			_state.AddAlias(transactionId, orderSubscription);
 
 			statusInfo.Linked.Add(transactionId);
 		}
@@ -369,15 +402,20 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 					var key = (dataType, secId);
 
-					if (!_state.TryGetSubscriptionByKey(key, out var info))
+					var info = _state.AddSubscriber(key, transId, message.TypedClone(), message.TypedClone, out var isOpener);
+
+					if (info is null)
+					{
+						sendOutMsgs =
+						[
+							transId.CreateSubscriptionResponse(new InvalidOperationException($"Subscription '{transId}' is already registered."))
+						];
+					}
+					else if (isOpener)
 					{
 						_logReceiver.AddDebugLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 						sendInMsg = message;
-
-						info = _state.CreateSubscriptionInfo(message.TypedClone());
-
-						_state.AddSubscriptionByKey(key, info);
 					}
 					else
 					{
@@ -393,23 +431,26 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						{
 							_logReceiver.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
 
-							var resultMsg = message.CreateResult();
+							// The request is acknowledged at once, but the joiner goes online with the stream
+							// it joined and not before it: while the venue has not confirmed that stream it may
+							// still refuse it, and the stream may still be replaying history the joiner never
+							// asked for.
+							if (info.State == SubscriptionStates.Online)
+							{
+								sendOutMsgs =
+								[
+									message.CreateResponse(),
+									message.CreateResult(),
+								];
 
-							sendOutMsgs =
-							[
-								message.CreateResponse(),
-								resultMsg,
-							];
-
-							info.OnlineSubscribers.Add(transId);
+								info.OnlineSubscribers.Add(transId);
+							}
+							else
+								sendOutMsgs = [message.CreateResponse()];
 						}
 					}
 
-					_state.AddSubscriptionById(transId, info);
-
-					info.Subscribers.Add(transId, message.TypedClone());
-
-					if (extraFilter)
+					if (info is not null && extraFilter)
 						info.ExtraFilters.Add(transId);
 				}
 			}
@@ -420,6 +461,9 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 					m.IsSubscribe = false;
 					m.TransactionId = transId;
 					m.OriginalTransactionId = subscriptionId;
+					// The stored opener supplies the upstream subscription shape; the caller's unsubscribe
+					// supplies the time of this command.
+					((Message)m).LocalTime = message.LocalTime;
 
 					return m;
 				}
@@ -428,11 +472,16 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 				if (_state.TryGetSubscriptionById(originId, out var info))
 				{
-					if (!info.Subscribers.Remove(originId))
+					var ownHistory = info.HistLive.Contains(originId)
+						&& info.Subscribers.TryGetValue(originId, out var request)
+						? request.TypedClone()
+						: null;
+
+					if (!_state.RemoveSubscriber(originId, out _, out var wasLast))
 					{
 						sendOutMsgs =
 						[
-							originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+							transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 						];
 					}
 					else
@@ -440,27 +489,39 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						info.OnlineSubscribers.Remove(originId);
 
 						info.ExtraFilters.Remove(originId);
+						info.HistLive.Remove(originId);
 
-						if (info.Linked.Count > 0)
+						if (!info.IsLinked && info.Linked.Count > 0)
 						{
 							foreach (var linked in info.Linked)
-								_state.RemoveSubscriptionById(linked);
+								_state.RemoveAlias(linked);
 						}
 
-						if (info.Subscribers.Count == 0)
+						if (ownHistory is not null && !wasLast)
 						{
-							_state.RemoveSubscriptionByKeyValue(info);
-							_state.RemoveSubscriptionById(originId);
+							// A joined hist+live subscriber opened a separate bounded history request.
+							// Removing its holder does not stop that request, so cancel it explicitly.
+							sendInMsg = MakeUnsubscribe(ownHistory, originId);
+						}
+						else if (wasLast)
+						{
+							// The stream is open upstream from the moment the opening request went out until
+							// the venue ends it, so giving it up has to reach the venue even while its
+							// confirmation is still on the way. Only a stream the venue has already ended has
+							// nothing left to give up, and there the caller is answered here instead.
+							if (info.State is SubscriptionStates.Error or SubscriptionStates.Finished)
+							{
+								_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
 
-							if (info.State.IsActive())
+								sendOutMsgs = [message.CreateResult()];
+							}
+							else
 							{
 								_state.AddUnsubscribeRequest(transId);
 
 								// copy full subscription's details into unsubscribe request
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 							}
-							else
-								_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
 						}
 						else
 						{
@@ -472,11 +533,16 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					sendInMsg = message;
 				}
+				else if (_state.RemoveEndedWithConnection(originId))
+				{
+					// The subscription ended with the connection, so there is nothing left upstream to give up.
+					sendOutMsgs = [message.CreateResult()];
+				}
 				else
 				{
 					sendOutMsgs =
 					[
-						originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 					];
 				}
 			}

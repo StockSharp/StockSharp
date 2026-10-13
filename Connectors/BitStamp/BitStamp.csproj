@@ -1,3 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_connectors_websocket.props" />
-</Project>

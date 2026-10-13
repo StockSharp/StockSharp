@@ -108,21 +108,21 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(Macd), Macd.Save());
-		storage.SetValue(nameof(StochasticK), StochasticK.Save());
+		storage.SetValue(nameof(Macd), await Macd.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(StochasticK), await StochasticK.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Macd.LoadIfNotNull(storage, nameof(Macd));
-		StochasticK.LoadIfNotNull(storage, nameof(StochasticK));
+		await Macd.LoadIfNotNullAsync(storage, nameof(Macd), cancellationToken);
+		await StochasticK.LoadIfNotNullAsync(storage, nameof(StochasticK), cancellationToken);
 	}
 
 	/// <inheritdoc />

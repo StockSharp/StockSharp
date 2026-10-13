@@ -191,15 +191,19 @@ public class SubscriptionHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TryGetSubscription_MatchingState_ReturnsSubscription()
+	public void TryGetSubscription_NewState_UpdatesSubscriptionAndRaisesEvent()
 	{
 		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
+		TestSubscription changed = null;
+		holder.SubscriptionChanged += s => changed = s;
 
-		holder.TryGetSubscription(1, SubscriptionStates.Active, out var result).AssertTrue();
-		result.AssertNotNull();
+		holder.TryGetSubscription(1, SubscriptionStates.Online, out var result).AssertTrue();
+		result.AssertSame(subscription);
+		result.State.AssertEqual(SubscriptionStates.Online);
+		changed.AssertSame(subscription);
 	}
 
 	#endregion
@@ -376,8 +380,22 @@ public class SubscriptionHolderTests : BaseTestClass
 	public void AddUnsubscribeRequest_StoresRequest()
 	{
 		using var holder = CreateHolder();
-		// Should not throw - just stores the unsubscribe request mapping
+		var subscription = CreateSubscription(
+			50,
+			"session1",
+			new SecurityId { SecurityCode = "AAPL" },
+			DataType.Ticks,
+			SubscriptionStates.Active);
+		holder.Add(subscription);
 		holder.AddUnsubscribeRequest(100, 50);
+
+		var matched = holder.GetSubscriptions(
+			new SubscriptionResponseMessage { OriginalTransactionId = 100 }).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].AssertSame(subscription);
+		subscription.State.AssertEqual(SubscriptionStates.Stopped);
+		holder.TryGetById(50, out _).AssertFalse();
 	}
 
 	#endregion
@@ -570,6 +588,269 @@ public class SubscriptionHolderTests : BaseTestClass
 		sessionSubs.Length.AssertEqual(2);
 		sessionSubs.Count(s => s.Id == 40).AssertEqual(1);
 		sessionSubs.Count(s => s.Id == 0 && s.SecurityId.SecurityCode == "MSFT").AssertEqual(1);
+	}
+
+	#endregion
+
+	#region GetSubscriptions(Message) — Transactions Execution targeting
+
+	private static TestSubscription CreateOrderStatusSub(long id, string session, SubscriptionStates state)
+		=> new()
+		{
+			Id = id,
+			Session = session,
+			DataType = DataType.Transactions,
+			State = state,
+			Responses = [MessageTypes.Execution],
+		};
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_AddressedToConfirmedSub_ReturnsIt()
+	{
+		// An addressed transactional execution names one subscription and only that one. A
+		// subscription that has been confirmed but has not reached Online is still the one it
+		// names, and dropping the reply in that window loses the answer to somebody's order.
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Active));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1, "the reply reached nobody while its subscription was still coming up");
+		matched[0].Id.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_AddressedToStoppedSub_ReturnsNone()
+	{
+		// A stopped subscription is not coming up - it is over, and nothing should be handed to it.
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Stopped));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		holder.GetSubscriptions(exec).ToArray().Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_OnlineSub_ReturnsOne()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(101, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_StoppedSub_FansOutToOnlineSiblings()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(200, "sessionA", SubscriptionStates.Stopped));
+		holder.Add(CreateOrderStatusSub(201, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			OrderState = OrderStates.Done,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(201);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_Unknown_FansOutToAllOnline()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(300, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(301, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 99999,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([300L, 301L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_FansOutToAllOnline()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(400, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(401, "sessionB", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(402, "sessionC", SubscriptionStates.Stopped));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([400L, 401L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_SkipsSuspended()
+	{
+		using var holder = CreateHolder();
+		var suspended = CreateOrderStatusSub(500, "sessionA", SubscriptionStates.Online);
+		suspended.Suspend = true;
+		holder.Add(suspended);
+		holder.Add(CreateOrderStatusSub(501, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(501);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_FollowUpByExecutionTxId_ReachesAllOwners()
+	{
+		using var holder = CreateHolder();
+		var subA = CreateOrderStatusSub(700, "sessionA", SubscriptionStates.Online);
+		var subB = CreateOrderStatusSub(701, "sessionB", SubscriptionStates.Online);
+		holder.Add(subA);
+		holder.Add(subB);
+
+		const long orderTxId = 12345L;
+
+		holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 700,
+			TransactionId = orderTxId,
+		}).Count().AssertEqual(1);
+
+		holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 701,
+			TransactionId = orderTxId,
+		}).Count().AssertEqual(1);
+
+		var matched = holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = orderTxId,
+			TradeId = 99,
+		}).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([700L, 701L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_FiltersByDataType()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(600, "sessionA", SubscriptionStates.Online));
+		var ticks = new TestSubscription
+		{
+			Id = 601,
+			Session = "sessionB",
+			DataType = DataType.Ticks,
+			State = SubscriptionStates.Online,
+			Responses = [MessageTypes.Execution],
+		};
+		holder.Add(ticks);
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(600);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrderIdIndex_StaysWithinMaxTrackedItems()
+	{
+		// Every order seen on a transactional subscription adds an owner entry, and MaxTrackedItems
+		// is what bounds the holder's helper tracking - a session that lives for days must not
+		// accumulate one entry per order it ever sent.
+		const int limit = 10;
+		const int orders = 200;
+		const long firstOrderId = 100000L;
+
+		using var holder = CreateHolder();
+		holder.MaxTrackedItems = limit;
+
+		holder.Add(CreateOrderStatusSub(700, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(701, "sessionB", SubscriptionStates.Online));
+
+		for (var i = 0; i < orders; i++)
+		{
+			holder.GetSubscriptions(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = 700,
+				TransactionId = firstOrderId + i,
+				OrderState = OrderStates.Done,
+			}).Count().AssertEqual(1);
+		}
+
+		// An order id the index still remembers routes to its owner alone; a forgotten one falls
+		// back to every online transactional subscription. Counting the first kind counts the index.
+		var retained = 0;
+
+		for (var i = 0; i < orders; i++)
+		{
+			var matched = holder.GetSubscriptions(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = firstOrderId + i,
+				TradeId = 1,
+			}).ToArray();
+
+			if (matched.Length == 1 && matched[0].Id == 700)
+				retained++;
+		}
+
+		(retained <= limit).AssertTrue($"the order-id index kept {retained} entries with MaxTrackedItems={limit}");
 	}
 
 	#endregion

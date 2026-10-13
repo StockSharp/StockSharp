@@ -29,8 +29,6 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		return manager;
 	}
 
-	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
-
 	#region Property Tests
 
 	[TestMethod]
@@ -85,7 +83,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void RegisterGenerator_AddsGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
 
@@ -98,7 +96,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void RegisterGenerator_ThrowsOnNullGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		ThrowsExactly<ArgumentNullException>(() =>
 			manager.RegisterGenerator(secId, DataType.Ticks, null, 123));
@@ -108,7 +106,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void HasGenerator_ReturnsFalseWhenNotRegistered()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		manager.HasGenerator(secId, DataType.Ticks).AssertFalse();
 	}
@@ -117,7 +115,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void UnregisterGenerator_RemovesGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
 		long transId = 123;
@@ -150,7 +148,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task SubscribeAsync_ReturnsErrorWithoutStorageRegistry()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var message = new MarketDataMessage
 		{
@@ -181,7 +179,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task SubscribeAsync_ThrowsOnUnsubscribeMessage()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var message = new MarketDataMessage
 		{
@@ -212,7 +210,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void Reset_ClearsGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
@@ -234,6 +232,39 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.IsStarted.AssertEqual(false);
 	}
 
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task Reset_ClearsPendingSubscriptions()
+	{
+		var securityId = Helper.CreateSecurityId();
+		var storage = new Mock<IMarketDataStorage<ExecutionMessage>>(MockBehavior.Strict);
+		var registry = new Mock<IStorageRegistry>(MockBehavior.Strict);
+
+		registry
+			.Setup(r => r.GetTickMessageStorage(
+				securityId,
+				It.IsAny<IMarketDataDrive>(),
+				It.IsAny<StorageFormats>()))
+			.Returns(storage.Object);
+
+		using var manager = CreateManager(
+			registry.Object,
+			new DateTime(2024, 1, 1),
+			new DateTime(2024, 1, 1));
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = securityId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		manager.Reset();
+		await manager.StartAsync([]).ToArrayAsync(CancellationToken);
+
+		storage.VerifyNoOtherCalls();
+	}
+
 	#endregion
 
 	#region GetSupportedDataTypes Tests
@@ -242,7 +273,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_ReturnsEmptyWithoutDriveAndGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToArrayAsync(CancellationToken);
 
@@ -253,7 +284,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_IncludesGeneratorDataTypes()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
@@ -267,7 +298,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_WithoutDrive_ReturnsOnlyGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
 		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
@@ -283,8 +314,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_FiltersGeneratorsBySecurityId()
 	{
 		using var manager = CreateManager();
-		var secId1 = CreateSecurityId();
-		var secId2 = CreateSecurityId();
+		var secId1 = Helper.CreateSecurityId();
+		var secId2 = Helper.CreateSecurityId();
 
 		manager.RegisterGenerator(secId1, DataType.Ticks, new RandomWalkTradeGenerator(secId1), 1);
 		manager.RegisterGenerator(secId2, DataType.Level1, new RandomWalkTradeGenerator(secId2), 2);
@@ -384,6 +415,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			await enumerator.DisposeAsync();
 		}
+
+		manager.IsStarted.AssertFalse();
 	}
 
 	[TestMethod]
@@ -593,8 +626,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var ticks = messages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
 		var candles = messages.OfType<CandleMessage>().ToList();
 
-		// At least one type should have data
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue();
+		// Both subscribed types should have produced data
+		ticks.Count.AssertGreater(0, "Should have tick messages from the subscription");
+		candles.Count.AssertGreater(0, "Should have candle messages from the subscription");
 	}
 
 	[TestMethod]
@@ -624,14 +658,21 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var messageCountBeforeUnsubscribe = 0;
 		var boards = Array.Empty<BoardMessage>();
 
+		var unsubscribed = false;
+		var dataAfterUnsubscribe = 0;
+
 		await foreach (var msg in manager.StartAsync(boards).WithCancellation(CancellationToken))
 		{
 			messageCountBeforeUnsubscribe++;
+
+			if (unsubscribed && msg is ExecutionMessage exec && exec.DataTypeEx == DataType.Ticks)
+				dataAfterUnsubscribe++;
 
 			if (messageCountBeforeUnsubscribe == 50)
 			{
 				// Unsubscribe mid-stream
 				manager.Unsubscribe(1);
+				unsubscribed = true;
 			}
 
 			if (messageCountBeforeUnsubscribe > 100)
@@ -641,8 +682,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			}
 		}
 
-		// Test passed if we didn't hang
-		(messageCountBeforeUnsubscribe > 0).AssertTrue();
+		messageCountBeforeUnsubscribe.AssertGreater(0, "Should have received data before unsubscribe");
+		// After unsubscribing the only subscription, no further tick data should be delivered.
+		dataAfterUnsubscribe.AssertEqual(0, "Unsubscribe should stop further tick data delivery");
 	}
 
 	[TestMethod]
@@ -668,9 +710,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		};
 
 		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
-		// Level1 may not be available - that's ok
-		if (error != null)
-			return;
+		error.AssertNull();
 
 		var messages = new List<Message>();
 		var boards = Array.Empty<BoardMessage>();
@@ -688,7 +728,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// If Level1 data exists, we should have received it
 		var level1Messages = messages.OfType<Level1ChangeMessage>().ToList();
-		// Just verify we didn't crash - Level1 may or may not be in sample data
+		level1Messages.Count.AssertGreater(0);
 	}
 
 	[TestMethod]
@@ -714,9 +754,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		};
 
 		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
-		// MarketDepth may not be available - that's ok
-		if (error != null)
-			return;
+		error.AssertNull();
 
 		var messages = new List<Message>();
 		var boards = Array.Empty<BoardMessage>();
@@ -732,8 +770,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			}
 		}
 
-		// Just verify we didn't crash
 		var depthMessages = messages.OfType<QuoteChangeMessage>().ToList();
+		depthMessages.Count.AssertGreater(0);
 	}
 
 	#endregion
@@ -842,7 +880,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		// Note: HistoryMarketDataManager tracks generator registration for HasGenerator() and
 		// GetSupportedDataTypes() checks, but actual message generation happens in MarketEmulator.
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var generator = new RandomWalkTradeGenerator(secId)
 		{
@@ -868,7 +906,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	{
 		// Verify that different data type generators are tracked separately
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var tickGen = new RandomWalkTradeGenerator(secId);
 		var depthGen = new TrendMarketDepthGenerator(secId);
@@ -902,7 +940,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			return;
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
-		var generatorSecId = CreateSecurityId();
+		var generatorSecId = Helper.CreateSecurityId();
 
 		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
@@ -945,7 +983,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var generatorTicks = messages.OfType<ExecutionMessage>()
 			.Where(m => m.SecurityId == generatorSecId && m.DataTypeEx == DataType.Ticks).ToList();
 
-		(historyTicks.Count > 0 || generatorTicks.Count > 0).AssertTrue("Should have messages from history or generator");
+		historyTicks.Count.AssertGreater(0, "Should have messages from history");
+		generatorTicks.Count.AssertGreater(0, "Should have messages from generator");
 	}
 
 	[TestMethod]
@@ -998,8 +1037,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	{
 		// Verify that generators for different securities are tracked separately
 		using var manager = CreateManager();
-		var secId1 = CreateSecurityId();
-		var secId2 = CreateSecurityId();
+		var secId1 = Helper.CreateSecurityId();
+		var secId2 = Helper.CreateSecurityId();
 
 		var gen1 = new RandomWalkTradeGenerator(secId1);
 		var gen2 = new RandomWalkTradeGenerator(secId2);
@@ -1069,7 +1108,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var ticks = messages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
 		var candles = messages.OfType<CandleMessage>().ToList();
 
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue("Should have ticks or candles");
+		ticks.Count.AssertGreater(0, "Should have tick messages");
+		candles.Count.AssertGreater(0, "Should have candle messages");
 	}
 
 	[TestMethod]
@@ -1083,7 +1123,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		// Historical security
 		var histSecId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		// Generator security
-		var genSecId = CreateSecurityId();
+		var genSecId = Helper.CreateSecurityId();
 
 		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(6));
 
@@ -1137,8 +1177,12 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var genTicks = messages.OfType<ExecutionMessage>().Where(m => m.SecurityId == genSecId && m.DataTypeEx == DataType.Ticks).Count();
 		var genDepths = messages.OfType<QuoteChangeMessage>().Where(m => m.SecurityId == genSecId).Count();
 
-		// At least some data from various sources
-		(histTicks + histCandles + genTicks + genDepths > 0).AssertTrue("Should have data from at least one source");
+		// FullMix sets up four sources (history ticks/candles + generated ticks/depths); each must yield data,
+		// otherwise the "full mix" the test name promises is not actually exercised.
+		histTicks.AssertGreater(0, "Should have historical ticks");
+		histCandles.AssertGreater(0, "Should have historical candles");
+		genTicks.AssertGreater(0, "Should have generated ticks");
+		genDepths.AssertGreater(0, "Should have generated market depths");
 	}
 
 	[TestMethod]
@@ -1151,9 +1195,11 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId1 = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var secId2 = Paths.HistoryDefaultSecurity2.ToSecurityId();
-		var genSecId = CreateSecurityId();
+		var genSecId = Helper.CreateSecurityId();
 
-		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(2));
+		// Security 2 candle data in the sample set only starts intraday (around 12:31), so the replay window
+		// must extend past it; a 2-hour window from midnight would contain ticks but no candles at all.
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(13));
 
 		// Security 1: Historical ticks
 		await manager.SubscribeAsync(new MarketDataMessage
@@ -1191,6 +1237,16 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}
 
 		AssertStrictlyOrderedByTime(messages, "ThreeSecurities_DifferentDataTypes");
+
+		messages.OfType<ExecutionMessage>()
+			.Count(m => m.SecurityId == secId1 && m.DataTypeEx == DataType.Ticks)
+			.AssertGreater(0);
+		messages.OfType<CandleMessage>()
+			.Count(m => m.SecurityId == secId2)
+			.AssertGreater(0);
+		messages.OfType<ExecutionMessage>()
+			.Count(m => m.SecurityId == genSecId && m.DataTypeEx == DataType.Ticks)
+			.AssertGreater(0);
 	}
 
 	[TestMethod]
@@ -1406,7 +1462,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30000, CooperativeCancellation = true)]
-	public async Task PropertyValidation_TimeChangedMessages_Valid()
+	public async Task PropertyValidation_CandleTimes_WithinReplayRange()
 	{
 		var storageRegistry = GetHistoryStorage();
 		if (storageRegistry == null)
@@ -1442,7 +1498,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			// OpenTime should be within range
 			(candle.OpenTime >= startDate).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} before start date");
-			(candle.OpenTime <= stopDate.AddDays(1)).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} after stop date");
+			(candle.OpenTime <= stopDate).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} after stop date");
 		}
 	}
 
@@ -1538,8 +1594,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			ValidateCandleMessage(candles[i], secId, startDate, stopDate, i);
 		}
 
-		// At least one type should have data
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue("Should have ticks or candles");
+		// Both subscribed types should have produced data
+		ticks.Count.AssertGreater(0, "Should have tick messages");
+		candles.Count.AssertGreater(0, "Should have candle messages");
 	}
 
 	[TestMethod]
@@ -1588,7 +1645,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30000, CooperativeCancellation = true)]
-	public async Task PropertyValidation_FinishedMessage_HasCorrectTransactionId()
+	public async Task PropertyValidation_EmulationCompletion_SendsStoppingState()
 	{
 		var storageRegistry = GetHistoryStorage();
 		if (storageRegistry == null)
@@ -1864,6 +1921,12 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			output.AssertNotNull("Emulator output should not be null");
 		}
+
+		// Feeding ticks into the emulator must produce a Level1ChangeMessage (price limits) per tick,
+		// not merely "some" output — that is what "all expected types" means here.
+		var emulatorOutTypes = emulatorOutputs.GroupBy(m => m.GetType().Name).Select(g => g.Key).ToList();
+		emulatorOutputs.OfType<Level1ChangeMessage>().Any().AssertTrue(
+			$"Emulator should emit Level1ChangeMessage. Got types: {string.Join(", ", emulatorOutTypes)}");
 	}
 
 	[TestMethod]

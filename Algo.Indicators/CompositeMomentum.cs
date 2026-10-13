@@ -127,12 +127,21 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 
 		if (ShortRoc.IsFormed && LongRoc.IsFormed && Rsi.IsFormed && EmaFast.IsFormed && EmaSlow.IsFormed)
 		{
-			var normalizedShortRoc = shortRocValue.ToDecimal(Source) / 100m;
-			var normalizedLongRoc = longRocValue.ToDecimal(Source) / 100m;
-			var normalizedRsi = (rsiValue.ToDecimal(Source) - 50m) / 50m;
+			var shortRoc = shortRocValue.ToNullableDecimal(Source);
+			var longRoc = longRocValue.ToNullableDecimal(Source);
+			var rsi = rsiValue.ToNullableDecimal(Source);
+			var emaFast = emaFastValue.ToNullableDecimal(Source);
+			var emaSlow = emaSlowValue.ToNullableDecimal(Source);
 
-			var emaSlow = emaSlowValue.ToDecimal(Source);
-			var macdLine = emaSlow != 0 ? (emaFastValue.ToDecimal(Source) - emaSlow) / emaSlow : 0;
+			if (shortRoc is null || longRoc is null || rsi is null || emaFast is null || emaSlow is null)
+				return result;
+
+			var normalizedShortRoc = shortRoc.Value / 100m;
+			var normalizedLongRoc = longRoc.Value / 100m;
+			var normalizedRsi = (rsi.Value - 50m) / 50m;
+
+			var emaSlowDecimal = emaSlow.Value;
+			var macdLine = emaSlowDecimal != 0m ? (emaFast.Value - emaSlowDecimal) / emaSlowDecimal : 0m;
 
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;

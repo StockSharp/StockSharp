@@ -59,6 +59,26 @@ public static class IChartExtensions
 		=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
 
 	/// <summary>
+	/// Validate the manual numeric range configured for the axis.
+	/// </summary>
+	/// <param name="axis">Chart axis.</param>
+	/// <exception cref="ArgumentNullException"><paramref name="axis"/> is <see langword="null"/>.</exception>
+	/// <exception cref="InvalidOperationException">A supported fixed range has incomplete or unordered bounds.</exception>
+	public static void ValidateManualRange(this IChartAxis axis)
+	{
+		ArgumentNullException.ThrowIfNull(axis);
+
+		if (axis.AutoRange || axis is not IChartManualRangeAxis manualRangeAxis)
+			return;
+
+		if (manualRangeAxis.MinValue.HasValue != manualRangeAxis.MaxValue.HasValue)
+			throw new InvalidOperationException($"Chart axis '{axis.Id}' must define both manual range bounds or neither bound.");
+
+		if (manualRangeAxis.MinValue is { } minimum && manualRangeAxis.MaxValue is { } maximum && maximum <= minimum)
+			throw new InvalidOperationException($"Chart axis '{axis.Id}' manual range maximum must be greater than its minimum.");
+	}
+
+	/// <summary>
 	/// Put the chart data.
 	/// </summary>
 	/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
@@ -78,7 +98,7 @@ public static class IChartExtensions
 			case IChartOrderElement orderElem:
 			{
 				var order = (Order)value;
-				return item.Add(orderElem, order, order.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
+				return item.Add(orderElem, order, order?.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
 			}
 			case IChartTradeElement tradeElem:
 				return item.Add(tradeElem, (MyTrade)value);
@@ -146,7 +166,64 @@ public static class IChartExtensions
 			return item;
 		}
 
-		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels, state);
+		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, candle.TotalVolume, priceLevels, state);
+	}
+
+	/// <summary>
+	/// Put the candle data with an explicit total volume.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing a candle.</param>
+	/// <param name="candle">Candle.</param>
+	/// <param name="openPrice">Opening price.</param>
+	/// <param name="highPrice">Highest price.</param>
+	/// <param name="lowPrice">Lowest price.</param>
+	/// <param name="closePrice">Closing price.</param>
+	/// <param name="totalVolume">Total candle volume.</param>
+	/// <param name="priceLevels">Price levels.</param>
+	/// <param name="state">Candle state.</param>
+	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal totalVolume, CandlePriceLevel[] priceLevels, CandleStates state)
+	{
+		if (candle == null)
+			return item;
+
+		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, totalVolume, priceLevels, state);
+	}
+
+	/// <summary>
+	/// Put the candle data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing a candle.</param>
+	/// <param name="dataType"><see cref="DataType"/>.</param>
+	/// <param name="secId"><see cref="SecurityId"/>.</param>
+	/// <param name="openPrice">Opening price.</param>
+	/// <param name="highPrice">Highest price.</param>
+	/// <param name="lowPrice">Lowest price.</param>
+	/// <param name="closePrice">Closing price.</param>
+	/// <param name="totalVolume">Total candle volume.</param>
+	/// <param name="priceLevels">Price levels.</param>
+	/// <param name="state">Candle state.</param>
+	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal totalVolume, CandlePriceLevel[] priceLevels, CandleStates state)
+		=> item.Add(element, new ChartCandleDrawData(dataType, secId, openPrice, highPrice, lowPrice, closePrice, totalVolume, priceLevels, state));
+
+	/// <summary>
+	/// Put the candle data.
+	/// </summary>
+	/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+	/// <param name="element">The chart element representing a candle.</param>
+	/// <param name="data">Candle data.</param>
+	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ChartCandleDrawData data)
+	{
+		ArgumentNullException.ThrowIfNull(item);
+
+		if (item is IChartCandleDrawDataItem completeItem)
+			return completeItem.Add(element, data);
+
+		return item.Add(element, data.DataType, data.SecurityId, data.OpenPrice, data.HighPrice, data.LowPrice, data.ClosePrice, data.PriceLevels, data.State);
 	}
 
 	/// <summary>

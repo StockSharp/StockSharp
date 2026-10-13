@@ -145,8 +145,28 @@ partial class Connector
 		}
 	}
 
+	/// <summary>
+	/// What of the cache one of the two places a request passes answers with.
+	/// </summary>
+	private sealed class CacheSnapshots(ISnapshotHolder cache, Func<ISubscriptionMessage, bool> isAnswered) : ISnapshotHolder
+	{
+		IEnumerable<Message> ISnapshotHolder.GetSnapshot(ISubscriptionMessage subscription)
+		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			return isAnswered(subscription) ? cache.GetSnapshot(subscription) : [];
+		}
+	}
+
+	private static bool IsState(ISubscriptionMessage subscription)
+		=> subscription.DataType == DataType.Transactions || subscription.DataType == DataType.PositionChanges;
+
 	private async ValueTask InMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
+		if (SupportSnapshots)
+			_stateSnapshots.ProcessInMessage(message);
+
 		await (_inAdapter?.SendInMessageAsync(message, cancellationToken) ?? default);
 
 		if (message != _disposeMessage)
@@ -159,7 +179,22 @@ partial class Connector
 
 	private ValueTask OutMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
-		return OnProcessMessage(message, cancellationToken);
+		if (!SupportSnapshots)
+			return OnProcessMessage(message, cancellationToken);
+
+		var (forward, snapshots) = _stateSnapshots.ProcessOutMessage(message);
+
+		return snapshots.Length == 0
+			? OnProcessMessage(forward, cancellationToken)
+			: ProcessWithSnapshotsAsync(forward, snapshots, cancellationToken);
+	}
+
+	private async ValueTask ProcessWithSnapshotsAsync(Message message, Message[] snapshots, CancellationToken cancellationToken)
+	{
+		await OnProcessMessage(message, cancellationToken);
+
+		foreach (var snapshot in snapshots)
+			await OnProcessMessage(snapshot, cancellationToken);
 	}
 
 	private IMessageAdapterWrapper _inAdapter;
@@ -209,6 +244,8 @@ partial class Connector
 
 			if (_adapter != null)
 			{
+				_subscriptionManager.TransactionIdGenerator = _adapter.TransactionIdGenerator;
+
 				_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 				_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 				_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
@@ -290,7 +327,7 @@ partial class Connector
 					_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true };
 
 				if (SupportSnapshots)
-					_inAdapter = new SnapshotHolderMessageAdapter(_inAdapter, _entityCache) { OwnInnerAdapter = true };
+					_inAdapter = new SnapshotHolderMessageAdapter(_inAdapter, _chainSnapshots) { OwnInnerAdapter = true };
 
 				if (SupportAssociatedSecurity)
 					_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -317,7 +354,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new BasketSecurityMessageAdapter(a, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true }, typeof(BufferMessageAdapter));
+				EnableAdapter(
+					a => new BasketSecurityMessageAdapter(a, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true },
+					typeof(BufferMessageAdapter),
+					typeof(SnapshotHolderMessageAdapter), typeof(AssociatedSecurityAdapter), typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<BasketSecurityMessageAdapter>();
 
@@ -361,7 +401,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new SnapshotHolderMessageAdapter(a, _entityCache) { OwnInnerAdapter = true }, typeof(BasketSecurityMessageAdapter));
+				EnableAdapter(
+					a => new SnapshotHolderMessageAdapter(a, _chainSnapshots) { OwnInnerAdapter = true },
+					typeof(BasketSecurityMessageAdapter),
+					typeof(AssociatedSecurityAdapter), typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<SnapshotHolderMessageAdapter>();
 
@@ -383,7 +426,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new AssociatedSecurityAdapter(a) { OwnInnerAdapter = true }, typeof(SnapshotHolderMessageAdapter));
+				EnableAdapter(
+					a => new AssociatedSecurityAdapter(a) { OwnInnerAdapter = true },
+					typeof(SnapshotHolderMessageAdapter),
+					typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<AssociatedSecurityAdapter>();
 
@@ -433,12 +479,12 @@ partial class Connector
 		return GetAdapter(typeof(T));
 	}
 
-	private void EnableAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create, Type type)
+	private void EnableAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create, Type innerType, params Type[] outerTypes)
 	{
 		if (_inAdapter == null)
 			return;
 
-		var tuple = type != null ? GetAdapter(type) : default;
+		var tuple = innerType != null ? GetAdapter(innerType) : default;
 		var adapter = tuple.adapter;
 
 		if (adapter != null)
@@ -465,7 +511,18 @@ partial class Connector
 			//}
 		}
 		else
+		{
+			foreach (var outerType in outerTypes)
+			{
+				if (GetAdapter(outerType).adapter is not IMessageAdapterWrapper outer)
+					continue;
+
+				outer.InnerAdapter = create(outer.InnerAdapter);
+				return;
+			}
+
 			AddAdapter(create);
+		}
 	}
 
 	private void AddAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create)
@@ -571,6 +628,7 @@ partial class Connector
 	/// Send error message.
 	/// </summary>
 	/// <param name="error">Error details.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use SendOutErrorAsync instead.")]
 	public void SendOutError(Exception error)
 		=> AsyncHelper.Run(() => SendOutErrorAsync(error, default));
 
@@ -605,7 +663,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.Disconnect:
-					ProcessDisconnectMessage((DisconnectMessage)message);
+					await ProcessDisconnectMessageAsync((DisconnectMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.ConnectionLost:
@@ -617,7 +675,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.QuoteChange:
-					ProcessQuotesMessage((QuoteChangeMessage)message);
+					await ProcessQuotesMessage((QuoteChangeMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.Board:
@@ -629,7 +687,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.Security:
-					ProcessSecurityMessage((SecurityMessage)message);
+					await ProcessSecurityMessage((SecurityMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.DataTypeInfo:
@@ -637,15 +695,15 @@ partial class Connector
 					break;
 
 				case MessageTypes.Level1Change:
-					ProcessLevel1ChangeMessage((Level1ChangeMessage)message);
+					await ProcessLevel1ChangeMessage((Level1ChangeMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.News:
-					ProcessNewsMessage((NewsMessage)message);
+					await ProcessNewsMessage((NewsMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.Execution:
-					ProcessExecutionMessage((ExecutionMessage)message);
+					await ProcessExecutionMessage((ExecutionMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.Portfolio:
@@ -653,7 +711,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.PositionChange:
-					ProcessPositionChangeMessage((PositionChangeMessage)message);
+					await ProcessPositionChangeMessage((PositionChangeMessage)message, cancellationToken);
 					break;
 
 				//case MessageTypes.Time:
@@ -771,7 +829,7 @@ partial class Connector
 
 				await foreach (var secMsg in message.Body.ExtractSecuritiesAsync().WithCancellation(cancellationToken))
 				{
-					ProcessSecurityMessage(secMsg);
+					await ProcessSecurityMessage(secMsg, cancellationToken);
 					secMsgs.Add(secMsg);
 				}
 
@@ -808,6 +866,31 @@ partial class Connector
 		ProcessSubscriptionResult(subscription, items);
 	}
 
+	/// <summary>
+	/// While an order book or a tick stream runs it is the authority on the Level1 fields it carries and
+	/// what Level1 says about them is ignored. That ends with the stream: once the last one for the
+	/// security is gone, Level1 is the only source left and has to report those fields again, or the
+	/// caller is shown the final value of a stream that ended as if it were the current market.
+	/// </summary>
+	private void ReleaseLevel1Ownership(Subscription subscription)
+	{
+		var dataType = subscription.DataType;
+
+		if (dataType != DataType.MarketDepth && dataType != DataType.Ticks)
+			return;
+
+		if (subscription.SecurityId is not SecurityId secId)
+			return;
+
+		foreach (var other in _subscriptionManager.Subscriptions)
+		{
+			if (other != subscription && other.DataType == dataType && other.SecurityId == secId && other.State.IsActive())
+				return;
+		}
+
+		_entityCache.ReleaseLevel1Ownership(secId, dataType);
+	}
+
 	private void ProcessSubscriptionResult(Subscription subscription, object[] items)
 	{
 		T[] typed<T>() => items.Cast<T>().ToArray();
@@ -829,7 +912,7 @@ partial class Connector
 
 		var securityId = message.SecurityId;
 
-		var security = SecurityStorage.LookupById(securityId);
+		var security = await SecurityStorage.LookupByIdAsync(securityId, cancellationToken);
 
 		if (security != null)
 		{
@@ -864,7 +947,7 @@ partial class Connector
 		}
 	}
 
-	private void ProcessDisconnectMessage(DisconnectMessage message)
+	private async ValueTask ProcessDisconnectMessageAsync(DisconnectMessage message, CancellationToken cancellationToken)
 	{
 		var adapter = message.Adapter;
 		var error = message.Error;
@@ -872,7 +955,7 @@ partial class Connector
 		if (error == null)
 		{
 			if (adapter == Adapter)
-				RaiseDisconnected();
+				await RaiseDisconnectedAsync(cancellationToken);
 			else
 				RaiseDisconnectedEx(adapter);
 		}
@@ -923,16 +1006,16 @@ partial class Connector
 		RaiseReceived(board, subscriptions, BoardReceived);
 	}
 
-	private void ProcessSecurityMessage(SecurityMessage message)
+	private async ValueTask ProcessSecurityMessage(SecurityMessage message, CancellationToken cancellationToken)
 	{
-		var security = GetSecurity(message.SecurityId, s =>
+		var security = await GetSecurityAsync(message.SecurityId, s =>
 		{
 			if (!UpdateSecurityByDefinition)
 				return false;
 
 			s.ApplyChanges(message, ExchangeInfoProvider, OverrideSecurityData);
 			return true;
-		});
+		}, cancellationToken);
 
 		var subscriptions = _subscriptionManager.ProcessLookupResponse(message, security);
 		RaiseReceived(security, subscriptions, SecurityReceived);
@@ -946,7 +1029,7 @@ partial class Connector
 		RaiseReceived(dt, message, DataTypeReceived);
 	}
 
-	private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
+	private async ValueTask ProcessLevel1ChangeMessage(Level1ChangeMessage message, CancellationToken cancellationToken)
 	{
 		Security security = null;
 
@@ -955,7 +1038,7 @@ partial class Connector
 			if (anyCanOnline != true)
 				return;
 
-			security = EnsureGetSecurity(message);
+			security = await EnsureGetSecurityAsync(message, cancellationToken);
 
 			if (_entityCache.HasLevel1Info(security))
 				return;
@@ -964,7 +1047,7 @@ partial class Connector
 #pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityByLevel1)
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			security.ApplyChanges(message);
 		}
@@ -972,7 +1055,7 @@ partial class Connector
 
 		if (ValuesChanged is not null)
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			var time = message.ServerTime;
 			var info = _entityCache.GetSecurityValues(security, time);
@@ -1014,7 +1097,7 @@ partial class Connector
 			}
 
 			if (changes.Count > 0)
-				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
+				RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 		}
 	}
 
@@ -1069,11 +1152,8 @@ partial class Connector
 		RaiseReceived(portfolio, message, PortfolioReceived);
 	}
 
-	private void ProcessPositionChangeMessage(PositionChangeMessage message)
+	private async ValueTask ProcessPositionChangeMessage(PositionChangeMessage message, CancellationToken cancellationToken)
 	{
-		if (!message.StrategyId.IsEmpty())
-			return;
-
 		Portfolio portfolio;
 
 		if (message.IsMoney())
@@ -1090,31 +1170,34 @@ partial class Connector
 			RaiseReceived(portfolio, message, PortfolioReceived);
 		}
 
-		var security = EnsureGetSecurity(message);
+		var security = await EnsureGetSecurityAsync(message, cancellationToken);
 		portfolio = LookupByPortfolioName(message.PortfolioName);
 
+		var entityMessage = message;
 		var valueInLots = message.TryGetDecimal(PositionChangeTypes.CurrentValueInLots);
 		if (valueInLots != null)
 		{
-			if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
+			entityMessage = message.TypedClone();
+
+			if (!entityMessage.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
 			{
-				var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
-				message.Add(PositionChangeTypes.CurrentValue, currValue);
+				var currValue = valueInLots.Value * (security.Multiplier ?? 1);
+				entityMessage.Add(PositionChangeTypes.CurrentValue, currValue);
 			}
 
-			message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
+			entityMessage.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 		}
 
 		var position = GetPosition(portfolio, security, message.StrategyId, message.Side, message.ClientCode, message.DepoName, message.LimitType, message.Description);
-		position.ApplyChanges(message);
+		position.ApplyChanges(entityMessage);
 
 		RaisePositionChanged(position);
 		RaiseReceived(position, message, PositionReceived);
 	}
 
-	private void ProcessNewsMessage(NewsMessage message)
+	private async ValueTask ProcessNewsMessage(NewsMessage message, CancellationToken cancellationToken)
 	{
-		var security = message.SecurityId == null ? null : GetSecurity(message.SecurityId.Value);
+		var security = message.SecurityId == null ? null : await GetSecurityAsync(message.SecurityId.Value, cancellationToken);
 
 		var news = _entityCache.ProcessNewsMessage(security, message);
 
@@ -1122,7 +1205,7 @@ partial class Connector
 			return;
 	}
 
-	private void ProcessQuotesMessage(QuoteChangeMessage message)
+	private async ValueTask ProcessQuotesMessage(QuoteChangeMessage message, CancellationToken cancellationToken)
 	{
 		if (RaiseReceived(message, message, OrderBookReceived) != true)
 			return;
@@ -1141,7 +1224,7 @@ partial class Connector
 
 		if (ValuesChanged is not null && !fromLevel1 && !Adapter.Level1Extend && (bestBid != null || bestAsk != null))
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			var info = _entityCache.GetSecurityValues(security, time);
 
@@ -1183,7 +1266,7 @@ partial class Connector
 #pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityLastQuotes)
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			var updated = false;
 
@@ -1214,11 +1297,11 @@ partial class Connector
 						if (bid.BoardCode.IsEmpty())
 							continue;
 
-						var innerSecurity = GetSecurity(new SecurityId
+						var innerSecurity = await GetSecurityAsync(new SecurityId
 						{
 							SecurityCode = security.Code,
 							BoardCode = bid.BoardCode
-						});
+						}, cancellationToken);
 
 						var info = changedSecurities.SafeAdd(innerSecurity);
 
@@ -1237,11 +1320,11 @@ partial class Connector
 						if (ask.BoardCode.IsEmpty())
 							continue;
 
-						var innerSecurity = GetSecurity(new SecurityId
+						var innerSecurity = await GetSecurityAsync(new SecurityId
 						{
 							SecurityCode = security.Code,
 							BoardCode = ask.BoardCode
-						});
+						}, cancellationToken);
 
 						var info = changedSecurities.SafeAdd(innerSecurity);
 
@@ -1266,7 +1349,7 @@ partial class Connector
 			return;
 	}
 
-	private void ProcessTradeMessage(ExecutionMessage message)
+	private async ValueTask ProcessTradeMessage(ExecutionMessage message, CancellationToken cancellationToken)
 	{
 		if (RaiseReceived(message, message, TickTradeReceived) != true)
 			return;
@@ -1275,7 +1358,7 @@ partial class Connector
 
 		if (ValuesChanged is not null)
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			var time = message.ServerTime;
 			var info = _entityCache.GetSecurityValues(security, time);
@@ -1335,7 +1418,7 @@ partial class Connector
 #pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityLastQuotes)
 		{
-			security ??= EnsureGetSecurity(message);
+			security ??= await EnsureGetSecurityAsync(message, cancellationToken);
 
 			security.LastTick = message;
 		}
@@ -1438,7 +1521,7 @@ partial class Connector
 		RaiseReceived(trade, message, OwnTradeReceived);
 	}
 
-	private void ProcessTransactionMessage(ExecutionMessage message)
+	private async ValueTask ProcessTransactionMessage(ExecutionMessage message, CancellationToken cancellationToken)
 	{
 		var originId = message.OriginalTransactionId;
 
@@ -1492,7 +1575,7 @@ partial class Connector
 				return;
 			}
 
-			security = EnsureGetSecurity(message);
+			security = await EnsureGetSecurityAsync(message, cancellationToken);
 
 			if (transactionId == 0 && isStatusRequest)
 				transactionId = TransactionIdGenerator.GetNextId();
@@ -1520,12 +1603,12 @@ partial class Connector
 			throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.UnknownType.Put(message));
 	}
 
-	private void ProcessExecutionMessage(ExecutionMessage message)
+	private async ValueTask ProcessExecutionMessage(ExecutionMessage message, CancellationToken cancellationToken)
 	{
 		if (message.DataType == DataType.Transactions)
-			ProcessTransactionMessage(message);
+			await ProcessTransactionMessage(message, cancellationToken);
 		else if (message.DataType == DataType.Ticks)
-			ProcessTradeMessage(message);
+			await ProcessTradeMessage(message, cancellationToken);
 		else if (message.DataType == DataType.OrderLog)
 			ProcessOrderLogMessage(message);
 		else

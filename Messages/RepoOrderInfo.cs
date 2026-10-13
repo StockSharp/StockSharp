@@ -6,7 +6,7 @@ namespace StockSharp.Messages;
 [Serializable]
 [DataContract]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
+public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RepoOrderInfo"/>.
@@ -137,7 +137,9 @@ public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		MatchRef = storage.GetValue<string>(nameof(MatchRef));
 		Partner = storage.GetValue<string>(nameof(Partner));
@@ -153,13 +155,17 @@ public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 		Term = storage.GetValue<decimal?>(nameof(Term));
 		UpperDiscount = storage.GetValue<decimal?>(nameof(UpperDiscount));
 		IsModified = storage.GetValue<bool>(nameof(IsModified));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(MatchRef), MatchRef);
 		storage.SetValue(nameof(Partner), Partner);
@@ -175,5 +181,7 @@ public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 		storage.SetValue(nameof(Term), Term);
 		storage.SetValue(nameof(UpperDiscount), UpperDiscount);
 		storage.SetValue(nameof(IsModified), IsModified);
+
+		return Task.CompletedTask;
 	}
 }

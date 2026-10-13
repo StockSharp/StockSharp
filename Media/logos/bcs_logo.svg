@@ -1,0 +1,53 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <mask id="bcs-a" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+    <path d="M19.8484 39.8158C30.8104 39.8158 39.6968 30.9027 39.6968 19.9079C39.6968 8.91306 30.8104 0 19.8484 0C8.88643 0 0 8.91306 0 19.9079C0 30.9027 8.88643 39.8158 19.8484 39.8158Z" fill="#fff"/>
+  </mask>
+  <g mask="url(#bcs-a)">
+    <path d="M37.5963 29.9191C43.0883 20.159 39.4903 7.68999 29.5601 2.06863C19.6298 -3.55273 7.12755 -0.19769 1.63555 9.56232C-3.85645 19.3223 -0.258513 31.7914 9.67176 37.4127C19.602 43.0341 32.1043 39.6791 37.5963 29.9191Z" fill="url(#bcs-g0)"/>
+  </g>
+  <mask id="bcs-b" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+    <path d="M19.8484 39.8158C30.8104 39.8158 39.6968 30.9027 39.6968 19.9079C39.6968 8.91306 30.8104 0 19.8484 0C8.88643 0 0 8.91306 0 19.9079C0 30.9027 8.88643 39.8158 19.8484 39.8158Z" fill="#fff"/>
+  </mask>
+  <g mask="url(#bcs-b)">
+    <path d="M38.0652 27.9163C43.3057 20.7002 40.634 9.79475 32.0978 3.55839C23.5616 -2.67798 12.3933 -1.88371 7.15283 5.33244C1.91233 12.5486 4.58402 23.454 13.1202 29.6904C21.6564 35.9267 32.8247 35.1325 38.0652 27.9163Z" fill="url(#bcs-g1)"/>
+  </g>
+  <mask id="bcs-c" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+    <path d="M19.8484 39.8158C30.8104 39.8158 39.6968 30.9027 39.6968 19.9079C39.6968 8.91306 30.8104 0 19.8484 0C8.88643 0 0 8.91306 0 19.9079C0 30.9027 8.88643 39.8158 19.8484 39.8158Z" fill="#fff"/>
+  </mask>
+  <g mask="url(#bcs-c)">
+    <path d="M38.1993 18.6234C40.799 13.5673 36.5815 6.19701 28.7793 2.16142C20.9772 -1.87418 12.5449 -1.0469 9.94531 4.00919C7.34569 9.06529 11.5632 16.4356 19.3653 20.4712C27.1674 24.5067 35.5997 23.6795 38.1993 18.6234Z" fill="url(#bcs-g2)"/>
+  </g>
+  <defs>
+    <linearGradient id="bcs-g0" x1="30.7196" y1="65.4903" x2="18.9764" y2="-7.46212" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#006DEF"/>
+      <stop offset=".11" stop-color="#0570EF"/>
+      <stop offset=".23" stop-color="#1277F0"/>
+      <stop offset=".37" stop-color="#2884F2"/>
+      <stop offset=".5" stop-color="#4896F4"/>
+      <stop offset=".64" stop-color="#70ADF6"/>
+      <stop offset=".78" stop-color="#A1C9F9"/>
+      <stop offset=".92" stop-color="#DBEAFD"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <radialGradient id="bcs-g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(47.3515 26.1811) rotate(105.248) scale(30.5992 51.1619)">
+      <stop offset=".03" stop-color="#006DEF"/>
+      <stop offset=".1" stop-color="#0671EF"/>
+      <stop offset=".21" stop-color="#187BF0"/>
+      <stop offset=".33" stop-color="#358BF2"/>
+      <stop offset=".46" stop-color="#5EA3F4"/>
+      <stop offset=".61" stop-color="#92C1F8"/>
+      <stop offset=".76" stop-color="#D1E4FB"/>
+      <stop offset=".83" stop-color="#F0F6FD"/>
+    </radialGradient>
+    <radialGradient id="bcs-g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(49.5397 7.11404) rotate(48.3775) scale(43.5271 36.669)">
+      <stop offset=".06" stop-color="#006DEF"/>
+      <stop offset=".09" stop-color="#0F75F0"/>
+      <stop offset=".25" stop-color="#529CF4"/>
+      <stop offset=".4" stop-color="#8BBCF7"/>
+      <stop offset=".54" stop-color="#B6D5FA"/>
+      <stop offset=".67" stop-color="#D6E7FB"/>
+      <stop offset=".77" stop-color="#E9F2FD"/>
+      <stop offset=".84" stop-color="#F0F6FD"/>
+    </radialGradient>
+  </defs>
+</svg>

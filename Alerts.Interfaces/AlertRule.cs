@@ -1,11 +1,9 @@
 namespace StockSharp.Alerts;
 
-using Ecng.Configuration;
-
 /// <summary>
 /// Rule.
 /// </summary>
-public class AlertRule : IPersistable
+public class AlertRule : IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertRule"/>.
@@ -24,51 +22,53 @@ public class AlertRule : IPersistable
 	/// </summary>
 	public ComparisonOperator Operator { get; set; }
 
+	private object _value;
+
 	/// <summary>
-	/// Comparison value.
+	/// Comparison value, in the form a message carries it: an instrument is kept as its <see cref="SecurityId"/>,
+	/// a portfolio as its name.
 	/// </summary>
-	public object Value { get; set; }
+	public object Value
+	{
+		get => _value;
+		set => _value = value switch
+		{
+			Security security => security.ToSecurityId(),
+			Portfolio portfolio => portfolio.Name,
+			_ => value,
+		};
+	}
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		Field = storage.GetValue<SettingsStorage>(nameof(Field)).Load<AlertRuleField>();
+		Field = await storage.GetValue<SettingsStorage>(nameof(Field)).LoadAsync<AlertRuleField>(cancellationToken);
 		Operator = storage.GetValue<ComparisonOperator>(nameof(Operator));
 
 		var value = storage.GetValue<string>(nameof(Value));
+		var valueType = Field.ValueType;
 
-		if (storage.GetValue<bool>(nameof(Portfolio)))
-			Value = ConfigManager.GetService<IPortfolioProvider>().LookupByPortfolioName(value);
-		else
-		{
-			var valueType = Field.ValueType;
-
-			Value = (valueType == typeof(SecurityId) || valueType == typeof(SecurityId?))
-				? ConfigManager.GetService<ISecurityProvider>().LookupById(value)
-				: value.To(valueType);
-		}
+		Value = valueType == typeof(SecurityId) || valueType == typeof(SecurityId?)
+			? value?.ToSecurityId()
+			: value.To(valueType);
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.Set(nameof(Field), Field.Save());
+		storage.Set(nameof(Field), await Field.SaveAsync(cancellationToken));
 		storage.Set(nameof(Operator), Operator);
 
-		if (Value is Security security)
-			storage.Set(nameof(Value), security.Id);
-		else if (Value is Portfolio portfolio)
-		{
-			storage.Set(nameof(Portfolio), true);
-			storage.Set(nameof(Value), portfolio.Name);
-		}
-		else
-			storage.Set(nameof(Value), Value?.ToString());
+		storage.Set(nameof(Value), Value is SecurityId securityId ? securityId.ToStringId() : Value?.ToString());
 	}
 }

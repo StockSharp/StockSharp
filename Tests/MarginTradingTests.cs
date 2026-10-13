@@ -12,7 +12,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_LongPosition_PriceUp()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 		var secId = CreateSecId();
 
@@ -27,7 +27,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_LongPosition_PriceDown()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 		var secId = CreateSecId();
 
@@ -42,7 +42,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_ShortPosition_PriceDown()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 		var secId = CreateSecId();
 
@@ -57,7 +57,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_ShortPosition_PriceUp()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 		var secId = CreateSecId();
 
@@ -72,7 +72,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_NoPosition_ReturnsZero()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 
 		var unrealized = portfolio.CalculateUnrealizedPnL(_ => 110m);
@@ -83,7 +83,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_NoPriceAvailable_ReturnsZero()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 		var secId = CreateSecId();
 
@@ -97,7 +97,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void CalculateUnrealizedPnL_MultiplePositions_SumsCorrectly()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(100000);
 
 		var secId1 = CreateSecId("AAPL", "NYSE");
@@ -129,23 +129,14 @@ public class MarginTradingTests : BaseTestClass
 		IsNull(pos.Leverage);
 	}
 
-	[TestMethod]
-	public void PositionInfo_Leverage_CanBeSet()
-	{
-		var pos = new PositionInfo(CreateSecId());
-		pos.Leverage = 10m;
-
-		AreEqual(10m, pos.Leverage);
-	}
-
 	#endregion
 
-	#region IPortfolio margin settings
+	#region EmulatedPortfolio margin settings
 
 	[TestMethod]
 	public void EmulatedPortfolio_MarginCallLevel_Default()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 
 		AreEqual(0.5m, portfolio.MarginCallLevel);
 	}
@@ -153,7 +144,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void EmulatedPortfolio_StopOutLevel_Default()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 
 		AreEqual(0.2m, portfolio.StopOutLevel);
 	}
@@ -161,7 +152,7 @@ public class MarginTradingTests : BaseTestClass
 	[TestMethod]
 	public void EmulatedPortfolio_EnableStopOut_DefaultFalse()
 	{
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 
 		IsFalse(portfolio.EnableStopOut);
 	}
@@ -208,7 +199,7 @@ public class MarginTradingTests : BaseTestClass
 	public void ValidateOrder_SufficientFunds_ReturnsNull()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000);
 
 		var error = mc.ValidateOrder(portfolio, price: 100, volume: 10, position: null);
@@ -220,7 +211,7 @@ public class MarginTradingTests : BaseTestClass
 	public void ValidateOrder_InsufficientFunds_ReturnsError()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(500);
 
 		var error = mc.ValidateOrder(portfolio, price: 100, volume: 10, position: null);
@@ -229,10 +220,22 @@ public class MarginTradingTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ValidateOrder_ExactFunds_ReturnsNull()
+	{
+		var mc = new MarginController();
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
+		portfolio.SetMoney(1000);
+
+		var error = mc.ValidateOrder(portfolio, price: 100, volume: 10, position: null);
+
+		IsNull(error);
+	}
+
+	[TestMethod]
 	public void ValidateOrder_WithLeverage_SufficientAfterLeverage()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(500);
 		var pos = new PositionInfo(CreateSecId()) { Leverage = 10m };
 
@@ -251,7 +254,7 @@ public class MarginTradingTests : BaseTestClass
 	public void IsMarginCall_BelowThreshold_ReturnsTrue()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 		portfolio.MarginCallLevel = 0.5m;
 		var secId = CreateSecId();
@@ -266,7 +269,7 @@ public class MarginTradingTests : BaseTestClass
 	public void IsMarginCall_AboveThreshold_ReturnsFalse()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 		portfolio.MarginCallLevel = 0.5m;
 		var secId = CreateSecId();
@@ -285,7 +288,7 @@ public class MarginTradingTests : BaseTestClass
 	public void IsStopOut_Disabled_ReturnsFalse()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 		portfolio.EnableStopOut = false;
 		portfolio.StopOutLevel = 0.2m;
@@ -301,7 +304,7 @@ public class MarginTradingTests : BaseTestClass
 	public void IsStopOut_Enabled_BelowThreshold_ReturnsTrue()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 		portfolio.EnableStopOut = true;
 		portfolio.StopOutLevel = 0.2m;
@@ -321,7 +324,7 @@ public class MarginTradingTests : BaseTestClass
 	public void CheckMarginLevel_NoBlockedMoney_ReturnsMaxValue()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 
 		AreEqual(decimal.MaxValue, mc.CheckMarginLevel(portfolio, 0));
@@ -331,7 +334,7 @@ public class MarginTradingTests : BaseTestClass
 	public void CheckMarginLevel_WithBlockedMoney_CalculatesCorrectly()
 	{
 		var mc = new MarginController();
-		var portfolio = new EmulatedPortfolio("test");
+		var portfolio = new EmulatedPortfolio("test", NoMarkPrices.Instance);
 		portfolio.SetMoney(1000);
 		var secId = CreateSecId();
 

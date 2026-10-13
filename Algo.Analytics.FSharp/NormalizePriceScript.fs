@@ -37,6 +37,8 @@ type NormalizePriceScript() =
             ) : Task =
 
             task {
+                cancellationToken.ThrowIfCancellationRequested()
+
                 if securities.Length = 0 then
                     logs.LogWarning("No instruments.")
                 else
@@ -46,41 +48,46 @@ type NormalizePriceScript() =
 
                     // Iterate over each security
                     for security in securities do
-                        // Stop if user cancels execution
-                        if not cancellationToken.IsCancellationRequested then
-                            idx <- idx + 1
-                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+                        cancellationToken.ThrowIfCancellationRequested()
 
-                            // Dictionary to store time -> normalized close price
-                            let series = Dictionary<DateTime, decimal>()
+                        idx <- idx + 1
+                        logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+                        cancellationToken.ThrowIfCancellationRequested()
 
-                            // Get candle storage for this security
-                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                        // Dictionary to store time -> normalized close price
+                        let series = Dictionary<DateTime, decimal>()
 
-                            // We'll store the first close price in a mutable option
-                            let mutable firstClose: decimal option = None
-                            let mutable prevDate = DateOnly.MinValue
+                        // Get candle storage for this security
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
-                            // Load candles and normalize close prices
-                            do! candleStorage.LoadAsync(fromDate, toDate)
-                                |> TaskSeq.iter (fun candle ->
-                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
-                                    if currDate <> prevDate then
-                                        prevDate <- currDate
-                                        logs.LogInfo("  {0}...", currDate)
+                        // We'll store the first close price in a mutable option
+                        let mutable firstClose: decimal option = None
+                        let mutable prevDate = DateOnly.MinValue
 
-                                    match firstClose with
-                                    | None ->
-                                        // First close is not set yet, initialize it
-                                        firstClose <- Some candle.ClosePrice
-                                        // Normalized value is 1 at the first candle
+                        // Load candles and normalize close prices
+                        do! candleStorage.LoadAsync(fromDate, toDate).WithEnforcedCancellation(cancellationToken)
+                            |> TaskSeq.iter (fun candle ->
+                                cancellationToken.ThrowIfCancellationRequested()
+
+                                let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                if currDate <> prevDate then
+                                    prevDate <- currDate
+                                    logs.LogInfo("  {0}...", currDate)
+                                    cancellationToken.ThrowIfCancellationRequested()
+
+                                match firstClose with
+                                | None ->
+                                    // A zero first close provides no normalization base. Remember it,
+                                    // but do not draw the raw price as if it were a ratio of one.
+                                    firstClose <- Some candle.ClosePrice
+                                    if candle.ClosePrice <> 0m then
                                         series.[candle.OpenTime] <- 1m
-                                    | Some fc ->
-                                        // Divide by the first close price to normalize
-                                        if fc <> 0m then
-                                            series.[candle.OpenTime] <- candle.ClosePrice / fc
-                                )
+                                | Some fc ->
+                                    // Divide by the first close price to normalize
+                                    if fc <> 0m then
+                                        series.[candle.OpenTime] <- candle.ClosePrice / fc
+                            )
 
-                            // Add the series for this security to the chart
-                            chart.Append(security.ToStringId(), series.Keys, series.Values)
+                        // Add the series for this security to the chart
+                        chart.Append(security.ToStringId(), series.Keys, series.Values)
             }

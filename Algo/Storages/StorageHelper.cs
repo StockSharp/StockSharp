@@ -275,6 +275,12 @@ public static partial class StorageHelper
 			return null;
 
 		var timePrecision = storage.Serializer.TimePrecision;
+
+		// A non-append-only storage may record data out of chronological order, leaving the meta info
+		// first/last bounds reversed. Normalize them so the stored range is [min, max].
+		if (first > last)
+			(first, last) = (last, first);
+
 		return new Range<DateTime>(first, last).Intersect(new Range<DateTime>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
 	}
 
@@ -733,7 +739,10 @@ public static partial class StorageHelper
 		if (context is null)
 			throw new ArgumentNullException(nameof(context));
 
-		if (subscription.From == null)
+		// No start date and no count — nothing to load. A count request without a
+		// From is valid: it means "the last Count records" and is resolved from the
+		// tail of the storage in GetRangeAsync.
+		if (subscription.From == null && !(subscription.Count > 0))
 			yield break;
 
 		IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, DataType dt)
@@ -755,8 +764,13 @@ public static partial class StorageHelper
 
 			var messages = storage.LoadAsync(range.from, range.to);
 
-			if (subscription.Skip != default)
-				messages = messages.Skip((int)subscription.Skip.Value);
+			// range.skip is the surplus at the front of a count-from-end window (see
+			// GetRangeAsync); combined with any caller-supplied Skip it drops the older
+			// records so only the requested last Count survive the Count cap below.
+			var skip = (subscription.Skip ?? 0) + range.skip;
+
+			if (skip > 0)
+				messages = messages.Skip((int)skip);
 
 			await foreach (var msg in LoadMessagesAsyncCore(messages, subscription.Count, transactionId, filter, context, cancellationToken))
 				yield return msg;
@@ -1071,7 +1085,7 @@ public static partial class StorageHelper
 		}
 	}
 
-	private static async ValueTask<(DateTime from, DateTime to)> GetRangeAsync(IMarketDataStorage storage, ISubscriptionMessage subscription, CancellationToken cancellationToken)
+	private static async ValueTask<(DateTime from, DateTime to, long skip)> GetRangeAsync(IMarketDataStorage storage, ISubscriptionMessage subscription, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1079,8 +1093,14 @@ public static partial class StorageHelper
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (subscription.From is not DateTime from)
-			return default;
+		// A time bound, once set, must be valid. A non-null From/To equal to default(DateTime)
+		// (0001-01-01) was assigned but never given a real value — a caller bug, not "no bound".
+		// Fail loudly rather than mask it (masking would silently clip a count-from-end window).
+		if (subscription.From == default(DateTime))
+			throw new ArgumentException("From is set to default(DateTime); a set time bound must be valid.", nameof(subscription));
+
+		if (subscription.To == default(DateTime))
+			throw new ArgumentException("To is set to default(DateTime); a set time bound must be valid.", nameof(subscription));
 
 		var dates = await storage.GetDatesAsync().ToArrayAsync(cancellationToken);
 		var last = dates.LastOr();
@@ -1088,17 +1108,59 @@ public static partial class StorageHelper
 		if (last == null)
 			return default;
 
+		// A null To means "no upper bound" — cap at the newest stored date.
 		var to = subscription.To ?? last.Value.EndOfDay();
 
 		var first = dates.First();
 
-		if (from < first)
+		long skip = 0;
+		DateTime from;
+
+		if (subscription.From is DateTime f)
+		{
+			from = f;
+
+			if (from < first)
+				from = first;
+		}
+		else if (subscription.Count > 0 && subscription is MarketDataMessage md && Equals(storage.DataType, md.DataType2))
+		{
+			// Count-from-end: no start date was given, so resolve the last Count records
+			// by walking stored dates newest-first, summing each day's record count until
+			// the window covers Count. The surplus at the front of the earliest day is
+			// skipped (see LoadFromStorage) so exactly the last Count records survive.
+			var target = subscription.Count.Value;
+
 			from = first;
+			long covered = 0;
+
+			// Count each day's records by loading it (candle storages don't expose a
+			// reliable per-day Count in meta-info — the buildable wrapper throws — so we
+			// count what LoadAsync actually yields, which is correct for every storage).
+			foreach (var date in dates.Where(d => d <= to).OrderByDescending(d => d))
+			{
+				var dayCount = await storage.LoadAsync(date).CountAsync(cancellationToken);
+
+				if (dayCount == 0)
+					continue;
+
+				covered += dayCount;
+				from = date;
+
+				if (covered >= target)
+					break;
+			}
+
+			if (covered > target)
+				skip = covered - target;
+		}
+		else
+			return default;
 
 		if (from >= to)
 			return default;
 
-		return (from, to);
+		return (from, to, skip);
 	}
 
 	private static async IAsyncEnumerable<Message> LoadMessagesAsyncCore<TMessage>(

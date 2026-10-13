@@ -8,7 +8,7 @@ namespace StockSharp.Messages;
 	Name = LocalizedStrings.ReConnectionSettingsKey,
 	Description = LocalizedStrings.ReConnectionDescKey)]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class ReConnectionSettings : IPersistable
+public class ReConnectionSettings : IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ReConnectionSettings"/>.
@@ -125,9 +125,11 @@ public class ReConnectionSettings : IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		WorkingTime.Load(storage, nameof(WorkingTime));
+		await WorkingTime.LoadAsync(storage, nameof(WorkingTime), cancellationToken);
 
 		Interval = storage.GetValue<TimeSpan>(nameof(Interval));
 		AttemptCount = storage.GetValue<int>(nameof(AttemptCount));
@@ -139,9 +141,11 @@ public class ReConnectionSettings : IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
+		storage.SetValue(nameof(WorkingTime), await WorkingTime.SaveAsync(cancellationToken));
 		storage.SetValue(nameof(Interval), Interval);
 		storage.SetValue(nameof(AttemptCount), AttemptCount);
 		storage.SetValue(nameof(ReAttemptCount), ReAttemptCount);

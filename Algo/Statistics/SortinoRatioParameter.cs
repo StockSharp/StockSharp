@@ -13,7 +13,6 @@ namespace StockSharp.Algo.Statistics;
 public class SortinoRatioParameter : RiskAdjustedRatioParameter
 {
 	private decimal _downsideSumSq;
-	private int _downsideCount;
 
 	/// <summary>
 	/// Initialize a new instance of the <see cref="SortinoRatioParameter"/> class.
@@ -24,26 +23,25 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override void AddRiskSample(decimal ret)
+	protected override void AddRiskSample(decimal ret, long count)
 	{
 		if (ret >= 0)
 			return;
 
-		_downsideSumSq += ret * ret;
-		_downsideCount++;
+		_downsideSumSq += ret * ret * count;
 	}
 
 	/// <inheritdoc />
-	protected override decimal GetRisk(int count, decimal sumReturn)
+	protected override decimal GetRisk(long count, decimal sumReturn)
 	{
-		return _downsideCount > 0
-			? (decimal)Math.Sqrt((double)(_downsideSumSq / _downsideCount))
+		return count > 0
+			? (decimal)Math.Sqrt((double)(_downsideSumSq / count))
 			: 0;
 	}
 
 	/// <inheritdoc />
-	protected override bool HasEnoughRiskSamples(int count)
-		=> _downsideCount > 0;
+	protected override bool HasEnoughRiskSamples(long count)
+		=> count >= 2;
 
 	/// <inheritdoc />
 	public override void Reset()
@@ -51,24 +49,21 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 		base.Reset();
 
 		_downsideSumSq = 0;
-		_downsideCount = 0;
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.Set("DownsideSumSq", _downsideSumSq);
-		storage.Set("DownsideCount", _downsideCount);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		_downsideSumSq = storage.GetValue<decimal>("DownsideSumSq");
-		_downsideCount = storage.GetValue<int>("DownsideCount");
 	}
 }

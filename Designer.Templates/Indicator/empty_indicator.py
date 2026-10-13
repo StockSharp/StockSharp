@@ -3,6 +3,7 @@ import random
 
 clr.AddReference("StockSharp.BusinessEntities")
 clr.AddReference("StockSharp.Algo")
+clr.AddReference("StockSharp.Algo.Indicators")
 
 from StockSharp.Algo.Indicators import BaseIndicator, DecimalIndicatorValue
 from indicator_extensions import *
@@ -20,6 +21,9 @@ class empty_indicator(BaseIndicator):
         self._change = 20
         self._counter = 0
         self._isFormed = False
+        # where the random decisions below come from - replace it with random.Random(seed)
+        # to repeat a run, or with a stub to state in a test what the values will be
+        self.random_source = random.Random()
 
     @property
     def Change(self) -> int:
@@ -48,7 +52,7 @@ class empty_indicator(BaseIndicator):
         :return: A new DecimalIndicatorValue after applying changes.
         """
         # Every 10th call, try to return an empty value
-        if random.randint(0, 10) == 0:
+        if self.random_source.randint(0, 10) == 0:
             return DecimalIndicatorValue(self, input.Time)
 
         if self._counter == 5:
@@ -59,30 +63,36 @@ class empty_indicator(BaseIndicator):
         value = to_decimal(input)
 
         # Apply random change of +/- _change percent to the current value
-        value += value * random.randint(-self._change, self._change) / 100.0
+        value += value * self.random_source.randint(-self._change, self._change) / 100.0
 
         result = DecimalIndicatorValue(self, value, input.Time)
         # Mark value as final based on a random decision
-        result.IsFinal = bool(random.getrandbits(1))
+        result.IsFinal = bool(self.random_source.getrandbits(1))
         return result
 
-    def Load(self, storage):
+    def LoadAsync(self, storage, cancellationToken):
         """
         Loads the indicator parameters from persistent storage.
         
         :param storage: The settings storage to load from.
+        :param cancellationToken: The token that cancels the load.
+        :return: The task of the load.
         """
-        super(empty_indicator, self).Load(storage)
+        task = super(empty_indicator, self).LoadAsync(storage, cancellationToken)
         self.Change = storage.GetValue("Change", self.Change)
+        return task
 
-    def Save(self, storage):
+    def SaveAsync(self, storage, cancellationToken):
         """
         Saves the indicator parameters to persistent storage.
         
         :param storage: The settings storage to save to.
+        :param cancellationToken: The token that cancels the save.
+        :return: The task of the save.
         """
-        super(empty_indicator, self).Save(storage)
+        task = super(empty_indicator, self).SaveAsync(storage, cancellationToken)
         storage.SetValue("Change", self.Change)
+        return task
 
     def __str__(self):
         return f"Change: {self.Change}"

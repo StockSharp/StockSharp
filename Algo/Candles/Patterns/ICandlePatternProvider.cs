@@ -47,10 +47,13 @@ public interface ICandlePatternProvider
 	bool Remove(ICandlePattern pattern);
 
 	/// <summary>
-	/// Save pattern to the storage.
+	/// Save pattern to the storage. The pattern is prepared first (<see cref="ICandlePattern.PrepareAsync"/>):
+	/// the indicators that use a pattern of the same name switch to the saved one at once.
 	/// </summary>
 	/// <param name="pattern">Pattern.</param>
-	void Save(ICandlePattern pattern);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask SaveAsync(ICandlePattern pattern, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -74,7 +77,8 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 
 	ValueTask ICandlePatternProvider.InitAsync(CancellationToken cancellationToken)
 	{
-		CandlePatternRegistry.All.ForEach(p => ((ICandlePatternProvider)this).Save(p));
+		// the built-in patterns are prepared by whoever uses them
+		CandlePatternRegistry.All.ForEach(Store);
 		return default;
 	}
 
@@ -92,11 +96,18 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 		return true;
 	}
 
-	void ICandlePatternProvider.Save(ICandlePattern pattern)
+	async ValueTask ICandlePatternProvider.SaveAsync(ICandlePattern pattern, CancellationToken cancellationToken)
 	{
 		if (pattern is null)
 			throw new ArgumentNullException(nameof(pattern));
 
+		await pattern.PrepareAsync(cancellationToken);
+
+		Store(pattern);
+	}
+
+	private void Store(ICandlePattern pattern)
+	{
 		ICandlePattern oldPattern = null;
 
 		_cache.SyncDo(_ =>
@@ -149,18 +160,25 @@ public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, C
 
 		if (_fileSystem.FileExists(_fileName))
 		{
-			await Do.InvariantAsync(async () => (await _fileName.DeserializeAsync<SettingsStorage[]>(_fileSystem, cancellationToken))?.Select(s =>
+			await Do.InvariantAsync(async () =>
 			{
-				try
+				foreach (var s in await _fileName.DeserializeAsync<SettingsStorage[]>(_fileSystem, cancellationToken) ?? [])
 				{
-					return s.LoadEntire<ICandlePattern>();
+					ICandlePattern pattern;
+
+					try
+					{
+						pattern = await s.LoadEntireAsync<ICandlePattern>(cancellationToken);
+					}
+					catch (Exception ex)
+					{
+						errors.Add(ex);
+						continue;
+					}
+
+					Store(pattern);
 				}
-				catch (Exception ex)
-				{
-					errors.Add(ex);
-					return null;
-				}
-			}).WhereNotNull().ForEach(Save));
+			});
 		}
 
 		if (errors.Count > 0)
@@ -185,11 +203,18 @@ public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, C
 	}
 
 	/// <inheritdoc />
-	public void Save(ICandlePattern pattern)
+	public async ValueTask SaveAsync(ICandlePattern pattern, CancellationToken cancellationToken)
 	{
 		if (pattern is null)
 			throw new ArgumentNullException(nameof(pattern));
 
+		await pattern.PrepareAsync(cancellationToken);
+
+		Store(pattern);
+	}
+
+	private void Store(ICandlePattern pattern)
+	{
 		ICandlePattern oldPattern = null;
 
 		_cache.SyncDo(_ =>
@@ -208,14 +233,14 @@ public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, C
 
 	private void Save()
 	{
-		_executor.Add(_ =>
+		_executor.Add(async cancellationToken =>
 		{
-			_cache
-				.CachedValues
-				.Select(i => i.SaveEntire(false))
-				.Serialize(_fileSystem, _fileName);
+			var patterns = new List<SettingsStorage>();
 
-			return default;
+			foreach (var pattern in _cache.CachedValues)
+				patterns.Add(await pattern.SaveEntireAsync(false, cancellationToken));
+
+			await patterns.ToArray().SerializeAsync(_fileSystem, _fileName, true, cancellationToken);
 		});
 	}
 

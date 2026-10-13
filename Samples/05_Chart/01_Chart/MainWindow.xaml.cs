@@ -176,8 +176,10 @@ public partial class MainWindow : ICandleBuilderSubscription
 		LoadData((SecurityId)Securities.SelectedItem, subscription.DataType);
 	}
 
-	private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, Subscription subscription, IIndicator indicator)
+	private async void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, Subscription subscription, IIndicator indicator)
 	{
+		await indicator.PrepareAsync(default);
+
 		ExecuteOnUi(() =>
 		{
 			var oldReset = Chart.DisableIndicatorReset;

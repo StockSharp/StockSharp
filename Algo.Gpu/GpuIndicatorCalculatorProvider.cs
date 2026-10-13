@@ -60,7 +60,7 @@ public class GpuIndicatorCalculatorProvider
 		if (!typeof(IGpuIndicatorCalculator).IsAssignableFrom(calculatorType))
 			throw new ArgumentException($"{calculatorType} must implement {nameof(IGpuIndicatorCalculator)}.", nameof(calculatorType));
 
-		_map.Add(indicatorType, calculatorType);
+		_map[indicatorType] = calculatorType;
 	}
 
 	/// <summary>

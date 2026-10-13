@@ -66,7 +66,7 @@ public static class AlertSchemaTemplates
 	/// <returns>Configured <see cref="AlertSchema"/>.</returns>
 	public static AlertSchema PriceAbove(SecurityId securityId, decimal price, AlertNotifications alertType = AlertNotifications.Sound)
 		=> CreateLevel1Schema(
-			securityId, Level1Fields.LastTradePrice, ComparisonOperator.Less, price, alertType,
+			securityId, Level1Fields.LastTradePrice, ComparisonOperator.Greater, price, alertType,
 			LocalizedStrings.Price + " > " + price,
 			$"{securityId.SecurityCode}: {LocalizedStrings.Price} > {price}");
 
@@ -79,7 +79,7 @@ public static class AlertSchemaTemplates
 	/// <returns>Configured <see cref="AlertSchema"/>.</returns>
 	public static AlertSchema PriceBelow(SecurityId securityId, decimal price, AlertNotifications alertType = AlertNotifications.Sound)
 		=> CreateLevel1Schema(
-			securityId, Level1Fields.LastTradePrice, ComparisonOperator.Greater, price, alertType,
+			securityId, Level1Fields.LastTradePrice, ComparisonOperator.Less, price, alertType,
 			LocalizedStrings.Price + " < " + price,
 			$"{securityId.SecurityCode}: {LocalizedStrings.Price} < {price}");
 
@@ -92,7 +92,7 @@ public static class AlertSchemaTemplates
 	/// <returns>Configured <see cref="AlertSchema"/>.</returns>
 	public static AlertSchema BidAbove(SecurityId securityId, decimal price, AlertNotifications alertType = AlertNotifications.Sound)
 		=> CreateLevel1Schema(
-			securityId, Level1Fields.BestBidPrice, ComparisonOperator.Less, price, alertType,
+			securityId, Level1Fields.BestBidPrice, ComparisonOperator.Greater, price, alertType,
 			"Bid > " + price,
 			$"{securityId.SecurityCode}: Bid > {price}");
 
@@ -105,7 +105,7 @@ public static class AlertSchemaTemplates
 	/// <returns>Configured <see cref="AlertSchema"/>.</returns>
 	public static AlertSchema AskBelow(SecurityId securityId, decimal price, AlertNotifications alertType = AlertNotifications.Sound)
 		=> CreateLevel1Schema(
-			securityId, Level1Fields.BestAskPrice, ComparisonOperator.Greater, price, alertType,
+			securityId, Level1Fields.BestAskPrice, ComparisonOperator.Less, price, alertType,
 			"Ask < " + price,
 			$"{securityId.SecurityCode}: Ask < {price}");
 
@@ -118,7 +118,7 @@ public static class AlertSchemaTemplates
 	/// <returns>Configured <see cref="AlertSchema"/>.</returns>
 	public static AlertSchema VolumeAbove(SecurityId securityId, decimal volume, AlertNotifications alertType = AlertNotifications.Sound)
 		=> CreateLevel1Schema(
-			securityId, Level1Fields.LastTradeVolume, ComparisonOperator.Less, volume, alertType,
+			securityId, Level1Fields.LastTradeVolume, ComparisonOperator.Greater, volume, alertType,
 			LocalizedStrings.Volume + " > " + volume,
 			$"{securityId.SecurityCode}: {LocalizedStrings.Volume} > {volume}");
 

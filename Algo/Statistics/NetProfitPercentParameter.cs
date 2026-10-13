@@ -31,4 +31,18 @@ public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>, IBe
 
 		Value = pnl * 100m / BeginValue;
 	}
+
+	/// <inheritdoc />
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		await base.LoadAsync(storage, cancellationToken);
+		BeginValue = storage.GetValue(nameof(BeginValue), BeginValue);
+	}
+
+	/// <inheritdoc />
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		await base.SaveAsync(storage, cancellationToken);
+		storage.SetValue(nameof(BeginValue), BeginValue);
+	}
 }

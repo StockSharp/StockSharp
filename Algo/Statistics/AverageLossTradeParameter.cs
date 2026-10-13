@@ -52,20 +52,20 @@ public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITrade
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("Sum", _sum);
 		storage.Set("Count", _count);
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_sum = storage.GetValue<decimal>("Sum");
 		_count = storage.GetValue<int>("Count");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

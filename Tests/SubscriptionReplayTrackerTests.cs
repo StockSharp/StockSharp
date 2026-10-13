@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionReplayTrackerTests : BaseTestClass
 {
-	private static readonly IdGenerator _idGen = new IncrementalIdGenerator();
-
 	private static MarketDataMessage CreateMdSubscription(long txId, SecurityId secId, DataType dataType, DateTime? from = null)
 		=> new()
 		{
@@ -156,7 +154,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 		// Track history+online subscription (From != null)
 		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks, from: DateTime.UtcNow.AddDays(-1)));
 
-		var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var replayed = tracker.GetSubscriptionsForReplay().ToList();
 
 		replayed.Count.AssertEqual(1);
 
@@ -169,7 +167,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Replay_AssignsNewTransactionIds()
+	public void Replay_PreservesOriginalTransactionIds()
 	{
 		var tracker = new SubscriptionReplayTracker();
 		var secId = Helper.CreateSecurityId();
@@ -177,20 +175,20 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 		tracker.Track(CreateMdSubscription(100, secId, DataType.Ticks));
 		tracker.Track(CreateMdSubscription(200, secId, DataType.MarketDepth));
 
-		var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var replayed = tracker.GetSubscriptionsForReplay().ToList();
 
 		replayed.Count.AssertEqual(2);
 
-		// New IDs must differ from originals
-		replayed[0].TransactionId.AssertNotEqual(100L);
-		replayed[1].TransactionId.AssertNotEqual(200L);
-
-		// New IDs must be unique
-		replayed[0].TransactionId.AssertNotEqual(replayed[1].TransactionId);
+		// Internal reconnect must stay transparent to code above the adapter:
+		// replayed subscriptions keep the original txIds so external subscribers
+		// continue to receive data under the txId they subscribed with.
+		var ids = replayed.Select(r => r.TransactionId).OrderBy(x => x).ToArray();
+		ids[0].AssertEqual(100L);
+		ids[1].AssertEqual(200L);
 	}
 
 	[TestMethod]
-	public void Replay_DrainsTracker()
+	public void Replay_DoesNotDrainTracker()
 	{
 		var tracker = new SubscriptionReplayTracker();
 		var secId = Helper.CreateSecurityId();
@@ -198,44 +196,40 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 
 		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks, from: from));
 
-		// First replay yields the subscription...
-		var replayed1 = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		// Replay is idempotent: txIds are preserved, so repeated calls return
+		// the same set without touching internal state.
+		var replayed1 = tracker.GetSubscriptionsForReplay().ToList();
 		replayed1.Count.AssertEqual(1);
 		((MarketDataMessage)replayed1[0]).From.AssertEqual(null);
 
-		// ...and drains it. Without draining, _subscriptions would grow linearly
-		// across reconnects because the caller re-feeds the clones through the
-		// pipeline, which re-tracks them under new transaction IDs.
-		tracker.Count.AssertEqual(0);
+		tracker.Count.AssertEqual(1);
 
-		var replayed2 = tracker.GetSubscriptionsForReplay(_idGen).ToList();
-		replayed2.Count.AssertEqual(0);
+		var replayed2 = tracker.GetSubscriptionsForReplay().ToList();
+		replayed2.Count.AssertEqual(1);
+		replayed2[0].TransactionId.AssertEqual(1L);
 	}
 
 	[TestMethod]
-	public void Replay_NoLinearGrowthAcrossReconnects()
+	public void Replay_NoGrowthAcrossReconnects()
 	{
 		var tracker = new SubscriptionReplayTracker();
 		var secId = Helper.CreateSecurityId();
 
-		// Initial subscribe: two entries tracked under original txIds.
 		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks));
 		tracker.Track(CreateMdSubscription(2, secId, DataType.MarketDepth));
 		tracker.Count.AssertEqual(2);
 
-		// Simulate three reconnect cycles: replay drains, caller re-tracks the
-		// clones under new txIds (as the real adapter pipeline does via Process).
+		// Replay preserves txIds, so when the pipeline re-feeds clones back through
+		// Process/Track they overwrite the existing entries under the same keys.
 		for (var i = 0; i < 3; i++)
 		{
-			var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+			var replayed = tracker.GetSubscriptionsForReplay().ToList();
 			replayed.Count.AssertEqual(2);
 
 			foreach (var sub in replayed)
 				tracker.Track(sub);
 		}
 
-		// After many reconnects the tracker must still hold exactly 2 entries,
-		// not 2 * N — otherwise every connector using it leaks memory.
 		tracker.Count.AssertEqual(2);
 	}
 
@@ -249,7 +243,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 		tracker.Track(CreateOrderStatusSubscription(2));
 		tracker.Track(CreatePortfolioSubscription(3));
 
-		var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var replayed = tracker.GetSubscriptionsForReplay().ToList();
 
 		replayed.Count.AssertEqual(3);
 		replayed.OfType<MarketDataMessage>().Count().AssertEqual(1);
@@ -268,7 +262,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 
 		tracker.Untrack(1);
 
-		var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var replayed = tracker.GetSubscriptionsForReplay().ToList();
 
 		replayed.Count.AssertEqual(1);
 		((MarketDataMessage)replayed[0]).DataType2.AssertEqual(DataType.MarketDepth);
@@ -290,7 +284,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 
 		tracker.Count.AssertEqual(1);
 
-		var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var replayed = tracker.GetSubscriptionsForReplay().ToList();
 		((MarketDataMessage)replayed[0]).DataType2.AssertEqual(DataType.MarketDepth);
 	}
 
@@ -299,7 +293,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 	{
 		var tracker = new SubscriptionReplayTracker();
 
-		var result = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		var result = tracker.GetSubscriptionsForReplay().ToList();
 		result.Count.AssertEqual(0);
 	}
 
@@ -309,15 +303,6 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 		var tracker = new SubscriptionReplayTracker();
 
 		Throws<ArgumentNullException>(() => tracker.Track(null));
-	}
-
-	[TestMethod]
-	public void Replay_NullIdGenerator_Throws()
-	{
-		var tracker = new SubscriptionReplayTracker();
-
-		Throws<ArgumentNullException>(() =>
-			tracker.GetSubscriptionsForReplay(null).ToList());
 	}
 
 	[TestMethod]

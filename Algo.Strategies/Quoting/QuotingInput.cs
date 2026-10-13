@@ -67,6 +67,11 @@ public class QuotingInput
 	public decimal? LastTradeVolume { get; set; }
 
 	/// <summary>
+	/// Identity of the last trade. It stays unchanged while the same trade is presented again, so a behavior that accumulates can count each trade once.
+	/// </summary>
+	public long LastTradeSeq { get; set; }
+
+	/// <summary>
 	/// Bid quotes from order book.
 	/// </summary>
 	public QuoteChange[] Bids { get; set; } = [];

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<defs>
+		<linearGradient id="cointr-gradient" x1="10" y1="52" x2="54" y2="12" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#14D98B"/>
+			<stop offset="1" stop-color="#78F05A"/>
+		</linearGradient>
+	</defs>
+	<path fill="none" stroke="url(#cointr-gradient)" stroke-linecap="round" stroke-width="10" d="M48 49A25 25 0 1 1 48 15"/>
+	<circle cx="50" cy="15" r="6" fill="#78F05A"/>
+</svg>

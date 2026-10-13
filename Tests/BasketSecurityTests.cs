@@ -1,10 +1,12 @@
 ﻿namespace StockSharp.Tests;
 
+using Ecng.Compilation;
+
 [TestClass]
 public class BasketSecurityTests : BaseTestClass
 {
 	[TestMethod]
-	public void WeightedIndex()
+	public async Task WeightedIndex()
 	{
 		CreateSpot(out var lkoh, out var sber);
 
@@ -16,11 +18,11 @@ public class BasketSecurityTests : BaseTestClass
 		basket.Weights[lkoh.ToSecurityId()] = 1;
 		basket.Weights[sber.ToSecurityId()] = -10;
 
-		Do(basket, prices => prices[0] * 1 + prices[1] * (-10), lkoh, sber);
+		await DoAsync(basket, prices => prices[0] * 1 + prices[1] * (-10), lkoh, sber);
 	}
 
 	[TestMethod]
-	public void ExpressionIndex()
+	public async Task ExpressionIndex()
 	{
 		CreateSpot(out var lkoh, out var sber);
 
@@ -31,11 +33,81 @@ public class BasketSecurityTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR - 10 * SBER@TQBR",
 		};
 
-		Do(basket, prices => prices[0] - 10 * prices[1], lkoh, sber);
+		await DoAsync(basket, prices => prices[0] - 10 * prices[1], lkoh, sber);
+	}
+
+	/// <summary>
+	/// Assigning a formula to an index either takes effect or fails loudly. What it must never do is
+	/// leave the index quietly calculating the formula it had before: from then on every value the
+	/// index publishes belongs to a formula the caller believes it replaced, and nothing on the
+	/// object says so.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize] // Takes C# out of the process-wide compiler provider for the duration.
+	public async Task ExpressionIndex_WithoutACompiler_RefusesTheExpressionInsteadOfKeepingTheOld()
+	{
+		var basket = new ExpressionIndexSecurity
+		{
+			Id = "LKOH_SBER_EXP@TQBR",
+			Board = ExchangeBoard.MicexTqbr,
+			Expression = "LKOH@TQBR - 10 * SBER@TQBR",
+		};
+
+		(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertTrue("the first formula must compile");
+
+		const string replacement = "SBER@TQBR * 2";
+
+		var compilers = ConfigManager.TryGetService<CompilerProvider>();
+		compilers.AssertNotNull("the suite registers a compiler provider");
+
+		var csharp = compilers[FileExts.CSharp];
+
+		try
+		{
+			// With C# gone from the provider nothing can turn the new text into a formula.
+			compilers.Remove(FileExts.CSharp);
+
+			basket.Expression = replacement;
+
+			(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertFalse("an index that could not compile the formula it was given must report that it cannot calculate");
+			basket.Expression.AssertEqual(replacement, "the uncompiled text must remain available for correction and persistence");
+			await ThrowsExactlyAsync<InvalidOperationException>(() => new BasketSecurityProcessorProvider().CreateProcessorAsync(basket, CancellationToken).AsTask(),
+				"an expression without a compiler must not produce a processor that silently emits no values");
+		}
+		finally
+		{
+			compilers[FileExts.CSharp] = csharp;
+		}
+	}
+
+	/// <summary>
+	/// A cloned index is the same index: it calculates the same formula over the same legs. A clone
+	/// that came back with a different formula, or with no legs to subscribe to, silently stops
+	/// producing the index the caller cloned.
+	/// </summary>
+	[TestMethod]
+	public async Task ExpressionIndex_Clone_KeepsTheFormulaAndItsInnerSecurities()
+	{
+		var basket = new ExpressionIndexSecurity
+		{
+			Id = "LKOH_SBER_EXP@TQBR",
+			Board = ExchangeBoard.MicexTqbr,
+			Expression = "LKOH@TQBR - 10 * SBER@TQBR",
+		};
+
+		var inner = basket.InnerSecurityIds.ToArray();
+		inner.Length.AssertEqual(2, "both legs of the formula must be known");
+
+		var clone = (ExpressionIndexSecurity)basket.Clone();
+
+		clone.Expression.AssertEqual(basket.Expression, "a clone calculates the same formula");
+		(await clone.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertTrue("a clone must be able to calculate");
+		clone.InnerSecurityIds.ToArray().AssertEqual(inner, "a clone subscribes to the same legs");
+		clone.Id.AssertEqual(basket.Id);
 	}
 
 	[TestMethod]
-	public void ExpirationContinuous()
+	public async Task ExpirationContinuous_PreExpiryUsesFrontContract()
 	{
 		CreateFut(out var riu, out var riz);
 
@@ -48,11 +120,13 @@ public class BasketSecurityTests : BaseTestClass
 		basket.ExpirationJumps.Add(riu.ToSecurityId(), riu.ExpiryDate.Value);
 		basket.ExpirationJumps.Add(riz.ToSecurityId(), riz.ExpiryDate.Value);
 
-		Do(basket, prices => prices[0], riu, riz);
+		// The generated window starts five hours before expiry and remains pre-expiry.
+		// Contract switching itself is covered by ContinuousProcessor_SwitchesToNextContract.
+		await DoAsync(basket, prices => prices[0], riu, riz);
 	}
 
 	[TestMethod]
-	public void VolumeContinuous()
+	public async Task VolumeContinuous()
 	{
 		CreateFut(out var riu, out var riz);
 
@@ -67,7 +141,7 @@ public class BasketSecurityTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		Do(basket, prices => prices[0], riu, riz);
+		await DoAsync(basket, prices => prices[0], riu, riz);
 	}
 
 	private static void CreateFut(out Security riu, out Security riz)
@@ -136,11 +210,11 @@ public class BasketSecurityTests : BaseTestClass
 		};
 	}
 
-	private static void Do(BasketSecurity basketSecurity, Func<decimal[], decimal> validateFormula, params Security[] securities)
+	private async Task DoAsync(BasketSecurity basketSecurity, Func<decimal[], decimal> validateFormula, params Security[] securities)
 	{
 		var processorProvider = new BasketSecurityProcessorProvider();
 		var secProvider = new CollectionSecurityProvider(securities);
-		securities = [.. basketSecurity.GetInnerSecurities(secProvider)];
+		securities = await basketSecurity.GetInnerSecuritiesAsync(secProvider, CancellationToken);
 		var legsCount = securities.Length;
 
 		var start = securities.First().ExpiryDate?.Subtract(TimeSpan.FromHours(5)) ?? DateTime.UtcNow;
@@ -189,7 +263,7 @@ public class BasketSecurityTests : BaseTestClass
 		})
 		{
 			var innerCandles = securities.SelectMany(s => ticks[s].ToCandles(new Subscription(dt, s))).OrderBy(c => c.OpenTime).ToArray();
-			var basketCandles = innerCandles.ToBasket(basketSecurity, processorProvider).ToArray();
+			var basketCandles = await innerCandles.ToAsyncEnumerable().ToBasket(basketSecurity, processorProvider).ToArrayAsync(CancellationToken);
 			foreach (var candle in basketCandles)
 			{
 				var innerValues = innerCandles.Where(c => c.OpenTime == candle.OpenTime).ToArray();
@@ -203,27 +277,6 @@ public class BasketSecurityTests : BaseTestClass
 		var prices = innerValues.Select(getDecimal).ToArray();
 		var expected = validateFormula(prices);
 		getDecimal(basketValue).AssertEqual(expected);
-	}
-
-	[TestMethod]
-	public void ToBasket_Sync_EmptyCollection_ReturnsEmpty()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = 1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var messages = Array.Empty<ExecutionMessage>();
-
-		var result = messages.ToBasket(basket, processorProvider).ToArray();
-
-		result.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -267,89 +320,6 @@ public class BasketSecurityTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task ToBasket_Sync_AndAsync_ProduceSameResults()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = -1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var serverTime = DateTime.UtcNow;
-
-		var ticks = new ExecutionMessage[]
-		{
-			new()
-			{
-				SecurityId = lkoh.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 100,
-				TradeVolume = 10,
-			},
-			new()
-			{
-				SecurityId = sber.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 50,
-				TradeVolume = 20,
-			},
-		};
-
-		var syncResult = ticks.ToBasket(basket, processorProvider).ToArray();
-		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
-
-		syncResult.Length.AssertEqual(asyncResult.Length);
-	}
-
-	[TestMethod]
-	public void ToBasket_Sync_WithTicks_ProcessesMessages()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = -1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var serverTime = DateTime.UtcNow;
-
-		var ticks = new ExecutionMessage[]
-		{
-			new()
-			{
-				SecurityId = lkoh.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 100,
-				TradeVolume = 10,
-			},
-			new()
-			{
-				SecurityId = sber.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 50,
-				TradeVolume = 20,
-			},
-		};
-
-		var result = ticks.ToBasket(basket, processorProvider).ToArray();
-
-		result.Length.AssertEqual(1);
-	}
-
-	[TestMethod]
 	public async Task ToBasket_Async_WithTicks_ProcessesMessages()
 	{
 		CreateSpot(out var lkoh, out var sber);
@@ -388,6 +358,12 @@ public class BasketSecurityTests : BaseTestClass
 		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
+		var basketTick = result[0];
+		basketTick.SecurityId.AssertEqual(basket.ToSecurityId());
+		basketTick.DataTypeEx.AssertEqual(DataType.Ticks);
+		basketTick.ServerTime.AssertEqual(serverTime);
+		basketTick.TradePrice.AssertEqual(50m);
+		basketTick.TradeVolume.AssertEqual(-10m);
 	}
 
 	[TestMethod]

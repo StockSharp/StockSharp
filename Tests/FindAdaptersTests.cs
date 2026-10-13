@@ -77,7 +77,7 @@ public class FindAdaptersTestMultipleConstructorsAdapter : MessageAdapter
 /// Tests for <see cref="Extensions.FindAdapters"/> method.
 /// </summary>
 [TestClass]
-public class FindAdaptersTests
+public class FindAdaptersTests : BaseTestClass
 {
 	[TestMethod]
 	public void HasValidAdapterConstructor_ValidAdapter_ReturnsTrue()
@@ -101,18 +101,6 @@ public class FindAdaptersTests
 	public void HasValidAdapterConstructor_MultipleConstructors_ReturnsTrue()
 	{
 		typeof(FindAdaptersTestMultipleConstructorsAdapter).HasValidAdapterConstructor().AssertTrue();
-	}
-
-	[TestMethod]
-	public void FindAdapters_FiltersDialects()
-	{
-		var type = typeof(FindAdaptersTestDialect);
-
-		// Type has valid constructor
-		type.HasValidAdapterConstructor().AssertTrue();
-
-		// But name ends with "Dialect" - should be filtered
-		type.Name.EndsWith("Dialect").AssertTrue();
 	}
 
 	[TestMethod]
@@ -221,4 +209,122 @@ public class FindAdaptersTests
 
 		thrown.AssertTrue("Expected ArgumentNullException was not thrown");
 	}
+
+	#region Directory scan
+
+	private static string CreateScanDir()
+		=> Path.Combine(Path.GetTempPath(), "ss_findadapters_" + Guid.NewGuid().ToString("N"));
+
+	// This assembly is a real one and holds the adapter types above, so copying its file into a scan
+	// directory under a chosen name is how a test decides what the scan is looking at.
+	private static void PlaceRealAssembly(string dir, string fileName)
+	{
+		Directory.CreateDirectory(dir);
+		File.Copy(typeof(FindAdaptersTestValidAdapter).Assembly.Location, Path.Combine(dir, fileName));
+	}
+
+	private static void PlaceJunk(string dir, string fileName)
+	{
+		Directory.CreateDirectory(dir);
+		File.WriteAllText(Path.Combine(dir, fileName), "this is not an assembly");
+	}
+
+	private static void Delete(string dir)
+	{
+		if (Directory.Exists(dir))
+			Directory.Delete(dir, true);
+	}
+
+	/// <summary>
+	/// Dropping a connector's assembly into the program's folder is how a connector is installed, so
+	/// the scan of that folder has to come back with the adapters that assembly holds.
+	/// </summary>
+	[TestMethod]
+	public void FindAdapters_FindsTheAdaptersInTheAssembliesItScans()
+	{
+		var dir = CreateScanDir();
+
+		try
+		{
+			PlaceRealAssembly(dir, "StockSharp.Scan.dll");
+
+			var errors = new List<Exception>();
+			var adapters = dir.FindAdapters(errors.Add).ToArray();
+
+			Contains(adapters, typeof(FindAdaptersTestValidAdapter), "an adapter sitting in the scanned folder is found");
+			IsEmpty(errors, "reading a good assembly is not an error");
+		}
+		finally
+		{
+			Delete(dir);
+		}
+	}
+
+	/// <summary>
+	/// The scan only opens assemblies that are ours. Anything else in the folder belongs to somebody
+	/// else and is left alone - loading it could run its module initializer for no reason at all.
+	/// </summary>
+	[TestMethod]
+	public void FindAdapters_LeavesAssembliesThatAreNotOursAlone()
+	{
+		var dir = CreateScanDir();
+
+		try
+		{
+			PlaceRealAssembly(dir, "SomebodyElse.Scan.dll");
+
+			var errors = new List<Exception>();
+			var adapters = dir.FindAdapters(errors.Add).ToArray();
+
+			IsEmpty(adapters, "a file outside our own naming is not opened, whatever it holds");
+			IsEmpty(errors);
+		}
+		finally
+		{
+			Delete(dir);
+		}
+	}
+
+	/// <summary>
+	/// One unreadable file in the folder - a half-written download, a stub - must not cost the user
+	/// every other connector installed next to it. The scan goes on and still returns the rest.
+	/// </summary>
+	[TestMethod]
+	public void FindAdapters_BrokenAssemblyNextToAGoodOne_DoesNotStopTheScan()
+	{
+		var dir = CreateScanDir();
+
+		try
+		{
+			PlaceJunk(dir, "StockSharp.Broken.dll");
+			PlaceRealAssembly(dir, "StockSharp.Scan.dll");
+
+			var errors = new List<Exception>();
+			var adapters = dir.FindAdapters(errors.Add).ToArray();
+
+			Contains(adapters, typeof(FindAdaptersTestValidAdapter), "the assembly next to the broken one is still read");
+		}
+		finally
+		{
+			Delete(dir);
+		}
+	}
+
+	/// <summary>
+	/// A folder that is not there is a configuration mistake, not a reason to bring the program down
+	/// on start-up: the scan hands the problem to the error handler and comes back empty-handed.
+	/// </summary>
+	[TestMethod]
+	public void FindAdapters_DirectoryThatIsNotThere_ReachesTheErrorHandler()
+	{
+		var dir = CreateScanDir();
+
+		var errors = new List<Exception>();
+		var adapters = dir.FindAdapters(errors.Add).ToArray();
+
+		IsEmpty(adapters, "nothing was found because there was nowhere to look");
+		errors.Count.AssertEqual(1, "the caller is told why nothing was found");
+	}
+
+	#endregion
 }

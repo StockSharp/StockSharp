@@ -41,8 +41,8 @@ public enum ExecutionTypes
 [DataContract]
 public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
-	IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
-	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage
+	IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
+	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage, IOwnerMessage
 {
 	OrderStates? IOrderMessage.State => OrderState;
 	decimal? IOrderMessage.Balance => Balance;
@@ -221,13 +221,22 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	/// <summary>
 	/// Order side (buy or sell).
 	/// </summary>
+	/// <remarks>
+	/// <see langword="null"/> means the message states no side - not <see cref="Sides.Buy"/>. A side
+	/// is required wherever the message is the only source of truth for an order: a registration, an
+	/// order log entry, or the first report of an order the receiver has not seen. It is absent from
+	/// reports that merely update an order the receiver already identifies by
+	/// <see cref="BaseSubscriptionIdMessage{TMessage}.OriginalTransactionId"/>. For the initiator of a trade see
+	/// <see cref="OriginSide"/>.
+	/// </remarks>
 	[DataMember]
+	//[Nullable]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DirectionKey,
 		Description = LocalizedStrings.OrderSideDescKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public Sides Side { get; set; }
+	public Sides? Side { get; set; }
 
 	/// <summary>
 	/// Order contracts balance.
@@ -679,6 +688,12 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	}
 
 	/// <inheritdoc />
+	public long OwnerUserId { get; set; }
+
+	/// <inheritdoc />
+	public long OwnerPortfolioId { get; set; }
+
+	/// <inheritdoc />
 	public override void CopyTo(ExecutionMessage destination)
 	{
 		base.CopyTo(destination);
@@ -748,5 +763,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		destination.OrderBuyId = OrderBuyId;
 		destination.OrderSellId = OrderSellId;
 		destination.MarketPrice = MarketPrice;
+		destination.OwnerUserId = OwnerUserId;
+		destination.OwnerPortfolioId = OwnerPortfolioId;
 	}
 }

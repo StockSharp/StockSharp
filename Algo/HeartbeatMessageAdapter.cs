@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// The messages adapter controlling the connection.
@@ -29,6 +29,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	private readonly IHeartbeatManagerState _state;
 
 	private ControllablePeriodicTimer _timer;
+
+	// When a message last went down the link. The other side hears only what is sent to it, so this,
+	// not what arrives, is what the probe interval is counted from.
+	private DateTime _lastSentTime;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
@@ -165,6 +169,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		// The probe is not traffic: counting it would keep the link looking busy for ever.
+		if (message != _timeMessage)
+			_lastSentTime = CurrentTime;
+
 		var isStartTimer = false;
 
 		switch (message.Type)
@@ -280,6 +288,8 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 		var time = CurrentTime;
 		var lastHeartBeatTime = time;
+
+		_lastSentTime = time;
 
 		var sync = new Lock();
 		var isProcessing = false;
@@ -460,8 +470,22 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
+	/// <summary>
+	/// Probes the connection once nothing has been sent down it for the heartbeat interval.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Task.</returns>
+	/// <remarks>
+	/// The probe is also what keeps the session alive for the other side, which hears only what is sent
+	/// to it: a message sent within the interval makes it unnecessary, data arriving does not.
+	/// </remarks>
+	public async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
 	{
+		var heartbeat = HeartbeatInterval;
+
+		if (heartbeat > TimeSpan.Zero && (CurrentTime - _lastSentTime) < heartbeat)
+			return;
+
 		using (await _sync.LockAsync(cancellationToken))
 		{
 			if (_state.CurrentState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforeConnect)
@@ -482,9 +506,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="HeartbeatMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new HeartbeatMessageAdapter(InnerAdapter.TypedClone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
+		return new HeartbeatMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken)) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 	}
 }

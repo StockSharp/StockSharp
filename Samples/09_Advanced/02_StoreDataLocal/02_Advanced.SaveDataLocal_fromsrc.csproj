@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
+    <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
     <ApplicationDefinition Include="..\01_MultiConnect\App.xaml" Link="App.xaml" />
     <Compile Include="..\01_MultiConnect\App.xaml.cs" DependentUpon="App.xaml" Link="App.xaml.cs" />
 
@@ -8,7 +9,6 @@
     <Compile Include="..\01_MultiConnect\*.xaml.cs" Exclude="..\01_MultiConnect\App.xaml.cs;..\01_MultiConnect\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Studio\Studio.WebApi.UI\Studio.WebApi.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

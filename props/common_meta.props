@@ -1,0 +1,68 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SSProjectName>StockSharp.$(MSBuildProjectName)</SSProjectName>
+
+    <RootNamespace>$(SSProjectName)</RootNamespace>
+    <AssemblyName>$(SSProjectName)</AssemblyName>
+
+    <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
+
+    <RepoGitHubPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..'))</RepoGitHubPath>
+    <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
+    <RepoWebPath>$(RepoGitHubPath)..\Web\</RepoWebPath>
+    <ConnectorsGitHubPath>$(RepoGitHubPath)..\Connectors\</ConnectorsGitHubPath>
+    <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
+
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Product>StockSharp</Product>
+    <Company>StockSharp Platform LLC</Company>
+    <Version>5.0.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <Copyright>Copyright @ $(Company) 2010 - $([System.DateTime]::Now.ToString(yyyy))</Copyright>
+  </PropertyGroup>
+  
+  <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
+  <PropertyGroup Condition="$(_TargetAssemblyProjectName) != ''">
+    <SSProjectName>StockSharp.$(_TargetAssemblyProjectName)</SSProjectName>
+    <AssemblyName>$(SSProjectName)</AssemblyName>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- reverse defaults from "C:\Program Files\dotnet\sdk\5.0.102\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.GenerateAssemblyInfo.targets"  -->
+    <GenerateAssemblyTitleAttribute Condition="'$(GenerateAssemblyTitleAttribute)' == ''">false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute Condition="'$(GenerateAssemblyDescriptionAttribute)' == ''">false</GenerateAssemblyDescriptionAttribute>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <!-- The publisher builds a symbols package out of the pdb beside the assembly; with none built
+       there is nothing to publish and the package ships without symbols. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <!-- Keeps the build machine's paths out of the published pdb; sources come from the repository
+       instead. Derived from no environment variable: the machine that builds the packages is not a
+       build server and exports none of them. -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyTrademarkAttribute">
+      <_Parameter1>StockSharp</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Condition=" !$(DefineConstants.Contains('CLS_DISABLE')) " Include="System.CLSCompliantAttribute">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Resources.NeutralResourcesLanguageAttribute">
+      <_Parameter1>en-US</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisibleAttribute">
+      <_Parameter1>false</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

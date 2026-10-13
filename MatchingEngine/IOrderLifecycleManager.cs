@@ -201,6 +201,11 @@ public class OrderLifecycleManager : IOrderLifecycleManager
 	/// <inheritdoc />
 	public IEnumerable<EmulatorOrder> GetExpiredOrders(DateTime currentTime)
 	{
+		// ProcessTime runs on every message; most have no order pending expiry, so avoid
+		// allocating a list in the common empty case.
+		if (_expiryTimes.Count == 0)
+			return [];
+
 		var expired = new List<EmulatorOrder>();
 
 		foreach (var kvp in _expiryTimes)
@@ -217,6 +222,9 @@ public class OrderLifecycleManager : IOrderLifecycleManager
 	/// <inheritdoc />
 	public IEnumerable<EmulatorOrder> ProcessTime(DateTime currentTime)
 	{
+		if (_expiryTimes.Count == 0)
+			return [];
+
 		var expired = GetExpiredOrders(currentTime).ToList();
 
 		foreach (var order in expired)

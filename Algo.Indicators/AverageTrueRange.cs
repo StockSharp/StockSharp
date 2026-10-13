@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ATRKey,
 	Description = LocalizedStrings.AverageTrueRangeKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/atr.html")]
 public class AverageTrueRange : WilderMovingAverage
 {

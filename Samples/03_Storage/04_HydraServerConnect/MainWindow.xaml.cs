@@ -35,11 +35,7 @@ public partial class MainWindow
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (_fileSystem.FileExists(_connectorFile))
-		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
-		}
-		else
+		if (!_fileSystem.FileExists(_connectorFile))
 		{
 			var adapter = new Fix.FixMessageAdapter(_connector.TransactionIdGenerator)
 			{
@@ -58,8 +54,6 @@ public partial class MainWindow
 			adapter.ChangeSupported(false, false);
 
 			_connector.Adapter.InnerAdapters.Add(adapter);
-
-			_connector.Save().Serialize(_fileSystem, _connectorFile);
 		}
 
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
@@ -74,9 +68,14 @@ public partial class MainWindow
 		_connector.CandleReceived += Connector_CandleReceived;
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		if (_fileSystem.FileExists(_connectorFile))
+			await _connector.LoadAsync(await _connectorFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
+		else
+			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 	}
 
 	private void Connector_ConnectionError(Exception error)
@@ -87,11 +86,11 @@ public partial class MainWindow
 		});
 	}
 
-	private void Setting_Click(object sender, RoutedEventArgs e)
+	private async void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_fileSystem, _connectorFile);
+			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 		}
 	}
 

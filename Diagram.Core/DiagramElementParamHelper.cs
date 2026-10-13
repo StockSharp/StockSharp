@@ -55,11 +55,38 @@ public static class DiagramElementParamHelper
 	/// <returns>The diagram element parameter.</returns>
 	public static DiagramElementParam<TValue> SetSaveLoadHandlers<TValue>(this DiagramElementParam<TValue> param, Func<TValue, SettingsStorage> save, Func<SettingsStorage, TValue> load)
 	{
-		if (param == null) 
+		if (save is null)
+			throw new ArgumentNullException(nameof(save));
+
+		if (load is null)
+			throw new ArgumentNullException(nameof(load));
+
+		param.SetSaveLoadHandlers((v, _) => new(save(v)), (s, _) => new(load(s)));
+
+		param.SyncSaveHandler = save;
+		param.SyncLoadHandler = load;
+
+		return param;
+	}
+
+	/// <summary>
+	/// To set the asynchronous handler of saving/loading for the diagram element parameter.
+	/// </summary>
+	/// <typeparam name="TValue">The diagram element parameter type.</typeparam>
+	/// <param name="param">The diagram element parameter.</param>
+	/// <param name="save">The handler for the parameter saving.</param>
+	/// <param name="load">The handler for the parameter loading.</param>
+	/// <returns>The diagram element parameter.</returns>
+	public static DiagramElementParam<TValue> SetSaveLoadHandlers<TValue>(this DiagramElementParam<TValue> param, Func<TValue, CancellationToken, ValueTask<SettingsStorage>> save, Func<SettingsStorage, CancellationToken, ValueTask<TValue>> load)
+	{
+		if (param == null)
 			throw new ArgumentNullException(nameof(param));
 
 		param.SaveHandler = save ?? throw new ArgumentNullException(nameof(save));
 		param.LoadHandler = load ?? throw new ArgumentNullException(nameof(load));
+
+		param.SyncSaveHandler = null;
+		param.SyncLoadHandler = null;
 
 		return param;
 	}

@@ -149,30 +149,36 @@ public class GpuLaguerreRsiCalculator : GpuIndicatorCalculatorBase<LaguerreRSI, 
 		}
 		
 		var param = parameters[paramIdx];
-		var gamma = MathF.Max(0.000001f, MathF.Min(0.999999f, param.Gamma));
-		var gamma1 = 1f - gamma;
+		var gamma = (double)param.Gamma;
+
+		if (gamma < 0.000001d)
+			gamma = 0.000001d;
+		else if (gamma > 0.999999d)
+			gamma = 0.999999d;
+
+		var gamma1 = 1d - gamma;
 		var priceType = (Level1Fields)param.PriceType;
 		
-		var l0 = 0f;
-		var l1 = 0f;
-		var l2 = 0f;
-		var l3 = 0f;
-		var prevCu = 0f;
-		var prevCd = 0f;
+		var l0 = 0d;
+		var l1 = 0d;
+		var l2 = 0d;
+		var l3 = 0d;
+		var prevCu = 0d;
+		var prevCd = 0d;
 		
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
-			var price = ExtractPrice(candle, priceType);
+			var price = (double)ExtractPrice(candle, priceType);
 			
 			var l0New = gamma1 * price + gamma * l0;
 			var l1New = -gamma * l0New + l0 + gamma * l1;
 			var l2New = -gamma * l1New + l1 + gamma * l2;
 			var l3New = -gamma * l2New + l2 + gamma * l3;
 			
-			var cu = 0f;
-			var cd = 0f;
+			var cu = 0d;
+			var cd = 0d;
 			
 			if (l0New >= l1New)
 			{
@@ -204,13 +210,13 @@ public class GpuLaguerreRsiCalculator : GpuIndicatorCalculatorBase<LaguerreRSI, 
 			var smoothCu = gamma1 * cu + gamma * prevCu;
 			var smoothCd = gamma1 * cd + gamma * prevCd;
 			var sum = smoothCu + smoothCd;
-			var lrsi = sum != 0f ? (smoothCu / sum) * 100f : 50f;
+			var lrsi = sum != 0d ? (smoothCu / sum) * 100d : 50d;
 			
 			var resIndex = paramIdx * flatCandles.Length + globalIdx;
 			flatResults[resIndex] = new()
 			{
 				Time = candle.Time,
-				Value = lrsi,
+				Value = (float)lrsi,
 				IsFormed = 1
 			};
 			

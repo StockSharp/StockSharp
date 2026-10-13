@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Derivatives;
@@ -120,9 +122,9 @@ public abstract class HedgeStrategy : Strategy
 	}
 
 	/// <inheritdoc />
-	protected override void OnStarted2(DateTime time)
+	protected override async ValueTask OnStartedAsync(DateTime time, CancellationToken cancellationToken)
 	{
-		base.OnStarted2(time);
+		await base.OnStartedAsync(time, cancellationToken);
 
 		BlackScholes.InnerModels.Clear();
 
@@ -136,13 +138,19 @@ public abstract class HedgeStrategy : Strategy
 		// Find all option securities related to our underlying asset
 		foreach (var security in Connector.Securities)
 		{
-			if (security.Type == SecurityTypes.Option && security.GetAsset(this) == BlackScholes.UnderlyingAsset)
-			{
-				var asset = security.GetUnderlyingAsset(this);
-				BlackScholes.InnerModels.Add(new BlackScholes(security, asset, this));
-				LogInfo("Added option model for {0}", security.Id);
-			}
+			if (security.Type != SecurityTypes.Option || await security.GetAssetAsync(this, cancellationToken) != BlackScholes.UnderlyingAsset)
+				continue;
+
+			var asset = await security.GetUnderlyingAssetAsync(this, cancellationToken);
+			BlackScholes.InnerModels.Add(new BlackScholes(security, asset, this));
+			LogInfo("Added option model for {0}", security.Id);
 		}
+	}
+
+	/// <inheritdoc />
+	protected override void OnStarted2(DateTime time)
+	{
+		base.OnStarted2(time);
 
 		// Setup periodic rebalancing
 		if (MonitoringInterval > TimeSpan.Zero)

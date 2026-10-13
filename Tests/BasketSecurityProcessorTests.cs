@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 /// <summary>
 /// Comprehensive tests for basket security processors.
@@ -12,12 +12,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_CalculatesCorrectly(string processorName)
+	public async Task IndexProcessor_Ticks_CalculatesCorrectly(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, expectedPrice) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -43,12 +43,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_MultipleRounds(string processorName)
+	public async Task IndexProcessor_Ticks_MultipleRounds(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time1 = DateTime.UtcNow;
 		var time2 = time1.AddSeconds(1);
@@ -69,12 +69,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_CalculatesCorrectDepth(string processorName)
+	public async Task IndexProcessor_OrderBook_CalculatesCorrectDepth(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -106,12 +106,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Candles_CalculatesOHLC(string processorName)
+	public async Task IndexProcessor_Candles_CalculatesOHLC(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
@@ -146,12 +146,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_IncompleteLegs_NoOutput(string processorName)
+	public async Task IndexProcessor_IncompleteLegs_NoOutput(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		// Only one leg - no output
 		var result = processor.Process(CreateTick(lkoh, DateTime.UtcNow, 100m, 10m)).ToArray();
@@ -162,12 +162,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_IgnoresStateMessages(string processorName)
+	public async Task IndexProcessor_OrderBook_IgnoresStateMessages(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		// State message (reset)
 		var stateMsg = new QuoteChangeMessage
@@ -183,20 +183,109 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		result.Length.AssertEqual(0);
 	}
 
+	[TestMethod]
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public async Task IndexProcessor_Candles_ZeroPricesFilledFromClose(string processorName)
+	{
+		var lkoh = CreateTestSecurity("LKOH", "TQBR");
+		var sber = CreateTestSecurity("SBER", "TQBR");
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
+		var processor = await CreateProcessorAsync(basket);
+
+		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
+
+		// Legs report the close only. The index candle backfills its zero prices from the
+		// single non-zero one, so the close must reach open/high/low as well.
+		processor.Process(CreateCandle(lkoh, openTime, open: 0m, high: 0m, low: 0m, close: 105m, volume: 1000m)).ToArray();
+		var result = processor.Process(CreateCandle(sber, openTime, open: 0m, high: 0m, low: 0m, close: 52m, volume: 2000m)).ToArray();
+
+		result.Length.AssertEqual(1);
+		var indexCandle = (CandleMessage)result[0];
+
+		// Close = 105 * 1 + 52 * 2 = 209.
+		indexCandle.ClosePrice.AssertEqual(209m);
+		indexCandle.OpenPrice.AssertEqual(209m);
+		indexCandle.HighPrice.AssertEqual(209m);
+		indexCandle.LowPrice.AssertEqual(209m);
+	}
+
+	[TestMethod]
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public async Task IndexProcessor_FillGapsByZeros_MissingLegCountsAsZero(string processorName)
+	{
+		var lkoh = CreateTestSecurity("LKOH", "TQBR");
+		var sber = CreateTestSecurity("SBER", "TQBR");
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
+		((IndexSecurity)basket).FillGapsByZeros = true;
+		var processor = await CreateProcessorAsync(basket);
+
+		var time1 = new DateTime(2024, 1, 1, 10, 0, 0);
+		var time2 = time1.AddMinutes(1);
+
+		// SBER misses the first minute. FillGapsByZeros means that gap counts as a zero
+		// value, so the bucket still yields an index candle built from LKOH alone.
+		processor.Process(CreateCandle(lkoh, time1, open: 100m, high: 110m, low: 95m, close: 105m, volume: 1000m)).ToArray();
+		processor.Process(CreateCandle(lkoh, time2, open: 100m, high: 110m, low: 95m, close: 105m, volume: 1000m)).ToArray();
+
+		var result = processor.Process(CreateCandle(sber, time2, open: 50m, high: 55m, low: 48m, close: 52m, volume: 2000m)).ToArray();
+
+		result.Length.AssertEqual(2);
+
+		var gapCandle = (CandleMessage)result[0];
+		gapCandle.OpenTime.AssertEqual(time1);
+
+		// Missing SBER contributes zero: 100 * 1 + 0 * 2 = 100, and so on for the rest.
+		gapCandle.OpenPrice.AssertEqual(100m);
+		gapCandle.HighPrice.AssertEqual(110m);
+		gapCandle.LowPrice.AssertEqual(95m);
+		gapCandle.ClosePrice.AssertEqual(105m);
+
+		var fullCandle = (CandleMessage)result[1];
+		fullCandle.OpenTime.AssertEqual(time2);
+		fullCandle.OpenPrice.AssertEqual(200m);
+		fullCandle.HighPrice.AssertEqual(220m);
+		fullCandle.LowPrice.AssertEqual(191m);
+		fullCandle.ClosePrice.AssertEqual(209m);
+	}
+
+	[TestMethod]
+	public async Task IndexProcessor_KeepsIndexSettings()
+	{
+		var (basket, _, _) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 2);
+
+		var index = (IndexSecurity)basket;
+		index.FillGapsByZeros = true;
+		index.IgnoreErrors = true;
+		index.CalculateExtended = true;
+
+		var processor = (WeightedIndexSecurityProcessor)await CreateProcessorAsync(basket);
+
+		// The processor rebuilds its own copy of the index security; the options that drive
+		// gap filling, error tolerance and extended fields must survive that copy.
+		processor.BasketSecurity.FillGapsByZeros.AssertTrue();
+		processor.BasketSecurity.IgnoreErrors.AssertTrue();
+		processor.BasketSecurity.CalculateExtended.AssertTrue();
+	}
+
 	#endregion
 
 	#region Parameterized Continuous Processor Tests
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_SwitchesToNextContract(string processorName)
+	public async Task ContinuousProcessor_SwitchesToNextContract(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
+
+		var basketId = basket.ToSecurityId();
 
 		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
@@ -216,40 +305,107 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			result3.Length.AssertEqual(1);
 			((ExecutionMessage)result3[0]).TradePrice.AssertEqual(101000m);
 		}
-		else // Volume
+		else // Volume (VolumeLevel = 100, legs RIU8 -> RIZ8)
 		{
 			var time = new DateTime(2024, 9, 10);
 
-			// RIU8 starts as active (first in list)
-			// RIU8 with volume 1000
+			// RIU8 starts as active (first in list). Only _currVolume known, _nextVolume null.
 			var result1 = processor.Process(CreateTick(riu, time, price: 100000m, volume: 1000m)).ToArray();
-			result1.Length.AssertEqual(0); // Waiting for both legs
+			result1.Length.AssertEqual(0); // _nextVolume still null -> CanProcess false
 
-			// RIZ8 with volume 500 (less than RIU8, so RIU8 stays active)
+			// RIZ8 with volume 500. Both volumes known now: 1000 + 100 >= 500 -> no switch.
+			// The tick belongs to the (still inactive) next leg, so nothing is emitted.
 			var result2 = processor.Process(CreateTick(riz, time, price: 100500m, volume: 500m)).ToArray();
-			result2.Length.AssertEqual(0); // Still no output, volumes not compared yet
+			result2.Length.AssertEqual(0);
 
-			// Update RIU8 - should output as it's still active
+			// Update RIU8 (volume 900): 900 + 100 >= 500 -> RIU8 still active -> emits.
 			var result3 = processor.Process(CreateTick(riu, time.AddSeconds(1), price: 100100m, volume: 900m)).ToArray();
-			// Volume logic: RIU8 active until next contract volume exceeds current + level
+			result3.Length.AssertEqual(1);
+			var active3 = (ExecutionMessage)result3[0];
+			active3.SecurityId.AssertEqual(basketId);
+			active3.TradePrice.AssertEqual(100100m); // RIU8 is still the active leg
 
-			// RIZ8 volume exceeds RIU8 - switch happens
+			// RIZ8 volume 2000 exceeds RIU8 (900) + level (100) -> switch to RIZ8.
+			// After the switch RIZ8 is the active (and last) leg, so its own tick is emitted.
 			var result4 = processor.Process(CreateTick(riz, time.AddSeconds(2), price: 101000m, volume: 2000m)).ToArray();
-			// After switch, RIZ8 is now active
+			result4.Length.AssertEqual(1);
+			var active4 = (ExecutionMessage)result4[0];
+			active4.SecurityId.AssertEqual(basketId);
+			active4.TradePrice.AssertEqual(101000m); // switched: RIZ8 is now the active leg
 		}
+	}
+
+	/// <summary>
+	/// A continuous security is one contract at a time. When the front contract expires the next one
+	/// takes over, while a trade in a contract further out is still not part of the series.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task ContinuousProcessor_AfterExpiration_OnlyTheNextContractPasses()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var rih = CreateFuture("RIH9", new DateTime(2025, 3, 15));
+
+		var basket = new ExpirationContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+		};
+
+		foreach (var leg in new[] { riu, riz, rih })
+			basket.ExpirationJumps.Add(leg.ToSecurityId(), leg.ExpiryDate!.Value);
+
+		var processor = await CreateProcessorAsync(basket);
+
+		var beforeExpiry = new DateTime(2024, 9, 10);
+
+		processor.Process(CreateTick(riu, beforeExpiry, price: 100000m, volume: 100m)).ToArray()
+			.Length.AssertEqual(1, "the front contract is the series while it lives");
+
+		var afterExpiry = new DateTime(2024, 9, 16);
+
+		processor.Process(CreateTick(rih, afterExpiry, price: 111000m, volume: 5m)).ToArray()
+			.Length.AssertEqual(0, "a trade in a contract further out is not the continuous security's trade");
+
+		processor.Process(CreateTick(riz, afterExpiry, price: 101000m, volume: 80m)).ToArray()
+			.Length.AssertEqual(1, "the next contract takes over after the front contract expires");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task ContinuousProcessor_GapAcrossTwoExpirations_AdvancesToTheThirdContract()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var rih = CreateFuture("RIH9", new DateTime(2025, 3, 15));
+
+		var basket = new ExpirationContinuousSecurity { Id = "RI@FORTS", Board = ExchangeBoard.Forts };
+		basket.ExpirationJumps.Add(riu.ToSecurityId(), riu.ExpiryDate.Value);
+		basket.ExpirationJumps.Add(riz.ToSecurityId(), riz.ExpiryDate.Value);
+		basket.ExpirationJumps.Add(rih.ToSecurityId(), rih.ExpiryDate.Value);
+
+		var processor = await CreateProcessorAsync(basket);
+		var afterTwoExpirations = new DateTime(2024, 12, 16);
+
+		processor.Process(CreateTick(rih, afterTwoExpirations, price: 111000m, volume: 5m)).ToArray()
+			.Length.AssertEqual(1, "a gap across two expiries must advance directly to the third contract");
+
+		processor.Process(CreateTick(riz, afterTwoExpirations, price: 101000m, volume: 80m)).ToArray()
+			.Length.AssertEqual(0, "the second contract is already expired at the incoming trade time");
 	}
 
 	[TestMethod]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_IgnoresNonLegSecurities(string processorName)
+	public async Task ContinuousProcessor_IgnoresNonLegSecurities(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 		var other = CreateTestSecurity("OTHER", "FORTS");
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 		var result = processor.Process(CreateTick(other, time, price: 50000m, volume: 50m)).ToArray();
@@ -259,15 +415,16 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesCandles(string processorName)
+	public async Task ContinuousProcessor_ProcessesCandles(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 9, 10, 10, 0, 0);
 
@@ -284,19 +441,25 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			basketCandle.SecurityId.AssertEqual(basket.ToSecurityId());
 			basketCandle.OpenPrice.AssertEqual(100000m);
 		}
-		// Volume processor may not output immediately due to volume comparison logic
+		else // Volume
+		{
+			// Only the current leg (RIU8) sent data; _nextVolume is still null, so the
+			// switch decision cannot be made and CanProcess deterministically returns false.
+			result.Length.AssertEqual(0);
+		}
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesOrderBook(string processorName)
+	public async Task ContinuousProcessor_ProcessesOrderBook(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = new DateTime(2024, 9, 10);
 
@@ -313,29 +476,34 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			var basketDepth = (QuoteChangeMessage)result[0];
 			basketDepth.SecurityId.AssertEqual(basket.ToSecurityId());
 		}
+		else // Volume
+		{
+			// Only the current leg (RIU8) book arrived; _nextVolume is still null, so the
+			// switch decision cannot be made and CanProcess deterministically returns false.
+			result.Length.AssertEqual(0);
+		}
 	}
 
 	/// <summary>
-	/// Regression test for operator precedence bug in ContinuousSecurityBaseProcessor.
-	/// Bug was: volume = volume ?? 0 + bestAsk?.Volume (parsed as volume ?? (0 + bestAsk?.Volume))
-	/// Fixed:   volume = (volume ?? 0) + bestAsk?.Volume
+	/// Smoke test for the order-book path of the continuous processors.
+	/// The operator-precedence fix (volume = (volume ?? 0) + bestAsk?.Volume) is actually
+	/// exercised by <see cref="VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch"/>,
+	/// which depends on the summed bid+ask volume to make a switching decision.
 	/// </summary>
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
+	public async Task ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Send order book with BOTH bid and ask volumes
-		// This tests the bug fix: volume should be sum of bid + ask volumes
-		// Bid volume = 100, Ask volume = 50, total should be 150
 		var depth = CreateOrderBook(riu, time,
 			bids: [(100000m, 100m)],
 			asks: [(100100m, 50m)]);
@@ -344,12 +512,108 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
-			// Before expiry - should pass through with correct volume calculation
+			// Before expiry the active leg's book passes through, re-keyed to the basket id.
 			result.Length.AssertEqual(1);
 			var basketDepth = (QuoteChangeMessage)result[0];
 			basketDepth.SecurityId.AssertEqual(basket.ToSecurityId());
 		}
-		// Volume processor needs both contracts' data first, so no output expected here
+		else // Volume
+		{
+			// Only the current leg book arrived; _nextVolume is still null, so CanProcess
+			// deterministically returns false and nothing is emitted.
+			result.Length.AssertEqual(0);
+		}
+	}
+
+	/// <summary>
+	/// Real regression guard for the operator-precedence fix in
+	/// <see cref="ContinuousSecurityBaseProcessor{T}"/>:
+	/// <code>if (bestAsk?.Volume != null) volume = (volume ?? 0) + bestAsk?.Volume;</code>
+	/// The volume processor's switch decision must use the summed bid+ask volume of the next
+	/// leg. The data is tuned so that bid+ask (640) crosses the switch threshold while the
+	/// bid-only value (590, the buggy parse) would not, making the two interpretations
+	/// observably different (switch vs no switch).
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+
+		var basket = new VolumeContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+			VolumeLevel = new Unit(100),
+		};
+		basket.InnerSecurities.Add(riu.ToSecurityId());
+		basket.InnerSecurities.Add(riz.ToSecurityId());
+
+		var processor = await CreateProcessorAsync(basket);
+
+		var time = new DateTime(2024, 9, 10);
+
+		// RIU8 (current leg): bid-only book -> _currVolume = 500 (unambiguous).
+		var riuBook = processor.Process(CreateOrderBook(riu, time,
+			bids: [(100000m, 500m)],
+			asks: [])).ToArray();
+		riuBook.Length.AssertEqual(0); // _nextVolume still null
+
+		// RIZ8 (next leg): bid 590 + ask 50 = 640 with the correct fix.
+		// Threshold check: _currVolume(500) + level(100) = 600.
+		//   Correct (sum 640): 600 >= 640 is false -> switch to RIZ8 -> book emitted.
+		//   Buggy (bid only 590): 600 >= 590 is true -> no switch -> nothing emitted.
+		var rizBook = processor.Process(CreateOrderBook(riz, time,
+			bids: [(100500m, 590m)],
+			asks: [(100600m, 50m)])).ToArray();
+
+		rizBook.Length.AssertEqual(1);
+		((QuoteChangeMessage)rizBook[0]).SecurityId.AssertEqual(basket.ToSecurityId());
+	}
+
+	[TestMethod]
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public async Task ContinuousProcessor_Level1AndNews_DoNotBreakProcessing(string processorName)
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var other = CreateTestSecurity("OTHER", "FORTS");
+
+		var basket = CreateContinuousBasket(processorName, riu, riz);
+		var processor = await CreateProcessorAsync(basket);
+
+		var time = new DateTime(2024, 9, 10);
+
+		// BasketSecurityMessageAdapter feeds every subscription message of a leg into Process,
+		// so a level1 subscription on a continuous security must not blow up the out pipeline.
+		var legLevel1 = processor.Process(new Level1ChangeMessage
+		{
+			SecurityId = riu.ToSecurityId(),
+			ServerTime = time,
+		}.TryAdd(Level1Fields.LastTradePrice, 100000m)).ToArray();
+
+		// Whether level1 is forwarded or dropped is open, but anything emitted is the basket's.
+		foreach (var msg in legLevel1)
+			((ISecurityIdMessage)msg).SecurityId.AssertEqual(basket.ToSecurityId());
+
+		// A security outside the basket is ignored everywhere else - level1 is no exception.
+		var alienLevel1 = processor.Process(new Level1ChangeMessage
+		{
+			SecurityId = other.ToSecurityId(),
+			ServerTime = time,
+		}.TryAdd(Level1Fields.LastTradePrice, 50000m)).ToArray();
+
+		alienLevel1.Length.AssertEqual(0);
+
+		// News carries no leg id at all and must simply pass by, not throw.
+		processor.Process(new NewsMessage
+		{
+			Id = "news-1",
+			Headline = "Test",
+			ServerTime = time,
+		}).ToArray();
 	}
 
 	#endregion
@@ -357,7 +621,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Volume Continuous Specific Tests
 
 	[TestMethod]
-	public void VolumeContinuous_SwitchesWhenNextVolumeExceeds()
+	public async Task VolumeContinuous_SwitchesWhenNextVolumeExceeds()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -371,7 +635,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -392,8 +656,15 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		result2.Length.AssertEqual(1);
 	}
 
+	/// <summary>
+	/// Verifies that with <see cref="VolumeContinuousSecurity.IsOpenInterest"/> = true the switch
+	/// decision is driven by open interest, not trade volume. The data is deliberately built so the
+	/// two metrics disagree: by OI the current leg (RIU8) stays active, but by trade volume RIZ8
+	/// would have already taken over. So the test passes only if the engine honors the OI flag.
+	/// </summary>
 	[TestMethod]
-	public void VolumeContinuous_UsesOpenInterest_WhenConfigured()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task VolumeContinuous_UsesOpenInterest_WhenConfigured()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -403,16 +674,16 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			Id = "RI@FORTS",
 			Board = ExchangeBoard.Forts,
 			VolumeLevel = new Unit(100),
-			IsOpenInterest = true, // Use OI instead of volume
+			IsOpenInterest = true, // Use OI instead of trade volume
 		};
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Create ticks with OI
+		// RIU8: high OI (50000) but low trade volume (100).
 		var tick1 = new ExecutionMessage
 		{
 			SecurityId = riu.ToSecurityId(),
@@ -423,20 +694,25 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			OpenInterest = 50000m,
 		};
 
+		// RIZ8: low OI (40000) but high trade volume (5000).
+		// By OI:     50000 + 100 >= 40000 -> RIU8 stays active.
+		// By volume: 100   + 100 >= 5000  is false -> RIZ8 would have taken over.
 		var tick2 = new ExecutionMessage
 		{
 			SecurityId = riz.ToSecurityId(),
 			DataTypeEx = DataType.Ticks,
 			ServerTime = time,
 			TradePrice = 100500m,
-			TradeVolume = 50m,
+			TradeVolume = 5000m,
 			OpenInterest = 40000m,
 		};
 
 		processor.Process(tick1).ToArray();
 		processor.Process(tick2).ToArray();
 
-		// RIU8 should still be active (OI 50000 + 100 > 40000)
+		// RIU8 update: by OI it is still active (49000 + 100 >= 40000) and must emit.
+		// Had the engine wrongly used trade volume, RIZ8 would be active and this RIU8 tick
+		// would produce no output.
 		var tick3 = new ExecutionMessage
 		{
 			SecurityId = riu.ToSecurityId(),
@@ -449,10 +725,20 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = processor.Process(tick3).ToArray();
 		result.Length.AssertEqual(1);
+		var active = (ExecutionMessage)result[0];
+		active.SecurityId.AssertEqual(basket.ToSecurityId());
+		active.TradePrice.AssertEqual(100100m); // RIU8 is the active leg
 	}
 
+	/// <summary>
+	/// Three-contract basket, first volume switch RIU8 -> RIZ8. Verifies the switch is taken
+	/// (RIZ8 starts being emitted) and that ticks of the now-inactive RIU8 and of the not-yet-active
+	/// RIH9 are dropped while RIZ8 is the active leg. A genuine second sequential switch
+	/// (RIZ8 -> RIH9) is covered separately because of the volume-reset behavior on rollover.
+	/// </summary>
 	[TestMethod]
-	public void VolumeContinuous_ThreeContracts_SwitchesSequentially()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task VolumeContinuous_ThreeContracts_SwitchesToSecond()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -468,27 +754,87 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 		basket.InnerSecurities.Add(rih.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
+		var basketId = basket.ToSecurityId();
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Initial state: RIU8 is active
+		// Initial state: RIU8 active. Then RIZ8 (vol 500) < RIU8 -> RIU8 stays active.
 		processor.Process(CreateTick(riu, time, 100000m, volume: 1000m)).ToArray();
 		processor.Process(CreateTick(riz, time, 100500m, volume: 500m)).ToArray();
 
-		// RIU8 still active
+		// RIU8 still active (900 >= 500) -> emits.
 		var result1 = processor.Process(CreateTick(riu, time.AddSeconds(1), 100100m, volume: 900m)).ToArray();
 		result1.Length.AssertEqual(1);
+		((ExecutionMessage)result1[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)result1[0]).TradePrice.AssertEqual(100100m);
 
-		// RIZ8 exceeds, switch to RIZ8
-		processor.Process(CreateTick(riz, time.AddSeconds(2), 100600m, volume: 1100m)).ToArray();
+		// RIZ8 volume (1100) exceeds RIU8 (900) -> switch to RIZ8, which is now emitted.
+		var switchResult = processor.Process(CreateTick(riz, time.AddSeconds(2), 100600m, volume: 1100m)).ToArray();
+		switchResult.Length.AssertEqual(1);
+		((ExecutionMessage)switchResult[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)switchResult[0]).TradePrice.AssertEqual(100600m);
 
-		// Now need to track RIZ8 vs RIH9
-		processor.Process(CreateTick(rih, time.AddSeconds(3), 101000m, volume: 200m)).ToArray();
+		// RIH9 is only the next (inactive) leg now -> its tick must not be emitted.
+		var rihResult = processor.Process(CreateTick(rih, time.AddSeconds(3), 101000m, volume: 200m)).ToArray();
+		rihResult.Length.AssertEqual(0);
 
-		// RIZ8 is active
+		// RIZ8 remains the active leg -> emits.
 		var result2 = processor.Process(CreateTick(riz, time.AddSeconds(4), 100700m, volume: 1000m)).ToArray();
 		result2.Length.AssertEqual(1);
+		((ExecutionMessage)result2[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)result2[0]).TradePrice.AssertEqual(100700m);
+	}
+
+	/// <summary>
+	/// Rollover bug guard: when the volume processor switches to the next contract it must
+	/// re-base the running volumes onto the new (current, next) pair. After a switch RIU8 -> RIZ8
+	/// in a three-contract basket, the very first tick of the newly active RIZ8 (with no fresh
+	/// RIH9 volume seen yet) must keep RIZ8 active and emit. The contract: a leg cannot be
+	/// switched away from based on its own (or the previous leg's) stale volume.
+	///
+	/// With the current engine _currVolume/_nextVolume are not reset on switch, so RIZ8's own
+	/// tick is compared against the stale RIZ8 volume carried over as _nextVolume, triggering a
+	/// false immediate second switch to RIH9 (and _finished). This test asserts the correct
+	/// behavior and is therefore expected to fail until that reset is fixed.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task VolumeContinuous_TickOfNewActiveLeg_AfterSwitch_StaysActive()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var rih = CreateFuture("RIH9", new DateTime(2025, 3, 15));
+
+		var basket = new VolumeContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+			VolumeLevel = new Unit(0), // Switch immediately when next exceeds current
+		};
+		basket.InnerSecurities.Add(riu.ToSecurityId());
+		basket.InnerSecurities.Add(riz.ToSecurityId());
+		basket.InnerSecurities.Add(rih.ToSecurityId());
+
+		var processor = await CreateProcessorAsync(basket);
+		var basketId = basket.ToSecurityId();
+
+		var time = new DateTime(2024, 9, 10);
+
+		// RIU8 active with volume 1000.
+		processor.Process(CreateTick(riu, time, 100000m, volume: 1000m)).ToArray();
+
+		// RIZ8 volume 1100 exceeds RIU8 (1000) -> switch to RIZ8 (now the active leg).
+		var switchResult = processor.Process(CreateTick(riz, time.AddSeconds(1), 100600m, volume: 1100m)).ToArray();
+		switchResult.Length.AssertEqual(1);
+		((ExecutionMessage)switchResult[0]).SecurityId.AssertEqual(basketId);
+
+		// First RIZ8 tick after the switch. No RIH9 volume has been observed since the switch,
+		// so there is no basis to switch away from RIZ8: it must stay active and emit.
+		var afterSwitch = processor.Process(CreateTick(riz, time.AddSeconds(2), 100700m, volume: 1000m)).ToArray();
+		afterSwitch.Length.AssertEqual(1);
+		((ExecutionMessage)afterSwitch[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)afterSwitch[0]).TradePrice.AssertEqual(100700m);
 	}
 
 	#endregion
@@ -496,10 +842,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region WeightedIndexSecurity Specific Tests
 
 	[TestMethod]
-	public void WeightedIndex_Ticks_NegativeWeight()
+	public async Task WeightedIndex_Ticks_NegativeWeight()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -513,10 +859,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_Ticks_FractionalWeights()
+	public async Task WeightedIndex_Ticks_FractionalWeights()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 0.5m, sberWeight: 0.5m);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -530,10 +876,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_OrderBook_DifferentDepths()
+	public async Task WeightedIndex_OrderBook_DifferentDepths()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -558,35 +904,50 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_Candles_HighLowNormalization()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task WeightedIndex_Candles_HighLowNormalization()
 	{
-		// When weighted calculation results in High < Low, they should be swapped
+		// When the weighted calculation produces High < Low (because a leg with a negative
+		// weight has a wider range than the positive leg), FillIndexCandle must swap them so
+		// the basket candle stays consistent (BasketSecurityBaseProcessor: HighPrice < LowPrice).
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
-		// With negative weight, high/low might get inverted
+		// lkoh (weight +1): narrow range around 10.
 		var lkohCandle = CreateCandle(lkoh, openTime,
-			open: 100m, high: 110m, low: 90m, close: 100m, volume: 1000m);
+			open: 10m, high: 10m, low: 9m, close: 10m, volume: 1000m);
 
+		// sber (weight -1): wide range. Subtracting its wide High/Low inverts the index range.
 		var sberCandle = CreateCandle(sber, openTime,
-			open: 50m, high: 55m, low: 45m, close: 50m, volume: 500m);
+			open: 12m, high: 20m, low: 5m, close: 12m, volume: 500m);
 
 		processor.Process(lkohCandle).ToArray();
 		var result = processor.Process(sberCandle).ToArray();
 
+		result.Length.AssertEqual(1);
 		var basketCandle = (CandleMessage)result[0];
 
-		// Verify High >= Low
+		// A negative leg contributes its opposite extreme to the basket range:
+		//   Open  = 10*1 + 12*(-1) = -2
+		//   High  = 10*1 +  5*(-1) = 5
+		//   Low   =  9*1 + 20*(-1) = -11
+		//   Close = 10*1 + 12*(-1) = -2
+		basketCandle.OpenPrice.AssertEqual(-2m);
+		basketCandle.ClosePrice.AssertEqual(-2m);
+		basketCandle.HighPrice.AssertEqual(5m);
+		basketCandle.LowPrice.AssertEqual(-11m);
+
+		// Sanity: invariant restored by the swap.
 		(basketCandle.HighPrice >= basketCandle.LowPrice).AssertTrue();
 	}
 
 	[TestMethod]
-	public void WeightedIndex_ClonedMessages()
+	public async Task WeightedIndex_ClonedMessages()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 		var originalTick = CreateTick(lkoh, serverTime, 100m, 10m);
@@ -600,12 +961,107 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basketTick.SecurityId.AssertEqual(basket.ToSecurityId());
 	}
 
+	/// <summary>
+	/// Selling a basket with a negative leg requires buying that leg at its ask, while buying the
+	/// basket requires selling the negative leg at its bid.
+	/// </summary>
+	[TestMethod]
+	public async Task WeightedIndex_NegativeWeightUsesOppositeBookSides()
+	{
+		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
+		var processor = await CreateProcessorAsync(basket);
+
+		var serverTime = DateTime.UtcNow;
+
+		processor.Process(CreateOrderBook(lkoh, serverTime,
+			bids: [(200m, 30m)],
+			asks: [(201m, 30m)])).ToArray();
+
+		var result = processor.Process(CreateOrderBook(sber, serverTime,
+			bids: [(100m, 10m)],
+			asks: [(110m, 10m)])).ToArray();
+
+		result.Length.AssertEqual(1);
+		var basketDepth = (QuoteChangeMessage)result[0];
+
+		basketDepth.Bids[0].Price.AssertEqual(90m);
+		basketDepth.Asks[0].Price.AssertEqual(101m);
+		(basketDepth.Bids[0].Price <= basketDepth.Asks[0].Price).AssertTrue("an index must not quote a bid above its own ask");
+		basketDepth.Verify().AssertTrue("the index must publish a well-formed order book");
+	}
+
+	/// <summary>
+	/// Depth is only readable best first: a consumer takes Bids[0]/Asks[0] as the touch and walks
+	/// outwards from there. An index that returns a side sorted the wrong way round makes every
+	/// such walk start at the worst price and call it the best one.
+	/// </summary>
+	[TestMethod]
+	public async Task WeightedIndex_CrossedLegs_BidsStayDescendingAndAsksAscending()
+	{
+		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
+		var processor = await CreateProcessorAsync(basket);
+
+		var serverTime = DateTime.UtcNow;
+
+		// Index bids use SBER asks: 200 - 110 = 90 and 198 - 111 = 87.
+		// Index asks use SBER bids: 201 - 100 = 101 and 203 - 95 = 108.
+		processor.Process(CreateOrderBook(lkoh, serverTime,
+			bids: [(200m, 30m), (198m, 40m)],
+			asks: [(201m, 30m), (203m, 40m)])).ToArray();
+
+		var result = processor.Process(CreateOrderBook(sber, serverTime,
+			bids: [(100m, 10m), (95m, 12m)],
+			asks: [(110m, 10m), (111m, 12m)])).ToArray();
+
+		result.Length.AssertEqual(1);
+		var basketDepth = (QuoteChangeMessage)result[0];
+
+		basketDepth.Bids.Length.AssertEqual(2);
+		basketDepth.Asks.Length.AssertEqual(2);
+		basketDepth.Bids.Select(q => q.Price).AssertEqual([90m, 87m]);
+		basketDepth.Asks.Select(q => q.Price).AssertEqual([101m, 108m]);
+
+		(basketDepth.Bids[0].Price > basketDepth.Bids[1].Price).AssertTrue("bids must run from the best price downwards");
+		(basketDepth.Asks[0].Price < basketDepth.Asks[1].Price).AssertTrue("asks must run from the best price upwards");
+		basketDepth.Verify().AssertTrue("the index must publish a well-formed order book");
+	}
+
+	/// <summary>
+	/// A weighted index is a set of (security, weight) pairs, and the order they happen to be stored
+	/// in is not part of what the user asked for. An index that pairs a leg with whichever weight now
+	/// sits at that position publishes a different instrument's price under the same security id, and
+	/// nothing in the result says so.
+	/// </summary>
+	[TestMethod]
+	public void WeightedIndex_ReorderedWeights_EachLegKeepsItsOwnWeight()
+	{
+		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
+		var processor = new WeightedIndexSecurityProcessor(basket);
+
+		// The very same securities with the very same weights, stored the other way round.
+		var weights = processor.BasketSecurity.Weights;
+		weights.Clear();
+		weights[sber.ToSecurityId()] = -1;
+		weights[lkoh.ToSecurityId()] = 1;
+
+		var serverTime = DateTime.UtcNow;
+
+		processor.Process(CreateTick(lkoh, serverTime, price: 100m, volume: 10m)).ToArray();
+		var result = processor.Process(CreateTick(sber, serverTime, price: 30m, volume: 5m)).ToArray();
+
+		result.Length.AssertEqual(1);
+		var basketTick = (ExecutionMessage)result[0];
+
+		// LKOH keeps its +1 and SBER its -1: 100 - 30 = 70.
+		basketTick.TradePrice.AssertEqual(70m, "each leg must be multiplied by the weight configured for that security");
+	}
+
 	#endregion
 
 	#region ExpressionIndexSecurity Specific Tests
 
 	[TestMethod]
-	public void ExpressionIndex_Ticks_SubtractionExpression()
+	public async Task ExpressionIndex_Ticks_SubtractionExpression()
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
@@ -617,7 +1073,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR - 2 * SBER@TQBR",
 		};
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var serverTime = DateTime.UtcNow;
 
 		processor.Process(CreateTick(lkoh, serverTime, price: 100m, volume: 10m)).ToArray();
@@ -631,7 +1087,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExpressionIndex_Ticks_DivisionExpression()
+	public async Task ExpressionIndex_Ticks_DivisionExpression()
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
@@ -643,7 +1099,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR / SBER@TQBR",
 		};
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var serverTime = DateTime.UtcNow;
 
 		processor.Process(CreateTick(lkoh, serverTime, price: 100m, volume: 10m)).ToArray();
@@ -655,12 +1111,54 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basketTick.TradePrice.AssertEqual(2m);
 	}
 
+	/// <summary>
+	/// A formula that does not compile is still the formula the user typed: it has to be shown back
+	/// to them to be corrected, and it has to survive being saved and reloaded. An index that answers
+	/// nothing when asked what its formula is has thrown that work away, and the only trace left of
+	/// it is a log line.
+	/// </summary>
+	[TestMethod]
+	public void ExpressionIndex_UncompilableFormula_KeepsTheTextItWasGiven()
+	{
+		const string formula = "LKOH@TQBR +";
+
+		var basket = new ExpressionIndexSecurity
+		{
+			Id = "LKOH_BROKEN_EXP@TQBR",
+			Board = ExchangeBoard.MicexTqbr,
+			Expression = formula,
+		};
+
+		basket.Expression.AssertEqual(formula, "the text of a formula that failed to compile must stay readable");
+		basket.BasketExpression.AssertEqual(formula, "a security that serializes back to nothing cannot be saved");
+	}
+
+	/// <summary>
+	/// An index that could not compile its formula cannot calculate anything. Handing out a processor
+	/// for it would create a subscription that silently never publishes a value, so the caller is
+	/// entitled to hear about the broken formula at the moment it asks for the processor.
+	/// </summary>
+	[TestMethod]
+	public async Task ExpressionIndex_UncompilableFormula_RefusesToBuildAProcessor()
+	{
+		var basket = new ExpressionIndexSecurity
+		{
+			Id = "LKOH_BROKEN_EXP@TQBR",
+			Board = ExchangeBoard.MicexTqbr,
+			Expression = "LKOH@TQBR +",
+		};
+
+		(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertFalse("an index that could not compile its formula must report that it cannot calculate");
+
+		await ThrowsExactlyAsync<InvalidOperationException>(() => CreateProcessorAsync(basket), "an index whose formula does not compile must not produce a processor");
+	}
+
 	#endregion
 
 	#region ToBasket Extension Method Tests
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesTickSequence()
+	public async Task ToBasket_Async_ProcessesTickSequenceOfTwoTimes()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -674,7 +1172,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateTick(sber, serverTime.AddSeconds(1), 32m, 6m),
 		};
 
-		var result = ticks.ToBasket(basket, processorProvider).ToArray();
+		var result = await ticks.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 		((ExecutionMessage)result[0]).TradePrice.AssertEqual(70m);  // 100 - 30
@@ -703,7 +1203,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesCandleSequence()
+	public async Task ToBasket_Async_ProcessesCandleSequence()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -716,7 +1216,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateCandle(sber, openTime, 50m, 55m, 45m, 52m, 500m),
 		};
 
-		var result = candles.ToBasket(basket, processorProvider).ToArray();
+		var result = await candles.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 		var basketCandle = (CandleMessage)result[0];
@@ -725,7 +1227,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesOrderBookSequence()
+	public async Task ToBasket_Async_ProcessesOrderBookSequence()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -737,7 +1239,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateOrderBook(sber, serverTime, [(50m, 5m)], [(51m, 8m)]),
 		};
 
-		var result = orderBooks.ToBasket(basket, processorProvider).ToArray();
+		var result = await orderBooks.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 		var basketDepth = (QuoteChangeMessage)result[0];
@@ -860,10 +1364,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		};
 	}
 
-	private static IBasketSecurityProcessor CreateProcessor(Security basket)
-	{
-		return new BasketSecurityProcessorProvider().CreateProcessor(basket);
-	}
+	private async Task<IBasketSecurityProcessor> CreateProcessorAsync(Security basket)
+		=> await new BasketSecurityProcessorProvider().CreateProcessorAsync(basket, CancellationToken);
 
 	private static ExecutionMessage CreateTick(Security security, DateTime serverTime, decimal price, decimal volume)
 	{
@@ -1077,7 +1579,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Custom Basket Processor Tests
 
 	[TestMethod]
-	public void CustomProcessor_ProcessesTicks()
+	public async Task CustomProcessor_ProcessesTicks()
 	{
 		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
 
@@ -1095,7 +1597,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.SecurityIds.Add(lkoh.ToSecurityId());
 		basket.SecurityIds.Add(sber.ToSecurityId());
 
-		var processor = provider.CreateProcessor(basket);
+		var processor = await provider.CreateProcessorAsync(basket, CancellationToken);
 		processor.GetType().AssertEqual(typeof(CustomBasketProcessor));
 
 		var serverTime = DateTime.UtcNow;

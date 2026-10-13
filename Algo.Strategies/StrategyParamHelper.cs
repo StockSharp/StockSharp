@@ -1,4 +1,6 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
+
+using System.Numerics;
 
 using Ecng.Reflection;
 
@@ -53,21 +55,28 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	/// <param name="param"><see cref="StrategyParam{T}"/></param>
+	/// <param name="provider">Where the value is drawn from.</param>
 	/// <returns>Random value within the optimization range.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
-	public static T GetRandom<T>(this StrategyParam<T> param)
-		=> (T)GetRandom((IStrategyParam)param);
+	public static T GetRandom<T>(this StrategyParam<T> param, IRandomProvider provider)
+		=> (T)GetRandom((IStrategyParam)param, provider);
 
 	/// <summary>
 	/// Generate a random value within the optimization range for the parameter.
 	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
+	/// <param name="provider">Where the value is drawn from. A search worth keeping the result of is
+	/// worth running again, so the caller states the source rather than a default deciding for it -
+	/// <see cref="Strategy.RandomProvider"/> is the one a strategy runs on.</param>
 	/// <returns>Random value within the optimization range.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
-	public static object GetRandom(this IStrategyParam param)
+	public static object GetRandom(this IStrategyParam param, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
+
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
 
 		if (!param.CanOptimize)
 			throw new InvalidOperationException($"Parameter '{param.Id}' cannot be optimized. Set CanOptimize to true.");
@@ -75,7 +84,7 @@ public static class StrategyParamHelper
 		// Check for explicit values first (for Security, DataType, etc.)
 		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
 		if (explicitValues.Length > 0)
-			return RandomGen.GetElement(explicitValues);
+			return provider.GetElement(explicitValues);
 
 		if (param.OptimizeFrom == null || param.OptimizeTo == null)
 			throw new InvalidOperationException($"Parameter '{param.Id}' optimization range is not set. Use SetOptimize or SetOptimizeValues method.");
@@ -84,86 +93,89 @@ public static class StrategyParamHelper
 
 		return type switch
 		{
-			_ when type == typeof(int) => GenerateRandomInt((int)param.OptimizeFrom, (int)param.OptimizeTo, (int?)param.OptimizeStep),
-			_ when type == typeof(long) => GenerateRandomLong((long)param.OptimizeFrom, (long)param.OptimizeTo, (long?)param.OptimizeStep),
-			_ when type == typeof(decimal) => GenerateRandomDecimal((decimal)param.OptimizeFrom, (decimal)param.OptimizeTo, (decimal?)param.OptimizeStep),
-			_ when type == typeof(double) => GenerateRandomDouble((double)param.OptimizeFrom, (double)param.OptimizeTo, (double?)param.OptimizeStep),
-			_ when type == typeof(float) => GenerateRandomFloat((float)param.OptimizeFrom, (float)param.OptimizeTo, (float?)param.OptimizeStep),
-			_ when type == typeof(bool) => RandomGen.GetBool(),
-			_ when type == typeof(TimeSpan) => GenerateRandomTimeSpan((TimeSpan)param.OptimizeFrom, (TimeSpan)param.OptimizeTo, (TimeSpan?)param.OptimizeStep),
-			_ when type == typeof(Unit) => GenerateRandomUnit((Unit)param.OptimizeFrom, (Unit)param.OptimizeTo, (Unit)param.OptimizeStep),
+			_ when type == typeof(int) => GenerateRandomInt((int)param.OptimizeFrom, (int)param.OptimizeTo, (int?)param.OptimizeStep, provider),
+			_ when type == typeof(long) => GenerateRandomLong((long)param.OptimizeFrom, (long)param.OptimizeTo, (long?)param.OptimizeStep, provider),
+			_ when type == typeof(decimal) => GenerateRandomDecimal((decimal)param.OptimizeFrom, (decimal)param.OptimizeTo, (decimal?)param.OptimizeStep, provider),
+			_ when type == typeof(double) => GenerateRandomDouble((double)param.OptimizeFrom, (double)param.OptimizeTo, (double?)param.OptimizeStep, provider),
+			_ when type == typeof(float) => GenerateRandomFloat((float)param.OptimizeFrom, (float)param.OptimizeTo, (float?)param.OptimizeStep, provider),
+			_ when type == typeof(bool) => GenerateRandomBool((bool)param.OptimizeFrom, (bool)param.OptimizeTo, provider),
+			_ when type == typeof(TimeSpan) => GenerateRandomTimeSpan((TimeSpan)param.OptimizeFrom, (TimeSpan)param.OptimizeTo, (TimeSpan?)param.OptimizeStep, provider),
+			_ when type == typeof(Unit) => GenerateRandomUnit((Unit)param.OptimizeFrom, (Unit)param.OptimizeTo, (Unit)param.OptimizeStep, provider),
 			_ => param.Value
 		};
 	}
 
-	private static int GenerateRandomInt(int from, int to, int? step)
+	private static bool GenerateRandomBool(bool from, bool to, IRandomProvider rnd)
+		=> from == to ? from : rnd.GetBool();
+
+	private static int GenerateRandomInt(int from, int to, int? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (to - from) / step.Value;
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetInt(from, to);
+		return rnd.GetInt(from, to);
 	}
 
-	private static long GenerateRandomLong(long from, long to, long? step)
+	private static long GenerateRandomLong(long from, long to, long? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (to - from) / step.Value;
-			return from + RandomGen.GetInt(0, (int)steps) * step.Value;
+			return from + rnd.GetInt(0, (int)steps) * step.Value;
 		}
 
-		return RandomGen.GetLong(from, to);
+		return rnd.GetLong(from, to);
 	}
 
-	private static decimal GenerateRandomDecimal(decimal from, decimal to, decimal? step)
+	private static decimal GenerateRandomDecimal(decimal from, decimal to, decimal? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetDecimal(from, to, from.GetDecimalInfo().EffectiveScale);
+		return rnd.GetDecimal(from, to, from.GetDecimalInfo().EffectiveScale);
 	}
 
-	private static double GenerateRandomDouble(double from, double to, double? step)
+	private static double GenerateRandomDouble(double from, double to, double? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetDouble(from, to);
+		return rnd.GetDouble(from, to);
 	}
 
-	private static float GenerateRandomFloat(float from, float to, float? step)
+	private static float GenerateRandomFloat(float from, float to, float? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetFloat(from, to);
+		return rnd.GetFloat(from, to);
 	}
 
-	private static TimeSpan GenerateRandomTimeSpan(TimeSpan from, TimeSpan to, TimeSpan? step)
+	private static TimeSpan GenerateRandomTimeSpan(TimeSpan from, TimeSpan to, TimeSpan? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > TimeSpan.Zero)
 		{
 			var steps = (int)((to - from).Ticks / step.Value.Ticks);
-			return from + TimeSpan.FromTicks(RandomGen.GetInt(0, steps) * step.Value.Ticks);
+			return from + TimeSpan.FromTicks(rnd.GetInt(0, steps) * step.Value.Ticks);
 		}
 
 		var range = to - from;
-		return from + TimeSpan.FromTicks(RandomGen.GetLong(0, range.Ticks));
+		return from + TimeSpan.FromTicks(rnd.GetLong(0, range.Ticks));
 	}
 
-	private static Unit GenerateRandomUnit(Unit from, Unit to, Unit step)
+	private static Unit GenerateRandomUnit(Unit from, Unit to, Unit step, IRandomProvider rnd)
 	{
 		if (from.Type != to.Type)
 			throw new ArgumentException($"Unit types must match: from.Type={from.Type}, to.Type={to.Type}");
@@ -172,8 +184,8 @@ public static class StrategyParamHelper
 			throw new ArgumentException($"Step unit type must match range type: step.Type={step.Type}, range.Type={from.Type}");
 
 		var randomValue = step is not null && step.Value > 0
-			? GenerateRandomDecimal(from.Value, to.Value, step.Value)
-			: GenerateRandomDecimal(from.Value, to.Value, null);
+			? GenerateRandomDecimal(from.Value, to.Value, step.Value, rnd)
+			: GenerateRandomDecimal(from.Value, to.Value, null, rnd);
 
 		return new Unit(randomValue, from.Type);
 	}
@@ -193,28 +205,44 @@ public static class StrategyParamHelper
 		if (!param.CanOptimize)
 			return 1;
 
+		// A shape that walks nowhere still leaves the parameter its own value, and a run needs one.
+		return GetIterationsCount(param.Type, param.OptimizeFrom, param.OptimizeTo, param.OptimizeStep, param.OptimizeValues).Max(1);
+	}
+
+	/// <summary>
+	/// Get the number of optimization iterations for a parameter shape.
+	/// </summary>
+	/// <param name="type">The type of the parameter value.</param>
+	/// <param name="from">Initial value, or <see langword="null" />.</param>
+	/// <param name="to">Final value, or <see langword="null" />.</param>
+	/// <param name="step">Increment value, or <see langword="null" />.</param>
+	/// <param name="values">Explicit values, or <see langword="null" />. Win over the range when not empty.</param>
+	/// <returns>Number of iterations, zero when the shape defines no values of its own.</returns>
+	public static int GetIterationsCount(Type type, object from, object to, object step, IEnumerable values)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		var explicitValues = values?.Cast<object>().ToArray() ?? [];
 		if (explicitValues.Length > 0)
 			return explicitValues.Length;
 
-		var from = param.OptimizeFrom;
-		var to = param.OptimizeTo;
-		var step = param.OptimizeStep;
-
 		if (from is null || to is null)
-			return 1;
+			return 0;
 
-		var type = param.Type.GetUnderlyingType() ?? param.Type;
+		type = type.GetUnderlyingType() ?? type;
 
 		if (step is null && type != typeof(bool))
-			return 1;
+			return 0;
 
+		// A step of zero walks nowhere, and Walk yields nothing for it; the count says the same instead
+		// of dividing by it.
 		static int getIterCountDec(decimal fromVal, decimal toVal, decimal stepVal)
-			=> (int)((toVal - fromVal + stepVal) / stepVal).Ceiling();
+			=> stepVal == 0 ? 0 : (int)decimal.Floor(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		static int getIterCountLong(long fromVal, long toVal, long stepVal)
-			=> (int)((toVal - fromVal + stepVal) / stepVal);
+			=> stepVal == 0 ? 0 : (int)(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		if (type == typeof(bool))
 			return from.Equals(to) ? 1 : 2;
@@ -255,13 +283,34 @@ public static class StrategyParamHelper
 			throw new ArgumentNullException(nameof(param));
 
 		if (!param.CanOptimize)
-		{
-			yield return param.Value;
-			yield break;
-		}
+			return [param.Value];
 
+		// A shape that walks nowhere still leaves the parameter its own value, and a run needs one.
+		return GetOptimizationValues(param.Type, param.OptimizeFrom, param.OptimizeTo, param.OptimizeStep, param.OptimizeValues)
+			.DefaultIfEmpty(param.Value);
+	}
+
+	/// <summary>
+	/// Get all optimization values for a parameter shape.
+	/// </summary>
+	/// <param name="type">The type of the parameter value.</param>
+	/// <param name="from">Initial value, or <see langword="null" />.</param>
+	/// <param name="to">Final value, or <see langword="null" />.</param>
+	/// <param name="step">Increment value, or <see langword="null" />.</param>
+	/// <param name="values">Explicit values, or <see langword="null" />. Win over the range when not empty.</param>
+	/// <returns>Enumerable of all optimization values, empty when the shape defines none of its own.</returns>
+	public static IEnumerable<object> GetOptimizationValues(Type type, object from, object to, object step, IEnumerable values)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
+		return Walk(type.GetUnderlyingType() ?? type, from, to, step, values);
+	}
+
+	private static IEnumerable<object> Walk(Type type, object from, object to, object step, IEnumerable values)
+	{
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		var explicitValues = values?.Cast<object>().ToArray() ?? [];
 		if (explicitValues.Length > 0)
 		{
 			foreach (var v in explicitValues)
@@ -269,48 +318,13 @@ public static class StrategyParamHelper
 			yield break;
 		}
 
-		var from = param.OptimizeFrom;
-		var to = param.OptimizeTo;
-		var step = param.OptimizeStep;
-
 		if (from is null || to is null)
-		{
-			yield return param.Value;
 			yield break;
-		}
-
-		var type = param.Type.GetUnderlyingType() ?? param.Type;
 
 		if (step is null && type != typeof(bool))
-		{
-			yield return param.Value;
 			yield break;
-		}
 
-		if (type == typeof(decimal))
-		{
-			var fromTyped = (decimal)from;
-			var toTyped = (decimal)to;
-			var stepTyped = (decimal)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-		}
-		else if (type == typeof(bool))
+		if (type == typeof(bool))
 		{
 			var fromTyped = (bool)from;
 			var toTyped = (bool)to;
@@ -323,74 +337,60 @@ public static class StrategyParamHelper
 		else if (type == typeof(Unit))
 		{
 			var fromTyped = (Unit)from;
-			var toTyped = (Unit)to;
-			var stepTyped = (Unit)step;
 
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range(fromTyped.Value, ((Unit)to).Value, ((Unit)step).Value))
+				yield return new Unit(value, fromTyped.Type);
 		}
 		else if (type == typeof(TimeSpan))
 		{
-			var fromTyped = (TimeSpan)from;
-			var toTyped = (TimeSpan)to;
-			var stepTyped = (TimeSpan)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var ticks in Range(((TimeSpan)from).Ticks, ((TimeSpan)to).Ticks, ((TimeSpan)step).Ticks))
+				yield return TimeSpan.FromTicks(ticks);
 		}
-		else if (type.IsPrimitive())
+		else if (type == typeof(decimal))
 		{
-			var fromTyped = from.To<long>();
-			var toTyped = to.To<long>();
-			var stepTyped = step.To<long>();
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped.To(type);
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped.To(type);
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range((decimal)from, (decimal)to, (decimal)step))
+				yield return value;
+		}
+		else if (type == typeof(double))
+		{
+			foreach (var value in Range((double)from, (double)to, (double)step))
+				yield return value;
+		}
+		else if (type == typeof(float))
+		{
+			foreach (var value in Range((float)from, (float)to, (float)step))
+				yield return value;
+		}
+		else if (type.IsNumericInteger())
+		{
+			foreach (var value in Range(from.To<long>(), to.To<long>(), step.To<long>()))
+				yield return value.To(type);
 		}
 		else
 			throw new NotSupportedException(LocalizedStrings.TypeNotSupported.Put(type));
+	}
+
+	// A descending shape reaches here as from > to with a step of either sign, because that is what an
+	// editor writes. GetIterationsCount reads the step by modulus and counts both bounds, so the walk
+	// does the same, or the editor's count and the engine's runs disagree.
+	private static IEnumerable<T> Range<T>(T from, T to, T step)
+		where T : INumber<T>
+	{
+		var delta = T.Abs(step);
+
+		if (delta == T.Zero)
+			yield break;
+
+		if (from > to)
+		{
+			for (var value = from; value >= to; value -= delta)
+				yield return value;
+		}
+		else
+		{
+			for (var value = from; value <= to; value += delta)
+				yield return value;
+		}
 	}
 
 	#endregion
@@ -405,7 +405,23 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForce(
+		this Strategy strategy,
+		IStrategyParam[] parameters,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceAsync(parameters, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with parameter permutations for brute force optimization.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters to optimize.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceAsync(
 		this Strategy strategy,
 		IStrategyParam[] parameters,
 		out IStrategyParam[] optimizedParams,
@@ -451,7 +467,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.iterCount);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -467,7 +483,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 
@@ -494,7 +510,24 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForce(
+		this Strategy strategy,
+		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceAsync(parameters, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with parameter permutations for brute force optimization.
+	/// Supports explicit value lists for parameters like Security, DataType.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters with optional explicit values to use instead of range.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceAsync(
 		this Strategy strategy,
 		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters,
 		out IStrategyParam[] optimizedParams,
@@ -555,7 +588,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.iterCount);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -571,7 +604,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 
@@ -598,7 +631,25 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceRandomAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceRandom(
+		this Strategy strategy,
+		IStrategyParam[] parameters,
+		int randomCount,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceRandomAsync(parameters, randomCount, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with random parameter values for brute force optimization.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters to optimize.</param>
+	/// <param name="randomCount">Number of random samples per parameter.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceRandomAsync(
 		this Strategy strategy,
 		IStrategyParam[] parameters,
 		int randomCount,
@@ -632,7 +683,7 @@ public static class StrategyParamHelper
 
 			for (var i = 0; i < randomCount; i++)
 			{
-				var randomValue = param.GetRandom();
+				var randomValue = param.GetRandom(strategy.RandomProvider);
 				if (randomValue is not null)
 					values.Add(randomValue);
 			}
@@ -654,7 +705,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.values.Count);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -674,7 +725,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 
@@ -830,8 +881,9 @@ public static class StrategyParamHelper
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	/// <param name="param"><see cref="StrategyParam{T}"/></param>
 	/// <param name="count">Number of random values to generate.</param>
+	/// <param name="provider">Where the values are drawn from.</param>
 	/// <returns>Set of unique random values.</returns>
-	public static HashSet<T> GetRandomValues<T>(this StrategyParam<T> param, int count)
+	public static HashSet<T> GetRandomValues<T>(this StrategyParam<T> param, int count, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
@@ -847,7 +899,7 @@ public static class StrategyParamHelper
 
 		while (values.Count < count && attempts < maxAttempts)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(provider);
 			values.Add(value);
 			attempts++;
 		}
@@ -860,8 +912,9 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
 	/// <param name="count">Number of random values to generate.</param>
+	/// <param name="provider">Where the values are drawn from.</param>
 	/// <returns>Set of unique random values.</returns>
-	public static HashSet<object> GetRandomValues(this IStrategyParam param, int count)
+	public static HashSet<object> GetRandomValues(this IStrategyParam param, int count, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
@@ -877,7 +930,7 @@ public static class StrategyParamHelper
 
 		while (values.Count < count && attempts < maxAttempts)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(provider);
 			if (value is not null)
 				values.Add(value);
 			attempts++;

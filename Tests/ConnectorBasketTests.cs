@@ -16,21 +16,87 @@ public class ConnectorBasketTests : BaseTestClass
 	#region Infrastructure
 
 	/// <summary>
-	/// Subclass to allow setting custom Adapter with injected routing manager.
+	/// Raised by the mock adapters after every message they handle, so a test can wait for the state
+	/// it expects to be reached instead of sleeping for a stretch of clock in which it has probably
+	/// been reached. A loaded machine then makes a test slower, never green for the wrong reason.
 	/// </summary>
-	private sealed class TestConnector : Connector
+	private sealed class ProgressSignal
 	{
-		public TestConnector(BasketMessageAdapter adapter)
-			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false, initChannels: false)
+		private TaskCompletionSource<bool> _next = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		/// <summary>
+		/// Completes on the next signal. Taken before a condition is tested, so a signal raised
+		/// between the two still ends the wait instead of being missed and waited out.
+		/// </summary>
+		public Task Next => Volatile.Read(ref _next).Task;
+
+		/// <summary>
+		/// Tell everyone waiting that something happened and their condition is worth re-checking.
+		/// </summary>
+		public void Raise()
+			=> Interlocked.Exchange(ref _next, AsyncHelper.CreateTaskCompletionSource<bool>()).TrySetResult(true);
+	}
+
+	/// <summary>
+	/// Wait until the condition holds, re-checking it on every signal the adapter raises. The test's
+	/// own token ends the wait - its timeout cancels it - and the failure then says what was waited
+	/// for and what had arrived instead.
+	/// </summary>
+	/// <param name="signal">Signal of the adapter whose state is being waited on.</param>
+	/// <param name="condition">What the test is waiting for.</param>
+	/// <param name="describeFailure">Message to fail with, built when the wait is given up on.</param>
+	/// <param name="cancellationToken">Token of the running test.</param>
+	private static async Task WaitFor(ProgressSignal signal, Func<bool> condition, Func<string> describeFailure, CancellationToken cancellationToken)
+	{
+		while (true)
 		{
-			InMessageChannel = new PassThroughMessageChannel();
-			OutMessageChannel = new PassThroughMessageChannel();
-			Adapter = adapter;
+			var next = signal.Next;
+
+			if (condition())
+				return;
+
+			try
+			{
+				await next.WithCancellation(cancellationToken);
+			}
+			catch (OperationCanceledException)
+			{
+				Fail(describeFailure());
+				return;
+			}
 		}
 	}
 
 	/// <summary>
-	/// Mock adapter identical to AsyncExtensionsTests.MockAdapter.
+	/// Subclass to allow setting custom Adapter with injected routing manager.
+	/// </summary>
+	private sealed class TestConnector : Connector
+	{
+		public TestConnector(BasketMessageAdapter adapter, IMessageChannel outChannel)
+			: this(outChannel)
+		{
+			Adapter = adapter;
+		}
+
+		/// <summary>
+		/// A connector whose adapter chain is assigned as a whole, the way an application composes its own.
+		/// </summary>
+		public TestConnector(IMessageAdapterWrapper chain)
+			: this(new PassThroughMessageChannel())
+		{
+			InnerAdapter = chain;
+		}
+
+		private TestConnector(IMessageChannel outChannel)
+			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false, initChannels: false)
+		{
+			InMessageChannel = new PassThroughMessageChannel();
+			OutMessageChannel = outChannel;
+		}
+	}
+
+	/// <summary>
+	/// Mock adapter after AsyncExtensionsTests.MockAdapter, with order books as well.
 	/// </summary>
 	private sealed class MockAdapter : MessageAdapter
 	{
@@ -42,6 +108,12 @@ public class ConnectorBasketTests : BaseTestClass
 		public OrderCancelMessage LastCancelMessage { get; private set; }
 		public long OrderStatusSubscriptionId { get; private set; }
 
+		/// <summary>
+		/// Signalled once the adapter has finished with a message, so a test waits for what it sent
+		/// to have been handled rather than for a while.
+		/// </summary>
+		public ProgressSignal Progress { get; } = new();
+
 		public override bool UseInChannel => false;
 		public override bool UseOutChannel => false;
 
@@ -50,12 +122,27 @@ public class ConnectorBasketTests : BaseTestClass
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
 			this.AddSupportedMarketDataType(DataType.Level1);
+			this.AddSupportedMarketDataType(DataType.MarketDepth);
 		}
 
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || dataType == DataType.Transactions;
 
 		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			try
+			{
+				await HandleAsync(message, cancellationToken);
+			}
+			finally
+			{
+				// Everything a test waits for here is recorded while the message is handled, so one
+				// signal afterwards wakes every waiter, however the handling ended.
+				Progress.Raise();
+			}
+		}
+
+		private async ValueTask HandleAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Enqueue(message);
 
@@ -73,10 +160,14 @@ public class ConnectorBasketTests : BaseTestClass
 					if (mdMsg.IsSubscribe)
 					{
 						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
-						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
-						LastSubscribedId = mdMsg.TransactionId;
+
 						if (mdMsg.To == null)
 							await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+
+						// Taken down only once the subscription has been answered in full, so a test
+						// that waits for it cannot go on to send data the subscription is not up for.
+						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
+						LastSubscribedId = mdMsg.TransactionId;
 					}
 					else
 					{
@@ -172,7 +263,7 @@ public class ConnectorBasketTests : BaseTestClass
 		}
 	}
 
-	private static (TestConnector connector, MockAdapter adapter, BasketState state) CreateConnectorWithBasketState()
+	private static (TestConnector connector, MockAdapter adapter, BasketState state) CreateConnectorWithBasketState(IMessageChannel outChannel)
 	{
 		var state = new BasketState();
 
@@ -199,7 +290,7 @@ public class ConnectorBasketTests : BaseTestClass
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
 
-		var connector = new TestConnector(basket);
+		var connector = new TestConnector(basket, outChannel);
 
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
@@ -215,7 +306,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_ConnectAsync()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		// --- Before connect ---
 		state.ConnectionState.ConnectedCount.AssertEqual(0, "ConnectedCount before connect");
@@ -250,7 +341,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrder_Basic()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -296,7 +387,8 @@ public class ConnectorBasketTests : BaseTestClass
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
 
-		orderReceived.Count.AssertEqual(1);
+		// None->Pending (registration) + Pending->Active = 2 OrderReceived.
+		orderReceived.Count.AssertEqual(2);
 
 		// --- State still consistent ---
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -311,7 +403,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_Live()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -322,25 +414,34 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 1, 10, 0, 0).UtcKind();
+
+		// The last of these is only there to be waited for: the channel keeps its order, so any
+		// duplicate of an earlier one has to show up in the list before it does.
+		var expectedTimes = Enumerable.Range(0, 4).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
+		var arrived = new ProgressSignal();
+
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
 				{
-					enumCts.Cancel();
-					break;
+					got.Add(l1);
+					arrived.Raise();
 				}
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		await started.Task.WithCancellation(CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await WaitFor(adapter.Progress, () => adapter.LastSubscribedId != 0,
+			() => "The subscription never reached the adapter.", CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 		AreNotEqual(0L, id);
@@ -352,18 +453,26 @@ public class ConnectorBasketTests : BaseTestClass
 		// (the connector generates its own transId, basket creates child)
 
 		// --- Send data ---
-		for (var i = 0; i < 3; i++)
+		foreach (var serverTime in expectedTimes)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = serverTime };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		await WaitFor(arrived, () => got.Count >= expectedTimes.Length,
+			() => $"Only {got.Count} of the {expectedTimes.Length} sent Level1 messages came out of the subscription.",
+			CancellationToken);
+
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
-		HasCount(3, got);
+		HasCount(expectedTimes.Length, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live basket subscription should preserve order without duplicates");
 
 		// Wait for unsubscribe
-		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id),
+			() => "Cancelling the enumeration never sent an unsubscribe to the adapter.", CancellationToken);
 
 		// --- State after unsubscribe ---
 		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected after unsub");
@@ -378,7 +487,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_History()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -398,14 +507,10 @@ public class ConnectorBasketTests : BaseTestClass
 				got.Add(l1);
 		}, CancellationToken);
 
-		// Wait for subscription to be processed
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(100, CancellationToken);
+		// Wait for the subscription to be processed: the adapter records it and takes down its id
+		// while handling the very same message, so one is as good as the other to wait for.
+		await WaitFor(adapter.Progress, () => adapter.ActiveSubscriptions.Count > 0,
+			() => "The historical subscription never reached the adapter.", CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 		AreNotEqual(0L, id);
@@ -439,7 +544,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_Lifecycle()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -475,13 +580,44 @@ public class ConnectorBasketTests : BaseTestClass
 
 	#endregion
 
+	#region Chain Assigned As A Whole
+
+	[TestMethod]
+	public void ConnectorBasket_ChainAssignedAsAWhole_NumbersSubscriptionsByItsBasket()
+	{
+		var basketIds = new IncrementalIdGenerator { Current = 1000 };
+
+		var basket = new BasketMessageAdapter(
+			basketIds,
+			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null);
+
+		using var connector = new TestConnector(new ChannelMessageAdapter(basket, new PassThroughMessageChannel(), new PassThroughMessageChannel())
+		{
+			OwnInnerAdapter = true,
+		});
+
+		var subscription = new Subscription(new SecurityLookupMessage());
+
+		connector.Subscribe(subscription);
+
+		// A subscription sent to a named adapter keeps its number on the way down, where the basket numbers the
+		// others: two sequences would meet there.
+		AreEqual(1001, subscription.TransactionId);
+		AreSame(basketIds, connector.TransactionIdGenerator);
+	}
+
+	#endregion
+
 	#region RegisterOrderAsync
 
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -500,7 +636,16 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var events = new List<(Order order, MyTrade trade)>();
 		var allOrderReceived = new List<Order>();
-		connector.OrderReceived += (_, o) => allOrderReceived.Add(o);
+
+		// The registration itself and the acceptance are one update of the order each, so the test
+		// waits for the second of them instead of for a while after the first.
+		var reported = new ProgressSignal();
+
+		connector.OrderReceived += (_, o) =>
+		{
+			allOrderReceived.Add(o);
+			reported.Raise();
+		};
 
 		var enumTask = Task.Run(async () =>
 		{
@@ -509,11 +654,8 @@ public class ConnectorBasketTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for adapter to actually receive the order
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastOrderTransactionId != 0,
+			() => "The order never reached the adapter.", CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -526,16 +668,14 @@ public class ConnectorBasketTests : BaseTestClass
 		// Simulate acceptance
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(reported, () => allOrderReceived.Count >= 2,
+			() => $"The order was reported {allOrderReceived.Count} time(s): the registration and the acceptance are two. Order state: {order.State}, Id: {order.Id}",
+			CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
+		AreEqual(OrderStates.Active, order.State);
 
-		allOrderReceived.Count.AssertEqual(1,
-			$"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+		allOrderReceived.Count.AssertEqual(2,
+			$"OrderReceived should have fired for the registration and for the acceptance, and for nothing else. Order state: {order.State}, Id: {order.Id}");
 
 		// --- State after active ---
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after active");
@@ -545,7 +685,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertEqual(2, "Should receive Active and Done events");
+		events.Count.AssertEqual(3, "Should receive Pending, Active and Done events");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
@@ -558,7 +698,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -583,11 +723,8 @@ public class ConnectorBasketTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastOrderTransactionId != 0,
+			() => "The order never reached the adapter.", CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -602,12 +739,12 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertGreater(3, "Should receive events for order states and trades");
+		events.Count.AssertEqual(7, "Expected Pending, Active, two order+trade pairs, and Done");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(1, "Should have received trade events");
+		tradeEvents.Count.AssertEqual(2, "Should have received exactly two trade events");
 
 		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
 		tradePrices.AssertContains(100.5m);
@@ -623,7 +760,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_CancellationSendsCancelOrder()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -660,11 +797,8 @@ public class ConnectorBasketTests : BaseTestClass
 			}
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastOrderTransactionId != 0,
+			() => "The order never reached the adapter.", CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -673,11 +807,8 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastCancelMessage == null)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastCancelMessage is not null,
+			() => "Cancelling the enumeration never sent a cancel order to the adapter.", CancellationToken);
 
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
 
@@ -695,7 +826,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_FiltersOtherOrders()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -720,11 +851,8 @@ public class ConnectorBasketTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastOrderTransactionId != 0,
+			() => "The order never reached the adapter.", CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -745,7 +873,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertEqual(4, "Should receive Active, Trade, order update and Done events for our order");
+		events.Count.AssertEqual(5, "Should receive Pending, Active, Trade, order update and Done events for our order");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
@@ -764,7 +892,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_FullLifecycle()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -789,11 +917,8 @@ public class ConnectorBasketTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.LastOrderTransactionId != 0,
+			() => "The order never reached the adapter.", CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -835,6 +960,146 @@ public class ConnectorBasketTests : BaseTestClass
 
 	#endregion
 
+	#region Orders Already Held
+
+	/// <summary>
+	/// Connects and leaves one order to buy ten at a hundred resting at the venue, known to the connector.
+	/// </summary>
+	private async Task<Order> RestOrderAsync(TestConnector connector, MockAdapter adapter, Security security)
+	{
+		await connector.ConnectAsync(CancellationToken);
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var reported = new ProgressSignal();
+		connector.OrderReceived += (_, _) => reported.Raise();
+
+		connector.RegisterOrder(order);
+		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
+
+		await WaitFor(reported, () => order.State == OrderStates.Active, () => $"The venue's acceptance did not reach the order: {order.State}.", CancellationToken);
+
+		return order;
+	}
+
+	/// <summary>
+	/// The venue reports that an order was partly filled, and before the connector has got to that message
+	/// somebody else asks it for orders. Whoever asked is told what the venue said last, and the order keeps
+	/// it - not what the order had been when the question arrived.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_OrdersAskedForAgain_AreToldAsTheVenueSaidLast()
+	{
+		var errors = new SynchronizedList<Exception>();
+		var (connector, adapter, _) = CreateConnectorWithBasketState(new InMemoryMessageChannel(new MessageByOrderQueue(), "Connector Out", errors.Add));
+
+		try
+		{
+			var security = new Security { Id = "AAPL@TEST" };
+			var order = await RestOrderAsync(connector, adapter, security);
+
+			// From here the connector does not get to what it is sent, until it is let go.
+			connector.OutMessageChannel.Suspend();
+
+			await adapter.SimulateData(order.TransactionId, new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				SecurityId = security.ToSecurityId(),
+				OrderId = 123,
+				Balance = 4m,
+				OrderState = OrderStates.Active,
+				ServerTime = DateTime.UtcNow,
+			}, CancellationToken);
+
+			var asked = new Subscription(DataType.Transactions);
+			var told = new SynchronizedList<decimal?>();
+			var answered = new ProgressSignal();
+
+			connector.OrderReceived += (subscription, o) =>
+			{
+				if (!ReferenceEquals(subscription, asked))
+					return;
+
+				told.Add(o.Balance);
+				answered.Raise();
+			};
+
+			connector.Subscribe(asked);
+
+			connector.OutMessageChannel.Resume();
+
+			await WaitFor(answered, () => told.Count > 0, () => "Whoever asked for orders was told of none.", CancellationToken);
+
+			AreEqual(4m, told[0], "Whoever asked is told what the order is now.");
+			AreEqual(4m, order.Balance, "The order holds what the venue said last.");
+			AreEqual(0, errors.Count, errors.Select(e => e.Message).Join("; "));
+		}
+		finally
+		{
+			connector.Dispose();
+		}
+	}
+
+	/// <summary>
+	/// A filtered order book leaves the account's own orders out. What computes it learns of them by asking
+	/// for the active orders itself, from inside the adapter chain, and an order that was resting before the
+	/// book was asked for is one of them.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_FilteredBook_LeavesOutAnOrderThatWasAlreadyResting()
+	{
+		var (connector, adapter, _) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await RestOrderAsync(connector, adapter, security);
+
+		var filtered = new Subscription(DataType.FilteredMarketDepth, security);
+		var books = new SynchronizedList<IOrderBookMessage>();
+
+		connector.OrderBookReceived += (subscription, book) =>
+		{
+			if (ReferenceEquals(subscription, filtered))
+				books.Add(book);
+		};
+
+		connector.Subscribe(filtered);
+
+		await WaitFor(adapter.Progress, () => adapter.ActiveSubscriptions.Values.Any(m => m.DataType2 == DataType.MarketDepth),
+			() => "The venue was not asked for the order book.", CancellationToken);
+
+		var bookId = adapter.ActiveSubscriptions.First(p => p.Value.DataType2 == DataType.MarketDepth).Key;
+
+		// The own order is the whole of the best bid.
+		await adapter.SimulateData(bookId, new QuoteChangeMessage
+		{
+			SecurityId = security.ToSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10m), new QuoteChange(99m, 7m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		}, CancellationToken);
+
+		IsTrue(books.Count > 0, "The filtered book did not come.");
+
+		var bids = books.Last().Bids;
+
+		AreEqual(1, bids.Length, $"Bids of the filtered book: {bids.Select(q => $"{q.Price}x{q.Volume}").Join(", ")}.");
+		AreEqual(99m, bids[0].Price);
+		AreEqual(7m, bids[0].Volume);
+	}
+
+	#endregion
+
 	#region Candle Pipeline — Live Subscription Bug
 
 	/// <summary>
@@ -845,6 +1110,12 @@ public class ConnectorBasketTests : BaseTestClass
 	{
 		public ConcurrentQueue<MarketDataMessage> RecordedSubscriptions { get; } = [];
 		public ConcurrentQueue<MarketDataMessage> RecordedUnsubscriptions { get; } = [];
+
+		/// <summary>
+		/// Signalled once the adapter has finished with a message, so a test waits for what it sent
+		/// to have been handled rather than for a while.
+		/// </summary>
+		public ProgressSignal Progress { get; } = new();
 
 		public CandleMockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -863,6 +1134,20 @@ public class ConnectorBasketTests : BaseTestClass
 
 		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
+			try
+			{
+				await HandleAsync(message, cancellationToken);
+			}
+			finally
+			{
+				// Everything a test waits for here is recorded while the message is handled, so one
+				// signal afterwards wakes every waiter, however the handling ended.
+				Progress.Raise();
+			}
+		}
+
+		private async ValueTask HandleAsync(Message message, CancellationToken cancellationToken)
+		{
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -876,15 +1161,23 @@ public class ConnectorBasketTests : BaseTestClass
 					var mdMsg = (MarketDataMessage)message;
 					if (mdMsg.IsSubscribe)
 					{
-						RecordedSubscriptions.Enqueue(mdMsg.TypedClone());
+						var recorded = mdMsg.TypedClone();
+
 						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 						// Online if live (To==null), Finished if history (To!=null)
 						await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+
+						// Recorded only once the subscription has been answered in full, so a test
+						// that waits for it cannot go on to act on a subscription that is not up yet.
+						RecordedSubscriptions.Enqueue(recorded);
 					}
 					else
 					{
-						RecordedUnsubscriptions.Enqueue(mdMsg.TypedClone());
+						var recorded = mdMsg.TypedClone();
+
 						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
+
+						RecordedUnsubscriptions.Enqueue(recorded);
 					}
 					break;
 				}
@@ -931,7 +1224,7 @@ public class ConnectorBasketTests : BaseTestClass
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
 
-		var connector = new TestConnector(basket);
+		var connector = new TestConnector(basket, new PassThroughMessageChannel());
 
 		var adapter = new CandleMockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
@@ -939,20 +1232,27 @@ public class ConnectorBasketTests : BaseTestClass
 		return (connector, adapter, state);
 	}
 
+	/// <summary>
+	/// What the adapter has been asked to subscribe to so far, so a wait that is given up on can say
+	/// what arrived instead of what was expected.
+	/// </summary>
+	private static string DescribeSubscriptions(CandleMockAdapter adapter)
+		=> $"Subscriptions: [{adapter.RecordedSubscriptions.Select(m => $"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})").Join("; ")}]";
+
+	/// <summary>
+	/// What the adapter has been asked to unsubscribe from so far, for the same reason.
+	/// </summary>
+	private static string DescribeUnsubscriptions(CandleMockAdapter adapter)
+		=> $"Unsubscriptions: [{adapter.RecordedUnsubscriptions.Select(m => m.DataType2.ToString()).Join("; ")}]";
+
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
 	public async Task CandleHistLive_LiveSubscriptionShouldReachAdapter()
 	{
-		// Bug repro: user subscribes to candles with From + To=null (hist+live).
-		// CandleBuilderManager always caps To=CurrentTime when IsSupportCandlesUpdates=false,
-		// so the actual adapter ONLY ever sees history-only candle subscriptions.
-		// After history finishes, it transitions to build from ticks —
-		// a live TICKS subscription arrives, but a live CANDLE subscription never does.
-		//
-		// The pipeline is allowed to split hist+live into two phases:
+		// A hist+live candle subscription is split into two phases:
 		//   Phase 1: candle subscription with To set (history-only)
 		//   Phase 2: candle subscription with To=null (live)
-		// We wait for the FULL cycle to complete before checking.
+		// The test waits for the full transition before checking both live sources.
 
 		var (connector, adapter, _) = CreateConnectorForCandleTest();
 
@@ -984,32 +1284,22 @@ public class ConnectorBasketTests : BaseTestClass
 		// 2) adapter responds Finished → CandleBuilderManager transitions to Compress
 		// 3) ticks subscription (live) arrives at adapter
 		// Ticks subscription = proof the full cycle completed.
-		// After that we also check if a live candle subscription arrived (as 2nd phase).
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()),
+			() => $"The live ticks subscription that builds the candles never reached the adapter. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
-		// Small extra delay: if pipeline sends a 2nd candle sub (live) it would arrive around the same time
-		await Task.Delay(500, CancellationToken);
+		// The second phase is the live candle subscription: wait for it to be sent rather than for a
+		// stretch of clock in which it may or may not have been.
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly()),
+			() => $"Expected a live candle subscription (To=null) at the adapter, but none arrived. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
-		var allSubs = adapter.RecordedSubscriptions.ToList();
+		var liveCandleSub = adapter.RecordedSubscriptions.FirstOrDefault(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly());
 
-		// The pipeline COULD legitimately split into:
-		//   1st: candle TF 5min (To=CurrentTime, history-only)
-		//   2nd: candle TF 5min (To=null, live)              ← this is what we expect but never arrives
-		// Instead what actually happens:
-		//   1st: candle TF 5min (To=CurrentTime, history-only)
-		//   2nd: Ticks (To=null, live)                        ← redirect to ticks, not candles
-
-		var liveCandleSub = allSubs.FirstOrDefault(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly());
-
-		// Fails — proving the bug: adapter never receives a live candle subscription
 		IsNotNull(liveCandleSub,
-			$"Expected a live candle subscription (To=null) at the adapter, but none arrived. " +
-			$"Subscriptions: [{allSubs.Select(m =>
-				$"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})").Join("; ")}]");
+			$"Expected a live candle subscription (To=null) at the adapter, but none arrived. {DescribeSubscriptions(adapter)}");
 
 		runCts.Cancel();
 	}
@@ -1036,25 +1326,27 @@ public class ConnectorBasketTests : BaseTestClass
 		connector.Subscribe(sub);
 
 		// Wait for full pipeline cycle (ticks subscription = proof history finished and compress started)
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()),
+			() => $"The live ticks subscription that builds the candles never reached the adapter. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
-		await Task.Delay(500, CancellationToken);
+		// Both live subscriptions have to be in place before unsubscribing, or there is nothing for
+		// the unsubscribe to undo and the test would be measuring the wrong thing.
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly()),
+			() => $"The live candle subscription never reached the adapter, so there was nothing to unsubscribe. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
 		// Now unsubscribe via sync API
 		connector.UnSubscribe(sub);
 
 		// Wait for unsubscribe messages to arrive
-		await Task.Run(async () =>
-		{
-			while (adapter.RecordedUnsubscriptions.Count < 2)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks)
+				&& adapter.RecordedUnsubscriptions.Any(m => m.DataType2.IsTFCandles),
+			() => $"Unsubscribing left one of the two live subscriptions in place. {DescribeUnsubscriptions(adapter)}",
+			CancellationToken);
 
 		var unsubs = adapter.RecordedUnsubscriptions.ToList();
 
@@ -1086,23 +1378,15 @@ public class ConnectorBasketTests : BaseTestClass
 		connector.Subscribe(sub);
 
 		// Wait for subscription to reach adapter
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks),
+			() => $"The ticks subscription never reached the adapter. {DescribeSubscriptions(adapter)}", CancellationToken);
 
 		// Now unsubscribe via sync API
 		connector.UnSubscribe(sub);
 
 		// Wait for unsubscribe
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks),
+			() => $"Unsubscribing never reached the adapter. {DescribeUnsubscriptions(adapter)}", CancellationToken);
 
 		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Ticks);
 		unsub.IsSubscribe.AssertFalse();
@@ -1125,23 +1409,15 @@ public class ConnectorBasketTests : BaseTestClass
 		connector.Subscribe(sub);
 
 		// Wait for subscription to reach adapter
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1),
+			() => $"The Level1 subscription never reached the adapter. {DescribeSubscriptions(adapter)}", CancellationToken);
 
 		// Now unsubscribe via sync API
 		connector.UnSubscribe(sub);
 
 		// Wait for unsubscribe
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1),
+			() => $"Unsubscribing never reached the adapter. {DescribeUnsubscriptions(adapter)}", CancellationToken);
 
 		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Level1);
 		unsub.IsSubscribe.AssertFalse();
@@ -1167,24 +1443,26 @@ public class ConnectorBasketTests : BaseTestClass
 		using var runCts = new CancellationTokenSource();
 		var run = connector.SubscribeAsync(sub, runCts.Token);
 
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()),
+			() => $"The live ticks subscription that builds the candles never reached the adapter. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
-		await Task.Delay(500, CancellationToken);
+		// Both live subscriptions have to be in place before cancelling, or there is nothing for the
+		// cancellation to undo and the test would be measuring the wrong thing.
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedSubscriptions.Any(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly()),
+			() => $"The live candle subscription never reached the adapter, so there was nothing to unsubscribe. {DescribeSubscriptions(adapter)}",
+			CancellationToken);
 
 		runCts.Cancel();
 		try { await run; } catch (OperationCanceledException) { }
 
-		await Task.Run(async () =>
-		{
-			while (adapter.RecordedUnsubscriptions.Count < 2)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress,
+			() => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks)
+				&& adapter.RecordedUnsubscriptions.Any(m => m.DataType2.IsTFCandles),
+			() => $"Cancelling left one of the two live subscriptions in place. {DescribeUnsubscriptions(adapter)}",
+			CancellationToken);
 
 		var unsubs = adapter.RecordedUnsubscriptions.ToList();
 
@@ -1214,22 +1492,14 @@ public class ConnectorBasketTests : BaseTestClass
 		using var runCts = new CancellationTokenSource();
 		var run = connector.SubscribeAsync(sub, runCts.Token);
 
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks),
+			() => $"The ticks subscription never reached the adapter. {DescribeSubscriptions(adapter)}", CancellationToken);
 
 		runCts.Cancel();
 		try { await run; } catch (OperationCanceledException) { }
 
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks),
+			() => $"Cancelling the subscription never reached the adapter as an unsubscribe. {DescribeUnsubscriptions(adapter)}", CancellationToken);
 
 		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Ticks);
 		unsub.IsSubscribe.AssertFalse();
@@ -1252,22 +1522,14 @@ public class ConnectorBasketTests : BaseTestClass
 		using var runCts = new CancellationTokenSource();
 		var run = connector.SubscribeAsync(sub, runCts.Token);
 
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		await Task.Delay(200, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1),
+			() => $"The Level1 subscription never reached the adapter. {DescribeSubscriptions(adapter)}", CancellationToken);
 
 		runCts.Cancel();
 		try { await run; } catch (OperationCanceledException) { }
 
-		await Task.Run(async () =>
-		{
-			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1))
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await WaitFor(adapter.Progress, () => adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1),
+			() => $"Cancelling the subscription never reached the adapter as an unsubscribe. {DescribeUnsubscriptions(adapter)}", CancellationToken);
 
 		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Level1);
 		unsub.IsSubscribe.AssertFalse();

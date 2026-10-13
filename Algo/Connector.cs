@@ -17,6 +17,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 	private readonly EntityCache _entityCache;
 	private readonly ConnectorSubscriptionManager _subscriptionManager;
 
+	// Orders and positions are answered from the cache where messages are applied to it, in the order they
+	// came. An adapter in the chain reads the cache ahead of the messages still waiting to be applied, so it
+	// is left the market data and the orders an adapter above it asks for by itself.
+	private readonly SnapshotHolderManager _stateSnapshots;
+	private readonly ISnapshotHolder _chainSnapshots;
+
 	// backward compatibility for NewXXX events
 	private readonly CachedSynchronizedSet<Security> _existingSecurities = [];
 	private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = [];
@@ -52,7 +58,9 @@ public partial class Connector : BaseLogReceiver, IConnector
 		SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 		PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-		_entityCache = new(this, TryGetSecurity, exchangeInfoProvider, PositionStorage);
+		_entityCache = new(this, exchangeInfoProvider, PositionStorage);
+		_stateSnapshots = new(new CacheSnapshots(_entityCache, IsState));
+		_chainSnapshots = new CacheSnapshots(_entityCache, subscription => !IsState(subscription) || !_stateSnapshots.IsPending(subscription.TransactionId));
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 
@@ -600,11 +608,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (changes is null)
 			throw new ArgumentNullException(nameof(changes));
 
+		CheckOnOld(order);
+
 		try
 		{
 			this.AddOrderInfoLog(order, nameof(EditOrder));
 
-			CheckOnOld(order);
 			CheckOnNew(changes);
 
 			if (IsOrderEditable(order) != true)
@@ -640,6 +649,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (newOrder is null)
 			throw new ArgumentNullException(nameof(newOrder));
 
+		CheckOnOld(oldOrder);
+
 		try
 		{
 			this.AddOrderInfoLog(oldOrder, nameof(ReRegisterOrder));
@@ -647,7 +658,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 			if (oldOrder.Security != newOrder.Security)
 				throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
-			CheckOnOld(oldOrder);
 			CheckOnNew(newOrder);
 
 			if (IsOrderReplaceable(oldOrder) != true)
@@ -682,13 +692,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	public async ValueTask CancelOrderAsync(Order order, CancellationToken cancellationToken = default)
 	{
+		CheckOnOld(order);
+
 		long transactionId = 0;
 
 		try
 		{
 			this.AddOrderInfoLog(order, nameof(CancelOrder));
-
-			CheckOnOld(order);
 
 			transactionId = TransactionIdGenerator.GetNextId();
 			_entityCache.AddOrderByCancelationId(order, transactionId);
@@ -759,12 +769,15 @@ public partial class Connector : BaseLogReceiver, IConnector
 		}
 	}
 
-	private static void CheckOnOld(Order order)
+	private void CheckOnOld(Order order)
 	{
 		CheckOrderState(order);
 
 		if (order.TransactionId == 0)
 			throw new ArgumentException(LocalizedStrings.OrderNoTransId, nameof(order));
+
+		if (!ReferenceEquals(_entityCache.TryGetOrder(order.TransactionId, OrderOperations.Register), order))
+			throw new ArgumentException(LocalizedStrings.OrderNotFound.Put(order.TransactionId), nameof(order));
 	}
 
 	private static void CheckOrderState(Order order)
@@ -955,13 +968,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <inheritdoc />
+	[Obsolete("Use GetSecurityAsync instead.")]
 	public Security GetSecurity(SecurityId securityId)
-		=> GetSecurity(securityId, s => false);
+		// Sync bridge over the async path kept only for the deprecated IConnector contract.
+		=> AsyncHelper.Run(() => GetSecurityAsync(securityId, default));
 
-	private Security TryGetSecurity(SecurityId? securityId)
-		=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
-
-	private Security EnsureGetSecurity<TMessage>(TMessage message)
+	private async ValueTask<Security> EnsureGetSecurityAsync<TMessage>(TMessage message, CancellationToken cancellationToken)
 		where TMessage : ISecurityIdMessage, ISubscriptionIdMessage
 	{
 		var secId = message.SecurityId;
@@ -983,16 +995,21 @@ public partial class Connector : BaseLogReceiver, IConnector
 			secId = subscrSecId.Value;
 		}
 
-		return TryGetSecurity(secId) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.SecurityNoFound.Put(secId));
+		return await GetSecurityAsync(secId, cancellationToken) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.SecurityNoFound.Put(secId));
 	}
+
+	/// <inheritdoc />
+	public ValueTask<Security> GetSecurityAsync(SecurityId securityId, CancellationToken cancellationToken)
+		=> GetSecurityAsync(securityId, s => false, cancellationToken);
 
 	/// <summary>
 	/// To get the instrument by the code.
 	/// </summary>
 	/// <param name="id">Security ID.</param>
 	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="SecurityReceived"/> should be called.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Security.</returns>
-	private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity)
+	private async ValueTask<Security> GetSecurityAsync(SecurityId id, Func<Security, bool> changeSecurity, CancellationToken cancellationToken)
 	{
 		if (id == default)
 			throw new ArgumentNullException(nameof(id));
@@ -1000,7 +1017,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (changeSecurity == null)
 			throw new ArgumentNullException(nameof(changeSecurity));
 
-		var security = SecurityStorage.GetOrCreate(id, key =>
+		var (security, isNew) = await SecurityStorage.GetOrCreateAsync(id, key =>
 		{
 			var idInfo = SecurityIdGenerator.Split(key);
 
@@ -1013,7 +1030,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 				Code = code,
 				Board = board,
 			};
-		}, out var isNew);
+		}, cancellationToken);
 
 		if (_existingSecurities.TryAdd(security))
 			_added?.Invoke([security]);
@@ -1072,17 +1089,23 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Disconnect"/>.
+	/// To release allocated resources. In particular, to disconnect from the trading system.
+	/// It is what both <see cref="IDisposable.Dispose"/> and <see cref="DisposeAsync"/> run.
 	/// </summary>
-	protected override void DisposeManaged()
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual async ValueTask DisposeManagedAsync()
 	{
 		_isDisposing = true;
 
 		if (ConnectionState == ConnectionStates.Connected)
 		{
+			LogInfo(nameof(Disconnect));
+
+			ConnectionState = ConnectionStates.Disconnecting;
+
 			try
 			{
-				Disconnect();
+				await OnDisconnectAsync(CancellationToken.None);
 			}
 			catch (Exception ex)
 			{
@@ -1098,13 +1121,41 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 		//	MarketDataAdapter = null;
 
-		AsyncHelper.Run(() => SendInMessageAsync(_disposeMessage, CancellationToken.None));
+		await SendInMessageAsync(_disposeMessage, CancellationToken.None);
 
 		CloseTimer();
 	}
 
+	/// <summary>
+	/// The release as <see cref="IDisposable"/> requires it: the caller is blocked until <see cref="DisposeManagedAsync"/> is over.
+	/// </summary>
+	protected sealed override void DisposeManaged()
+		=> AsyncHelper.Run(DisposeManagedAsync);
+
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public async ValueTask DisposeAsync()
+	{
+		if (!TryBeginDispose())
+			return;
+
+		try
+		{
+			await DisposeManagedAsync();
+			DisposeNative();
+		}
+		finally
+		{
+			EndDispose();
+		}
+	}
+
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1121,18 +1172,34 @@ public partial class Connector : BaseLogReceiver, IConnector
 		CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
 
 		if (storage.ContainsKey(nameof(RiskManager)))
-			RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
+			RiskManager = await storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntireAsync<IRiskManager>(cancellationToken);
 
-		Adapter.Load(storage, nameof(Adapter));
+		await Adapter.LoadAsync(storage, nameof(Adapter), cancellationToken);
 
 		MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
-		SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
+		TimeChange = storage.GetValue(nameof(TimeChange), TimeChange);
+
+		var supportBasketSecurities = storage.GetValue(nameof(SupportBasketSecurities), SupportBasketSecurities);
+		var supportSnapshots = storage.GetValue(nameof(SupportSnapshots), SupportSnapshots);
+		var supportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
+		var supportFilteredMarketDepth = storage.GetValue(nameof(SupportFilteredMarketDepth), SupportFilteredMarketDepth);
+
+		// Rebuild these wrappers from the inside out so their order is the same as in Adapter's setter.
+		SupportFilteredMarketDepth = false;
+		SupportAssociatedSecurity = false;
+		SupportSnapshots = false;
+		SupportBasketSecurities = false;
+
+		SupportBasketSecurities = supportBasketSecurities;
+		SupportSnapshots = supportSnapshots;
+		SupportAssociatedSecurity = supportAssociatedSecurity;
+		SupportFilteredMarketDepth = supportFilteredMarketDepth;
 
 		var subscriptionsOnConnect = storage.GetValue<object>("LookupMessagesOnConnect") ?? storage.GetValue<object>(nameof(SubscriptionsOnConnect));
 		if (subscriptionsOnConnect is IEnumerable<SettingsStorage> subSettings)
 		{
 			SubscriptionsOnConnect.Clear();
-			SubscriptionsOnConnect.AddRange(subSettings.Select(s => new Subscription(s.Load<DataType>())));
+			SubscriptionsOnConnect.AddRange((await subSettings.LoadAllAsync<DataType>(cancellationToken)).Select(dt => new Subscription(dt)));
 		}
 		else if (subscriptionsOnConnect is string str)
 		{
@@ -1148,13 +1215,18 @@ public partial class Connector : BaseLogReceiver, IConnector
 		IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 		if (Buffer != null && storage.ContainsKey(nameof(Buffer)))
-			Buffer.Load(storage, nameof(Buffer));
+			await Buffer.LoadAsync(storage, nameof(Buffer), cancellationToken);
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1171,20 +1243,24 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(CheckSteps), CheckSteps);
 
 		if (RiskManager != null)
-			storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
+			storage.SetValue(nameof(RiskManager), await RiskManager.SaveEntireAsync(false, cancellationToken));
 
-		storage.SetValue(nameof(Adapter), Adapter.Save());
+		storage.SetValue(nameof(Adapter), await Adapter.SaveAsync(cancellationToken));
 
 		storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
+		storage.SetValue(nameof(TimeChange), TimeChange);
+		storage.SetValue(nameof(SupportBasketSecurities), SupportBasketSecurities);
+		storage.SetValue(nameof(SupportFilteredMarketDepth), SupportFilteredMarketDepth);
+		storage.SetValue(nameof(SupportSnapshots), SupportSnapshots);
 		storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
+		storage.SetValue(nameof(SubscriptionsOnConnect), await _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType).SaveAllAsync(cancellationToken));
 		storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 		if (Buffer != null)
-			storage.SetValue(nameof(Buffer), Buffer.Save());
+			storage.SetValue(nameof(Buffer), await Buffer.SaveAsync(cancellationToken));
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 }

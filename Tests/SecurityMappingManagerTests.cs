@@ -21,14 +21,18 @@ public class SecurityMappingManagerTests : BaseTestClass
 	public void ProcessInMessage_SecurityLookupMessage_PassesThrough()
 	{
 		var provider = CreateProvider();
+		var stockSharpId = CreateStockSharpId();
+		var adapterId = CreateAdapterId();
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
-		var message = new SecurityLookupMessage { TransactionId = 123 };
+		var message = new SecurityLookupMessage { TransactionId = 123, SecurityId = stockSharpId };
 
 		var (result, forward) = manager.ProcessInMessage(message);
 
 		result.AssertSame(message);
 		forward.AssertTrue();
+		message.SecurityId.AssertEqual(stockSharpId);
 	}
 
 	[TestMethod]
@@ -332,6 +336,17 @@ public class SecurityMappingManagerTests : BaseTestClass
 
 		// Use the predefined special security ID (Money)
 		var specialSecurityId = SecurityId.Money;
+		var equivalentAdapterId = new SecurityId
+		{
+			SecurityCode = specialSecurityId.SecurityCode,
+			BoardCode = specialSecurityId.BoardCode,
+		};
+		var mappedStockSharpId = CreateStockSharpId("NOT-MONEY", "TEST");
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping
+		{
+			StockSharpId = mappedStockSharpId,
+			AdapterId = equivalentAdapterId,
+		});
 
 		var message = new Level1ChangeMessage
 		{
@@ -343,8 +358,7 @@ public class SecurityMappingManagerTests : BaseTestClass
 
 		result.AssertSame(message);
 		forward.AssertTrue();
-		// Special security ID should not be mapped
-		((Level1ChangeMessage)result).SecurityId.SecurityCode.AssertEqual("MONEY");
+		((Level1ChangeMessage)result).SecurityId.AssertEqual(specialSecurityId);
 	}
 
 	[TestMethod]

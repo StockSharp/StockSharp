@@ -90,6 +90,13 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 	protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
 
 	/// <inheritdoc />
+	public override async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		foreach (var inner in InnerIndicators)
+			await inner.PrepareAsync(cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public override IIndicatorValue Process(IIndicatorValue input)
 	{
 		var output = base.Process(input);
@@ -144,31 +151,31 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		var index = 0;
 
 		foreach (var indicator in InnerIndicators)
 		{
 			var innerSettings = new SettingsStorage();
-			indicator.Save(innerSettings);
+			await indicator.SaveAsync(innerSettings, cancellationToken);
 			storage.SetValue(indicator.Name + index, innerSettings);
 			index++;
 		}
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		var index = 0;
 
 		foreach (var indicator in InnerIndicators)
 		{
-			indicator.Load(storage, indicator.Name + index);
+			await indicator.LoadAsync(storage, indicator.Name + index, cancellationToken);
 			index++;
 		}
 	}

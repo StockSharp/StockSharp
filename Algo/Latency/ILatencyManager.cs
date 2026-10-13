@@ -3,8 +3,15 @@ namespace StockSharp.Algo.Latency;
 /// <summary>
 /// The interface of the order registration delay calculation manager.
 /// </summary>
-public interface ILatencyManager : IPersistable, ICloneable<ILatencyManager>
+public interface ILatencyManager : IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the manager.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ILatencyManager> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// To zero calculations.
 	/// </summary>

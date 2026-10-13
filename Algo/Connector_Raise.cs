@@ -318,11 +318,19 @@ partial class Connector
 	/// <summary>
 	/// To call the event <see cref="Disconnected"/>.
 	/// </summary>
-	private void RaiseDisconnected()
+	private async ValueTask RaiseDisconnectedAsync(CancellationToken cancellationToken)
 	{
 		ConnectionState = ConnectionStates.Disconnected;
+		await OnDisconnectedAsync(cancellationToken);
 		Disconnected?.Invoke();
 	}
+
+	/// <summary>
+	/// Called once the connection is closed, before <see cref="Disconnected"/> is raised.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual ValueTask OnDisconnectedAsync(CancellationToken cancellationToken) => default;
 
 	/// <summary>
 	/// To call the event <see cref="DisconnectedEx"/>.
@@ -544,6 +552,8 @@ partial class Connector
 		if (subscription == null)
 			throw new ArgumentNullException(nameof(subscription));
 
+		ReleaseLevel1Ownership(subscription);
+
 		SubscriptionStopped?.Invoke(subscription, error);
 	}
 
@@ -575,7 +585,7 @@ partial class Connector
 	private ValueTask RaiseNewMessage(Message message, CancellationToken cancellationToken)
 	{
 		NewMessage?.Invoke(message);
-		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime)

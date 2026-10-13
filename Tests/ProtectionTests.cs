@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Tests;
 
+using StockSharp.Algo.PnL;
 using StockSharp.Algo.Strategies.Protective;
 
 [TestClass]
@@ -170,9 +171,9 @@ public class ProtectionTests : BaseTestClass
 		// Open new position at price 100
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Price moves up more, no activation
+		// Price reaches the take-profit level (2% above 100 = 102) again, take profit activates
 		activationResult = behaviour.TryActivate(102m, DateTime.UtcNow);
-		activationResult.AssertNotNull(); // take profit снова
+		activationResult.AssertNotNull(); // take profit again
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
 			isTake.AssertTrue();
@@ -193,7 +194,7 @@ public class ProtectionTests : BaseTestClass
 
 		behaviourTrailingOnly.Update(100m, 10m, DateTime.UtcNow);
 
-		// Price moves up, trailing stop подтягивается, но не срабатывает
+		// Price moves up, the trailing stop is pulled up but does not trigger
 		activationResult = behaviourTrailingOnly.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNull();
 		activationResult = behaviourTrailingOnly.TryActivate(102m, DateTime.UtcNow);
@@ -520,11 +521,16 @@ public class ProtectionTests : BaseTestClass
 	[TestMethod]
 	public void UnitsAbsolute()
 	{
-		// Arrange
+		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
+		// protected entry price, exactly like Percent. Entry = 100, so a take Absolute(1) means
+		// activation at 100 + 1 = 101 and a stop Absolute(20) means activation at 100 - 20 = 80.
+		// TDD red until the engine unifies Absolute with Percent: the current engine treats an
+		// Absolute level as a raw price LEVEL, so Absolute(1)/Absolute(20) would (wrongly) fire
+		// almost immediately and the "100.5 => no take" assertion below fails until that is fixed.
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
 		var behaviour = factory.Create(
-			new Unit(101m, UnitTypes.Absolute),  // Take profit at absolute price 101
-			new Unit(80m, UnitTypes.Absolute),   // Stop loss at absolute price 80
+			new Unit(1m, UnitTypes.Absolute),    // Take profit: Absolute offset 1 above entry => 100 + 1 = 101
+			new Unit(20m, UnitTypes.Absolute),   // Stop loss: Absolute offset 20 below entry => 100 - 20 = 80
 			false,                             // No trailing stop
 			TimeSpan.Zero,                     // No take timeout
 			TimeSpan.Zero,                     // No stop timeout
@@ -533,11 +539,11 @@ public class ProtectionTests : BaseTestClass
 		// Initial position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 100.5 (take at 101 absolute)
+		// Should not activate at 100.5 (take offset => activation at 101)
 		var activationResult = behaviour.TryActivate(100.5m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate take at 101 (absolute price)
+		// Should activate take at 101 (entry + Absolute offset 1)
 		activationResult = behaviour.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
@@ -554,11 +560,11 @@ public class ProtectionTests : BaseTestClass
 		// New position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 85 (stop at 80 absolute)
+		// Should not activate at 85 (stop offset => activation at 80)
 		activationResult = behaviour.TryActivate(85m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate stop at 80 (absolute price)
+		// Should activate stop at 80 (entry - Absolute offset 20)
 		activationResult = behaviour.TryActivate(80m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
@@ -667,13 +673,29 @@ public class ProtectionTests : BaseTestClass
 		activationLimit.AssertNotNull();
 		activationMarket.AssertNotNull();
 
-		// Check the price - for limit orders, it should be equal to trigger price
-		// For market orders, price might be 0 or special flag might be set
-		var orderTypeLimit = activationLimit.Value.condition == null ? "Limit" : "Special";
-		var orderTypeMarket = activationMarket.Value.condition == null ? "Market" : "Special";
+		// The observable effect of the market-orders flag is the activation price
+		// (ProtectiveProcessor.GetActivationPrice -> getClosePosPrice):
+		//   limit  => close price = trigger price (priceOffset is zero here);
+		//   market => close price = 0 (close by market).
+		// LocalProtectiveBehaviour always reports a null condition regardless of the flag,
+		// so the price is the only thing that actually distinguishes the two modes.
+		var limitInfo = activationLimit.Value;
+		var marketInfo = activationMarket.Value;
 
-		orderTypeLimit.AssertEqual("Limit");
-		orderTypeMarket.AssertEqual("Market");
+		// Both are take-profit activations of the full long position closing via Sell.
+		limitInfo.isTake.AssertTrue();
+		limitInfo.side.AssertEqual(Sides.Sell);
+		limitInfo.volume.AssertEqual(10m);
+		limitInfo.condition.AssertNull();
+
+		marketInfo.isTake.AssertTrue();
+		marketInfo.side.AssertEqual(Sides.Sell);
+		marketInfo.volume.AssertEqual(10m);
+		marketInfo.condition.AssertNull();
+
+		// The flag must change the close price: limit closes at the trigger, market closes at 0.
+		limitInfo.price.AssertEqual(101m);
+		marketInfo.price.AssertEqual(0m);
 	}
 
 	[TestMethod]
@@ -829,39 +851,633 @@ public class ProtectionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TrailingStop_LimitUnitType()
+	public void AbsoluteUnitType_TrailingAndActivation()
 	{
-		// Test for ProtectiveProcessor class which is used internally by the behaviour
+		// Absolute is an offset from the protected entry price and is therefore valid
+		// for both fixed and trailing protection.
 		var logReceiver = new LogReceiver();
 
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
 
-		// Trailing stop with UnitTypes.Absolute for take profit
-		factory.Create(
-			new Unit(1m, UnitTypes.Absolute),
-			new Unit(1m, UnitTypes.Percent),
-			true, // Trailing stop enabled
+		var behaviour = factory.Create(
+			new Unit(),
+			new Unit(10m, UnitTypes.Absolute),
+			true,
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		// Trailing stop with UnitTypes.Absolute for stop loss
-		ThrowsExactly<ArgumentException>(() =>
-			factory.Create(
-				new Unit(1m, UnitTypes.Percent),
-				new Unit(1m, UnitTypes.Absolute),
-				true, // Trailing stop enabled
-				TimeSpan.Zero, TimeSpan.Zero, false));
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
+		behaviour.TryActivate(105m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(96m, DateTime.UtcNow).AssertNull();
 
-		// Regular stop with UnitTypes.Absolute for take profit
+		var trailingActivation = behaviour.TryActivate(95m, DateTime.UtcNow);
+		trailingActivation.AssertNotNull();
+		trailingActivation.Value.isTake.AssertFalse();
+		trailingActivation.Value.side.AssertEqual(Sides.Sell);
+		trailingActivation.Value.price.AssertEqual(95m);
+		trailingActivation.Value.volume.AssertEqual(10m);
+
+		// Fixed Absolute protection follows the same entry-minus-offset semantics.
 		var p = new ProtectiveProcessor(
 			Sides.Buy, 100m, false, false, new(10, UnitTypes.Absolute),
 			true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver);
 
-		p.AssertNotNull();
+		p.GetActivationPrice(85m, DateTime.UtcNow).AssertEqual(0m);
+		p.GetActivationPrice(95m, DateTime.UtcNow).AssertNull();
+	}
 
-		// Trailing stop with UnitTypes.Absolute for stop loss
-		ThrowsExactly<ArgumentException>(() =>
-			new ProtectiveProcessor(
-				Sides.Buy, 100m, false, true, new(10, UnitTypes.Absolute),
-				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));
+	[TestMethod]
+	[Timeout(5_000)]
+	public void TimeoutLimitCloseWithPriceOffset()
+	{
+		// Covers the limit close-by-timeout branch of ProtectiveProcessor.GetActivationPrice:
+		// when the timeout elapses and useMarketOrders is false, the close price is the
+		// current price shifted by priceOffset (subtracted for a Buy protective side,
+		// added for a Sell protective side). This branch (limit close + non-zero offset)
+		// is otherwise not exercised, since the behaviour-level timeout tests all use market orders.
+		var logReceiver = new LogReceiver();
+
+		var started = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var timeout = TimeSpan.FromSeconds(30);
+		var priceOffset = new Unit(0.5m, UnitTypes.Absolute);
+
+		// Buy protective side (e.g. take for a long): close price = current - offset.
+		var procBuy = new ProtectiveProcessor(
+			Sides.Buy, 100m, true, false,
+			new Unit(5m, UnitTypes.Percent), false,
+			priceOffset, timeout, started, logReceiver);
+
+		// Before the timeout there is no activation when the price did not move.
+		procBuy.GetActivationPrice(100m, started.AddSeconds(10)).AssertNull();
+
+		// After the timeout the position is closed by a limit at current - offset.
+		procBuy.GetActivationPrice(100m, started.AddSeconds(31)).AssertEqual(99.5m);
+
+		// Sell protective side (e.g. take for a short): close price = current + offset.
+		var procSell = new ProtectiveProcessor(
+			Sides.Sell, 100m, false, false,
+			new Unit(5m, UnitTypes.Percent), false,
+			priceOffset, timeout, started, logReceiver);
+
+		procSell.GetActivationPrice(100m, started.AddSeconds(10)).AssertNull();
+		procSell.GetActivationPrice(100m, started.AddSeconds(31)).AssertEqual(100.5m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ControllerNonPositivePriceNoActivation()
+	{
+		// Covers the early "price <= 0" guard in ProtectiveController.TryActivate
+		// (yield break before any controller is consulted).
+		var controller = new ProtectiveController();
+		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
+
+		var securityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+
+		var posController = controller.GetController(
+			securityId, "Portfolio1", factory,
+			new Unit(1m, UnitTypes.Percent),
+			new Unit(1m, UnitTypes.Percent),
+			false, TimeSpan.Zero, TimeSpan.Zero, false);
+
+		// Open a long position that would normally activate take profit at 101.
+		posController.Update(100m, 10m, DateTime.UtcNow);
+
+		// A non-positive price must short-circuit to an empty result, even though
+		// a position exists that could otherwise activate.
+		controller.TryActivate(securityId, 0m, DateTime.UtcNow).ToArray().Length.AssertEqual(0);
+		controller.TryActivate(securityId, -5m, DateTime.UtcNow).ToArray().Length.AssertEqual(0);
+
+		// Sanity check: a valid positive price still activates the existing position,
+		// proving the empty result above was due to the price guard and not a missing controller.
+		var activations = controller.TryActivate(securityId, 101m, DateTime.UtcNow).ToArray();
+		activations.Length.AssertEqual(1);
+		activations[0].isTake.AssertTrue();
+		activations[0].side.AssertEqual(Sides.Sell);
+		activations[0].price.AssertEqual(101m);
+		activations[0].volume.AssertEqual(10m);
+	}
+
+	// Minimal combined order condition used as a test double for the server protective path.
+	// It derives from OrderCondition (so Type.CreateOrderCondition can instantiate it via the
+	// parameterless constructor) and implements BOTH protective interfaces, which is exactly
+	// what ServerProtectiveBehaviourFactory requires from the adapter's OrderConditionType.
+	public class ServerTestOrderCondition : OrderCondition, IStopLossOrderCondition, ITakeProfitOrderCondition
+	{
+		// Shared by both interfaces (identical signatures), so a single property satisfies both.
+		public decimal? ClosePositionPrice { get; set; }
+		public decimal? ActivationPrice { get; set; }
+		public bool IsTrailing { get; set; }
+	}
+
+	// Builds a fake IMessageAdapter whose OrderConditionType is ServerTestOrderCondition.
+	// That single type implements both IStopLossOrderCondition and ITakeProfitOrderCondition,
+	// so IsSupportStopLoss()/IsSupportTakeProfit() (which test the OrderConditionType) both return
+	// true and CreateOrderCondition() yields a fresh ServerTestOrderCondition instance.
+	private static IMessageAdapter CreateServerStopAdapter()
+	{
+		var mock = new Mock<IMessageAdapter>();
+		mock.Setup(a => a.OrderConditionType).Returns(typeof(ServerTestOrderCondition));
+		return mock.Object;
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ServerAbsoluteOffsetSemantics()
+	{
+		// First coverage for the otherwise-untested ServerProtectiveBehaviour.
+		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
+		// protected entry price. The server path implements exactly this in Update():
+		//   take.ActivationPrice = entry +/- TakeValue, stop.ActivationPrice = entry -/+ StopValue.
+		// Each side is asserted on its OWN registration: the dual-interface server condition stores
+		// a single ActivationPrice, so configuring take and stop together would make the two writes
+		// collide; testing one side at a time verifies the offset arithmetic cleanly. Expected GREEN.
+		IProtectiveBehaviourFactory factory = new ServerProtectiveBehaviourFactory(CreateServerStopAdapter());
+
+		// Take-only: long entry at 100, take Absolute(1) => activation at 100 + 1 = 101.
+		var takeOnly = factory.Create(
+			new Unit(1m, UnitTypes.Absolute),
+			new Unit(),                         // stop not set
+			false, TimeSpan.Zero, TimeSpan.Zero,
+			false);                             // Limit close (ClosePositionPrice = ActivationPrice)
+
+		var takeReg = takeOnly.Update(100m, 10m, DateTime.UtcNow);
+		takeReg.AssertNotNull();
+		{
+			var (isTake, side, price, volume, condition) = takeReg.Value;
+			side.AssertEqual(Sides.Sell);
+			price.AssertEqual(100m);
+			volume.AssertEqual(10m);
+			condition.AssertNotNull();
+
+			var take = (ITakeProfitOrderCondition)condition;
+			take.ActivationPrice.AssertEqual(101m);    // entry + Absolute offset 1
+			take.ClosePositionPrice.AssertEqual(101m); // limit close at the activation price
+			isTake.AssertTrue();                       // a take-only registration is correctly a take
+		}
+
+		// Stop-only: long entry at 100, stop Absolute(20) => activation at 100 - 20 = 80.
+		var stopOnly = factory.Create(
+			new Unit(),                         // take not set
+			new Unit(20m, UnitTypes.Absolute),
+			false, TimeSpan.Zero, TimeSpan.Zero,
+			false);
+
+		var stopReg = stopOnly.Update(100m, 10m, DateTime.UtcNow);
+		stopReg.AssertNotNull();
+		{
+			var (_, side, price, volume, condition) = stopReg.Value;
+			side.AssertEqual(Sides.Sell);
+			price.AssertEqual(100m);
+			volume.AssertEqual(10m);
+
+			var stop = (IStopLossOrderCondition)condition;
+			stop.ActivationPrice.AssertEqual(80m);     // entry - Absolute offset 20
+			stop.ClosePositionPrice.AssertEqual(80m);
+			stop.IsTrailing.AssertFalse();
+		}
+
+		// ServerProtectiveBehaviour does not track position locally and never activates on price.
+		stopOnly.Position.AssertEqual(0m);
+		stopOnly.TryActivate(80m, DateTime.UtcNow).AssertNull();
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ServerUpdateStopOnlyIsMislabeledAsTake()
+	{
+		// Proves the "// TODO" mislabeling in ServerProtectiveBehaviour.Update: the returned
+		// isTake flag is hard-coded to (condition is ITakeProfitOrderCondition) regardless of
+		// which protective side is actually configured. The shared server condition type always
+		// implements ITakeProfitOrderCondition, so a STOP-ONLY registration (no take configured)
+		// is still reported as isTake = true.
+		//
+		// Here only the stop is set (take Unit is unset => IsSet() == false), so the engine
+		// produces a pure stop order: only stop.ActivationPrice is populated and take.ActivationPrice
+		// stays null. The correct label for that registration is isTake = false. The assertion below
+		// asserts the CORRECT label and therefore goes RED on the current engine (which returns true).
+		IProtectiveBehaviourFactory factory = new ServerProtectiveBehaviourFactory(CreateServerStopAdapter());
+
+		var behaviour = factory.Create(
+			new Unit(),                       // Take NOT set => take block is skipped in Update
+			new Unit(5m, UnitTypes.Absolute), // Stop: offset -5 from entry => 100 - 5 = 95
+			false,
+			TimeSpan.Zero, TimeSpan.Zero,
+			false);
+
+		var reg = behaviour.Update(100m, 10m, DateTime.UtcNow);
+		reg.AssertNotNull();
+
+		var (isTake, side, _, _, condition) = reg.Value;
+
+		// Sanity: this is genuinely a stop-only registration - the take Unit is unset, so the take
+		// block is skipped and only the stop level is written. (The dual-interface server condition
+		// stores a single ActivationPrice, which therefore carries the stop offset 95.)
+		var stop = (IStopLossOrderCondition)condition;
+		stop.ActivationPrice.AssertEqual(95m);
+
+		side.AssertEqual(Sides.Sell);
+
+		// Correct label for a stop-only registration is false; the engine wrongly reports true.
+		isTake.AssertFalse();
+	}
+
+	// Exposes the protected high-level subscription helpers, so a test can bind several securities.
+	private class HighLevelBindStrategy : Strategy
+	{
+		public ISubscriptionHandler<ICandleMessage> BindCandles(Security security)
+			=> SubscribeCandles(TimeSpan.FromMinutes(1), true, security).Bind(_ => { }).Start();
+
+		public ISubscriptionHandler<ITickTradeMessage> BindTicks(Security security)
+			=> SubscribeTicks(security).Bind(_ => { }).Start();
+	}
+
+	private static Security CreateProtectionSecurity(string code)
+	{
+		var secId = new SecurityId { SecurityCode = code, BoardCode = BoardCodes.Test };
+
+		return new()
+		{
+			Id = secId.ToStringId(),
+			Code = code,
+			Board = ExchangeBoard.Test,
+			PriceStep = 0.01m,
+		};
+	}
+
+	private static TimeFrameCandleMessage CreateProtectionCandle(Security security, decimal close, DateTime time)
+		=> new()
+		{
+			SecurityId = security.ToSecurityId(),
+			OpenTime = time,
+			LocalTime = time,
+			OpenPrice = close,
+			HighPrice = close,
+			LowPrice = close,
+			ClosePrice = close,
+			TotalVolume = 1m,
+			State = CandleStates.Finished,
+		};
+
+	private static ExecutionMessage CreateProtectionTick(Security security, decimal price, DateTime time)
+		=> new()
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = security.ToSecurityId(),
+			ServerTime = time,
+			LocalTime = time,
+			TradePrice = price,
+			TradeVolume = 1m,
+		};
+
+	// Opens a ten-lot long, filled in one trade, the way the strategy sees it come back from a connector.
+	private static void EnterProtectedLong(Strategy strategy, Subscription txSub, Security security, Portfolio portfolio, long transactionId, decimal price, DateTime time)
+	{
+		var entry = new Order
+		{
+			TransactionId = transactionId,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = price,
+			Volume = 10m,
+			Security = security,
+			Portfolio = portfolio,
+			Time = time,
+		};
+
+		strategy.RegisterOrder(entry);
+		strategy.OnConnectorOrderReceived(txSub, entry);
+		entry.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(txSub, entry);
+
+		strategy.OnTradeReceived(txSub, new MyTrade
+		{
+			Order = entry,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = transactionId,
+				TradePrice = price,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = time,
+			},
+		});
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task HighLevelBoundCandleActivatesOwnSecurityOnly()
+	{
+		// A strategy holds a protected long in one security and has high-level candle subscriptions
+		// bound for two. A candle of the unprotected security carries a price that would breach the
+		// protected position's stop; it must not reach the protected security's controller.
+		var protectedSec = CreateProtectionSecurity("PROT_OWN");
+		var otherSec = CreateProtectionSecurity("PROT_OTHER");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = protectedSec,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: a long entered at 100 is protected at 95, so 90 is deep in stop territory.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		var protectedSub = strategy.BindCandles(protectedSec).Subscription;
+		var otherSub = strategy.BindCandles(otherSec).Subscription;
+
+		// The protective position controller is created by the fill, not by StartProtection.
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, protectedSec, portfolio, 1, 100m, time);
+
+		AreEqual(10m, strategy.Position, "the protected long must be open before any candle arrives");
+
+		var afterEntry = registered.Count;
+
+		// A candle of the other security at the protected position's stop price.
+		connector.Raise(c => c.CandleReceived += null, otherSub,
+			CreateProtectionCandle(otherSec, 90m, time.AddMinutes(1)));
+
+		AreEqual(afterEntry, registered.Count,
+			"a candle of another security must not activate protection of the protected one");
+
+		// The very same price on the protected security's own candle must activate the stop.
+		connector.Raise(c => c.CandleReceived += null, protectedSub,
+			CreateProtectionCandle(protectedSec, 90m, time.AddMinutes(2)));
+
+		AreEqual(afterEntry + 1, registered.Count,
+			"the protected security's own candle must activate the stop");
+
+		var protectiveOrder = registered[^1];
+		AreEqual(Sides.Sell, protectiveOrder.Side, "a stop closing a long must be a sell");
+		AreEqual(protectedSec, protectiveOrder.Security, "the stop must be registered for the protected security");
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task HighLevelBoundTickActivatesOwnSecurityOnly()
+	{
+		// The tick branch of a high-level subscription activates protection itself, without going
+		// through Strategy.OnCandleReceived, so it has to name the security of its own value.
+		var protectedSec = CreateProtectionSecurity("PROT_TICK_OWN");
+		var otherSec = CreateProtectionSecurity("PROT_TICK_OTHER");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = protectedSec,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: a long entered at 100 is protected at 95, so 90 is deep in stop territory.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		var protectedSub = strategy.BindTicks(protectedSec).Subscription;
+		var otherSub = strategy.BindTicks(otherSec).Subscription;
+
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, protectedSec, portfolio, 1, 100m, time);
+
+		AreEqual(10m, strategy.Position, "the protected long must be open before any tick arrives");
+
+		var afterEntry = registered.Count;
+
+		connector.Raise(c => c.TickTradeReceived += null, otherSub,
+			CreateProtectionTick(otherSec, 90m, time.AddMinutes(1)));
+
+		AreEqual(afterEntry, registered.Count,
+			"a tick of another security must not activate protection of the protected one");
+
+		connector.Raise(c => c.TickTradeReceived += null, protectedSub,
+			CreateProtectionTick(protectedSec, 90m, time.AddMinutes(2)));
+
+		AreEqual(afterEntry + 1, registered.Count,
+			"the protected security's own tick must activate the stop");
+
+		var tickStop = registered[^1];
+		AreEqual(Sides.Sell, tickStop.Side, "a stop closing a long must be a sell");
+		AreEqual(protectedSec, tickStop.Security, "the stop must be registered for the protected security");
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task ProtectionActivatesForTheSecurityItsPositionIsIn()
+	{
+		// A strategy holds a protected long in each of two securities. Protection is per (security,
+		// portfolio): each position is measured from its own entry price and closed on its own security.
+		var first = CreateProtectionSecurity("PROT_FIRST");
+		var second = CreateProtectionSecurity("PROT_SECOND");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = first,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: the long entered at 100 is protected at 95, the one entered at 200 at 190.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		var firstSub = strategy.BindCandles(first).Subscription;
+		var secondSub = strategy.BindCandles(second).Subscription;
+
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, first, portfolio, 1, 100m, time);
+		EnterProtectedLong(strategy, txSub, second, portfolio, 2, 200m, time);
+
+		var afterEntries = registered.Count;
+
+		// The second security falls through its own stop while the first is nowhere near its own.
+		connector.Raise(c => c.CandleReceived += null, secondSub,
+			CreateProtectionCandle(second, 189m, time.AddMinutes(1)));
+
+		AreEqual(afterEntries + 1, registered.Count,
+			"the second security's position must be stopped by its own candle");
+
+		var secondStop = registered[^1];
+		AreEqual(second, secondStop.Security, "a stop must be registered for the security it protects");
+		AreEqual(Sides.Sell, secondStop.Side);
+		AreEqual(10m, secondStop.Volume, "a stop closes the position of its own security, not the total");
+
+		connector.Raise(c => c.CandleReceived += null, firstSub,
+			CreateProtectionCandle(first, 94m, time.AddMinutes(2)));
+
+		AreEqual(afterEntries + 2, registered.Count,
+			"the first security's position must be stopped by its own candle");
+
+		var firstStop = registered[^1];
+		AreEqual(first, firstStop.Security, "a stop must be registered for the security it protects");
+		AreEqual(Sides.Sell, firstStop.Side);
+		AreEqual(10m, firstStop.Volume, "a stop closes the position of its own security, not the total");
+	}
+
+	/// <summary>
+	/// A protective level farther away than the price itself puts the trigger at or below zero -
+	/// a price that cannot be reached, so the position is simply unprotected. Standing in a price
+	/// of one tick for it instead lets that stop fire after all, closing the position for a penny
+	/// at a level the user never named.
+	/// </summary>
+	[TestMethod]
+	public void StopFartherAwayThanThePriceItselfDoesNotFireAtAPenny()
+	{
+		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
+
+		var behaviour = factory.Create(
+			new Unit(),                          // No take, so only the stop can fire
+			new Unit(200m, UnitTypes.Absolute),  // 200 below an entry of 100: no such price exists
+			false,                               // No trailing stop
+			TimeSpan.Zero,                       // No take timeout
+			TimeSpan.Zero,                       // No stop timeout
+			false);                              // No market orders
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		behaviour.Update(100m, 10m, time);
+
+		behaviour.TryActivate(0.01m, time)
+			.AssertNull("a stop placed below zero can never be reached, so nothing may fire at a penny instead");
+	}
+
+	/// <summary>
+	/// After part of a position is closed, protection and profit-and-loss must price what is left
+	/// the same way. They are two lot-matching models over one sequence of trades: if they pick
+	/// different lots to close, the take fires at a price the reported profit says the position
+	/// never cost, and a user reading one number cannot predict the other.
+	/// </summary>
+	[TestMethod]
+	public void ProtectionAndPnLAgreeOnThePositionPriceAfterAPartialClose()
+	{
+		var secId = new SecurityId { SecurityCode = "LOTS", BoardCode = "TEST" };
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		const decimal priceStep = 0.01m;
+
+		// One sequence of trades, fed to both models: two buys at different prices, then a sell
+		// closing part of the position - the point where lot matching starts to matter.
+		(decimal price, decimal volume)[] opens = [(100m, 10m), (110m, 5m)];
+		const decimal closeVolume = 5m;
+		const decimal closePrice = 120m;
+		const decimal leftVolume = 10m;
+
+		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(priceStep, 2);
+
+		// Absolute take: it fires once the price is the offset away from the position price, so the
+		// price at which it fires is what protection believes the remaining position cost.
+		const decimal takeOffset = 10m;
+
+		var behaviour = factory.Create(
+			new Unit(takeOffset, UnitTypes.Absolute),
+			new Unit(),                       // No stop, so only the take can fire
+			false,                            // No trailing stop
+			TimeSpan.Zero,                    // No take timeout
+			TimeSpan.Zero,                    // No stop timeout
+			false);                           // No market orders
+
+		var queue = new PnLQueue(secId);
+
+		// One money unit per price step, so the reported profit is in price units.
+		queue.UpdateSecurity(new Level1ChangeMessage { SecurityId = secId }
+			.Add(Level1Fields.PriceStep, priceStep)
+			.Add(Level1Fields.StepPrice, priceStep));
+
+		var tradeId = 0L;
+
+		void Trade(Sides tradeSide, decimal tradePrice, decimal tradeVolume)
+		{
+			behaviour.Update(tradePrice, tradeSide == Sides.Buy ? tradeVolume : -tradeVolume, time);
+
+			queue.Process(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				SecurityId = secId,
+				TradeId = ++tradeId,
+				TradePrice = tradePrice,
+				TradeVolume = tradeVolume,
+				Side = tradeSide,
+				ServerTime = time,
+			});
+		}
+
+		foreach (var (openPrice, openVolume) in opens)
+			Trade(Sides.Buy, openPrice, openVolume);
+
+		Trade(Sides.Sell, closePrice, closeVolume);
+
+		behaviour.Position.AssertEqual(leftVolume, "both models are looking at the same open position");
+
+		// Mark the rest to a price well clear of every trade, so the unrealized profit names the
+		// price the queue still holds the position at.
+		const decimal markPrice = 130m;
+
+		queue.ProcessExecution(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = markPrice,
+			ServerTime = time,
+		});
+
+		var pnlPosPrice = markPrice - queue.UnrealizedPnL / leftVolume;
+
+		// Protection must measure the take from that same price: not before it, and exactly at it.
+		behaviour.TryActivate(pnlPosPrice + takeOffset - priceStep, time)
+			.AssertNull("the take must not fire before the offset is reached from the position price the profit is measured against");
+
+		var activation = behaviour.TryActivate(pnlPosPrice + takeOffset, time);
+
+		activation.AssertNotNull($"the take must fire at {pnlPosPrice + takeOffset}, the offset away from the position price of {pnlPosPrice} the profit is measured against");
+
+		var (isTake, side, price, volume, condition) = activation.Value;
+		isTake.AssertTrue();
+		side.AssertEqual(Sides.Sell, "a take closing a long is a sell");
+		price.AssertEqual(pnlPosPrice + takeOffset);
+		volume.AssertEqual(leftVolume, "the take closes what is left of the position");
+		condition.AssertNull();
 	}
 }

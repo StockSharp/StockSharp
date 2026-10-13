@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_net.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_target_net.props" />
   <PropertyGroup>
     <RootNamespace>StockSharp.Media</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\Media\logos\*.png" />
     <AdditionalFiles Include="..\Media\logos\*.svg" />
   </ItemGroup>
   <ItemGroup>

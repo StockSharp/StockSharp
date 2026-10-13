@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.STOCHKey,
 	Description = LocalizedStrings.StochasticOscillatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/stochastic_oscillator.html")]
 [IndicatorOut(typeof(IStochasticOscillatorValue))]
 public class StochasticOscillator : BaseComplexIndicator<IStochasticOscillatorValue>

@@ -70,7 +70,7 @@ public class LookupTrackingManagerStateTests : BaseTestClass
 		// Remove first item, should get second
 		var next = state.TryDequeueNext(MessageTypes.SecurityLookup, 1);
 
-		IsNotNull(next);
+		next.AssertSame(msg2);
 	}
 
 	[TestMethod]
@@ -87,16 +87,18 @@ public class LookupTrackingManagerStateTests : BaseTestClass
 	public void TryDequeueFromAnyType_FindsInAnyQueue()
 	{
 		var state = CreateState();
-		var msg1 = CreateLookup(1);
-		var msg2 = CreateLookup(2);
+		var securityLookup = CreateLookup(1);
+		var portfolioLookup1 = new PortfolioLookupMessage { TransactionId = 2 };
+		var portfolioLookup2 = new PortfolioLookupMessage { TransactionId = 3 };
 
-		state.TryEnqueue(MessageTypes.SecurityLookup, 1, msg1);
-		state.TryEnqueue(MessageTypes.SecurityLookup, 2, msg2);
+		state.TryEnqueue(MessageTypes.SecurityLookup, 1, securityLookup);
+		state.TryEnqueue(MessageTypes.PortfolioLookup, 2, portfolioLookup1);
+		state.TryEnqueue(MessageTypes.PortfolioLookup, 3, portfolioLookup2);
 
-		// Remove id=1 from any type queue
-		var next = state.TryDequeueFromAnyType(1);
+		// Remove id=2 from the portfolio queue while another queue also exists.
+		var next = state.TryDequeueFromAnyType(2);
 
-		IsNotNull(next);
+		next.AssertSame(portfolioLookup2);
 	}
 
 	[TestMethod]

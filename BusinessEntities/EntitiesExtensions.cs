@@ -192,8 +192,24 @@ public static partial class EntitiesExtensions
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <param name="id">Security ID.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByIdAsync method instead.")]
 	public static Security LookupById(this ISecurityProvider provider, string id)
 		=> provider.LookupById(id.ToSecurityId());
+
+	/// <summary>
+	/// To get the instrument by the identifier.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="id">Security ID.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public static ValueTask<Security> LookupByIdAsync(this ISecurityProvider provider, string id, CancellationToken cancellationToken)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupByIdAsync(id.ToSecurityId(), cancellationToken);
+	}
 
 	private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
 
@@ -280,6 +296,7 @@ public static partial class EntitiesExtensions
 		{
 			OrderId = order.Id,
 			OrderStringId = order.StringId,
+			OrderBoardId = order.BoardId,
 			TransactionId = order.TransactionId,
 			OriginalTransactionId = order.TransactionId,
 			SecurityId = order.Security.ToSecurityId(),
@@ -299,13 +316,27 @@ public static partial class EntitiesExtensions
 			ExpiryDate = order.ExpiryDate,
 			UserOrderId = order.UserOrderId,
 			StrategyId = order.StrategyId,
+			BrokerCode = order.BrokerCode,
+			ClientCode = order.ClientCode,
+			Condition = order.Condition?.TypedClone(),
 			Commission = order.Commission,
 			CommissionCurrency = order.CommissionCurrency,
 			IsSystem = order.IsSystem,
 			Comment = order.Comment,
 			VisibleVolume = order.VisibleVolume,
 			Currency = order.Currency,
+			IsMarketMaker = order.IsMarketMaker,
+			MarginMode = order.MarginMode,
+			Slippage = order.Slippage,
+			IsManual = order.IsManual,
+			AveragePrice = order.AveragePrice,
+			MarketPrice = order.MarketPrice,
+			Yield = order.Yield,
+			MinVolume = order.MinVolume,
+			PositionEffect = order.PositionEffect,
+			PostOnly = order.PostOnly,
 			SeqNum = order.SeqNum,
+			Leverage = order.Leverage,
 		};
 
 		return message;
@@ -384,6 +415,9 @@ public static partial class EntitiesExtensions
 
 		order.Security.ToMessage(securityId).CopyTo(msg, false);
 
+		if (order.Currency is not null)
+			msg.Currency = order.Currency;
+
 		return msg;
 	}
 
@@ -447,7 +481,7 @@ public static partial class EntitiesExtensions
 			VisibleVolume = newOrder.VisibleVolume,
 			OrderType = newOrder.Type,
 			Comment = newOrder.Comment,
-			Condition = newOrder.Condition,
+			Condition = newOrder.Condition?.TypedClone(),
 			TimeInForce = newOrder.TimeInForce,
 			TillDate = newOrder.ExpiryDate,
 			//IsSystem = newOrder.IsSystem,
@@ -480,6 +514,9 @@ public static partial class EntitiesExtensions
 		};
 
 		oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
+
+		if (newOrder.Currency is not null)
+			msg.Currency = newOrder.Currency;
 
 		return msg;
 	}
@@ -905,14 +942,26 @@ public static partial class EntitiesExtensions
 	/// <returns>Order.</returns>
 	public static Order ToOrder(this ExecutionMessage message, Order order)
 	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
 
+		// An order always has a side. A message that states none describes an order it cannot build,
+		// and defaulting would give the caller a buy it never placed.
+		if (message.Side is not Sides side)
+			throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(message));
+
 		order.Id = message.OrderId;
 		order.StringId = message.OrderStringId;
+		order.BoardId = message.OrderBoardId;
 		order.TransactionId = message.TransactionId;
-		order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
-		order.Side = message.Side;
+
+		if (order.Portfolio is null && !message.PortfolioName.IsEmpty())
+			order.Portfolio = new Portfolio { Board = order.Security?.Board, Name = message.PortfolioName };
+
+		order.Side = side;
 		order.Price = message.OrderPrice;
 		order.Volume = message.OrderVolume ?? 0;
 		order.Balance = message.Balance ?? 0;
@@ -927,6 +976,9 @@ public static partial class EntitiesExtensions
 		order.ExpiryDate = message.ExpiryDate;
 		order.UserOrderId = message.UserOrderId;
 		order.StrategyId = message.StrategyId;
+		order.BrokerCode = message.BrokerCode;
+		order.ClientCode = message.ClientCode;
+		order.Condition = message.Condition?.TypedClone();
 		order.Comment = message.Comment;
 		order.Commission = message.Commission;
 		order.CommissionCurrency = message.CommissionCurrency;
@@ -958,8 +1010,8 @@ public static partial class EntitiesExtensions
 	/// <param name="logs">Logs.</param>
 	public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 	{
-		((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs);
-		order.State = state;
+		if (((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs))
+			order.State = state;
 	}
 
 	/// <summary>
@@ -1019,7 +1071,7 @@ public static partial class EntitiesExtensions
 
 			// http://stocksharp.com/forum/yaf_postst5143findunread_API-4-2-4-0-Nie-vystavliaiutsia-zaiavki-po-niekotorym-instrumientam-FORTS.aspx
 			// для Quik необходимо соблюдение регистра в коде инструмента при выставлении заявок
-			if (secCode.EqualsIgnoreCase(security.Code))
+			if (string.Equals(secCode, security.Code, StringComparison.OrdinalIgnoreCase))
 				secCode = security.Code;
 
 			//if (!boardCode.EqualsIgnoreCase(ExchangeBoard.Test.Code))
@@ -1151,6 +1203,8 @@ public static partial class EntitiesExtensions
 	/// <returns>News.</returns>
 	public static News ToNews(this NewsMessage message, IExchangeInfoProvider exchangeInfoProvider)
 	{
+		var securityId = message.SecurityId;
+
 		return new News
 		{
 			Id = message.Id,
@@ -1164,9 +1218,11 @@ public static partial class EntitiesExtensions
 			Priority = message.Priority,
 			Language = message.Language,
 			ExpiryDate = message.ExpiryDate,
-			Security = message.SecurityId == null ? null : new Security
+			Security = securityId == null ? null : new Security
 			{
-				Id = message.SecurityId.Value.SecurityCode
+				Id = securityId.Value.ToStringId(),
+				Code = securityId.Value.SecurityCode,
+				Board = securityId.Value.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(securityId.Value.BoardCode),
 			},
 			SeqNum = message.SeqNum,
 		};
@@ -1299,7 +1355,7 @@ public static partial class EntitiesExtensions
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security == AllSecurity || security.Id.EqualsIgnoreCase(AllSecurity.Id);
+		return security == AllSecurity || string.Equals(security.Id, AllSecurity.Id, StringComparison.OrdinalIgnoreCase);
 	}
 
 	/// <summary>
@@ -2245,15 +2301,26 @@ public static partial class EntitiesExtensions
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <returns><see cref="Security"/></returns>
+	[Obsolete("Use TryGetSecurityAsync method instead.")]
 	public static Security TryGetSecurity(this Subscription subscription, ISecurityProvider provider = null)
+		=> AsyncHelper.Run(() => subscription.TryGetSecurityAsync(provider ?? TrySecurityProvider, default));
+
+	/// <summary>
+	/// Try to get the security for the specified subscription.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISecurityProvider"/>, or <see langword="null"/> when there is none.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Security"/>, or <see langword="null"/> when the subscription names none or none is found.</returns>
+	public static async ValueTask<Security> TryGetSecurityAsync(this Subscription subscription, ISecurityProvider provider, CancellationToken cancellationToken)
 	{
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (subscription.SecurityId is not SecurityId secId)
+		if (subscription.SecurityId is not SecurityId secId || provider is null)
 			return null;
 
-		return (provider ?? TrySecurityProvider)?.LookupById(secId);
+		return await provider.LookupByIdAsync(secId, cancellationToken);
 	}
 
 	/// <summary>
@@ -2358,6 +2425,7 @@ public static partial class EntitiesExtensions
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <param name="id">Security ID.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByIdAsync method instead.")]
 	public static Security LookupById(this ISecurityProvider provider, SecurityId id)
 	{
 		if (provider is null)
@@ -2372,6 +2440,7 @@ public static partial class EntitiesExtensions
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <returns>Found instruments.</returns>
+	[Obsolete("Use LookupAsync method instead.")]
 	public static IEnumerable<Security> Lookup(this ISecurityProvider provider, SecurityLookupMessage criteria)
 	{
 		if (provider is null)

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="qmt-blue" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#29A8FF"/>
+      <stop offset="1" stop-color="#1263D6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#qmt-blue)"/>
+  <path fill="#fff" d="M32 13c-10.5 0-19 8.5-19 19s8.5 19 19 19c3.6 0 7-1 9.8-2.8l5.7 5.7 6.4-6.4-5.7-5.7A18.9 18.9 0 0 0 51 32c0-10.5-8.5-19-19-19Zm0 9a10 10 0 1 1 0 20 10 10 0 0 1 0-20Z"/>
+  <path fill="#fff" d="m29 37 5-7 4 4 7-10 4 3-10 14-4-4-3 4Z"/>
+</svg>

@@ -3,7 +3,7 @@
 using StockSharp.Algo.Slippage;
 
 [TestClass]
-public class SlippageTests
+public class SlippageTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
@@ -162,6 +162,57 @@ public class SlippageTests
 		mgr.Slippage.AssertEqual(-2m); // Total slippage remains unchanged
 	}
 
+	/// <summary>
+	/// Moving an order is placing one: the replacement takes a new price into the same market and is
+	/// filled like any other order. Slippage is the whole reason a trader moves an order at all, so a
+	/// replaced order that is measured at nothing hides exactly the fills a trader is chasing, and
+	/// the reported total silently understates what the moving cost.
+	/// </summary>
+	[TestMethod]
+	public void AnOrderPlacedByReplacingAnotherIsMeasuredForSlippage()
+	{
+		var mgr = new SlippageManager(new SlippageManagerState());
+
+		mgr.ProcessMessage(new Level1ChangeMessage
+		{
+			SecurityId = _secId
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 102m));
+
+		var regMsg = new OrderRegisterMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 700,
+		};
+		mgr.ProcessMessage(regMsg);
+
+		// The trader moves the order: the replacement carries its own transaction and is the order
+		// that will actually be filled.
+		var replaceMsg = new OrderReplaceMessage
+		{
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			TransactionId = 701,
+			OriginalTransactionId = regMsg.TransactionId,
+		};
+		mgr.ProcessMessage(replaceMsg);
+
+		var slip = mgr.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _secId,
+			OriginalTransactionId = replaceMsg.TransactionId,
+			TradePrice = 104m,
+			TradeVolume = 3m,
+			Side = Sides.Buy,
+		});
+
+		slip.AssertEqual(6m, "the replacement was bought two points above the ask it was placed against, three times over");
+		mgr.Slippage.AssertEqual(6m, "and what the moving cost belongs in the total the trader reads");
+	}
+
 	[TestMethod]
 	public void NoBestPrices()
 	{
@@ -269,7 +320,7 @@ public class SlippageTests
 	}
 
 	[TestMethod]
-	public void SaveLoadSettings()
+	public async Task SaveLoadSettings()
 	{
 		var mgr = new SlippageManager(new SlippageManagerState())
 		{
@@ -277,14 +328,14 @@ public class SlippageTests
 		};
 
 		var storage = new SettingsStorage();
-		mgr.Save(storage);
+		await mgr.SaveAsync(storage, CancellationToken);
 
 		var mgr2 = new SlippageManager(new SlippageManagerState())
 		{
 			CalculateNegative = true
 		};
 
-		mgr2.Load(storage);
+		await mgr2.LoadAsync(storage, CancellationToken);
 
 		mgr2.CalculateNegative.AssertFalse();
 	}

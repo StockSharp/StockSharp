@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class DataType : Equatable<DataType>, IPersistable
+public class DataType : Equatable<DataType>, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DataType"/>.
@@ -156,6 +156,11 @@ public class DataType : Equatable<DataType>, IPersistable
 	public static DataType CandlePnF { get; } = CreateImmutable<PnFCandleMessage>();
 
 	/// <summary>
+	/// <see cref="HeikinAshiCandleMessage"/> data type.
+	/// </summary>
+	public static DataType CandleHeikinAshi { get; } = CreateImmutable<HeikinAshiCandleMessage>();
+
+	/// <summary>
 	/// Security legs.
 	/// </summary>
 	public static DataType SecurityLegs { get; } = CreateImmutable<SecurityLegsInfoMessage>();
@@ -197,7 +202,7 @@ public class DataType : Equatable<DataType>, IPersistable
 			CheckImmutable();
 
 			_messageType = value;
-			ReInitHashCode();
+			ReInit();
 		}
 	}
 
@@ -218,9 +223,32 @@ public class DataType : Equatable<DataType>, IPersistable
 				throw new ArgumentException(value.To<string>(), nameof(value));
 
 			_arg = value;
-			ReInitHashCode();
+			ReInit();
 		}
 	}
+
+	/// <summary>
+	/// Indicator values computed from a candle series.
+	/// </summary>
+	/// <remarks>
+	/// The specification is the argument, so two requests for the same indicator on the same series
+	/// are the same data type and share one computation.
+	/// </remarks>
+	/// <param name="spec">Which indicator, with what parameters, on which series.</param>
+	/// <returns>Data type info.</returns>
+	/// <exception cref="ArgumentNullException"><paramref name="spec"/> is <see langword="null"/>.</exception>
+	public static DataType Indicator(IndicatorSpec spec)
+	{
+		if (spec is null)
+			throw new ArgumentNullException(nameof(spec));
+
+		return Create<IndicatorMessage>(spec);
+	}
+
+	/// <summary>
+	/// Whether this is <see cref="Indicator"/>.
+	/// </summary>
+	public bool IsIndicator => MessageType == typeof(IndicatorMessage);
 
 	/// <summary>
 	/// Compare <see cref="DataType"/> on the equivalence.
@@ -234,12 +262,54 @@ public class DataType : Equatable<DataType>, IPersistable
 
 	private int _hashCode;
 
-	private void ReInitHashCode()
+	// The same test as Extensions.IsCandleMessage, answered here because that class builds its tables
+	// out of these static instances: a process touching DataType first would otherwise run Extensions'
+	// initializer from inside this one and read the instances it is still filling in.
+	internal static bool IsCandleMessageType(Type messageType)
+		=> messageType.IsSubclassOf(typeof(CandleMessage));
+
+	private void ReInit()
 	{
-		var h1 = MessageType?.GetHashCode() ?? 0;
-		var h2 = Arg?.GetHashCode() ?? 0;
+		var messageType = MessageType;
+		var arg = Arg;
+		var h1 = messageType?.GetHashCode() ?? 0;
+		var h2 = arg?.GetHashCode() ?? 0;
 
 		_hashCode = ((h1 << 5) + h1) ^ h2;
+
+		_isCandles = messageType is not null && IsCandleMessageType(messageType);
+		_isMarketData =
+		(
+			_isCandles ||
+			messageType == typeof(QuoteChangeMessage) ||
+			messageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
+			(messageType == typeof(ExecutionMessage) && arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
+#pragma warning restore CS0618 // Type or member is obsolete
+			messageType == typeof(NewsMessage) ||
+			messageType == typeof(BoardMessage) ||
+			messageType == typeof(BoardStateMessage) ||
+			messageType == typeof(SecurityLegsInfoMessage) ||
+			messageType == typeof(SecurityMappingMessage) ||
+			messageType == typeof(DataTypeInfoMessage)
+		);
+		_isSecurityRequiredByType =
+		(
+			_isCandles ||
+			messageType == typeof(QuoteChangeMessage) ||
+			messageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
+			(messageType == typeof(ExecutionMessage) && arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
+#pragma warning restore CS0618 // Type or member is obsolete
+		);
+		_isNonSecurity =
+		(
+			messageType == typeof(SecurityMessage) ||
+			messageType == typeof(NewsMessage) ||
+			messageType == typeof(BoardMessage) ||
+			messageType == typeof(BoardStateMessage) ||
+			messageType == typeof(DataTypeInfoMessage)
+		);
 	}
 
 	/// <summary>Serves as a hash function for a particular type. </summary>
@@ -257,11 +327,8 @@ public class DataType : Equatable<DataType>, IPersistable
 			_messageType = MessageType,
 			_arg = Arg,
 			_isSecurityRequired = _isSecurityRequired,
-			_isCandles = _isCandles,
-			_isMarketData = _isMarketData,
-			_isNonSecurity = _isNonSecurity,
 		};
-		clone.ReInitHashCode();
+		clone.ReInit();
 		return clone;
 	}
 
@@ -318,67 +385,39 @@ public class DataType : Equatable<DataType>, IPersistable
 		}
 	}
 
-	private bool? _isCandles;
+	private bool _isCandles;
 
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is derived from <see cref="CandleMessage"/>.
 	/// </summary>
-	public bool IsCandles => _isCandles ??= MessageType.IsCandleMessage();
+	public bool IsCandles => _isCandles;
 
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is <see cref="TimeFrameCandleMessage"/>.
 	/// </summary>
 	public bool IsTFCandles => MessageType == typeof(TimeFrameCandleMessage);
 
-	private bool? _isMarketData;
+	private bool _isMarketData;
 
 	/// <summary>
 	/// Determines whether the specified message type is market-data.
 	/// </summary>
-	public bool IsMarketData => _isMarketData ??=
-	(
-		IsCandles ||
-		MessageType == typeof(QuoteChangeMessage) ||
-		MessageType == typeof(Level1ChangeMessage) ||
-#pragma warning disable CS0618 // Type or member is obsolete
-		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
-#pragma warning restore CS0618 // Type or member is obsolete
-		MessageType == typeof(NewsMessage) ||
-		MessageType == typeof(BoardMessage) ||
-		MessageType == typeof(BoardStateMessage) ||
-		MessageType == typeof(SecurityLegsInfoMessage) ||
-		MessageType == typeof(SecurityMappingMessage) ||
-		MessageType == typeof(DataTypeInfoMessage)
-	);
+	public bool IsMarketData => _isMarketData;
 
 	private bool? _isSecurityRequired;
+	private bool _isSecurityRequiredByType;
 
 	/// <summary>
 	/// Is the data type required security info.
 	/// </summary>
-	public bool IsSecurityRequired => _isSecurityRequired ??=
-	(
-		IsCandles ||
-		MessageType == typeof(QuoteChangeMessage) ||
-		MessageType == typeof(Level1ChangeMessage) ||
-#pragma warning disable CS0618 // Type or member is obsolete
-		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
-#pragma warning restore CS0618 // Type or member is obsolete
-	);
+	public bool IsSecurityRequired => _isSecurityRequired ?? _isSecurityRequiredByType;
 
-	private bool? _isNonSecurity;
+	private bool _isNonSecurity;
 
 	/// <summary>
 	/// Is the data type never associated with security.
 	/// </summary>
-	public bool IsNonSecurity => _isNonSecurity ??=
-	(
-		MessageType == typeof(SecurityMessage) ||
-		MessageType == typeof(NewsMessage) ||
-		MessageType == typeof(BoardMessage) ||
-		MessageType == typeof(BoardStateMessage) ||
-		MessageType == typeof(DataTypeInfoMessage)
-	);
+	public bool IsNonSecurity => _isNonSecurity;
 
 	/// <summary>
 	/// Is the data type can be used as candles compression source.
@@ -406,6 +445,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		{ "tick_candle", CandleTick },
 		{ "range", CandleRange },
 		{ "pnf", CandlePnF },
+		{ "heikin_ashi", CandleHeikinAshi },
 	};
 
 	/// <summary>
@@ -481,7 +521,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		if (!_aliasToType.TryGetKey(Create(type, null), out var typeName))
 			typeName = type?.GetTypeName(false);
 
-		return $"{typeName}:{(type?.IsCandleMessage() == true ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
+		return $"{typeName}:{(type is not null && IsCandleMessageType(type) ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
 	}
 
 	/// <summary>
@@ -513,7 +553,7 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		object arg;
 
-		if (msgType?.IsCandleMessage() == true)
+		if (msgType is not null && IsCandleMessageType(msgType))
 			arg = msgType.ToDataTypeArg(parts[1]);
 		else
 		{
@@ -532,9 +572,12 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		MessageType = storage.GetValue<Type>(nameof(MessageType));
+		Arg = null;
 
 		if (storage.ContainsKey(nameof(Arg)))
 		{
@@ -544,10 +587,10 @@ public class DataType : Equatable<DataType>, IPersistable
 			{
 				var type = ss.GetValue<Type>("type");
 
-				if (type.Is<IPersistable>())
+				if (type.Is<IAsyncPersistable>())
 				{
-					var instance = type.CreateInstance<IPersistable>();
-					instance.Load(ss, "value");
+					var instance = type.CreateInstance<IAsyncPersistable>();
+					await instance.LoadAsync(ss, "value", cancellationToken);
 
 					Arg = instance;
 				}
@@ -555,13 +598,13 @@ public class DataType : Equatable<DataType>, IPersistable
 				{
 					var value = ss.GetValue<object>("value");
 
-					if (MessageType?.IsCandleMessage() == true && value is string str)
+					if (MessageType is not null && IsCandleMessageType(MessageType) && value is string str)
 						Arg = MessageType.ToDataTypeArg(str);
 					else
 						Arg = value.To(type);
 				}
 			}
-			else if (MessageType?.IsCandleMessage() == true && arg is string str)
+			else if (MessageType is not null && IsCandleMessageType(MessageType) && arg is string str)
 			{
 				Arg = MessageType.ToDataTypeArg(str);
 			}
@@ -571,15 +614,20 @@ public class DataType : Equatable<DataType>, IPersistable
 			}
 		}
 
-		if (storage.ContainsKey(nameof(IsSecurityRequired)))
-			_isSecurityRequired = storage.GetValue<bool>(nameof(IsSecurityRequired));
+		_isSecurityRequired = storage.ContainsKey(nameof(IsSecurityRequired))
+			? storage.GetValue<bool>(nameof(IsSecurityRequired))
+			: null;
+
+		Name = storage.GetValue<string>(nameof(Name));
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(MessageType), MessageType?.GetTypeName(false));
 
@@ -588,9 +636,9 @@ public class DataType : Equatable<DataType>, IPersistable
 			var ss = new SettingsStorage();
 			ss.SetValue("type", Arg.GetType().GetTypeName(false));
 
-			if (Arg is IPersistable per)
-				ss.SetValue("value", per.Save());
-			else if (MessageType?.IsCandleMessage() == true)
+			if (Arg is IAsyncPersistable per)
+				ss.SetValue("value", await per.SaveAsync(cancellationToken));
+			else if (MessageType is not null && IsCandleMessageType(MessageType))
 				ss.SetValue("value", MessageType.DataTypeArgToString(Arg));
 			else
 				ss.SetValue("value", Arg.To<string>());
@@ -600,5 +648,9 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		if (_isSecurityRequired == true)
 			storage.SetValue(nameof(IsSecurityRequired), true);
+
+		// The name is what a custom data type prints as, so it is part of what is being saved.
+		if (!Name.IsEmpty())
+			storage.SetValue(nameof(Name), Name);
 	}
 }

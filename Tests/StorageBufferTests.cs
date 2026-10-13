@@ -10,7 +10,7 @@ public class StorageBufferTests : BaseTestClass
 
 	private static SecurityId CreateSecurityId(string code = "SBER")
 	{
-		return new SecurityId { SecurityCode = code, BoardCode = "TQBR" };
+		return Helper.CreateSecurityId(code, "TQBR");
 	}
 
 	private static ExecutionMessage CreateTick(SecurityId securityId, DateTime serverTime, decimal price, decimal volume)
@@ -159,6 +159,153 @@ public class StorageBufferTests : BaseTestClass
 
 	#endregion
 
+	#region What waits to be written
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_Zero_KeepsEverything()
+	{
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 100; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.DroppedMessages.AssertEqual(0L, "no limit was stated, so nothing is thrown away");
+		buffer.GetTicks()[secId].Count().AssertEqual(100);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_Reached_DropsAndCounts()
+	{
+		// A storage that has stalled must cost data rather than the process: what cannot be written
+		// piles up, and past the limit new data is thrown away instead of growing without bound.
+		var buffer = new StorageBuffer { MaxBufferedMessages = 3 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 10; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks()[secId].Count().AssertEqual(3, "three is what the limit allows to wait");
+		buffer.DroppedMessages.AssertEqual(7L, "and what is thrown away is counted, or the loss goes unnoticed");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_RoomIsFreedByDraining()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 3 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 3; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks().Count.AssertEqual(1);
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks()[secId].Count()
+			.AssertEqual(1, "what was taken out is no longer waiting, so there is room again");
+		buffer.DroppedMessages.AssertEqual(0L);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_CountsEveryKind()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 2 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+		buffer.ProcessOutMessage(new NewsMessage { ServerTime = time, Headline = "one" });
+		buffer.ProcessOutMessage(new NewsMessage { ServerTime = time, Headline = "two" });
+
+		buffer.DroppedMessages
+			.AssertEqual(1L, "the limit is on what waits to be written, whatever kind it is");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_WhatCouldNotBeWritten_IsGivenBack()
+	{
+		// Draining hands the data over and forgets it, so a write that then fails takes the data
+		// with it. What could not be written is put back and written on the next round instead.
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		var taken = buffer.GetTicks()[secId].ToArray();
+
+		buffer.GetTicks().Count.AssertEqual(0, "it was handed over, so the buffer no longer holds it");
+
+		buffer.PutBack(taken);
+
+		var again = buffer.GetTicks();
+
+		again.Count.AssertEqual(1, "and it is back, to be written next time");
+		again[secId].Single().TradePrice.Value.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_CountsAgainstTheLimit()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 1 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		var taken = buffer.GetTicks()[secId].ToArray();
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 101, 10));
+		buffer.PutBack(taken);
+
+		buffer.DroppedMessages
+			.AssertEqual(1L, "there was room for one, and the one put back has nowhere to go");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_EachKindGoesBackWhereItCameFrom()
+	{
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			DataType = TimeSpan.FromMinutes(1).TimeFrame(),
+			OpenTime = time,
+			State = CandleStates.Finished,
+		};
+
+		buffer.PutBack(
+		[
+			CreateTick(secId, time, 100, 10),
+			new Level1ChangeMessage { SecurityId = secId, ServerTime = time }.Add(Level1Fields.LastTradePrice, 1m),
+			new QuoteChangeMessage { SecurityId = secId, ServerTime = time },
+			candle,
+			new NewsMessage { ServerTime = time, Headline = "n" },
+		]);
+
+		buffer.GetTicks().Count.AssertEqual(1, "a tick goes back among the ticks");
+		buffer.GetLevel1().Count.AssertEqual(1);
+		buffer.GetOrderBooks().Count.AssertEqual(1);
+		buffer.GetCandles().Count.AssertEqual(1);
+		buffer.GetNews().Count().AssertEqual(1);
+	}
+
+	#endregion
+
 	#region ProcessOutMessage - Ticks Tests
 
 	[TestMethod]
@@ -166,14 +313,45 @@ public class StorageBufferTests : BaseTestClass
 	{
 		var buffer = new StorageBuffer();
 		var secId = CreateSecurityId();
-		var tick = CreateTick(secId, DateTime.UtcNow, 100, 10);
+		var time = DateTime.UtcNow;
+		var tick = CreateTick(secId, time, 100, 10);
 
 		buffer.ProcessOutMessage(tick);
 
 		var ticks = buffer.GetTicks();
 		ticks.Count.AssertEqual(1);
 		ticks.ContainsKey(secId).AssertTrue();
-		ticks[secId].Count().AssertEqual(1);
+
+		// verify the buffered tick preserves its payload, not just that something was stored
+		var buffered = ticks[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].DataType.AssertEqual(DataType.Ticks);
+		buffered[0].SecurityId.AssertEqual(secId);
+		buffered[0].ServerTime.AssertEqual(time);
+		buffered[0].TradePrice.Value.AssertEqual(100m);
+		buffered[0].TradeVolume.Value.AssertEqual(10m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ProcessOutMessage_Tick_StoresClone()
+	{
+		// the buffer must store a clone (StorageBuffer.cs: TypedClone), so mutating the
+		// source message after ProcessOutMessage must not corrupt the buffered copy.
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var tick = CreateTick(secId, DateTime.UtcNow, 100, 10);
+
+		buffer.ProcessOutMessage(tick);
+
+		// mutate the original after it was handed to the buffer
+		tick.TradePrice = 999;
+		tick.TradeVolume = 888;
+
+		var buffered = buffer.GetTicks()[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].TradePrice.Value.AssertEqual(100m);
+		buffered[0].TradeVolume.Value.AssertEqual(10m);
 	}
 
 	[TestMethod]
@@ -384,6 +562,19 @@ public class StorageBufferTests : BaseTestClass
 		result.Count.AssertEqual(1);
 	}
 
+	// EnabledTransactions says whether transactions are stored, the same way EnabledLevel1 and
+	// EnabledOrderBook do for their kinds; it is not a sub-setting of FilterSubscription.
+	[TestMethod]
+	public void ProcessOutMessage_Transaction_NotBufferedWhenDisabled()
+	{
+		var buffer = new StorageBuffer { EnabledTransactions = false };
+		var secId = CreateSecurityId();
+
+		buffer.ProcessOutMessage(CreateTransaction(secId, DateTime.UtcNow, 123));
+
+		buffer.GetTransactions().Count.AssertEqual(0, "transactions are turned off, so none is kept");
+	}
+
 	#endregion
 
 	#region ProcessOutMessage - PositionChange Tests
@@ -391,14 +582,46 @@ public class StorageBufferTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_PositionChange_Buffered()
 	{
-		var buffer = new StorageBuffer();
+		// position storage is opt-in (EnabledPositions defaults to false), so explicitly
+		// enable it here to exercise the genuine "buffered when enabled" path and verify
+		// the buffered payload (not just the count).
+		var buffer = new StorageBuffer { EnabledPositions = true };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+		var position = CreatePositionChange(secId, time, 100);
+
+		buffer.ProcessOutMessage(position);
+
+		var result = buffer.GetPositionChanges();
+		result.Count.AssertEqual(1);
+		result.ContainsKey(secId).AssertTrue();
+
+		var buffered = result[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].SecurityId.AssertEqual(secId);
+		buffered[0].ServerTime.AssertEqual(time);
+		buffered[0].PortfolioName.AssertEqual("TestPortfolio");
+		((decimal)buffered[0].Changes[PositionChangeTypes.CurrentValue]).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ProcessOutMessage_PositionChange_NotBufferedWhenDisabled()
+	{
+		// Contracted behavior: EnabledPositions is an opt-in flag (default false, doc:
+		// "Enable positions storage"). With it disabled, position changes must NOT be
+		// buffered - mirroring EnabledLevel1/EnabledOrderBook handling in ProcessOutMessage.
+		// On the current engine the PositionChange branch ignores EnabledPositions when
+		// FilterSubscription is false, so this guard is expected to fail until the
+		// inconsistency is fixed.
+		var buffer = new StorageBuffer { EnabledPositions = false };
 		var secId = CreateSecurityId();
 		var position = CreatePositionChange(secId, DateTime.UtcNow, 100);
 
 		buffer.ProcessOutMessage(position);
 
 		var result = buffer.GetPositionChanges();
-		result.Count.AssertEqual(1);
+		result.Count.AssertEqual(0);
 	}
 
 	#endregion
@@ -425,6 +648,38 @@ public class StorageBufferTests : BaseTestClass
 		buffer.GetLevel1().Count.AssertEqual(0);
 		buffer.GetOrderBooks().Count.AssertEqual(0);
 		buffer.GetNews().Count().AssertEqual(0);
+	}
+
+	// Reset drops what was accumulated before the connection restarted; a board state is
+	// accumulated data like any other and must not survive into the new session.
+	[TestMethod]
+	public void ProcessInMessage_Reset_ClearsBoardStates()
+	{
+		var buffer = new StorageBuffer();
+
+		buffer.ProcessOutMessage(CreateBoardState("TQBR", SessionStates.Active, DateTime.UtcNow));
+
+		buffer.ProcessInMessage(new ResetMessage());
+
+		buffer.GetBoardStates().Count().AssertEqual(0, "reset clears every buffer, board states included");
+	}
+
+	// What reset clears also stops counting against MaxBufferedMessages, otherwise the reserve
+	// of the cleared data is never returned and later messages are dropped for no reason.
+	[TestMethod]
+	public void ProcessInMessage_Reset_FreesBoardStateRoom()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 1 };
+		var secId = CreateSecurityId();
+
+		buffer.ProcessOutMessage(CreateBoardState("TQBR", SessionStates.Active, DateTime.UtcNow));
+
+		buffer.ProcessInMessage(new ResetMessage());
+
+		buffer.ProcessOutMessage(CreateTick(secId, DateTime.UtcNow, 100, 10));
+
+		buffer.DroppedMessages.AssertEqual(0L, "nothing waits to be written after reset, so there is room");
+		buffer.GetTicks().Count.AssertEqual(1);
 	}
 
 	#endregion
@@ -623,10 +878,10 @@ public class StorageBufferTests : BaseTestClass
 
 	#endregion
 
-	#region IPersistable Tests
+	#region IAsyncPersistable Tests
 
 	[TestMethod]
-	public void Save_Load_PreservesSettings()
+	public async Task Save_Load_PreservesSettings()
 	{
 		var buffer = new StorageBuffer
 		{
@@ -637,13 +892,14 @@ public class StorageBufferTests : BaseTestClass
 			EnabledTransactions = false,
 			FilterSubscription = true,
 			DisableStorageTimer = true,
+			MaxBufferedMessages = 12345,
 		};
 
 		var storage = new SettingsStorage();
-		((IPersistable)buffer).Save(storage);
+		await ((IAsyncPersistable)buffer).SaveAsync(storage, CancellationToken);
 
 		var buffer2 = new StorageBuffer();
-		((IPersistable)buffer2).Load(storage);
+		await ((IAsyncPersistable)buffer2).LoadAsync(storage, CancellationToken);
 
 		buffer2.Enabled.AssertEqual(buffer.Enabled);
 		buffer2.EnabledLevel1.AssertEqual(buffer.EnabledLevel1);
@@ -652,6 +908,30 @@ public class StorageBufferTests : BaseTestClass
 		buffer2.EnabledTransactions.AssertEqual(buffer.EnabledTransactions);
 		buffer2.FilterSubscription.AssertEqual(buffer.FilterSubscription);
 		buffer2.DisableStorageTimer.AssertEqual(buffer.DisableStorageTimer);
+		buffer2.MaxBufferedMessages.AssertEqual(buffer.MaxBufferedMessages);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public async Task Save_Load_PreservesIgnoreGenerated()
+	{
+		// IgnoreGenerated is serialized/deserialized by Save/Load (StorageBuffer.cs),
+		// so a non-default set must round-trip exactly.
+		var buffer = new StorageBuffer();
+		buffer.IgnoreGenerated.Clear();
+		buffer.IgnoreGenerated.Add(DataType.Ticks);
+		buffer.IgnoreGenerated.Add(DataType.OrderLog);
+
+		var storage = new SettingsStorage();
+		await ((IAsyncPersistable)buffer).SaveAsync(storage, CancellationToken);
+
+		var buffer2 = new StorageBuffer();
+		await ((IAsyncPersistable)buffer2).LoadAsync(storage, CancellationToken);
+
+		buffer2.IgnoreGenerated.Count.AssertEqual(2);
+		buffer2.IgnoreGenerated.Contains(DataType.Ticks).AssertTrue();
+		buffer2.IgnoreGenerated.Contains(DataType.OrderLog).AssertTrue();
+		buffer2.IgnoreGenerated.Contains(DataType.Level1).AssertFalse();
 	}
 
 	#endregion
@@ -678,6 +958,19 @@ public class StorageBufferTests : BaseTestClass
 		var transactions = buffer.GetTransactions();
 		transactions.Count.AssertEqual(1);
 		transactions.ContainsKey(secId).AssertTrue();
+
+		// verify the ToExec() conversion result, not just that a row was buffered
+		var buffered = transactions[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		var exec = buffered[0];
+		exec.DataType.AssertEqual(DataType.Transactions);
+		exec.SecurityId.AssertEqual(secId);
+		exec.TransactionId.AssertEqual(123L);
+		exec.HasOrderInfo.AssertTrue();
+		exec.Side.AssertEqual(Sides.Buy);
+		exec.OrderPrice.AssertEqual(100m);
+		exec.OrderVolume.Value.AssertEqual(10m);
+		exec.OrderState.Value.AssertEqual(OrderStates.Pending);
 	}
 
 	[TestMethod]
@@ -701,6 +994,43 @@ public class StorageBufferTests : BaseTestClass
 		transactions.Count.AssertEqual(1);
 	}
 
+	// An order sent in is a transaction as much as its execution coming back, so turning
+	// transactions off must keep it out of the buffer without FilterSubscription being involved.
+	[TestMethod]
+	public void ProcessInMessage_OrderRegister_NotBufferedWhenTransactionsDisabled()
+	{
+		var buffer = new StorageBuffer { EnabledTransactions = false };
+		var secId = CreateSecurityId();
+
+		buffer.ProcessInMessage(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = 123,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+		});
+
+		buffer.GetTransactions().Count.AssertEqual(0, "transactions are turned off, so the order is not kept");
+	}
+
+	[TestMethod]
+	public void ProcessInMessage_OrderReplace_NotBufferedWhenTransactionsDisabled()
+	{
+		var buffer = new StorageBuffer { EnabledTransactions = false };
+
+		buffer.ProcessInMessage(new OrderReplaceMessage
+		{
+			SecurityId = CreateSecurityId(),
+			TransactionId = 124,
+			OriginalTransactionId = 123,
+			Price = 101,
+			Volume = 15,
+		});
+
+		buffer.GetTransactions().Count.AssertEqual(0, "transactions are turned off, so the replacement is not kept");
+	}
+
 	#endregion
 
 	#region IgnoreGenerated Tests
@@ -716,6 +1046,10 @@ public class StorageBufferTests : BaseTestClass
 		buffer.IgnoreGenerated.Count(d => d == DataType.OrderLog).AssertEqual(1);
 		buffer.IgnoreGenerated.Count(d => d == DataType.Transactions).AssertEqual(1);
 		buffer.IgnoreGenerated.Count(d => d == DataType.PositionChanges).AssertEqual(1);
+		// previously missing from the oracle (StorageBuffer.cs default set)
+		buffer.IgnoreGenerated.Count(d => d == DataType.FilteredMarketDepth).AssertEqual(1);
+		// pin the exact default set size so an added/removed default entry is caught
+		buffer.IgnoreGenerated.Count.AssertEqual(7);
 	}
 
 	[TestMethod]

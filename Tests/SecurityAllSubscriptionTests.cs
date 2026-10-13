@@ -147,11 +147,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 	private static async Task<long> WaitForSubscription(SecurityAllTestAdapter adapter, CancellationToken ct, int timeoutMs = 5000)
 	{
-		using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-		cts.CancelAfter(timeoutMs);
-
-		while (adapter.ActiveSubscriptions.Count == 0)
-			await Task.Delay(10, cts.Token);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0,
+			TimeSpan.FromMilliseconds(timeoutMs), ct, "the subscription reaches the adapter");
 
 		await Task.Delay(50, ct);
 		return adapter.ActiveSubscriptions.Keys.First();
@@ -209,7 +206,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		// now emit real data — children are online
 		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 2, CancellationToken);
 
 		IsTrue(receivedTicks.Count >= 2, $"Expected at least 2 ticks, got {receivedTicks.Count}");
 		IsTrue(receivedTicks.Any(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId), "Expected AAPL tick");
@@ -255,7 +253,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
 		await adapter.EmitTick(subId, MsftId, 300m, 7, now.AddSeconds(3), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 3, CancellationToken);
 
 		var aaplCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId);
 		var googCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == GoogId);
@@ -352,7 +351,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 		await adapter.EmitLevel1(subId, AaplId, 150m, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitLevel1(subId, GoogId, 2800m, now.AddSeconds(2), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedL1.Count >= 2, CancellationToken);
 
 		IsTrue(receivedL1.Count >= 2, $"Expected at least 2 Level1 messages, got {receivedL1.Count}");
 		IsTrue(receivedL1.Any(l => l.msg.SecurityId == AaplId), "Expected AAPL Level1");
@@ -417,7 +417,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		await adapter.EmitTick(subId, AaplId, 160m, 10, baseTime.AddMinutes(1).AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2810m, 5, baseTime.AddMinutes(1).AddSeconds(1), CancellationToken);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedCandles.Count >= 2, CancellationToken);
 
 		IsTrue(receivedCandles.Count >= 2, $"Expected at least 2 candles, got {receivedCandles.Count}");
 		IsTrue(receivedCandles.Any(c => ((ISecurityIdMessage)c.candle).SecurityId == AaplId), "Expected AAPL candle");
@@ -462,7 +462,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 			bids: [new(2800m, 5), new(2799m, 8)],
 			asks: [new(2801m, 3), new(2802m, 7)], CancellationToken);
 
-		await Task.Delay(300, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedBooks.Count > 0, CancellationToken);
 
 		// Verify AAPL books received
 		IsTrue(receivedBooks.Any(b => ((ISecurityIdMessage)b.book).SecurityId == AaplId), "AAPL book should arrive");
@@ -479,27 +479,157 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		var googRun = connector.SubscribeAsync(googSub, googCts.Token).AsTask();
 
 		// Wait — no new data emitted by adapter after this point
-		await Task.Delay(500, CancellationToken);
+		await googStarted.Task.WithCancellation(CancellationToken);
 
 		// 4. Late subscriber should receive GOOG's cached order book
 		var googBooks = receivedBooks
 			.Where(b => ((ISecurityIdMessage)b.book).SecurityId == GoogId)
 			.ToList();
 
-		IsTrue(googBooks.Count >= 1, $"Late GOOG subscriber should receive cached order book, got {googBooks.Count}");
+		googBooks.Count.AssertEqual(1);
+		googBooks[0].sub.AssertSame(googSub);
 
 		// Verify the cached book has correct data
 		var book = googBooks[0].book;
 		var bids = book.Bids.ToArray();
 		var asks = book.Asks.ToArray();
 
-		IsTrue(bids.Length >= 1, "GOOG book should have bids");
-		IsTrue(asks.Length >= 1, "GOOG book should have asks");
+		bids.Length.AssertEqual(2);
+		bids[0].Price.AssertEqual(2800m);
+		bids[0].Volume.AssertEqual(5m);
+		bids[1].Price.AssertEqual(2799m);
+		bids[1].Volume.AssertEqual(8m);
+		asks.Length.AssertEqual(2);
+		asks[0].Price.AssertEqual(2801m);
+		asks[0].Volume.AssertEqual(3m);
+		asks[1].Price.AssertEqual(2802m);
+		asks[1].Volume.AssertEqual(7m);
 
 		aaplCts.Cancel();
 		googCts.Cancel();
 		await aaplRun.WithCancellation(CancellationToken);
 		await googRun.WithCancellation(CancellationToken);
+	}
+
+	#endregion
+
+	#region Test 6: What may be replayed to a late subscriber
+
+	/// <summary>
+	/// An adapter that cannot filter by security - the case the ALL subscription exists for - and
+	/// that says nothing on its own, so the wrapper is driven message by message with no waiting.
+	/// </summary>
+	private sealed class NoSecurityFilterAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
+	{
+		public override bool IsSecurityRequired(DataType dataType) => false;
+
+		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+			=> default;
+
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new NoSecurityFilterAdapter(TransactionIdGenerator));
+	}
+
+	/// <summary>
+	/// The cache the late subscriber is served from keeps the last message of any kind, so for ticks
+	/// it keeps a trade. A book is state and replaying it tells the subscriber where the market is;
+	/// a trade is an event that already happened, and replaying it presents a past trade as a new one.
+	/// Driven straight through the adapter, with no timing involved.
+	/// </summary>
+	[TestMethod]
+	public async Task LateTickSubscriber_IsNotGivenAlreadyHappenedTrade()
+	{
+		var inner = new NoSecurityFilterAdapter(new IncrementalIdGenerator());
+		using var adapter = new SubscriptionSecurityAllMessageAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		// the ALL subscription — the one that actually talks to the venue
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			DataType2 = DataType.Ticks,
+		}, CancellationToken);
+
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = AaplId,
+			TradePrice = 150m,
+			TradeVolume = 1m,
+			ServerTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+		tick.SetSubscriptionIds(subscriptionId: 1);
+
+		await inner.SendOutMessageAsync(tick, CancellationToken);
+
+		output.Clear();
+
+		// a per-security subscriber arrives after that trade has already happened
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = AaplId,
+			DataType2 = DataType.Ticks,
+		}, CancellationToken);
+
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 2)
+			.AssertEqual(1, "the late subscriber joined the ALL subscription that is already open");
+
+		output.OfType<ExecutionMessage>().Count()
+			.AssertEqual(0, "a trade that happened before the subscription must not be delivered to it as a new one");
+	}
+
+	/// <summary>
+	/// An increment is a difference against a book the late subscriber has never seen, so replaying
+	/// one as its opening book leaves it with a book built out of nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task LateDepthSubscriber_IsNotGivenBareIncrement()
+	{
+		var inner = new NoSecurityFilterAdapter(new IncrementalIdGenerator());
+		using var adapter = new SubscriptionSecurityAllMessageAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			DataType2 = DataType.MarketDepth,
+		}, CancellationToken);
+
+		var increment = new QuoteChangeMessage
+		{
+			SecurityId = AaplId,
+			ServerTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+			State = QuoteChangeStates.Increment,
+			Bids = [new(150m, 10)],
+			Asks = [],
+		};
+		increment.SetSubscriptionIds(subscriptionId: 1);
+
+		await inner.SendOutMessageAsync(increment, CancellationToken);
+
+		output.Clear();
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = AaplId,
+			DataType2 = DataType.MarketDepth,
+		}, CancellationToken);
+
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 2)
+			.AssertEqual(1, "the late subscriber joined the ALL subscription that is already open");
+
+		output.OfType<QuoteChangeMessage>().Count(b => b.State == QuoteChangeStates.Increment)
+			.AssertEqual(0, "an increment is not a snapshot and cannot open a book for a subscriber that has none");
 	}
 
 	#endregion

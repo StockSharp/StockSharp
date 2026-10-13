@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.RVIKey,
 	Description = LocalizedStrings.RelativeVigorIndexKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/rvi.html")]
 [IndicatorOut(typeof(IRelativeVigorIndexValue))]
 public class RelativeVigorIndex : BaseComplexIndicator<IRelativeVigorIndexValue>

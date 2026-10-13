@@ -45,6 +45,23 @@ public class PositionModifyAlgoTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void MarketOrderAlgo_OnOrderMatched_NoReRegister()
+	{
+		// Per IPositionModifyAlgo, OnOrderMatched signals a fully filled order, so a market
+		// algo is done after a single match: RemainingVolume is zero and GetNextAction never
+		// emits another Register (it must report Finished from then on). This pins the
+		// post-match contract boundary that previously was unguarded.
+		var algo = new MarketOrderAlgo(Sides.Buy, 100);
+		algo.GetNextAction(); // initial Register
+
+		algo.OnOrderMatched(100);
+
+		IsTrue(algo.IsFinished);
+		algo.RemainingVolume.AreEqual(0m);
+		algo.GetNextAction().ActionType.AreEqual(PositionModifyAction.ActionTypes.Finished);
+	}
+
+	[TestMethod]
 	public void MarketOrderAlgo_OnOrderFailed_IsFinished()
 	{
 		var algo = new MarketOrderAlgo(Sides.Buy, 100);
@@ -62,7 +79,14 @@ public class PositionModifyAlgoTests : BaseTestClass
 
 		algo.Cancel();
 
+		// After Cancel() the algo must report itself as finished, consistent with the
+		// IPositionModifyAlgo.IsFinished contract ("Whether the algorithm has finished")
+		// and with the sibling QuotingBehaviorAlgo, whose IsFinished honors cancellation.
+		// GetNextAction() already returns Finished forever after Cancel(), so IsFinished
+		// must agree. Currently MarketOrderAlgo.IsFinished only inspects _finished, so this
+		// assertion fails until the engine is fixed to IsFinished => _finished || _canceled.
 		algo.GetNextAction().ActionType.AreEqual(PositionModifyAction.ActionTypes.Finished);
+		IsTrue(algo.IsFinished);
 	}
 
 	[TestMethod]
@@ -226,21 +250,38 @@ public class PositionModifyAlgoTests : BaseTestClass
 
 		algo.UpdateMarketData(DateTime.UtcNow, 50m, null);
 
-		// First slice
-		algo.GetNextAction();
+		// First slice: the iceberg must actually register a 100-lot slice at the last price,
+		// not merely allow RemainingVolume to be decremented. Assert the full action.
+		var slice1 = algo.GetNextAction();
+		slice1.ActionType.AreEqual(PositionModifyAction.ActionTypes.Register);
+		slice1.Side.AreEqual(Sides.Sell);
+		slice1.Volume.AreEqual(100m);
+		slice1.Price.AreEqual(50m);
+		slice1.OrderType.AreEqual(OrderTypes.Limit);
 		algo.OnOrderMatched(100m);
 		algo.RemainingVolume.AreEqual(200m);
 
-		// Second slice
-		algo.GetNextAction();
+		// Second slice: a new slice must be emitted for the next 100 lots.
+		var slice2 = algo.GetNextAction();
+		slice2.ActionType.AreEqual(PositionModifyAction.ActionTypes.Register);
+		slice2.Side.AreEqual(Sides.Sell);
+		slice2.Volume.AreEqual(100m);
+		slice2.Price.AreEqual(50m);
 		algo.OnOrderMatched(100m);
 		algo.RemainingVolume.AreEqual(100m);
 
-		// Third slice
-		algo.GetNextAction();
+		// Third slice: the final 100 lots must be quoted, after which the algo finishes.
+		var slice3 = algo.GetNextAction();
+		slice3.ActionType.AreEqual(PositionModifyAction.ActionTypes.Register);
+		slice3.Side.AreEqual(Sides.Sell);
+		slice3.Volume.AreEqual(100m);
+		slice3.Price.AreEqual(50m);
 		algo.OnOrderMatched(100m);
 		algo.RemainingVolume.AreEqual(0m);
 		IsTrue(algo.IsFinished);
+
+		// Once finished, no further slice may be registered.
+		algo.GetNextAction().ActionType.AreEqual(PositionModifyAction.ActionTypes.Finished);
 	}
 
 	[TestMethod]

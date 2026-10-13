@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class StopOrderManagerTests : BaseTestClass
@@ -146,6 +146,117 @@ public class StopOrderManagerTests : BaseTestClass
 		Assert.AreEqual(Sides.Buy, triggers[0].ResultingOrder.Side);
 	}
 
+	/// <summary>
+	/// A trailing stop carries a level before it has seen any price, and that level implies the
+	/// watermark it was built from. A first price below that watermark must not become one, or the
+	/// stop walks away from the level it was registered at - which is what the same stop reloaded
+	/// from storage refuses to do.
+	/// </summary>
+	[TestMethod]
+	public void TrailingStopSell_FirstPriceBelowTheLevelDoesNotMoveIt()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 95, isTrailing: true, trailingOffset: 5);
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 98, DateTime.UtcNow);
+
+		AreEqual(0, triggers.Count);
+		AreEqual(95m, info.StopPrice);
+		AreEqual(100m, info.BestSeenPrice);
+	}
+
+	/// <summary>
+	/// A trailing stop may be registered with an offset and no level at all - the offset is the
+	/// trigger. There is no level to imply a watermark, so the first price still becomes one.
+	/// </summary>
+	[TestMethod]
+	public void TrailingStopBuy_WithoutALevelStillTakesTheFirstPrice()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 0, isTrailing: true, trailingOffset: 5);
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+
+		AreEqual(0, triggers.Count);
+		AreEqual(105m, info.StopPrice);
+		AreEqual(100m, info.BestSeenPrice);
+	}
+
+	/// <summary>
+	/// A sell stop trails below its watermark, so a percentage that reaches 100 puts it at zero and
+	/// anything beyond puts it below. A buy stop trails above and stays reachable however far.
+	/// </summary>
+	[TestMethod]
+	public void InitialWatermark_IsTheOneTheLevelImplies()
+	{
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(95m, 5m, false, Sides.Sell));
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(105m, 5m, false, Sides.Buy));
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(95m, 5m, true, Sides.Sell));
+
+		IsNull(TrailingStopPriceCalculator.InitialWatermark(0m, 5m, false, Sides.Buy),
+			"an offset-only stop has no level to imply one, and takes the first price it sees");
+	}
+
+	[TestMethod]
+	public void PercentOffsetReachability_DependsOnSide()
+	{
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(5m, Sides.Sell));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(100m, Sides.Sell));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(150m, Sides.Sell));
+
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(5m, Sides.Buy));
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(150m, Sides.Buy));
+
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(0m, Sides.Buy));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(-5m, Sides.Sell));
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_AbsoluteOffset_RoundTripsBothSides()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, false, Sides.Sell).AssertEqual(95m);
+		TrailingStopPriceCalculator.ReconstructWatermark(95m, 5m, false, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, false, Sides.Buy).AssertEqual(105m);
+		TrailingStopPriceCalculator.ReconstructWatermark(105m, 5m, false, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_PercentOffset_RoundTripsBothSides()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, true, Sides.Sell).AssertEqual(95m);
+		TrailingStopPriceCalculator.ReconstructWatermark(95m, 5m, true, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, true, Sides.Buy).AssertEqual(105m);
+		TrailingStopPriceCalculator.ReconstructWatermark(105m, 5m, true, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_NullOrZeroOffset_KeepsPrice()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, null, false, Sides.Sell).AssertEqual(100m);
+		TrailingStopPriceCalculator.ReconstructWatermark(100m, null, false, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 0m, true, Sides.Buy).AssertEqual(100m);
+		TrailingStopPriceCalculator.ReconstructWatermark(100m, 0m, true, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_ZeroPercentFactor_CollapsesStopPrice()
+		=> TrailingStopPriceCalculator
+			.CalculateStopPrice(125m, 100m, true, Sides.Sell)
+			.AssertEqual(0m);
+
+	[TestMethod]
+	public void TrailingStopPrice_ZeroPercentFactor_KeepsPersistedStopPrice()
+		=> TrailingStopPriceCalculator
+			.ReconstructWatermark(25m, 100m, true, Sides.Sell)
+			.AssertEqual(25m);
+
 	[TestMethod]
 	public void Cancel_RemovesStopOrder()
 	{
@@ -246,6 +357,55 @@ public class StopOrderManagerTests : BaseTestClass
 		// secId2 still pending
 		triggers = mgr.CheckPrice(secId2, 150, DateTime.UtcNow);
 		Assert.AreEqual(0, triggers.Count);
+	}
+
+	[TestMethod]
+	public void GetStopIds_ListsWhatRestsOnThatSecurityOnly()
+	{
+		var mgr = new StopOrderManager();
+		var secId1 = CreateSecId();
+		var secId2 = CreateSecId();
+
+		mgr.Register(CreateStopInfo(secId1, Sides.Buy, stopPrice: 105, transactionId: 1));
+		mgr.Register(CreateStopInfo(secId1, Sides.Sell, stopPrice: 95, transactionId: 2));
+		mgr.Register(CreateStopInfo(secId2, Sides.Buy, stopPrice: 200, transactionId: 3));
+
+		AreEquivalent(new[] { 1L, 2L }, mgr.GetStopIds(secId1).ToArray(), "both stops on the first security");
+		AreEquivalent(new[] { 3L }, mgr.GetStopIds(secId2).ToArray(), "and only its own on the second");
+		HasCount(0, mgr.GetStopIds(CreateSecId()).ToArray(), "a security nothing rests on has nothing to list");
+	}
+
+	[TestMethod]
+	public void GetStopIds_ForgetsWhatWasCancelledOrTriggered()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+
+		mgr.Register(CreateStopInfo(secId, Sides.Buy, stopPrice: 105, transactionId: 1));
+		mgr.Register(CreateStopInfo(secId, Sides.Buy, stopPrice: 110, transactionId: 2));
+		mgr.Register(CreateStopInfo(secId, Sides.Sell, stopPrice: 95, transactionId: 3));
+
+		IsTrue(mgr.Cancel(1, out _), "the first stop is cancelled");
+		AreEqual(1, mgr.CheckPrice(secId, 110, DateTime.UtcNow).Count, "and the second one fires");
+
+		AreEquivalent(new[] { 3L }, mgr.GetStopIds(secId).ToArray(), "only the stop that is still waiting is listed");
+
+		mgr.Clear();
+		HasCount(0, mgr.GetStopIds(secId).ToArray(), "and a cleared manager holds nothing at all");
+	}
+
+	[TestMethod]
+	public void GetStopIds_FollowsAReplaceOntoItsSecurity()
+	{
+		var mgr = new StopOrderManager();
+		var from = CreateSecId();
+		var to = CreateSecId();
+
+		mgr.Register(CreateStopInfo(from, Sides.Buy, stopPrice: 105, transactionId: 1));
+		IsTrue(mgr.Replace(1, CreateStopInfo(to, Sides.Buy, stopPrice: 105, transactionId: 2)), "the stop is replaced onto another security");
+
+		HasCount(0, mgr.GetStopIds(from).ToArray(), "nothing rests on the security it left");
+		AreEquivalent(new[] { 2L }, mgr.GetStopIds(to).ToArray(), "and the replacement rests on the one it names");
 	}
 
 	[TestMethod]
@@ -404,5 +564,192 @@ public class StopOrderManagerTests : BaseTestClass
 		// Price rises well above — must NOT trigger.
 		var triggers = mgr.CheckPrice(secId, 120, DateTime.UtcNow);
 		Assert.AreEqual(0, triggers.Count, "TakeProfit Buy must NOT trigger on price rise");
+	}
+
+	[TestMethod]
+	public void StopLimitBuy_PercentLimit_ResolvedAtTrigger()
+	{
+		// IsLimitPricePercent=true: LimitPrice (2) is 2% slippage above the absolute stop price.
+		// For Buy stop at 100: resulting limit order price = 100 * (1 + 2/100) = 102.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 100, limitPrice: 2);
+		info.IsLimitPricePercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(OrderTypes.Limit, triggers[0].ResultingOrder.OrderType);
+		Assert.AreEqual(102m, triggers[0].ResultingOrder.Price, "Buy stop percent limit must resolve to stop*(1+pct/100)");
+	}
+
+	[TestMethod]
+	public void StopLimitSell_PercentLimit_ResolvedAtTrigger()
+	{
+		// For Sell stop at 100 with 2% slippage tolerance: limit = 100 * (1 - 2/100) = 98.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 100, limitPrice: 2);
+		info.IsLimitPricePercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(OrderTypes.Limit, triggers[0].ResultingOrder.OrderType);
+		Assert.AreEqual(98m, triggers[0].ResultingOrder.Price, "Sell stop percent limit must resolve to stop*(1-pct/100)");
+	}
+
+	[TestMethod]
+	public void TrailingSell_PercentOffset_StopFollowsWatermark()
+	{
+		// Sell trailing with 5% offset: as market rises, stop = high*(1-5/100).
+		// BestSeen=120 → StopPrice=120*0.95=114. Price falls to 114 → trigger.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 100, isTrailing: true, trailingOffset: 5);
+		info.IsTrailingOffsetPercent = true;
+		mgr.Register(info);
+
+		// Price rises — no trigger, stop recomputed from high watermark
+		var triggers = mgr.CheckPrice(secId, 120, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+		Assert.AreEqual(114m, info.StopPrice, "Trailing sell percent: stop must track high*(1-pct/100)");
+
+		// Price falls to the new stop — trigger
+		triggers = mgr.CheckPrice(secId, 114, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+	}
+
+	[TestMethod]
+	public void TrailingBuy_PercentOffset_StopFollowsWatermark()
+	{
+		// Buy trailing with 5% offset: as market falls, stop = low*(1+5/100).
+		// BestSeen=80 → StopPrice=80*1.05=84. Price rises to 84 → trigger.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 100, isTrailing: true, trailingOffset: 5);
+		info.IsTrailingOffsetPercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 80, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+		Assert.AreEqual(84m, info.StopPrice, "Trailing buy percent: stop must track low*(1+pct/100)");
+
+		triggers = mgr.CheckPrice(secId, 84, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+	}
+
+	/// <summary>
+	/// Registers a conditional order through the engine's own registration path, the way a client order
+	/// arrives, so the condition is translated by the engine rather than by the test.
+	/// </summary>
+	private static MatchingEngineAdapter RegisterStop(SecurityId secId, Sides side, OrderCondition condition)
+	{
+		var engine = new MatchingEngineAdapter();
+
+		engine.ProcessOrderRegister(new()
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			PortfolioName = "test",
+			Side = side,
+			OrderType = OrderTypes.Conditional,
+			Volume = 10,
+			LocalTime = DateTime.UtcNow,
+			Condition = condition,
+		}, []);
+
+		return engine;
+	}
+
+	[TestMethod]
+	public void RegisteredPercentClosePrice_ResolvedAgainstActivationPrice()
+	{
+		// A percent close price registered on the condition must still be a percent once the stop fires.
+		// ClosePositionPrice is a percent of the activation price, and a buy stop pays up:
+		// 100 * (1 + 2/100) = 102.
+		var secId = CreateSecId();
+
+		var engine = RegisterStop(secId, Sides.Buy, new StopOrderCondition()
+		{
+			ActivationPrice = 100m,
+			ClosePositionPrice = 2m,
+			IsClosePositionPricePercent = true,
+		});
+
+		var triggers = engine.StopOrderManager.CheckPrice(secId, 100m, DateTime.UtcNow);
+
+		AreEqual(1, triggers.Count, "a buy stop at 100 must fire when the market reaches 100");
+		AreEqual<OrderTypes?>(OrderTypes.Limit, triggers[0].ResultingOrder.OrderType, "a stop naming a close price places a limit order");
+		AreEqual(102m, triggers[0].ResultingOrder.Price, "a 2 percent close price on a buy stop at 100 is 102, not 2");
+	}
+
+	[TestMethod]
+	public void RegisteredPercentTrailingOffset_TrailsByPercentOfWatermark()
+	{
+		// A percent trailing offset registered on the condition must still be a percent once the stop
+		// trails. A sell trailing 5 percent below a high of 120 rests at 120 * (1 - 5/100) = 114,
+		// so 114.9 is still above it and must not fire.
+		var secId = CreateSecId();
+
+		var engine = RegisterStop(secId, Sides.Sell, new StopOrderCondition()
+		{
+			ActivationPrice = 100m,
+			IsTrailing = true,
+			TrailingOffset = 5m,
+			IsTrailingOffsetPercent = true,
+		});
+
+		var mgr = engine.StopOrderManager;
+
+		AreEqual(0, mgr.CheckPrice(secId, 120m, DateTime.UtcNow).Count, "a rising market moves a trailing sell up, it does not fire it");
+		AreEqual(0, mgr.CheckPrice(secId, 114.9m, DateTime.UtcNow).Count, "114.9 has not reached a stop trailing 5 percent below 120");
+
+		var triggers = mgr.CheckPrice(secId, 114m, DateTime.UtcNow);
+
+		AreEqual(1, triggers.Count, "the market reached the trailed stop");
+		AreEqual(114m, triggers[0].Info.StopPrice, "a 5 percent trail below a high of 120 rests at 114");
+	}
+
+	[TestMethod]
+	public void RegisteredTakeProfitSell_FiresWhenTheMarketRisesToIt()
+	{
+		// A condition that names a take-profit price and no stop-loss price is a take-profit: a sell
+		// take at 110 waits while the market is below it and fires when it reaches 110. Read as a
+		// stop-loss it carries no activation price at all, rests at 0 and can never fire.
+		var secId = CreateSecId();
+
+		var condition = new EmulationOrderCondition();
+		((ITakeProfitOrderCondition)condition).ActivationPrice = 110m;
+
+		var mgr = RegisterStop(secId, Sides.Sell, condition).StopOrderManager;
+
+		AreEqual(0, mgr.CheckPrice(secId, 105m, DateTime.UtcNow).Count, "105 has not reached a take-profit asking for 110");
+
+		var triggers = mgr.CheckPrice(secId, 110m, DateTime.UtcNow);
+
+		AreEqual(1, triggers.Count, "a sell take-profit at 110 must fire when the market reaches 110");
+		AreEqual(110m, triggers[0].Info.StopPrice, "and fire at the price it named, not at 0");
+	}
+
+	[TestMethod]
+	public void RegisteredTakeProfitBuy_DoesNotFireBeforeTheMarketFallsToIt()
+	{
+		// The other side of the same rule: a buy take-profit at 90 waits for the market to fall to 90.
+		// Read as a stop-loss with no activation price it sits at 0, which every price is above, so it
+		// fires on the first quote it sees and buys the market it was meant to wait out.
+		var secId = CreateSecId();
+
+		var condition = new EmulationOrderCondition();
+		((ITakeProfitOrderCondition)condition).ActivationPrice = 90m;
+
+		var mgr = RegisterStop(secId, Sides.Buy, condition).StopOrderManager;
+
+		AreEqual(0, mgr.CheckPrice(secId, 100m, DateTime.UtcNow).Count, "100 is above a buy take-profit waiting for 90, so nothing may fire");
+
+		var triggers = mgr.CheckPrice(secId, 90m, DateTime.UtcNow);
+
+		AreEqual(1, triggers.Count, "a buy take-profit at 90 must fire when the market falls to 90");
+		AreEqual(90m, triggers[0].Info.StopPrice, "and fire at the price it named, not at 0");
 	}
 }

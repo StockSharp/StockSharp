@@ -147,48 +147,7 @@ public class IsMatchTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void IsMatch_SecurityIds_PartialCodeMatch()
-	{
-		var security = CreateSecurity(code: "AAPL", board: "NASDAQ");
-
-		// Only security code specified - should match if contains
-		var criteria = new SecurityLookupMessage
-		{
-			SecurityIds = [
-				new SecurityId { SecurityCode = "AA" }, // partial match
-			]
-		};
-
-		// NOTE: Current behavior - partial code without board returns FALSE
-		// This is because the code only returns true when BOTH code AND board match exactly
-		// When only code is specified, the loop continues without returning true
-		// This might be by design or a bug depending on intended behavior
-		var result = security.IsMatch(criteria);
-		result.AssertFalse(); // Documenting current behavior
-	}
-
-	[TestMethod]
-	public void IsMatch_SecurityIds_BoardOnlyMatch_CurrentBehavior()
-	{
-		var security = CreateSecurity(code: "AAPL", board: "NASDAQ");
-
-		// Only board code specified
-		var criteria = new SecurityLookupMessage
-		{
-			SecurityIds = [
-				new SecurityId { BoardCode = "NASDAQ" },
-			]
-		};
-
-		// NOTE: Current behavior - board only without code returns FALSE
-		// The loop checks pass, but the return true only happens when BOTH are specified
-		// This might be intentional - SecurityIds is meant for exact ID lookup
-		var result = security.IsMatch(criteria);
-		result.AssertFalse(); // Documenting current behavior
-	}
-
-	[TestMethod]
-	public void IsMatch_SecurityIds_ExactMatchRequired()
+	public void IsMatch_SecurityIds_RequireCompleteIdentifiers()
 	{
 		var security = CreateSecurity(code: "AAPL", board: "NASDAQ");
 
@@ -199,7 +158,7 @@ public class IsMatchTests : BaseTestClass
 		};
 		security.IsMatch(fullMatch).AssertTrue();
 
-		// Partial matches don't work with SecurityIds array
+		// SecurityIds is a list of complete identifiers, not partial lookup criteria.
 		var partialCode = new SecurityLookupMessage
 		{
 			SecurityIds = [new SecurityId { SecurityCode = "AAPL" }] // no board
@@ -1125,26 +1084,6 @@ public class IsMatchTests : BaseTestClass
 
 		// Wrong board
 		tsla.IsMatch(criteria).AssertFalse();
-	}
-
-	[TestMethod]
-	public void IsMatch_SecurityIdsArray_OnlyCodeSpecified()
-	{
-		var aapl = CreateSecurity(code: "AAPL", board: "NASDAQ");
-		var aaplNyse = CreateSecurity(code: "AAPL", board: "NYSE");
-
-		// When only SecurityCode is set in SecurityIds, it requires exact code+board match
-		// This is current behavior - SecurityIds is for exact ID matching
-		var criteria = new SecurityLookupMessage();
-		criteria.SecurityIds =
-		[
-			new SecurityId { SecurityCode = "AAPL" }, // No board
-		];
-
-		// Current behavior: when board is empty in criteria, it doesn't match
-		// because GetHash returns 0 for empty IDs
-		aapl.IsMatch(criteria).AssertFalse();
-		aaplNyse.IsMatch(criteria).AssertFalse();
 	}
 
 	[TestMethod]

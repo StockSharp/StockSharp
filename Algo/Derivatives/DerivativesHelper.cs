@@ -69,7 +69,18 @@ public static class DerivativesHelper
 	/// <param name="derivative">The derivative.</param>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>Underlying asset.</returns>
+	[Obsolete("Use GetUnderlyingAssetAsync method instead.")]
 	public static Security GetUnderlyingAsset(this Security derivative, ISecurityProvider provider)
+		=> AsyncHelper.Run(() => derivative.GetUnderlyingAssetAsync(provider, default));
+
+	/// <summary>
+	/// To get the underlying asset by the derivative.
+	/// </summary>
+	/// <param name="derivative">The derivative.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Underlying asset.</returns>
+	public static async ValueTask<Security> GetUnderlyingAssetAsync(this Security derivative, ISecurityProvider provider, CancellationToken cancellationToken)
 	{
 		if (derivative == null)
 			throw new ArgumentNullException(nameof(derivative));
@@ -77,21 +88,20 @@ public static class DerivativesHelper
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		if (derivative.Type == SecurityTypes.Option)
-		{
-			derivative.CheckOption();
+		var underlyingId = derivative.UnderlyingSecurityId.ToSecurityId();
 
-			return _underlyingSecurities.SafeAdd(derivative, key =>
-			{
-				var underlyingSecurity = provider.LookupById(key.UnderlyingSecurityId);
+		if (derivative.Type != SecurityTypes.Option)
+			return await provider.LookupByIdAsync(underlyingId, cancellationToken);
 
-				return underlyingSecurity ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(key.UnderlyingSecurityId));
-			});
-		}
-		else
-		{
-			return provider.LookupById(derivative.UnderlyingSecurityId);
-		}
+		derivative.CheckOption();
+
+		if (_underlyingSecurities.TryGetValue(derivative, out var cached))
+			return cached;
+
+		var underlying = await provider.LookupByIdAsync(underlyingId, cancellationToken)
+			?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(derivative.UnderlyingSecurityId));
+
+		return _underlyingSecurities.SafeAdd(derivative, _ => underlying);
 	}
 
 	/// <summary>
@@ -154,9 +164,26 @@ public static class DerivativesHelper
 	/// <remarks>
 	/// It returns an empty list if derivatives are not found.
 	/// </remarks>
+	[Obsolete("Use GetDerivativesAsync method instead.")]
 	public static IEnumerable<Security> GetDerivatives(this Security asset, ISecurityProvider provider, DateTime? expirationDate = null)
+		=> asset.GetDerivativesAsync(provider, expirationDate).ToBlockingEnumerable();
+
+	/// <summary>
+	/// To get derivatives by the underlying asset.
+	/// </summary>
+	/// <param name="asset">Underlying asset.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="expirationDate">The expiration date.</param>
+	/// <returns>The derivatives, or none when there are none.</returns>
+	public static IAsyncEnumerable<Security> GetDerivativesAsync(this Security asset, ISecurityProvider provider, DateTime? expirationDate)
 	{
-		return provider.Lookup(new Security
+		if (asset == null)
+			throw new ArgumentNullException(nameof(asset));
+
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupAsync(new Security
 		{
 			UnderlyingSecurityId = asset.Id,
 			ExpiryDate = expirationDate,
@@ -169,9 +196,26 @@ public static class DerivativesHelper
 	/// <param name="derivative">The derivative.</param>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>Underlying asset.</returns>
+	[Obsolete("Use GetAssetAsync method instead.")]
 	public static Security GetAsset(this Security derivative, ISecurityProvider provider)
+		=> AsyncHelper.Run(() => derivative.GetAssetAsync(provider, default));
+
+	/// <summary>
+	/// To get the underlying asset.
+	/// </summary>
+	/// <param name="derivative">The derivative.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Underlying asset.</returns>
+	public static async ValueTask<Security> GetAssetAsync(this Security derivative, ISecurityProvider provider, CancellationToken cancellationToken)
 	{
-		var asset = provider.LookupById(derivative.UnderlyingSecurityId);
+		if (derivative == null)
+			throw new ArgumentNullException(nameof(derivative));
+
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		var asset = await provider.LookupByIdAsync(derivative.UnderlyingSecurityId.ToSecurityId(), cancellationToken);
 
 		return asset ?? throw new ArgumentException(LocalizedStrings.UnderlyingAssentNotFound.Put(derivative));
 	}
@@ -192,22 +236,33 @@ public static class DerivativesHelper
 	/// <param name="option">Options contract.</param>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>The opposite option.</returns>
+	[Obsolete("Use GetOppositeOptionAsync method instead.")]
 	public static Security GetOppositeOption(this Security option, ISecurityProvider provider)
+		=> AsyncHelper.Run(() => option.GetOppositeOptionAsync(provider, default));
+
+	/// <summary>
+	/// To get opposite option (for Call to get Put, for Put to get Call).
+	/// </summary>
+	/// <param name="option">Options contract.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The opposite option.</returns>
+	public static async ValueTask<Security> GetOppositeOptionAsync(this Security option, ISecurityProvider provider, CancellationToken cancellationToken)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
 		option.CheckOption();
 
-		var oppositeOption = provider
-			.Lookup(new Security
+		var oppositeOption = await provider
+			.LookupAsync(new Security
 			{
 				OptionType = option.OptionType == OptionTypes.Call ? OptionTypes.Put : OptionTypes.Call,
 				Strike = option.Strike,
 				ExpiryDate = option.ExpiryDate,
 				UnderlyingSecurityId = option.UnderlyingSecurityId,
 			})
-			.FirstOrDefault();
+			.FirstOrDefaultAsync(cancellationToken);
 
 		return oppositeOption ?? throw new ArgumentException(LocalizedStrings.OppositeOptionNotFound.Put(option.Id), nameof(option));
 	}
@@ -220,10 +275,21 @@ public static class DerivativesHelper
 	/// <param name="strike">Strike.</param>
 	/// <param name="expirationDate">The date of the option expiration.</param>
 	/// <returns>The Call option.</returns>
+	[Obsolete("Use GetCallAsync method instead.")]
 	public static Security GetCall(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate)
-	{
-		return future.GetOption(provider, strike, expirationDate, OptionTypes.Call);
-	}
+		=> AsyncHelper.Run(() => future.GetCallAsync(provider, strike, expirationDate, default));
+
+	/// <summary>
+	/// To get Call for the underlying futures.
+	/// </summary>
+	/// <param name="future">Underlying futures.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="strike">Strike.</param>
+	/// <param name="expirationDate">The date of the option expiration.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The Call option.</returns>
+	public static ValueTask<Security> GetCallAsync(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate, CancellationToken cancellationToken)
+		=> future.GetOptionAsync(provider, strike, expirationDate, OptionTypes.Call, cancellationToken);
 
 	/// <summary>
 	/// To get Put for the underlying futures.
@@ -233,10 +299,21 @@ public static class DerivativesHelper
 	/// <param name="strike">Strike.</param>
 	/// <param name="expirationDate">The date of the option expiration.</param>
 	/// <returns>The Put option.</returns>
+	[Obsolete("Use GetPutAsync method instead.")]
 	public static Security GetPut(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate)
-	{
-		return future.GetOption(provider, strike, expirationDate, OptionTypes.Put);
-	}
+		=> AsyncHelper.Run(() => future.GetPutAsync(provider, strike, expirationDate, default));
+
+	/// <summary>
+	/// To get Put for the underlying futures.
+	/// </summary>
+	/// <param name="future">Underlying futures.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="strike">Strike.</param>
+	/// <param name="expirationDate">The date of the option expiration.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The Put option.</returns>
+	public static ValueTask<Security> GetPutAsync(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate, CancellationToken cancellationToken)
+		=> future.GetOptionAsync(provider, strike, expirationDate, OptionTypes.Put, cancellationToken);
 
 	/// <summary>
 	/// To get an option for the underlying futures.
@@ -247,7 +324,21 @@ public static class DerivativesHelper
 	/// <param name="expirationDate">The options expiration date.</param>
 	/// <param name="optionType">Option type.</param>
 	/// <returns>Options contract.</returns>
+	[Obsolete("Use GetOptionAsync method instead.")]
 	public static Security GetOption(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate, OptionTypes optionType)
+		=> AsyncHelper.Run(() => future.GetOptionAsync(provider, strike, expirationDate, optionType, default));
+
+	/// <summary>
+	/// To get an option for the underlying futures.
+	/// </summary>
+	/// <param name="future">Underlying futures.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="strike">Strike.</param>
+	/// <param name="expirationDate">The options expiration date.</param>
+	/// <param name="optionType">Option type.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Options contract.</returns>
+	public static async ValueTask<Security> GetOptionAsync(this Security future, ISecurityProvider provider, decimal strike, DateTime expirationDate, OptionTypes optionType, CancellationToken cancellationToken)
 	{
 		if (future == null)
 			throw new ArgumentNullException(nameof(future));
@@ -255,15 +346,15 @@ public static class DerivativesHelper
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		var option = provider
-			.Lookup(new Security
+		var option = await provider
+			.LookupAsync(new Security
 			{
 				Strike = strike,
 				OptionType = optionType,
 				ExpiryDate = expirationDate,
 				UnderlyingSecurityId = future.Id
 			})
-			.FirstOrDefault();
+			.FirstOrDefaultAsync(cancellationToken);
 
 		return option ?? throw new ArgumentException(LocalizedStrings.OptionNotFound.Put(future.Id), nameof(future));
 	}
@@ -277,9 +368,25 @@ public static class DerivativesHelper
 	/// <param name="optionType">Option type.</param>
 	/// <param name="assetPrice">The current market price of the asset. It is used to calculate the main strike.</param>
 	/// <returns>The main strike.</returns>
+	[Obsolete("Use GetCentralStrikeAsync method instead.")]
 	public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, DateTime expirationDate, OptionTypes optionType, decimal assetPrice)
+		=> AsyncHelper.Run(() => underlyingAsset.GetCentralStrikeAsync(securityProvider, expirationDate, optionType, assetPrice, default));
+
+	/// <summary>
+	/// To get the main strike.
+	/// </summary>
+	/// <param name="underlyingAsset">Underlying asset.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="expirationDate">The options expiration date.</param>
+	/// <param name="optionType">Option type.</param>
+	/// <param name="assetPrice">The asset price.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The main strike.</returns>
+	public static async ValueTask<Security> GetCentralStrikeAsync(this Security underlyingAsset, ISecurityProvider securityProvider, DateTime expirationDate, OptionTypes optionType, decimal assetPrice, CancellationToken cancellationToken)
 	{
-		return underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType).GetCentralStrike(assetPrice);
+		var derivatives = await underlyingAsset.GetDerivativesAsync(securityProvider, expirationDate).ToArrayAsync(cancellationToken);
+
+		return derivatives.Filter(optionType).GetCentralStrike(assetPrice);
 	}
 
 	/// <summary>
@@ -303,10 +410,33 @@ public static class DerivativesHelper
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="expirationDate">The options expiration date (to specify a particular series).</param>
 	/// <returns>The strike step size.</returns>
+	[Obsolete("Use GetStrikeStepAsync method instead.")]
 	public static decimal GetStrikeStep(this Security underlyingAsset, ISecurityProvider provider, DateTime? expirationDate = null)
+		=> AsyncHelper.Run(() => underlyingAsset.GetStrikeStepAsync(provider, expirationDate, default));
+
+	/// <summary>
+	/// To get the strike step size.
+	/// </summary>
+	/// <param name="underlyingAsset">Underlying asset.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="expirationDate">The options expiration date (to specify a particular series).</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The strike step size.</returns>
+	public static async ValueTask<decimal> GetStrikeStepAsync(this Security underlyingAsset, ISecurityProvider provider, DateTime? expirationDate, CancellationToken cancellationToken)
 	{
-		var group = underlyingAsset
-			.GetDerivatives(provider, expirationDate)
+		var derivatives = await underlyingAsset.GetDerivativesAsync(provider, expirationDate).ToArrayAsync(cancellationToken);
+
+		return derivatives.GetStrikeStep();
+	}
+
+	/// <summary>
+	/// To get the strike step size.
+	/// </summary>
+	/// <param name="derivatives">Derivatives of the underlying asset.</param>
+	/// <returns>The strike step size.</returns>
+	public static decimal GetStrikeStep(this IEnumerable<Security> derivatives)
+	{
+		var group = derivatives
 			.Filter(OptionTypes.Call)
 			.Where(s => s.Strike != null)
 			.GroupBy(s => s.ExpiryDate)
@@ -328,10 +458,20 @@ public static class DerivativesHelper
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>Out of the money options.</returns>
+	[Obsolete("Use GetOutOfTheMoneyAsync method instead.")]
 	public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
-	{
-		return underlyingAsset.GetOutOfTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
-	}
+		=> AsyncHelper.Run(() => underlyingAsset.GetOutOfTheMoneyAsync(securityProvider, assetPrice, default));
+
+	/// <summary>
+	/// To get out of the money options (OTM).
+	/// </summary>
+	/// <param name="underlyingAsset">Underlying asset.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="assetPrice">The asset price.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Out of the money options.</returns>
+	public static async ValueTask<IEnumerable<Security>> GetOutOfTheMoneyAsync(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice, CancellationToken cancellationToken)
+		=> underlyingAsset.GetOutOfTheMoney(await underlyingAsset.GetDerivativesAsync(securityProvider, null).ToArrayAsync(cancellationToken), assetPrice);
 
 	/// <summary>
 	/// To get out of the money options (OTM).
@@ -362,10 +502,20 @@ public static class DerivativesHelper
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>In the money options.</returns>
+	[Obsolete("Use GetInTheMoneyAsync method instead.")]
 	public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
-	{
-		return underlyingAsset.GetInTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
-	}
+		=> AsyncHelper.Run(() => underlyingAsset.GetInTheMoneyAsync(securityProvider, assetPrice, default));
+
+	/// <summary>
+	/// To get in the money options (ITM).
+	/// </summary>
+	/// <param name="underlyingAsset">Underlying asset.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="assetPrice">The asset price.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>In the money options.</returns>
+	public static async ValueTask<IEnumerable<Security>> GetInTheMoneyAsync(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice, CancellationToken cancellationToken)
+		=> underlyingAsset.GetInTheMoney(await underlyingAsset.GetDerivativesAsync(securityProvider, null).ToArrayAsync(cancellationToken), assetPrice);
 
 	/// <summary>
 	/// To get in the money options (ITM).
@@ -396,10 +546,20 @@ public static class DerivativesHelper
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="assetPrice">The asset price.</param>
 	/// <returns>At the money options.</returns>
+	[Obsolete("Use GetAtTheMoneyAsync method instead.")]
 	public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice)
-	{
-		return underlyingAsset.GetAtTheMoney(underlyingAsset.GetDerivatives(securityProvider), assetPrice);
-	}
+		=> AsyncHelper.Run(() => underlyingAsset.GetAtTheMoneyAsync(securityProvider, assetPrice, default));
+
+	/// <summary>
+	/// To get at the money options (ATM).
+	/// </summary>
+	/// <param name="underlyingAsset">Underlying asset.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="assetPrice">The asset price.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>At the money options.</returns>
+	public static async ValueTask<IEnumerable<Security>> GetAtTheMoneyAsync(this Security underlyingAsset, ISecurityProvider securityProvider, decimal assetPrice, CancellationToken cancellationToken)
+		=> underlyingAsset.GetAtTheMoney(await underlyingAsset.GetDerivativesAsync(securityProvider, null).ToArrayAsync(cancellationToken), assetPrice);
 
 	/// <summary>
 	/// To get at the money options (ATM).
@@ -587,13 +747,31 @@ public static class DerivativesHelper
 	/// <param name="riskFree">The risk free interest rate.</param>
 	/// <param name="dividend">The dividend amount on shares.</param>
 	/// <returns>The order book volatility.</returns>
+	[Obsolete("Use ImpliedVolatilityAsync method instead.")]
 	public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTime currentTime, decimal riskFree = 0, decimal dividend = 0)
+		=> AsyncHelper.Run(() => depth.ImpliedVolatilityAsync(securityProvider, dataProvider, currentTime, riskFree, dividend, default));
+
+	/// <summary>
+	/// To create the volatility order book from usual order book.
+	/// </summary>
+	/// <param name="depth">The order book quotes of which will be changed to volatility quotes.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="dataProvider">The market data provider.</param>
+	/// <param name="currentTime">The current time.</param>
+	/// <param name="riskFree">The risk free interest rate.</param>
+	/// <param name="dividend">The dividend amount on shares.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The order book volatility.</returns>
+	public static async ValueTask<QuoteChangeMessage> ImpliedVolatilityAsync(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTime currentTime, decimal riskFree, decimal dividend, CancellationToken cancellationToken)
 	{
 		if (depth == null)
 			throw new ArgumentNullException(nameof(depth));
 
-		var option = securityProvider.LookupById(depth.SecurityId);
-		var underlying = option?.GetUnderlyingAsset(securityProvider);
+		if (securityProvider == null)
+			throw new ArgumentNullException(nameof(securityProvider));
+
+		var option = await securityProvider.LookupByIdAsync(depth.SecurityId, cancellationToken);
+		var underlying = option is null ? null : await option.GetUnderlyingAssetAsync(securityProvider, cancellationToken);
 
 		var model = new BlackScholes(option, underlying, dataProvider)
 		{
@@ -735,6 +913,11 @@ public static class DerivativesHelper
 		var expDiv = ExpRate(dividend, timeToExp);
 		var expRate = ExpRate(riskFree, timeToExp);
 
+		// Without volatility, or with no time left, the forward is already known: the option either
+		// finishes in the money or it does not, so the premium is the discounted intrinsic value.
+		if ((double)deviation * timeToExp.Sqrt() == 0)
+			return (sign * (assetPrice * (decimal)expDiv - strike * (decimal)expRate)).Max(0);
+
 		return (assetPrice * (decimal)(expDiv * NormalDistr(d1 * sign)) -
 				strike * (decimal)(expRate * NormalDistr(D2(d1, deviation, timeToExp) * sign))) * sign;
 	}
@@ -801,16 +984,34 @@ public static class DerivativesHelper
 	/// <param name="daysInYear">Days per year.</param>
 	/// <returns>Option theta.</returns>
 	public static decimal Theta(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal deviation, double timeToExp, double d1, decimal daysInYear = 365)
+		=> Theta(optionType, strike, assetPrice, riskFree, 0, deviation, timeToExp, d1, daysInYear);
+
+	/// <summary>
+	/// To calculate the option theta with a continuous dividend yield.
+	/// </summary>
+	/// <param name="optionType">Option type.</param>
+	/// <param name="strike">The strike price.</param>
+	/// <param name="assetPrice">Underlying asset price.</param>
+	/// <param name="riskFree">The risk free interest rate.</param>
+	/// <param name="dividend">The continuous dividend yield.</param>
+	/// <param name="deviation">Standard deviation.</param>
+	/// <param name="timeToExp">The option period before the expiration.</param>
+	/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+	/// <param name="daysInYear">Days per year.</param>
+	/// <returns>Option theta.</returns>
+	public static decimal Theta(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal dividend, decimal deviation, double timeToExp, double d1, decimal daysInYear = 365)
 	{
 		var nd1 = InvertD1(d1);
 
 		var expRate = ExpRate(riskFree, timeToExp);
+		var expDiv = ExpRate(dividend, timeToExp);
 
 		var sign = optionType == OptionTypes.Call ? 1 : -1;
 
 		return
-			(-(assetPrice * deviation * (decimal)nd1) / (2 * (decimal)timeToExp.Sqrt()) -
-			sign * (strike * riskFree * (decimal)(expRate * NormalDistr(sign * D2(d1, deviation, timeToExp))))) / daysInYear;
+			(-(assetPrice * (decimal)expDiv * deviation * (decimal)nd1) / (2 * (decimal)timeToExp.Sqrt()) -
+			sign * (strike * riskFree * (decimal)(expRate * NormalDistr(sign * D2(d1, deviation, timeToExp)))) +
+			sign * (assetPrice * dividend * (decimal)(expDiv * NormalDistr(sign * d1)))) / daysInYear;
 	}
 
 	/// <summary>
@@ -838,7 +1039,7 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="premium">The option premium.</param>
 	/// <param name="getPremium">To calculate the premium by volatility.</param>
-	/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+	/// <returns>The implied volatility, in percent. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 	public static decimal? ImpliedVolatility(decimal premium, Func<decimal, decimal?> getPremium)
 	{
 		if (getPremium == null)
@@ -846,21 +1047,39 @@ public static class DerivativesHelper
 
 		const decimal min = 0.00001m;
 
-		var deviation = min;
-
-		//Если Премия оказывается меньше чем премия с нулевой волатильностью, то выходим
-		if (premium <= getPremium(deviation))
+		// A premium at or below the price of a motionless asset is explained by no positive volatility.
+		if (premium <= getPremium(min))
 			return null;
 
-		var high = 2m;
+		// The premium grows with the deviation, so the search starts from a bracket that already holds
+		// the answer: the ceiling is doubled until the premium it prices exceeds the one being inverted.
+		// Reporting a ceiling the search merely stopped at would be indistinguishable from a real quote.
+		const decimal maxDeviation = 1000m;
+
 		var low = 0m;
+		var high = 2m;
+
+		while (true)
+		{
+			if (getPremium(high) is not decimal atHigh)
+				return null;
+
+			if (atHigh >= premium)
+				break;
+
+			if (high >= maxDeviation)
+				return null;
+
+			low = high;
+			high = (high * 2).Min(maxDeviation);
+		}
 
 		const int maxIter = 10000;
 		var currIter = 0;
 
 		while ((high - low) > min)
 		{
-			deviation = (high + low) / 2;
+			var deviation = (high + low) / 2;
 
 			if (getPremium(deviation) > premium)
 				high = deviation;

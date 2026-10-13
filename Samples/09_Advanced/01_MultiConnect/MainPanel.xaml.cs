@@ -5,6 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
+using System.Security;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -25,9 +28,13 @@ using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.GridControl;
+using StockSharp.Web.Common;
+
+// Aliased rather than imported wholesale: StockSharp.Web.DomainModel also defines
+// Subscription and DataType, which this file uses from BusinessEntities and Messages.
+using WebIds = StockSharp.Web.DomainModel.Ids;
 using StockSharp.Web.Api.Client;
 using StockSharp.Web.Api.Interfaces;
-using StockSharp.Studio.Controls;
 
 public partial class MainPanel
 {
@@ -68,7 +75,7 @@ public partial class MainPanel
 
 	public event Func<string, Connector> CreateConnector;
 
-	private void MainPanel_OnLoaded(object sender, RoutedEventArgs e)
+	private async void MainPanel_OnLoaded(object sender, RoutedEventArgs e)
 	{
 		var logManager = new LogManager();
 		logManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(_defaultDataPath, "Logs") });
@@ -79,8 +86,16 @@ public partial class MainPanel
 
 		ConfigManager.RegisterService<ILastDirSelector>(new InMemoryLastDirSelector());
 
-		InitWeb();
-		InitConnector();
+		try
+		{
+			await InitWebAsync();
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show(this.GetWindow(), ex.ToString());
+		}
+
+		await InitConnectorAsync();
 	}
 
 	public void Close()
@@ -109,7 +124,7 @@ public partial class MainPanel
 	/// <summary>
 	/// For connectors depends on StockSharp WebAPI.
 	/// </summary>
-	private void InitWeb()
+	private async Task InitWebAsync()
 	{
 		IApiServiceProvider webApiProvider = new ApiServiceProvider();
 		ConfigManager.RegisterService(webApiProvider);
@@ -117,38 +132,32 @@ public partial class MainPanel
 		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
 		ConfigManager.RegisterService(credProvider);
 
-		ConfigManager.ServiceFallback += (type, name) =>
+		var autoLogon = true;
+		var credentials = await credProvider.TryLoadAsync(default);
+
+		if (credentials?.CanAutoLogin() != true)
 		{
-			if (type != typeof(IInstrumentInfoService))
-				return null;
+			var (c, a) = await CredentialsWindow.TryShow(this, new CurrentClientFetcher(), credentials);
 
-			var autoLogon = true;
+			if (c is null)
+				return;
 
-			if (!credProvider.TryLoad(out var credentials))
-			{
-				//var clientSvc = WebApiServicesRegistry.GetServiceAsAnonymous<IClientService>();
-				var (c, a) = this.GuiSync(() => AsyncContext.Run(() => CredentialsWindow.TryShow(this, credentials)));
+			credentials = c;
+			autoLogon = a;
+		}
 
-				if (c is null)
-					return null;
+		var token = credentials.Token.UnSecure();
 
-				credentials = c;
-				autoLogon = a;
-			}
+		if (token.IsEmpty())
+			throw new InvalidOperationException("Token is empty.");
 
-			var token = credentials.Token.UnSecure();
+		credentials.Password = default;
+		await credProvider.SaveAsync(credentials, autoLogon, default);
 
-			if (token.IsEmpty())
-				throw new InvalidOperationException("Token is empty.");
-
-			credentials.Password = default;
-			credProvider.Save(credentials, autoLogon);
-
-			return webApiProvider.GetService<IInstrumentInfoService>(token);
-		};
+		ConfigManager.RegisterService(webApiProvider.GetService<IInstrumentInfoService>(token));
 	}
 
-	private void InitConnector()
+	private async Task InitConnectorAsync()
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += async () =>
@@ -224,7 +233,7 @@ public partial class MainPanel
 
 			try
 			{
-				AsyncHelper.Run(() => nativeIdStorage.InitAsync(default));
+				await nativeIdStorage.InitAsync(default);
 			}
 			catch (Exception ex)
 			{
@@ -234,17 +243,14 @@ public partial class MainPanel
 
 		if (Connector.StorageAdapter != null)
 		{
-			AsyncHelper.Run(async () =>
-			{
-				await LoggingHelper.DoWithLogAsync(ServicesRegistry.EntityRegistry.InitAsync);
-				await LoggingHelper.DoWithLogAsync(ServicesRegistry.ExchangeInfoProvider.InitAsync);
-			});
+			await LoggingHelper.DoWithLogAsync(ServicesRegistry.EntityRegistry.InitAsync);
+			await LoggingHelper.DoWithLogAsync(ServicesRegistry.ExchangeInfoProvider.InitAsync);
 
 			//Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
 			Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 			Connector.LookupAll();
 
-			AsyncHelper.Run(() => Connector.SnapshotRegistry.InitAsync(default));
+			await Connector.SnapshotRegistry.InitAsync(default);
 		}
 
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
@@ -256,11 +262,14 @@ public partial class MainPanel
 		{
 			if (_settingsFile.IsConfigExists(_fileSystem))
 			{
+				var settings = await _settingsFile.DeserializeAsync<SettingsStorage>(_fileSystem, default);
+
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
+					if (settings is not null)
+						await Connector.LoadAsync(settings, default);
 			}
 		}
 		catch
@@ -295,10 +304,10 @@ public partial class MainPanel
 		});
 	}
 
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this.GetWindow()))
-			Connector.Save().Serialize(_fileSystem, _settingsFile);
+			await (await Connector.SaveAsync(default)).SerializeAsync(_fileSystem, _settingsFile, true, default);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)
@@ -362,6 +371,21 @@ public partial class MainPanel
 	private void ShowLevel1Click(object sender, RoutedEventArgs e)
 	{
 		ShowOrHide(_level1Window);
+	}
+
+	/// <summary>
+	/// Reads who is signed in, for <see cref="CredentialsWindow"/>. The dialog lives in the UI
+	/// library and takes this narrow contract instead of the web API's own client service.
+	/// </summary>
+	private class CurrentClientFetcher : ICurrentClientFetcher
+	{
+		async Task<(string email, SecureString accessToken)> ICurrentClientFetcher.FetchAsync(string salt, CancellationToken cancellationToken)
+		{
+			var clientSvc = ConfigManager.GetService<IApiServiceProvider>().GetService<IClientService>(WebIds.Client.Anonymous.To<string>());
+			var client = await clientSvc.GetCurrentAsync(default, salt, cancellationToken: cancellationToken);
+
+			return (client.Email, client.GetAccessToken().Secure());
+		}
 	}
 
 	private static void ShowOrHide(Window window)

@@ -7,10 +7,14 @@ namespace StockSharp.Algo.Indicators;
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.PPOSKey,
 	Description = LocalizedStrings.PercentagePriceOscillatorSignalKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator_signal.html")]
 [IndicatorOut(typeof(IPercentagePriceOscillatorSignalValue))]
 public class PercentagePriceOscillatorSignal : BaseComplexIndicator<IPercentagePriceOscillatorSignalValue>
 {
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PercentagePriceOscillatorSignal"/>.
 	/// </summary>

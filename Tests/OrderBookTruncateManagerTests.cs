@@ -259,11 +259,8 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		var (forward, extraOut) = manager.ProcessOutMessage(quoteMsg);
 
 		// No depths registered — should pass through without truncation
-		if (forward != null)
-		{
-			var fwd = (QuoteChangeMessage)forward;
-			fwd.Bids.Length.AssertEqual(3, "No truncation when no depths registered");
-		}
+		forward.AssertSame(quoteMsg);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -306,10 +303,13 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 
 		totalBooks.Length.AssertEqual(2, "Should produce truncated books");
 
-		// Check that subscription IDs are distributed correctly
-		var allIds = totalBooks.SelectMany(b => b.GetSubscriptionIds()).Distinct().OrderBy(x => x).ToArray();
-		allIds.Count(id => id == 1L).AssertEqual(1, "Should contain subscription 1");
-		allIds.Count(id => id == 2L).AssertEqual(1, "Should contain subscription 2");
+		var depth2 = totalBooks.Single(b => b.GetSubscriptionIds().SequenceEqual([1L]));
+		depth2.Bids.Length.AssertEqual(2);
+		depth2.Asks.Length.AssertEqual(2);
+
+		var depth4 = totalBooks.Single(b => b.GetSubscriptionIds().SequenceEqual([2L]));
+		depth4.Bids.Length.AssertEqual(4);
+		depth4.Asks.Length.AssertEqual(4);
 	}
 
 	[TestMethod]
@@ -396,10 +396,15 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks.Add(fwd);
 
-		totalBooks.Count.AssertEqual(2, "Should produce at least one book");
+		totalBooks.Count.AssertEqual(2, "Should produce one truncated and one pass-through book");
 
-		var allIds = totalBooks.SelectMany(b => b.GetSubscriptionIds()).Distinct().ToArray();
-		allIds.Count(id => id == 1L).AssertEqual(1, "Known ID should be present");
+		var known = totalBooks.Single(b => b.GetSubscriptionIds().SequenceEqual([1L]));
+		known.Bids.Length.AssertEqual(2);
+		known.Asks.Length.AssertEqual(2);
+
+		var unknown = totalBooks.Single(b => b.GetSubscriptionIds().SequenceEqual([999L]));
+		unknown.Bids.Length.AssertEqual(3);
+		unknown.Asks.Length.AssertEqual(3);
 	}
 
 	#region Status Message Handling
@@ -545,7 +550,11 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		AreEqual(1, extraOut.Length);
 
 		var truncated = (QuoteChangeMessage)extraOut[0];
-		IsTrue(truncated.Bids.Length <= 2, $"Expected max 2 bids, got {truncated.Bids.Length}");
-		IsTrue(truncated.Asks.Length <= 2, $"Expected max 2 asks, got {truncated.Asks.Length}");
+		truncated.Bids.Length.AssertEqual(2);
+		truncated.Asks.Length.AssertEqual(2);
+		truncated.Bids[0].Price.AssertEqual(105m);
+		truncated.Bids[1].Price.AssertEqual(104m);
+		truncated.Asks[0].Price.AssertEqual(106m);
+		truncated.Asks[1].Price.AssertEqual(107m);
 	}
 }

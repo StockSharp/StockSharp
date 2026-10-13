@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 using System.IO.Compression;
@@ -51,6 +51,25 @@ public class RemoteStorageClientTests : BaseTestClass
 
 			await Task.CompletedTask;
 		}
+	}
+
+	// IMessageAdapterProvider test-double that lets the test capture the exact transport
+	// adapter the self-creating RemoteMarketDataDrive ctor obtains from
+	// ServicesRegistry.AdapterProvider.CreateTransportAdapter(...). Unlike
+	// InMemoryMessageAdapterProvider (which builds a brand-new instance per call and thus
+	// cannot be observed), this returns a single pre-created adapter we keep a reference to.
+	private sealed class CapturingAdapterProvider(IMessageAdapter transport) : IMessageAdapterProvider
+	{
+		public IMessageAdapter Transport { get; } = transport ?? throw new ArgumentNullException(nameof(transport));
+
+		IEnumerable<IMessageAdapter> IMessageAdapterProvider.CurrentAdapters => [];
+		IEnumerable<IMessageAdapter> IMessageAdapterProvider.PossibleAdapters => [];
+
+		IMessageAdapter IMessageAdapterProvider.CreateTransportAdapter(IdGenerator transactionIdGenerator)
+			=> Transport;
+
+		IEnumerable<IMessageAdapter> IMessageAdapterProvider.CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password)
+			=> [];
 	}
 
 	#endregion
@@ -255,7 +274,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		});
 		await tcs.Task.WaitAsync(cancellationToken);
 
-		return securitiesList.GetCopy();
+		return await securitiesList.GetCopyAsync(cancellationToken);
 	}
 
 	[TestMethod]
@@ -370,7 +389,12 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		var dataTypes = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary).ToListAsync(CancellationToken);
 
-		HasCount(2, dataTypes); // should be deduplicated
+		// Deduplicated by content: the duplicated Ticks must collapse into a single Ticks,
+		// and Level1 must survive. Asserting the actual elements (not just the count) guards
+		// against e.g. dropping Level1 instead of the duplicate.
+		HasCount(2, dataTypes);
+		dataTypes.AssertContains(DataType.Ticks);
+		dataTypes.AssertContains(DataType.Level1);
 	}
 
 	#endregion
@@ -388,10 +412,14 @@ public class RemoteStorageClientTests : BaseTestClass
 		var date2 = new DateTime(2024, 1, 16);
 		var date3 = new DateTime(2024, 1, 17);
 
+		// Feed the dates UNSORTED and with a cross-message duplicate (date2 appears in
+		// both messages). This actually exercises the engine's OrderBy().Distinct()
+		// (RemoteStorageClient.GetDatesAsync: msgs.SelectMany(i => i.Dates).OrderBy().Distinct()):
+		// removing either operator must now make the test fail.
 		adapter.DataTypeLookupHandler = lookup =>
 		[
-			new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date1, date2] },
-			new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date3] },
+			new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date3, date1] },
+			new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date2, date1] },
 		];
 
 		using var client = new RemoteStorageClient(adapter, 100);
@@ -399,12 +427,107 @@ public class RemoteStorageClientTests : BaseTestClass
 		var result = await client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken);
 
 		var dates = result.ToList();
+
+		// Distinct: date1 was sent twice but must appear once.
 		HasCount(3, dates);
 
-		// Should be ordered
+		// OrderBy: ascending chronological order regardless of arrival order.
 		AreEqual(date1, dates[0]);
 		AreEqual(date2, dates[1]);
 		AreEqual(date3, dates[2]);
+	}
+
+	/// <summary>
+	/// A source asks for the dates of every kind of data it downloads at once, over one client.
+	/// </summary>
+	/// <remarks>
+	/// Each request connected the client if it was not connected yet, so the second of two requests made while
+	/// the first was still connecting connected it again - which a transport refuses until it is disconnected.
+	/// </remarks>
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_TwoAtOnce_ShareOneConnection()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator()) { ConnectDelay = TimeSpan.FromMilliseconds(200) };
+
+		var secId = new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" };
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var results = await Task.WhenAll(
+			client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask(),
+			client.GetDatesAsync(secId, TimeSpan.FromMinutes(1).TimeFrame(), StorageFormats.Binary, CancellationToken).AsTask());
+
+		foreach (var dates in results)
+			AreEqual(date, dates.Single());
+
+		AreEqual(1, adapter.SentMessages.Count(m => m.Type == MessageTypes.Connect));
+	}
+
+	/// <summary>
+	/// A request the server had not answered when the connection was lost is not answered after it comes
+	/// back either: a transport that reconnects sends again what is still subscribed, and a request for
+	/// what is stored is not that. Its caller is told it failed rather than left waiting for ever.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_WhenTheConnectionIsLost_FailsInsteadOfWaiting()
+	{
+		// No handler: the lookup is taken and never answered.
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var asking = client.GetDatesAsync(new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" }, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask();
+
+		while (!adapter.SentMessages.Any(m => m.Type == MessageTypes.DataTypeLookup))
+			await Task.Delay(10, CancellationToken);
+
+		await adapter.SendOutMessageAsync(new ConnectionLostMessage(), CancellationToken);
+		await adapter.SendOutMessageAsync(new ConnectionRestoredMessage(), CancellationToken);
+
+		await ThrowsAsync<InvalidOperationException>(() => asking);
+
+		// The client is as good as new for the next request.
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		AreEqual(date, (await client.GetDatesAsync(new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" }, DataType.Ticks, StorageFormats.Binary, CancellationToken)).Single());
+	}
+
+	/// <summary>
+	/// Requests made at once reach the transport one after another.
+	/// </summary>
+	/// <remarks>
+	/// A transport writes a message as it is handed one, the way a connector hands them over: one at a time.
+	/// Handed two at the same moment from two threads, it writes them into each other, and the server can
+	/// read neither.
+	/// </remarks>
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_TwoAtOnce_ReachTheTransportOneAfterAnother()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator()) { SendDelay = TimeSpan.FromMilliseconds(100) };
+
+		var secId = new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" };
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var results = await Task.WhenAll(
+			Task.Run(() => client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask(), CancellationToken),
+			Task.Run(() => client.GetDatesAsync(secId, TimeSpan.FromMinutes(1).TimeFrame(), StorageFormats.Binary, CancellationToken).AsTask(), CancellationToken));
+
+		foreach (var dates in results)
+			AreEqual(date, dates.Single());
+
+		AreEqual(1, adapter.MostSendsAtOnce);
 	}
 
 	#endregion
@@ -511,13 +634,28 @@ public class RemoteStorageClientTests : BaseTestClass
 		using var stream = new MemoryStream(data);
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
-		await client.SaveStreamAsync(secId, DataType.Ticks, StorageFormats.Binary, new DateTime(2024, 1, 15), stream, CancellationToken);
+		var date = new DateTime(2024, 1, 15);
+		await client.SaveStreamAsync(secId, DataType.Ticks, StorageFormats.Binary, date, stream, CancellationToken);
 
 		var cmd = adapter.SentMessages.OfType<RemoteFileCommandMessage>().First();
 		AreEqual(CommandTypes.Update, cmd.Command);
 		AreEqual(CommandScopes.File, cmd.Scope);
 		AreEqual(secId, cmd.SecurityId);
 		AreEqual(DataType.Ticks, cmd.FileDataType);
+		AreEqual((int)StorageFormats.Binary, cmd.Format);
+
+		// The actual payload must be carried in Body (the test name claims a command is
+		// "sent" - it must carry the bytes we asked to save). Engine: Body = stream.To<byte[]>().
+		IsNotNull(cmd.Body);
+		CollectionAssert.AreEqual(data, cmd.Body);
+
+		// Engine clamps the day window: From = date, To = date.AddDays(1)
+		// (RemoteStorageClient.SaveStreamAsync). Use the same implicit DateTime->DateTimeOffset
+		// conversion the engine uses so the comparison is timezone-stable.
+		IsTrue(cmd.From.HasValue);
+		IsTrue(cmd.To.HasValue);
+		AreEqual((DateTimeOffset)date, cmd.From.Value);
+		AreEqual((DateTimeOffset)date.AddDays(1), cmd.To.Value);
 	}
 
 	[TestMethod]
@@ -778,7 +916,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		});
 		await tcs.Task.WaitAsync(cancellationToken);
 
-		return boardsList.GetCopy();
+		return await boardsList.GetCopyAsync(cancellationToken);
 	}
 
 	#endregion
@@ -786,15 +924,25 @@ public class RemoteStorageClientTests : BaseTestClass
 	#region Dispose Tests
 
 	[TestMethod]
-	public void Dispose_DisposesAdapter()
+	public void Dispose_DoesNotDisposeExternallyOwnedAdapter()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 		var client = new RemoteStorageClient(adapter, 100);
 
+		// Sanity: nothing is disposed before the call.
+		IsFalse(adapter.IsDisposed);
+		IsFalse(client.IsDisposed);
+
 		client.Dispose();
 
-		// Adapter should be disposed (IsDisposed property or similar)
-		// Since MessageAdapter doesn't expose IsDisposed publicly, we just verify no exception
+		// The client wraps the supplied adapter in a SubscriptionMessageAdapter without
+		// OwnInnerAdapter = true (RemoteStorageClient ctor). Per the wrapper contract
+		// (IMessageAdapterWrapper.Dispose: "if (OwnInnerAdapter) InnerAdapter.Dispose()"),
+		// an externally supplied adapter is caller-owned and must NOT be disposed by the
+		// client - the caller keeps ownership. IsDisposed IS public (DisposableBase), so we
+		// assert that contract directly instead of merely "no exception".
+		IsTrue(client.IsDisposed);
+		IsFalse(adapter.IsDisposed, "externally supplied adapter must remain caller-owned and not be disposed by the client");
 	}
 
 	#endregion
@@ -810,14 +958,26 @@ public class RemoteStorageClientTests : BaseTestClass
 	#region RemoteMarketDataDrive Constructor Tests
 
 	[TestMethod]
-	public void Drive_Constructor_Default_UsesDefaultAddress()
+	public void Drive_Constructor_WithAddress_UsesGivenAddress()
 	{
-		// Note: Default constructor uses ServicesRegistry which may not be available in tests
-		// Test the address-based constructor instead
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
 
 		AreEqual(RemoteMarketDataDrive.DefaultAddress, drive.Address);
+	}
+
+	[TestMethod]
+	public void Drive_Constructor_Default_UsesDefaultAddress()
+	{
+		// The genuine parameterless constructor: it must default Address to DefaultAddress.
+		// The transport adapter factory (ServicesRegistry.AdapterProvider) is lazy and only
+		// resolves when Client is first touched - the test harness registers
+		// InMemoryMessageAdapterProvider(typeof(MockRemoteAdapter)) (see AsmInit), so disposing
+		// the drive (which lazily creates the client) stays self-contained.
+		using var drive = new RemoteMarketDataDrive();
+
+		AreEqual(RemoteMarketDataDrive.DefaultAddress, drive.Address);
+		AreEqual(RemoteMarketDataDrive.DefaultTargetCompId, drive.TargetCompId);
 	}
 
 	[TestMethod]
@@ -1184,7 +1344,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	#region RemoteMarketDataDrive Save/Load Tests
 
 	[TestMethod]
-	public void Drive_SaveLoad_PreservesSettings()
+	public async Task Drive_SaveLoad_PreservesSettings()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
@@ -1198,12 +1358,12 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		// Save
 		var storage = new SettingsStorage();
-		drive.Save(storage);
+		await drive.SaveAsync(storage, CancellationToken);
 
 		// Create new drive and load
 		var adapter2 = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var drive2 = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter2);
-		drive2.Load(storage);
+		await drive2.LoadAsync(storage, CancellationToken);
 
 		// Verify
 		AreEqual("CustomTarget", drive2.TargetCompId);
@@ -1310,13 +1470,25 @@ public class RemoteStorageClientTests : BaseTestClass
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
 		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
 
+		var date = new DateTime(2024, 1, 15);
 		using var stream = new MemoryStream(data);
-		await storageDrive.SaveStreamAsync(new DateTime(2024, 1, 15), stream, CancellationToken);
+		await storageDrive.SaveStreamAsync(date, stream, CancellationToken);
 
 		var cmd = adapter.SentMessages.OfType<RemoteFileCommandMessage>().First();
 		AreEqual(CommandTypes.Update, cmd.Command);
 		AreEqual(secId, cmd.SecurityId);
 		AreEqual(DataType.Ticks, cmd.FileDataType);
+
+		// "SendsData" must actually carry the saved bytes through to the command Body,
+		// otherwise the name is unproven.
+		IsNotNull(cmd.Body);
+		CollectionAssert.AreEqual(data, cmd.Body);
+
+		// Day-bounded window passed through from the storage drive to the client.
+		IsTrue(cmd.From.HasValue);
+		IsTrue(cmd.To.HasValue);
+		AreEqual((DateTimeOffset)date, cmd.From.Value);
+		AreEqual((DateTimeOffset)date.AddDays(1), cmd.To.Value);
 	}
 
 	[TestMethod]
@@ -1338,17 +1510,150 @@ public class RemoteStorageClientTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task StorageDrive_ClearDatesCacheAsync_Succeeds()
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task StorageDrive_ClearDatesCacheAsync_InvalidatesCache()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+		var callCount = 0;
+
+		adapter.DataTypeLookupHandler = lookup =>
+		{
+			callCount++;
+			return [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [new DateTime(2024, 1, 15)] }];
+		};
 
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
 		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
 
-		// Should not throw (currently does nothing but should complete)
+		// Populate the 3-second dates cache.
+		await storageDrive.GetDatesAsync().ToListAsync(CancellationToken);
+		AreEqual(1, callCount);
+
+		// Explicitly clear the cache. The IMarketDataDrive contract for clearing the dates
+		// cache means "drop the cached availability info", so the very next GetDatesAsync
+		// must hit the adapter again even though we are still inside the 3s TTL window.
 		await storageDrive.ClearDatesCacheAsync(CancellationToken);
+
+		// Within the TTL but after an explicit clear -> must re-query the adapter.
+		await storageDrive.GetDatesAsync().ToListAsync(CancellationToken);
+		AreEqual(2, callCount, "ClearDatesCacheAsync must invalidate the cached dates so the next GetDatesAsync re-queries the adapter");
+	}
+
+	// A server whose day list follows the file commands it was actually sent, so a day that appears or
+	// disappears in a reply is the server's own state rather than the test's bookkeeping.
+	private static void ServeDatesFromFileCommands(MockRemoteAdapter adapter, params DateTime[] initial)
+	{
+		adapter.DataTypeLookupHandler = lookup =>
+		{
+			var dates = new HashSet<DateTime>(initial);
+
+			foreach (var cmd in adapter.SentMessages.OfType<RemoteFileCommandMessage>())
+			{
+				if (cmd.From is not DateTime from)
+					continue;
+
+				if (cmd.Command == CommandTypes.Update)
+					dates.Add(from.Date);
+				else if (cmd.Command == CommandTypes.Remove)
+					dates.Remove(from.Date);
+			}
+
+			return [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [.. dates.OrderBy(d => d)] }];
+		};
+	}
+
+	// The days themselves, so a day that is missing or left over is visible in the failure.
+	private static string Days(IEnumerable<DateTime> dates)
+		=> dates.Select(d => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)).JoinComma();
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task StorageDrive_SaveStreamAsync_SavedDayIsInTheDatesRightAway()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+		var day1 = new DateTime(2024, 1, 15);
+		var day2 = new DateTime(2024, 1, 16);
+
+		ServeDatesFromFileCommands(adapter, day1);
+
+		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
+		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
+
+		// Reading the days first is what fills the 3s cache, which is the state a writer finds the
+		// drive in whenever it checked what was there before deciding to write.
+		AreEqual("2024-01-15", Days(await storageDrive.GetDatesAsync().ToArrayAsync(CancellationToken)));
+
+		using var stream = new MemoryStream("day two"u8.ToArray());
+		await storageDrive.SaveStreamAsync(day2, stream, CancellationToken);
+
+		// What this same drive was told to save is part of what it reports: the local drive adds the
+		// day to its own list on save, and a caller reads these days to decide whether a day still has
+		// to be written.
+		AreEqual("2024-01-15,2024-01-16", Days(await storageDrive.GetDatesAsync().ToArrayAsync(CancellationToken)), "a day saved through the drive is in the days it reports");
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task StorageDrive_DeleteAsync_DeletedDayIsOutOfTheDatesRightAway()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+		var day1 = new DateTime(2024, 1, 15);
+		var day2 = new DateTime(2024, 1, 16);
+
+		ServeDatesFromFileCommands(adapter, day1, day2);
+
+		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
+		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
+
+		AreEqual("2024-01-15,2024-01-16", Days(await storageDrive.GetDatesAsync().ToArrayAsync(CancellationToken)));
+
+		await storageDrive.DeleteAsync(day2, CancellationToken);
+
+		// The other half of the same promise: a day this drive was told to delete is gone from what it
+		// reports, or a caller goes on to load a day it just removed.
+		AreEqual("2024-01-15", Days(await storageDrive.GetDatesAsync().ToArrayAsync(CancellationToken)), "a day deleted through the drive is out of the days it reports");
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task StorageDrive_ClearDatesCacheAsync_DuringEnumeration_TheReaderStillGetsTheRest()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+		var day1 = new DateTime(2024, 1, 15);
+		var day2 = new DateTime(2024, 1, 16);
+
+		ServeDatesFromFileCommands(adapter, day1, day2);
+
+		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
+		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
+
+		var enumerator = storageDrive.GetDatesAsync().GetAsyncEnumerator(CancellationToken);
+
+		try
+		{
+			IsTrue(await enumerator.MoveNextAsync());
+			AreEqual(day1, enumerator.Current);
+
+			// Cleared while a reader is half way through the days. The reader keeps the list it started
+			// on and finishes it, instead of failing on a cache dropped underneath it.
+			await storageDrive.ClearDatesCacheAsync(CancellationToken);
+
+			IsTrue(await enumerator.MoveNextAsync(), "an enumeration that began before the cache was cleared still delivers the rest of its days");
+			AreEqual(day2, enumerator.Current);
+			IsFalse(await enumerator.MoveNextAsync());
+		}
+		finally
+		{
+			await enumerator.DisposeAsync();
+		}
 	}
 
 	#endregion
@@ -1364,6 +1669,53 @@ public class RemoteStorageClientTests : BaseTestClass
 		// Should not throw on multiple dispose calls
 		drive.Dispose();
 		drive.Dispose();
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	[DoNotParallelize] // The registered IMessageAdapterProvider is process-wide, and sibling tests read it.
+	public async Task Drive_Dispose_DisposesSelfCreatedTransportAdapter()
+	{
+		// Bug #1: the self-creating ctor (RemoteMarketDataDrive(EndPoint)) builds its own
+		// transport adapter via ServicesRegistry.AdapterProvider.CreateTransportAdapter(...).
+		// That adapter is owned by the drive (nobody else holds it), yet DisposeManaged only
+		// disposes Client. Client wraps the adapter in a SubscriptionMessageAdapter with
+		// OwnInnerAdapter = false, so the wrapper does NOT cascade Dispose to the inner
+		// transport adapter -> the self-created adapter leaks.
+		//
+		// Legitimate seam (no private-field reflection): ServicesRegistry.AdapterProvider is
+		// ConfigManager.GetService<IMessageAdapterProvider>(), which is settable. We register a
+		// provider returning an instrumented adapter we keep a reference to, drive the
+		// self-creating ctor, force the lazy adapter/Client to materialize, dispose the drive,
+		// and assert the captured adapter was disposed.
+		var captured = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		// Preserve and restore the harness-registered provider so the rest of the suite
+		// (e.g. Drive_Constructor_Default_UsesDefaultAddress) keeps seeing MockRemoteAdapter.
+		var previous = ConfigManager.GetService<IMessageAdapterProvider>();
+		ConfigManager.RegisterService<IMessageAdapterProvider>(new CapturingAdapterProvider(captured));
+
+		try
+		{
+			var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress);
+
+			// Force the Lazy<IMessageAdapter> (and thus Client) to materialize through the
+			// registered provider, so the captured adapter is actually the one in use.
+			// VerifyAsync is answered by the mock (Connect/Disconnect) and is bounded.
+			await drive.VerifyAsync(CancellationToken);
+
+			IsFalse(captured.IsDisposed, "sanity: the self-created transport adapter must not be disposed before drive disposal");
+
+			drive.Dispose();
+
+			// Canonical contract: an owned, self-created transport adapter MUST be disposed by
+			// the drive. On the current engine it is NOT (leak) -> this assertion goes RED.
+			IsTrue(captured.IsDisposed, "the self-created transport adapter must be disposed when the drive is disposed");
+		}
+		finally
+		{
+			ConfigManager.RegisterService(previous);
+		}
 	}
 
 	#endregion
@@ -1384,6 +1736,26 @@ class MockRemoteAdapter : MessageAdapter,
 	public Func<DataTypeLookupMessage, DataTypeInfoMessage[]> DataTypeLookupHandler { get; set; }
 	public Func<RemoteFileCommandMessage, RemoteFileMessage> FileCommandHandler { get; set; }
 	public bool SimulateTimeout { get; set; }
+
+	/// <summary>
+	/// How long connecting takes, during which a second connect is refused as a transport refuses it.
+	/// </summary>
+	public TimeSpan ConnectDelay { get; set; }
+
+	private int _connections;
+
+	/// <summary>
+	/// How long the transport takes to write a message, during which it must not be handed another.
+	/// </summary>
+	public TimeSpan SendDelay { get; set; }
+
+	/// <summary>
+	/// The most messages the transport was ever writing at one moment.
+	/// </summary>
+	public int MostSendsAtOnce => Volatile.Read(ref _mostSends);
+
+	private int _sends;
+	private int _mostSends;
 
 	// IAddressAdapter<EndPoint>
 	public System.Net.EndPoint Address { get; set; }
@@ -1406,6 +1778,26 @@ class MockRemoteAdapter : MessageAdapter,
 		this.AddSupportedMarketDataType(DataType.Level1);
 	}
 
+	public override async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		var sends = Interlocked.Increment(ref _sends);
+
+		for (var most = Volatile.Read(ref _mostSends); sends > most; most = Volatile.Read(ref _mostSends))
+			Interlocked.CompareExchange(ref _mostSends, sends, most);
+
+		try
+		{
+			if (SendDelay > TimeSpan.Zero)
+				await Task.Delay(SendDelay, cancellationToken);
+
+			await base.SendInMessageAsync(message, cancellationToken);
+		}
+		finally
+		{
+			Interlocked.Decrement(ref _sends);
+		}
+	}
+
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		SentMessages.Enqueue(message);
@@ -1413,11 +1805,18 @@ class MockRemoteAdapter : MessageAdapter,
 		switch (message.Type)
 		{
 			case MessageTypes.Connect:
+				if (Interlocked.Increment(ref _connections) > 1)
+					throw new InvalidOperationException("Connected again without disconnecting.");
+
+				if (ConnectDelay > TimeSpan.Zero)
+					await Task.Delay(ConnectDelay, cancellationToken);
+
 				if (!SimulateTimeout)
 					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 				break;
 
 			case MessageTypes.Disconnect:
+				Interlocked.Exchange(ref _connections, 0);
 				await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 				break;
 

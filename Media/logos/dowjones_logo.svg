@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Official Dow Jones symbol extracted unchanged from the official vector logo:
+     https://developer.dowjones.com/wp-content/uploads/DJ_Logo_Small_Format_light_background_RGB.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.473 333.168" role="img" aria-label="Dow Jones">
+  <g transform="translate(0 333.168) scale(1 -1)" fill="#44a5da">
+    <path d="m 221.98,222.098 c -0.574,6.875 -0.878,9.886 -2.207,14.507 -6.851,23.719 -28.726,41.063 -54.656,41.063 H 55.4961 V 55.5859 H 111.133 V -0.00390625 H 0 L 0,333.168 h 165.859 c 56.043,0 102.364,-40.777 110.321,-94.609 0.773,-5.215 1.293,-10.618 1.293,-16.504 l -55.493,0.043"/>
+    <path d="m 277.473,180.539 v -68.93 C 277.473,50.0703 225.754,-0.00390625 164.238,-0.00390625 H 152.629 V 55.5859 h 11.101 c 31.36,0 58.262,25.5274 58.262,56.8791 v 68.074 h 55.481"/>
+  </g>
+</svg>

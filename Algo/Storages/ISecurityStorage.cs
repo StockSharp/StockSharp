@@ -185,8 +185,12 @@ public class InMemorySecurityStorage : ISecurityStorage
 
 		cancellationToken.ThrowIfCancellationRequested();
 
-		if (_inner.TryAdd2(security.ToSecurityId(), security))
+		var id = security.ToSecurityId();
+
+		if (_inner.TryAdd2(id, security))
 			Added?.Invoke([security]);
+		else if (forced)
+			_inner[id] = security;
 
 		return default;
 	}

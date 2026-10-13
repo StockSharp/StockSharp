@@ -4,6 +4,7 @@ import clr
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo")
 clr.AddReference("StockSharp.Algo.Analytics")
+clr.AddReference("StockSharp.Algo.Indicators")
 clr.AddReference("Ecng.Drawing")
 
 from Ecng.Drawing import DrawStyles

@@ -52,7 +52,7 @@ public static class StateValidator
 	{
 		// OrderStates transitions
 		// None -> Pending, Active, Done, Failed
-		// Pending -> Active, Failed
+		// Pending -> Active, Done, Failed
 		// Active -> Done
 		// Done, Failed are terminal states
 		_orderStates = new(s => (int)s);
@@ -61,6 +61,7 @@ public static class StateValidator
 		_orderStates[OrderStates.None, OrderStates.Done] = true;
 		_orderStates[OrderStates.None, OrderStates.Failed] = true;
 		_orderStates[OrderStates.Pending, OrderStates.Active] = true;
+		_orderStates[OrderStates.Pending, OrderStates.Done] = true;
 		_orderStates[OrderStates.Pending, OrderStates.Failed] = true;
 		_orderStates[OrderStates.Active, OrderStates.Done] = true;
 

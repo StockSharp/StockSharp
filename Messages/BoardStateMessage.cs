@@ -48,6 +48,7 @@ public enum SessionStates
 /// </summary>
 [DataContract]
 [Serializable]
+[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SessionStateKey)]
 public class BoardStateMessage : BaseSubscriptionIdMessage<BoardStateMessage>, IServerTimeMessage
 {
 	/// <summary>

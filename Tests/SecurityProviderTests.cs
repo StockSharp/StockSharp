@@ -516,6 +516,10 @@ public class SecurityProviderTests : BaseTestClass
 			.ToArray();
 		var provider = new CollectionSecurityProvider(securities);
 
+		// Reference ordering: unpaged lookup-all over the same provider yields the
+		// full sequence in the provider's iteration order.
+		var reference = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
+
 		var criteria = new SecurityLookupMessage
 		{
 			Skip = 3,
@@ -524,7 +528,12 @@ public class SecurityProviderTests : BaseTestClass
 
 		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
+		// Skip=3, Count=4 must return items 4..7 of the reference ordering.
+		var expectedIds = reference.Skip(3).Take(4).Select(s => s.Id).ToArray();
+		var actualIds = results.Select(s => s.Id).ToArray();
+
 		results.Length.AssertEqual(4);
+		actualIds.AssertEqual(expectedIds);
 	}
 
 	#endregion
@@ -755,29 +764,29 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_SaveAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_SaveAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.SaveAsync(null, false, CancellationToken));
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_DeleteAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_DeleteAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.DeleteAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_DeleteByAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_DeleteByAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.DeleteByAsync(null, CancellationToken));
 	}
 
@@ -928,5 +937,365 @@ public class SecurityProviderTests : BaseTestClass
 
 		// Cleared should not be called because nothing was deleted
 		clearedCalled.AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task InMemorySecurityStorage_SaveAsync_ForcedUpdatesExistingInstance()
+	{
+		var storage = new InMemorySecurityStorage();
+
+		// Two instances sharing the same identity (Id/SecurityId) but differing payload.
+		var original = CreateSecurityWithCode("AAPL", "NASDAQ");
+		original.Name = "Apple original";
+
+		var updated = CreateSecurityWithCode("AAPL", "NASDAQ");
+		updated.Name = "Apple updated";
+
+		await storage.SaveAsync(original, false, CancellationToken);
+
+		// forced:true is documented as "Forced update": re-saving the same identity
+		// with forced must overwrite the stored security with the new payload.
+		await storage.SaveAsync(updated, true, CancellationToken);
+
+		var stored = await storage.LookupByIdAsync(updated.ToSecurityId(), CancellationToken);
+
+		stored.AssertNotNull();
+		// Correct/canonical behavior: the stored security reflects the forced update.
+		stored.Name.AssertEqual("Apple updated");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void IsMatch_SecurityIds_CodeOnlyPartialId_DoesNotMatch()
+	{
+		var security = new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" },
+		};
+
+		// SecurityIds is an exact id lookup. Partial code/board filters belong to
+		// SecurityId, not to the SecurityIds array.
+		var criteria = new SecurityLookupMessage
+		{
+			SecurityIds = [new SecurityId { SecurityCode = "AAPL" }]
+		};
+
+		security.IsMatch(criteria).AssertFalse();
+	}
+
+	/// <summary>
+	/// A source that hands its notifications out as a sequence which can be walked only once, which the
+	/// IEnumerable of the event is free to be.
+	/// </summary>
+	private sealed class DrainOnceSecurityProvider : ISecurityProvider
+	{
+		private readonly List<Security> _securities = [];
+
+		public int Count => _securities.Count;
+
+		public event Action<IEnumerable<Security>> Added;
+		public event Action<IEnumerable<Security>> Removed;
+		public event Action Cleared;
+
+		public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+			=> new(_securities.FirstOrDefault(s => s.ToSecurityId() == id));
+
+		public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria)
+			=> _securities.Filter(criteria).ToAsyncEnumerable();
+
+		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+			=> new(_securities.FirstOrDefault(s => s.ToSecurityId() == id)?.ToMessage());
+
+		IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
+			=> _securities.Filter(criteria).Select(s => s.ToMessage()).ToAsyncEnumerable();
+
+		public void AddDrainOnce(Security security)
+		{
+			_securities.Add(security);
+			Added?.Invoke(Drain(security));
+		}
+
+		public void RemoveDrainOnce(Security security)
+		{
+			_securities.Remove(security);
+			Removed?.Invoke(Drain(security));
+		}
+
+		public void ClearAll()
+		{
+			_securities.Clear();
+			Cleared?.Invoke();
+		}
+
+		private static IEnumerable<Security> Drain(Security security)
+		{
+			var pending = new List<Security> { security };
+
+			while (pending.Count > 0)
+			{
+				var first = pending[0];
+				pending.RemoveAt(0);
+				yield return first;
+			}
+		}
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_IndexesInitialSnapshotAndFollowsAdds()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var source = new CollectionSecurityProvider([aapl]);
+
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		provider.Count.AssertEqual(1);
+
+		source.Add(msft);
+
+		// The provider is a searchable view of its source, so a security that arrives after the initial
+		// snapshot is reachable both by id and by the code search - being indexed later must not leave
+		// it out of one of the two.
+		provider.Count.AssertEqual(2);
+		(await provider.LookupByIdAsync(msft.ToSecurityId(), CancellationToken)).Id.AssertEqual(msft.Id);
+
+		var byCode = await provider.LookupAsync(new SecurityLookupMessage
+		{
+			SecurityId = new() { SecurityCode = "MSFT" }
+		}).ToArrayAsync(CancellationToken);
+
+		byCode.Length.AssertEqual(1);
+		byCode[0].Id.AssertEqual(msft.Id);
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_RemovedSecurityLeavesTheSearchIndex()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var source = new CollectionSecurityProvider([aapl, msft]);
+
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		source.Remove(aapl).AssertTrue();
+
+		// Removal has to reach the search index as well as the id map: a code search that still answers
+		// with a security the source no longer holds gives the caller a hit it cannot tell from a live one.
+		provider.Count.AssertEqual(1);
+		(await provider.LookupByIdAsync(aapl.ToSecurityId(), CancellationToken)).AssertNull();
+
+		var byCode = await provider.LookupAsync(new SecurityLookupMessage
+		{
+			SecurityId = new() { SecurityCode = "AAPL" }
+		}).ToArrayAsync(CancellationToken);
+
+		byCode.Length.AssertEqual(0);
+
+		var all = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
+		all.Length.AssertEqual(1);
+		all[0].Id.AssertEqual(msft.Id);
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_ClearEmptiesTheSearchIndex()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var source = new CollectionSecurityProvider([aapl, msft]);
+
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		var cleared = 0;
+		provider.Cleared += () => cleared++;
+
+		source.Clear();
+
+		// Clearing the source empties every way of reaching a security, and the provider passes the
+		// notification on so that its own subscribers drop their copies too.
+		provider.Count.AssertEqual(0);
+		cleared.AssertEqual(1);
+
+		(await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken)).Length.AssertEqual(0);
+
+		var byCode = await provider.LookupAsync(new SecurityLookupMessage
+		{
+			SecurityId = new() { SecurityCode = "AAPL" }
+		}).ToArrayAsync(CancellationToken);
+
+		byCode.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_ReRaisesAddedOfAOneShotSequence()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var source = new DrainOnceSecurityProvider();
+
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		var added = new List<Security>();
+		provider.Added += securities => added.AddRange(securities);
+
+		source.AddDrainOnce(aapl);
+
+		// Added says which securities appeared. The provider both indexes and re-raises the sequence it
+		// was given, so it has to read it once and pass on what it read - a subscriber that is handed an
+		// already spent sequence is told nothing arrived while the index says otherwise.
+		provider.Count.AssertEqual(1);
+		added.Count.AssertEqual(1);
+		added[0].Id.AssertEqual(aapl.Id);
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_ReRaisesRemovedOfAOneShotSequence()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var source = new DrainOnceSecurityProvider();
+		source.AddDrainOnce(aapl);
+
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		var removed = new List<Security>();
+		provider.Removed += securities => removed.AddRange(securities);
+
+		source.RemoveDrainOnce(aapl);
+
+		// Same promise on the way out: the subscriber is told which securities went away, not handed the
+		// sequence the index already consumed.
+		provider.Count.AssertEqual(0);
+		removed.Count.AssertEqual(1);
+		removed[0].Id.AssertEqual(aapl.Id);
+	}
+
+	[TestMethod]
+	public async Task FilterableSecurityProvider_DisposeStopsFollowingTheSource()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var source = new DrainOnceSecurityProvider();
+		source.AddDrainOnce(aapl);
+
+		var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
+
+		var events = 0;
+		provider.Added += _ => events++;
+		provider.Cleared += () => events++;
+
+		provider.Dispose();
+
+		source.AddDrainOnce(msft);
+		source.ClearAll();
+
+		// A disposed provider is detached from its source: it neither re-indexes nor keeps forwarding
+		// events, so its subscribers cannot be called after they have let it go.
+		provider.Count.AssertEqual(1);
+		events.AssertEqual(0);
+	}
+
+	/// <summary>
+	/// A security the trie refuses to store must leave nothing of itself behind. Search is how a
+	/// user picks an instrument to trade, so a hit the collection does not actually hold - GetById
+	/// answers nothing for it and Count does not count it - offers an instrument that is not there.
+	/// </summary>
+	[TestMethod]
+	public void Trie_DuplicateAdd_LeavesNoPartialState()
+	{
+		var trie = new SecurityTrie();
+
+		var apple = CreateSecurityWithCode("AAPL", "NASDAQ");
+		trie.Add(apple);
+
+		// The same id, so the trie must refuse it - but it arrives carrying identifiers of its own.
+		var duplicate = CreateSecurityWithCode("AAPL", "NASDAQ");
+		duplicate.ExternalId.Isin = "US0378331005";
+
+		Throws<ArgumentException>(() => trie.Add(duplicate));
+
+		trie.Count.AssertEqual(1, "a refused security is not stored");
+		AreSame(apple, trie.GetById(apple.ToSecurityId()), "the security already held stays held");
+
+		IsEmpty(trie.Retrieve("US0378331005").ToArray(), "a refused security must not stay findable by the identifiers it carried");
+
+		var found = trie.Retrieve("AAPL").ToArray();
+
+		found.Length.AssertEqual(1, "a security stored once is found once");
+		AreSame(apple, found[0], "search must answer with the security the trie holds");
+	}
+
+	[TestMethod]
+	public async Task SecurityStorage_GetOrCreateAsync_LooksTheSecurityUpWithTheCallersToken()
+	{
+		var security = Helper.CreateSecurity();
+		var id = security.ToSecurityId();
+
+		var underlying = new Mock<ISecurityProvider>();
+		underlying.Setup(p => p.LookupByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync(security);
+
+		var (found, isNew) = await new InMemorySecurityStorage(underlying.Object).GetOrCreateAsync(id, _ => throw new InvalidOperationException("a held security is not created again"), CancellationToken);
+
+		AreSame(security, found);
+		IsFalse(isNew);
+		underlying.Verify(p => p.LookupByIdAsync(id, CancellationToken), Times.Once());
+	}
+
+	[TestMethod]
+	public async Task SecurityStorage_GetOrCreateAsync_CreatesAndKeepsWhatTheStorageDoesNotHold()
+	{
+		var id = new SecurityId { SecurityCode = "NEW", BoardCode = BoardCodes.Test };
+
+		var underlying = new Mock<ISecurityProvider>();
+		underlying.Setup(p => p.LookupByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync((Security)null);
+
+		var storage = new InMemorySecurityStorage(underlying.Object);
+
+		var (created, isNew) = await storage.GetOrCreateAsync(id, key => new Security { Id = key, Code = id.SecurityCode, Board = ExchangeBoard.Test }, CancellationToken);
+
+		IsTrue(isNew);
+		AreEqual(id.ToStringId(), created.Id);
+		AreSame(created, await storage.LookupByIdAsync(id, CancellationToken));
+		underlying.Verify(p => p.LookupByIdAsync(id, CancellationToken), Times.Once());
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupByIdAsync_FindsTheSecurityByItsStringId()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var provider = new CollectionSecurityProvider([aapl, CreateSecurityWithCode("MSFT", "NASDAQ")]);
+
+		AreSame(aapl, await provider.LookupByIdAsync("AAPL@NASDAQ", CancellationToken));
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupAsync_FiltersByTheFieldsOfTheCriteria()
+	{
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var provider = new CollectionSecurityProvider([CreateSecurityWithCode("AAPL", "NASDAQ"), msft]);
+
+		var found = await provider.LookupAsync(new Security { Code = "MSFT" }).ToArrayAsync(CancellationToken);
+
+		AreEqual(1, found.Length);
+		AreSame(msft, found[0]);
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupByCodeAsync_FindsByTheCodeOrEverythingWithoutOne()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var provider = new CollectionSecurityProvider([aapl, CreateSecurityWithCode("MSFT", "NASDAQ")]);
+
+		var byCode = await provider.LookupByCodeAsync("AAPL").ToArrayAsync(CancellationToken);
+
+		AreEqual(1, byCode.Length);
+		AreSame(aapl, byCode[0]);
+		AreEqual(2, (await provider.LookupByCodeAsync(null).ToArrayAsync(CancellationToken)).Length);
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_GetAllSecurityAsync_FindsTheAllSecuritiesPlaceholder()
+	{
+		var provider = new CollectionSecurityProvider([EntitiesExtensions.AllSecurity, CreateSecurityWithCode("AAPL", "NASDAQ")]);
+
+		AreSame(EntitiesExtensions.AllSecurity, await provider.GetAllSecurityAsync(CancellationToken));
 	}
 }

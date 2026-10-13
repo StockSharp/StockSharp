@@ -14,12 +14,10 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 		foreach (var range in GetOrderedRanges(boards, date))
 		{
 			var time = GetTime(date, range.range.Min);
-			if (time.Date >= date.Date)
-				yield return new TimeMessage { ServerTime = time };
+			yield return new TimeMessage { ServerTime = time };
 
 			time = GetTime(date, range.range.Max);
-			if (time.Date >= date.Date)
-				yield return new TimeMessage { ServerTime = time };
+			yield return new TimeMessage { ServerTime = time };
 		}
 	}
 
@@ -32,11 +30,13 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 		if (count < 0)
 			throw new ArgumentOutOfRangeException(nameof(count), count, "Count cannot be negative.");
 
+		var endOfUtcDay = TimeSpan.FromDays(Math.Floor(lastTime.TotalDays)) + TimeHelper.LessOneDay;
+
 		for (var i = 0; i < count; i++)
 		{
 			lastTime += interval;
 
-			if (lastTime > TimeHelper.LessOneDay)
+			if (lastTime > endOfUtcDay)
 				break;
 
 			yield return new TimeMessage
@@ -58,9 +58,11 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 			{
 				var period = board.WorkingTime.GetPeriod(date);
 
-				return period == null || period.Times.Count == 0
-					? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
-					: period.Times.Select(t => (board, ranges: ToUtc(board, t)));
+				IEnumerable<Range<TimeSpan>> ranges = period == null || period.Times.Count == 0
+					? [new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)]
+					: period.Times;
+
+				return ranges.Select(t => (board, ranges: ToUtc(board, date, t)));
 			})
 			.OrderBy(i => i.ranges.Min)
 			.ToList();
@@ -87,15 +89,17 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 		return orderedRanges;
 	}
 
-	private static Range<TimeSpan> ToUtc(BoardMessage board, Range<TimeSpan> range)
+	private static Range<TimeSpan> ToUtc(BoardMessage board, DateTime date, Range<TimeSpan> range)
 	{
-		var min = DateTime.MinValue + range.Min;
-		var max = DateTime.MinValue + range.Max;
+		var utcDate = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
 
-		var utcMin = min.To(board.TimeZone);
-		var utcMax = max.To(board.TimeZone);
+		DateTime toUtc(TimeSpan time)
+		{
+			var localTime = DateTime.SpecifyKind(date.Date + time, DateTimeKind.Unspecified);
+			return TimeZoneInfo.ConvertTimeToUtc(localTime, board.TimeZone);
+		}
 
-		return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
+		return new Range<TimeSpan>(toUtc(range.Min) - utcDate, toUtc(range.Max) - utcDate);
 	}
 
 	/// <inheritdoc />

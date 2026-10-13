@@ -72,10 +72,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		ArgumentNullException.ThrowIfNull(source);
 		ArgumentNullException.ThrowIfNull(stream);
 
+		var generatedAt = DateTime.UtcNow;
+
 		if (!Template.IsEmpty)
-			GenerateWithTemplate(source, stream, cancellationToken);
+			GenerateWithTemplate(source, stream, generatedAt, cancellationToken);
 		else
-			GenerateWithoutTemplate(source, stream, cancellationToken);
+			GenerateWithoutTemplate(source, stream, generatedAt, cancellationToken);
 
 		return default;
 	}
@@ -88,7 +90,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker.SwitchSheet(worker.ContainsSheet(localizedName) ? localizedName : englishName);
 	}
 
-	private void GenerateWithTemplate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	private void GenerateWithTemplate(IReportSource source, Stream stream, DateTime generatedAt, CancellationToken cancellationToken)
 	{
 		// Copy template into output stream
 		stream.SetLength(0);
@@ -97,7 +99,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		using var worker = _provider.OpenExist(stream);
 
-		FillParams(worker, source, cancellationToken);
+		FillParams(worker, source, generatedAt, cancellationToken);
 
 		if (IncludeTrades)
 			FillTrades(worker, source, cancellationToken);
@@ -115,7 +117,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		SwitchSheet(worker, _dashboardSheet, _dashboardSheetEn);
 	}
 
-	private void GenerateWithoutTemplate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	private void GenerateWithoutTemplate(IReportSource source, Stream stream, DateTime generatedAt, CancellationToken cancellationToken)
 	{
 		stream.SetLength(0);
 
@@ -125,11 +127,11 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		// 1. Dashboard sheet
 		worker.AddSheet().RenameSheet(_dashboardSheet);
-		CreateDashboardSheet(worker, source, cancellationToken);
+		CreateDashboardSheet(worker, source, generatedAt, cancellationToken);
 
 		// 2. Params sheet
 		worker.AddSheet().RenameSheet(_paramsSheet);
-		CreateParamsSheet(worker, source, cancellationToken);
+		CreateParamsSheet(worker, source, generatedAt, cancellationToken);
 
 		// 3. Equity sheet
 		worker.AddSheet().RenameSheet(_equitySheet);
@@ -170,7 +172,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	private string GetDecimalFormat()
 		=> Decimals <= 0 ? "#,##0" : $"#,##0.{new string('0', Decimals)}";
 
-	private void CreateParamsSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	private void CreateParamsSheet(IExcelWorker worker, IReportSource source, DateTime generatedAt, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -204,7 +206,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker
 			.SetCell(0, 2, LocalizedStrings.StartTime)
 			.SetCellColor(0, 2, labelBg, null)
-			.SetCell(1, 2, DateTime.Now)
+			.SetCell(1, 2, generatedAt)
 			.SetCellFormat(1, 2, "yyyy-MM-dd HH:mm:ss");
 
 		// Row 3: Symbol
@@ -310,7 +312,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		}
 	}
 
-	private void CreateDashboardSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	private void CreateDashboardSheet(IExcelWorker worker, IReportSource source, DateTime generatedAt, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -342,7 +344,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker
 			.SetCell(0, 4, LocalizedStrings.StartTime)
 			.SetCellColor(0, 4, labelBg, null)
-			.SetCell(1, 4, DateTime.Now)
+			.SetCell(1, 4, generatedAt)
 			.SetCellFormat(1, 4, "yyyy-MM-dd HH:mm:ss");
 
 		// Row 5: Net PnL
@@ -827,7 +829,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		}
 	}
 
-	private void FillParams(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	private void FillParams(IExcelWorker worker, IReportSource source, DateTime generatedAt, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -838,7 +840,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		// B3 -> (col=1,row=2) Report Date/Time
 		worker
 			.SetCell(1, 1, source.Name)
-			.SetCell(1, 2, DateTime.Now);
+			.SetCell(1, 2, generatedAt);
 
 		// Optional: try to populate commonly used params if present in source.Parameters
 		WriteParamIfExists(worker, source, LocalizedStrings.Security, 1, 3);         // B4

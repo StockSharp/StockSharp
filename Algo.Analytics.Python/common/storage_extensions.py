@@ -3,11 +3,19 @@ import clr
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo")
 
+from System import IAsyncDisposable
 from System.Threading import CancellationToken
 from StockSharp.Algo.Storages import StorageHelper
 from StockSharp.Messages import Extensions
 from StockSharp.Messages import TimeFrameCandleMessage
 from StockSharp.Messages import CandleMessage
+
+def _dispose_async_enumerator(enumerator):
+    # IAsyncEnumerator<T> implements DisposeAsync explicitly. IronPython therefore
+    # cannot find it as a normal instance member; invoke it through its interface.
+    # Async iterators can back the returned ValueTask with IValueTaskSource, whose
+    # GetResult does not synchronously wait. AsTask provides the blocking bridge.
+    IAsyncDisposable.DisposeAsync(enumerator).AsTask().GetAwaiter().GetResult()
 
 def to_string_id(security_id):
     """
@@ -28,16 +36,18 @@ def get_dates(storage, from_date, to_date, cancellation_token=None):
     """
     if cancellation_token is None:
         cancellation_token = CancellationToken()
+    cancellation_token.ThrowIfCancellationRequested()
     async_enumerable = storage.GetDatesAsync()
     enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)
     result = []
     try:
-        while enumerator.MoveNextAsync().GetAwaiter().GetResult():
+        while enumerator.MoveNextAsync().AsTask().GetAwaiter().GetResult():
+            cancellation_token.ThrowIfCancellationRequested()
             d = enumerator.Current
             if d >= from_date and d <= to_date:
                 result.append(d)
     finally:
-        enumerator.DisposeAsync().GetAwaiter().GetResult()
+        _dispose_async_enumerator(enumerator)
     return result
 
 def load_tf_candles(storage, from_date, to_date, cancellation_token=None):
@@ -88,6 +98,7 @@ def iter_async_enumerable(storage, message_type, from_date, to_date, cancellatio
     """
     if cancellation_token is None:
         cancellation_token = CancellationToken()
+    cancellation_token.ThrowIfCancellationRequested()
 
     # Get IAsyncEnumerable from LoadAsync<T> extension method with explicit type
     async_enumerable = StorageHelper.LoadAsync[message_type](storage, from_date, to_date)
@@ -95,10 +106,11 @@ def iter_async_enumerable(storage, message_type, from_date, to_date, cancellatio
     # Iterate over IAsyncEnumerable by blocking on each MoveNextAsync
     enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)
     try:
-        while enumerator.MoveNextAsync().GetAwaiter().GetResult():
+        while enumerator.MoveNextAsync().AsTask().GetAwaiter().GetResult():
+            cancellation_token.ThrowIfCancellationRequested()
             yield enumerator.Current
     finally:
-        enumerator.DisposeAsync().GetAwaiter().GetResult()
+        _dispose_async_enumerator(enumerator)
 
 def iter_candles(storage, from_date, to_date, cancellation_token=None):
     """

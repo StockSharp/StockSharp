@@ -100,31 +100,39 @@ public class BasketRoutingManager : IBasketRoutingManager
 	public void InitializeAdapter(IMessageAdapter adapter) => _connectionManager.InitializeAdapter(adapter);
 
 	/// <inheritdoc />
-	public (IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs) ProcessConnect(
+	public async ValueTask<(IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs)> ProcessConnectAsync(
 		IMessageAdapter adapter,
 		IMessageAdapter wrapper,
 		IEnumerable<MessageTypes> supportedMessages,
-		Exception error)
+		Exception error,
+		CancellationToken cancellationToken)
 	{
 		Message[] pendingToLoopback = null;
 		Message[] notSupportedMsgs = null;
+		IEnumerable<Message> outMsgs;
 
-		if (error == null)
+		// Under the routing lock, because routing decides to hold a message by reading the very
+		// state this changes: without it a message can be held right after the last adapter
+		// answered and the held ones were taken away, and then there is nothing left to release it.
+		using (await _lock.LockAsync(cancellationToken))
 		{
-			foreach (var type in supportedMessages)
-				_router.AddMessageTypeAdapter(type, wrapper);
-		}
+			if (error == null)
+			{
+				foreach (var type in supportedMessages)
+					_router.AddMessageTypeAdapter(type, wrapper);
+			}
 
-		var outMsgs = _connectionManager.ProcessConnect(adapter, error);
+			outMsgs = _connectionManager.ProcessConnect(adapter, error);
 
-		if (!_connectionState.HasPendingAdapters)
-		{
-			var pending = _pendingState.GetAndClear();
+			if (!_connectionState.HasPendingAdapters)
+			{
+				var pending = _pendingState.GetAndClear();
 
-			if (_connectionState.ConnectedCount > 0)
-				pendingToLoopback = pending;
-			else
-				notSupportedMsgs = pending;
+				if (_connectionState.ConnectedCount > 0)
+					pendingToLoopback = pending;
+				else
+					notSupportedMsgs = pending;
+			}
 		}
 
 		return (outMsgs, pendingToLoopback ?? [], notSupportedMsgs ?? []);
@@ -208,35 +216,38 @@ public class BasketRoutingManager : IBasketRoutingManager
 		if (originIds.Length == 0)
 			return true;
 
-		var ids = originIds;
-		var changed = false;
+		var ids = new List<long>(originIds.Length);
 		var hasValidId = false;
 
-		for (var i = 0; i < ids.Length; i++)
+		for (var i = 0; i < originIds.Length; i++)
 		{
-			if (_parentChildMap.TryGetParent(ids[i], out var parentId))
+			var originId = originIds[i];
+			long id;
+
+			if (_parentChildMap.TryGetParent(originId, out var parentId))
 			{
-				hasValidId = true;
+				id = parentId;
 
-				if (!changed)
-				{
-					ids = [.. originIds];
-					changed = true;
-				}
-
-				if (msg.OriginalTransactionId == ids[i])
+				if (msg.OriginalTransactionId == originId)
 					msg.OriginalTransactionId = parentId;
-
-				ids[i] = parentId;
 			}
+			else if (_subscriptionRouting.TryGetSubscription(originId, out _, out _, out _))
+				id = originId;
+			else
+				continue;
+
+			hasValidId = true;
+
+			if (!ids.Contains(id))
+				ids.Add(id);
 		}
 
-		if (changed)
-			msg.SetSubscriptionIds(ids);
+		if (hasValidId && (ids.Count != originIds.Length || !ids.SequenceEqual(originIds)))
+			msg.SetSubscriptionIds([.. ids]);
 
-		// If message had subscription IDs but none mapped to valid parents,
-		// the subscription was removed (unsubscribed) � drop the message
-		return hasValidId || originIds.Length == 0;
+		// If message had subscription IDs but none matched valid parents or direct subscriptions,
+		// the subscription was removed (unsubscribed): drop the message.
+		return hasValidId;
 	}
 
 	/// <inheritdoc />
@@ -397,6 +408,9 @@ public class BasketRoutingManager : IBasketRoutingManager
 				LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
 				return RoutingInResult.CreateHandled();
 			}
+
+			// Keep the parent unsubscribe request until all child responses are aggregated.
+			_subscriptionRouting.AddUnsubscribe(mdMsg.TransactionId, mdMsg.TypedClone());
 		}
 
 		var routing = ToChild(mdMsg, adapters);
@@ -486,6 +500,17 @@ public class BasketRoutingManager : IBasketRoutingManager
 		using (await _lock.LockAsync(cancellationToken))
 		{
 			var (adapters, skipSupportedMessages) = _router.GetAdapters(message, adapterLookup);
+
+			// A subscription that names no adapter belongs to every adapter supporting it, and which
+			// those are is known only once they have all answered their connect: one still connecting
+			// has registered nothing, would be left out, and nothing hands the subscription to it
+			// afterwards. Held until the connect settles.
+			if (adapters != null && !skipSupportedMessages
+				&& message is ISubscriptionMessage { IsSubscribe: true }
+				&& _connectionState.HasPendingAdapters)
+			{
+				adapters = null;
+			}
 
 			if (adapters == null)
 			{
@@ -616,12 +641,25 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 		if (parentId != null)
 		{
+			if (!originMsg.IsSubscribe && needParentResponse)
+			{
+				if (_subscriptionRouting.TryGetUnsubscribe(parentId.Value, out var parentRequest))
+				{
+					if (!allError)
+						_subscriptionRouting.RemoveSubscription(parentRequest.OriginalTransactionId);
+
+					_subscriptionRouting.RemoveUnsubscribe(parentId.Value);
+				}
+
+				_parentChildMap.RemoveMappings(parentId.Value);
+			}
+
 			if (allError)
 				_subscriptionRouting.RemoveSubscription(parentId.Value);
 
 			return needParentResponse
 				? RoutingOutResult.WithMessage(parentId.Value.CreateSubscriptionResponse(
-					allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null))
+					allError ? innerErrors.ToArray().SingleOrAggr() : null))
 				: RoutingOutResult.Empty;
 		}
 		else

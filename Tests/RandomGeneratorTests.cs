@@ -36,6 +36,7 @@ public class RandomGeneratorTests : BaseTestClass
 		var ticks = security.RandomTicks(count, true);
 
 		AreEqual(count, ticks.Length);
+		IsTrue(ticks.All(t => t.OriginSide != null));
 	}
 
 	[TestMethod]
@@ -72,7 +73,7 @@ public class RandomGeneratorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void RandomDepths_WithInterval_GeneratesExactCount()
+	public void RandomDepths_GenerateOnEachTrade_IgnoresInterval()
 	{
 		var security = CreateSecurity();
 		const int count = 50;
@@ -91,6 +92,7 @@ public class RandomGeneratorTests : BaseTestClass
 		var depths = security.RandomDepths(count, ordersCount: true);
 
 		AreEqual(count, depths.Length);
+		IsTrue(depths.Any(d => d.Bids.Concat(d.Asks).Any(q => q.OrdersCount != null)));
 	}
 
 	[TestMethod]
@@ -172,11 +174,4 @@ public class RandomGeneratorTests : BaseTestClass
 			IsNotNull(item.Headline);
 	}
 
-	[TestMethod]
-	public void RandomBoardStates_GeneratesItems()
-	{
-		var items = Helper.RandomBoardStates();
-
-		IsTrue(items.Length > 0);
-	}
 }

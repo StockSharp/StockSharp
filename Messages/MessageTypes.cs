@@ -444,6 +444,16 @@ public enum MessageTypes
 	/// <see cref="ConnectionRestoredMessage"/>.
 	/// </summary>
 	ConnectionRestored,
+
+	/// <summary>
+	/// <see cref="IndicatorMessage"/>.
+	/// </summary>
+	Indicator,
+
+	/// <summary>
+	/// <see cref="IndicatorInfoMessage"/>.
+	/// </summary>
+	IndicatorInfo,
 }
 
 /// <summary>

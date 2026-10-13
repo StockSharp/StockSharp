@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="OrderTypes.Conditional"/> settings.
 /// </summary>
-public class OrderConditionSettings : IPersistable
+public class OrderConditionSettings : IAsyncPersistable
 {
 	/// <summary>
 	/// <see cref="IMessageAdapter"/> type.
@@ -23,7 +23,7 @@ public class OrderConditionSettings : IPersistable
 		Parameters = new Dictionary<string, object>();
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		AdapterType = storage.GetValue<Type>(nameof(AdapterType));
 
@@ -31,9 +31,11 @@ public class OrderConditionSettings : IPersistable
 
 		foreach (var pair in paramerters)
 			Parameters[pair.Key] = pair.Value;
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(AdapterType), AdapterType?.GetTypeName(false));
 
@@ -43,6 +45,8 @@ public class OrderConditionSettings : IPersistable
 			paramerters.SetValue(pair.Key, pair.Value);
 
 		storage.SetValue(nameof(Parameters), paramerters);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc/>

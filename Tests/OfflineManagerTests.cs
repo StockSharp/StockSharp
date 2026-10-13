@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OfflineManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	[TestMethod]
 	public void Reset_ClearsState()
 	{
@@ -28,6 +24,11 @@ public class OfflineManagerTests : BaseTestClass
 		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(new ResetMessage());
 
 		shouldForward.AssertTrue();
+		toInner.Length.AssertEqual(0);
+		toOut.Length.AssertEqual(0);
+
+		(toInner, toOut, shouldForward) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		shouldForward.AssertFalse();
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(0);
 	}
@@ -121,6 +122,13 @@ public class OfflineManagerTests : BaseTestClass
 		shouldForward.AssertFalse();
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(0);
+
+		(toInner, toOut, shouldForward) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		shouldForward.AssertFalse();
+		toInner.Length.AssertEqual(1);
+		// The manager stores a clone of the suspended message, so compare by identity fields.
+		((OrderRegisterMessage)toInner[0]).TransactionId.AssertEqual(orderMsg.TransactionId);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -206,6 +214,13 @@ public class OfflineManagerTests : BaseTestClass
 		shouldForward.AssertFalse();
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(0);
+
+		(toInner, toOut, shouldForward) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		shouldForward.AssertFalse();
+		toInner.Length.AssertEqual(1);
+		// The manager stores a clone of the suspended message, so compare by identity fields.
+		((OrderCancelMessage)toInner[0]).TransactionId.AssertEqual(cancelMsg.TransactionId);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -245,7 +260,7 @@ public class OfflineManagerTests : BaseTestClass
 		var execMsg = (ExecutionMessage)toOut[0];
 		execMsg.DataTypeEx.AssertEqual(DataType.Transactions);
 		execMsg.HasOrderInfo.AssertTrue();
-		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.TransactionId);
+		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.OriginalTransactionId);
 		execMsg.OrderState.AssertEqual(OrderStates.Done);
 		execMsg.OrderType.AssertEqual(OrderTypes.Limit);
 	}

@@ -60,6 +60,20 @@ public class StopOrderInfo
 	/// Buy triggers when price &lt;= StopPrice, Sell triggers when price &gt;= StopPrice.
 	/// </summary>
 	public bool InvertTrigger { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="LimitPrice"/> is a percent of <see cref="StopPrice"/>;
+	/// the absolute limit price is computed at trigger time
+	/// (Buy: stop*(1+pct/100), Sell: stop*(1-pct/100)).
+	/// </summary>
+	public bool IsLimitPricePercent { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="TrailingOffset"/> is a percent of the
+	/// high/low watermark; the stop price is recomputed on each tick as
+	/// Sell: high*(1-pct/100), Buy: low*(1+pct/100).
+	/// </summary>
+	public bool IsTrailingOffsetPercent { get; set; }
 }
 
 /// <summary>
@@ -104,6 +118,13 @@ public interface IStopOrderManager
 	/// <param name="time">Current time.</param>
 	/// <returns>List of triggered stop orders with resulting orders to submit.</returns>
 	IReadOnlyList<StopOrderTrigger> CheckPrice(SecurityId securityId, decimal price, DateTime time);
+
+	/// <summary>
+	/// Get the stop orders resting on the given security.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns>Transaction IDs of the stop orders registered for the security, empty when none rest on it.</returns>
+	IReadOnlyList<long> GetStopIds(SecurityId securityId);
 
 	/// <summary>
 	/// Clear all stop orders.

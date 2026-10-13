@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Testing;
 
 using System.Runtime.CompilerServices;
 
+using Nito.AsyncEx;
+
 using StockSharp.Algo.Testing.Generation;
 
 /// <summary>
@@ -9,9 +11,54 @@ using StockSharp.Algo.Testing.Generation;
 /// </summary>
 public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 {
-	private readonly IHistoryMarketDataManager _marketDataManager;
+	private sealed class ReplayRun(CancellationTokenSource cancellationSource, CancellationToken cancellationToken)
+	{
+		public CancellationTokenSource CancellationSource { get; } = cancellationSource;
+		public CancellationToken CancellationToken { get; } = cancellationToken;
 
-	private CancellationTokenSource _cancellationTokenSource;
+		public Task<EmulationStateMessage> ReplayTask { get; set; } = Task.FromResult<EmulationStateMessage>(null);
+		public Task LifecycleTask { get; set; } = Task.CompletedTask;
+
+		public EmulationStateMessage ExplicitStopping { get; set; }
+		public EmulationStateMessage TerminalMessage { get; set; }
+		public DisconnectMessage DisconnectMessage { get; set; }
+		public ResetMessage ResetMessage { get; set; }
+
+		public TaskCompletionSource<bool> StartPublicationSource { get; set; }
+		public Task StartPublicationTask { get; set; } = Task.CompletedTask;
+
+		public bool IsStopping { get; set; }
+		public bool TerminalDecided { get; set; }
+		public bool TerminalPublicationCompleted { get; set; }
+		public bool DisconnectDecided { get; set; }
+		public bool DisconnectPublicationCompleted { get; set; }
+		public bool ResetDecided { get; set; }
+		public bool ResetPublicationCompleted { get; set; }
+	}
+
+	private enum StartAction
+	{
+		New,
+		Resume,
+		Ignore,
+	}
+
+	private enum TerminalAction
+	{
+		SendNow,
+		Lifecycle,
+		Ignore,
+	}
+
+	private readonly IHistoryMarketDataManager _marketDataManager;
+	private readonly Lock _processingSync = new();
+
+	private ReplayRun _processingRun;
+	private bool _isDisposing;
+	private bool _stopRequestInProgress;
+	private ResetMessage _activeReset;
+
+	private readonly AsyncManualResetEvent _processingGate = new(true);
 
 	/// <summary>
 	/// The provider of information about instruments.
@@ -182,18 +229,18 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 		{
 			case MessageTypes.Reset:
 			{
-				_marketDataManager.Reset();
-				_supportedMarketDataTypes.Clear();
+				var reset = new ResetMessage();
+				var (run, action) = RequestReset(reset);
 
-				if (!_marketDataManager.IsStarted)
-					await SendOutMessageAsync(new ResetMessage(), cancellationToken);
+				if (action == TerminalAction.SendNow)
+					await SendResetAsync(run, reset, cancellationToken);
 
 				break;
 			}
 
 			case MessageTypes.Connect:
 			{
-				if (_marketDataManager.IsStarted)
+				if (IsProcessing())
 					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 				await SendOutMessageAsync(new ConnectMessage { LocalTime = StartDate }, cancellationToken);
@@ -202,8 +249,16 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 			case MessageTypes.Disconnect:
 			{
-				_marketDataManager.Stop();
-				await SendOutMessageAsync(new DisconnectMessage { LocalTime = StopDate }, cancellationToken);
+				var disconnect = new DisconnectMessage { LocalTime = StopDate };
+				var (run, action) = RequestDisconnect(disconnect);
+
+				switch (action)
+				{
+					case TerminalAction.SendNow:
+						await SendDisconnectAsync(run, disconnect, cancellationToken);
+						break;
+				}
+
 				break;
 			}
 
@@ -212,12 +267,12 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				var lookupMsg = (SecurityLookupMessage)message;
 
 				var securities = lookupMsg.SecurityId == default
-					? SecurityProvider.LookupAll()
-					: SecurityProvider.Lookup(lookupMsg);
+					? SecurityProvider.LookupAllAsync()
+					: SecurityProvider.LookupAsync(lookupMsg);
 
 				var processedBoards = new HashSet<ExchangeBoard>();
 
-				foreach (var security in securities)
+				await foreach (var security in securities.WithEnforcedCancellation(cancellationToken))
 				{
 					if (security.Board != null && processedBoards.Add(security.Board))
 						await SendOutMessageAsync(security.Board.ToMessage(), cancellationToken);
@@ -241,21 +296,44 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				{
 					case ChannelStates.Starting:
 					{
-						if (!_marketDataManager.IsStarted)
-						{
-							_ = StartProcessing(
+						var (run, action, publication) = PrepareStart(
 								stateMsg.StartDate == default ? StartDate : stateMsg.StartDate,
 								stateMsg.StopDate == default ? StopDate : stateMsg.StopDate,
 								cancellationToken);
+
+						if (action == StartAction.Ignore)
+							return;
+
+						var published = false;
+
+						try
+						{
+							await SendOutMessageAsync(stateMsg, cancellationToken);
+							published = true;
+						}
+						finally
+						{
+							CompleteStart(run, action, publication, published);
 						}
 
+						return;
+					}
+
+					case ChannelStates.Suspending:
+					{
+						// Pause the replay loop so no further historical data is fed out while suspended.
+						_processingGate.Reset();
 						break;
 					}
 
 					case ChannelStates.Stopping:
 					{
-						StopProcessing();
-						break;
+						var (run, action) = RequestStopping(stateMsg);
+
+						if (action == TerminalAction.SendNow)
+							await SendTerminalAsync(run, stateMsg, cancellationToken);
+
+						return;
 					}
 				}
 
@@ -279,6 +357,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				{
 					_marketDataManager.UnregisterGenerator(generatorMsg.OriginalTransactionId);
 				}
+
+				// Registering/unregistering a generator changes a security's supported data types, so drop the
+				// cached query results — otherwise GetSupportedMarketDataTypesAsync keeps returning the stale set.
+				_supportedMarketDataTypes.Clear();
 
 				break;
 			}
@@ -308,60 +390,625 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			await SendSubscriptionResultAsync(message, cancellationToken);
 	}
 
-	private BoardMessage[] GetBoards()
-		=> [.. SecurityProvider
-			.LookupAll()
-			.Select(s => s.Board)
-			.Distinct()
-			.Select(b => b.ToMessage())];
-
-	private Task StartProcessing(DateTime startDate, DateTime stopDate, CancellationToken cancellationToken)
+	private async ValueTask<BoardMessage[]> GetBoardsAsync(CancellationToken cancellationToken)
 	{
-		_marketDataManager.StartDate = startDate;
-		_marketDataManager.StopDate = stopDate;
+		var boards = new HashSet<ExchangeBoard>();
 
-		var (cts, t) = cancellationToken.CreateChildToken();
-		_cancellationTokenSource = cts;
-		var token = t;
+		await foreach (var security in SecurityProvider.LookupAllAsync().WithEnforcedCancellation(cancellationToken))
+			boards.Add(security.Board);
 
-		var boards = CheckTradableDates ? GetBoards() : [];
-
-		return Task.Run(async () =>
-		{
-			await Task.Yield();
-
-			try
-			{
-				await foreach (var message in _marketDataManager.StartAsync(boards).WithCancellation(token))
-				{
-					await SendOutMessageAsync(message, token);
-				}
-			}
-			catch (Exception ex)
-			{
-				if (!token.IsCancellationRequested)
-					await SendOutMessageAsync(ex.ToErrorMessage(), token);
-
-				await SendOutMessageAsync(new EmulationStateMessage
-				{
-					LocalTime = stopDate,
-					State = ChannelStates.Stopping,
-					Error = ex,
-				}, token);
-			}
-		}, token);
+		return [.. boards.Select(b => b.ToMessage())];
 	}
 
-	private void StopProcessing()
+	private bool IsProcessing()
 	{
-		_marketDataManager.Stop();
-		_cancellationTokenSource?.Cancel();
+		using (_processingSync.EnterScope())
+		{
+			if (_stopRequestInProgress || _activeReset is not null)
+				return true;
+
+			if (_processingRun is not { } run)
+				return false;
+
+			return !run.LifecycleTask.IsCompleted ||
+				(run.TerminalMessage is not null && !run.TerminalPublicationCompleted) ||
+				(run.DisconnectMessage is not null && !run.DisconnectPublicationCompleted) ||
+				(run.ResetMessage is not null && !run.ResetPublicationCompleted);
+		}
+	}
+
+	private (ReplayRun run, StartAction action, TaskCompletionSource<bool> publication) PrepareStart(
+		DateTime startDate, DateTime stopDate, CancellationToken cancellationToken)
+	{
+		using (_processingSync.EnterScope())
+		{
+			if (_isDisposing || _stopRequestInProgress || _activeReset is not null)
+				return (null, StartAction.Ignore, null);
+
+			if (_processingRun is { } currentRun)
+			{
+				var publicationPending =
+					(currentRun.TerminalMessage is not null && !currentRun.TerminalPublicationCompleted) ||
+					(currentRun.DisconnectMessage is not null && !currentRun.DisconnectPublicationCompleted) ||
+					(currentRun.ResetMessage is not null && !currentRun.ResetPublicationCompleted);
+
+				if (!currentRun.LifecycleTask.IsCompleted || publicationPending)
+				{
+					if (currentRun.IsStopping || currentRun.ReplayTask.IsCompleted || publicationPending ||
+						!currentRun.StartPublicationTask.IsCompleted)
+						return (currentRun, StartAction.Ignore, null);
+
+					var resumePublication = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+					currentRun.StartPublicationSource = resumePublication;
+					currentRun.StartPublicationTask = resumePublication.Task;
+					return (currentRun, StartAction.Resume, resumePublication);
+				}
+			}
+
+			_marketDataManager.StartDate = startDate;
+			_marketDataManager.StopDate = stopDate;
+
+			var (cts, token) = cancellationToken.CreateChildToken();
+			var run = new ReplayRun(cts, token);
+			var startPublication = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+			run.StartPublicationSource = startPublication;
+			run.StartPublicationTask = startPublication.Task;
+
+			_processingRun = run;
+			run.ReplayTask = Task.Run(
+				() => RunReplayAsync(run, stopDate, startPublication.Task),
+				CancellationToken.None);
+			run.LifecycleTask = Task.Run(() => CompleteLifecycleAsync(run), CancellationToken.None);
+
+			return (run, StartAction.New, startPublication);
+		}
+	}
+
+	private void CompleteStart(
+		ReplayRun run,
+		StartAction action,
+		TaskCompletionSource<bool> publication,
+		bool published)
+	{
+		var shouldStop = false;
+		var shouldResume = false;
+		CancellationTokenSource cancellationSource = null;
+
+		using (_processingSync.EnterScope())
+		{
+			if (run is null || publication is null ||
+				!ReferenceEquals(run.StartPublicationSource, publication))
+			{
+				publication?.TrySetResult(false);
+				return;
+			}
+
+			var canRun = published && !_isDisposing && !run.IsStopping;
+
+			if (!published && !_isDisposing && !run.IsStopping)
+			{
+				run.IsStopping = true;
+				cancellationSource = run.CancellationSource;
+
+				if (!_stopRequestInProgress)
+				{
+					_stopRequestInProgress = true;
+					shouldStop = true;
+				}
+			}
+
+			shouldResume = canRun && action == StartAction.Resume;
+			publication.TrySetResult(canRun);
+		}
+
+		if (shouldResume)
+			_processingGate.Set();
+
+		if (shouldStop)
+			StopManager(cancellationSource);
+	}
+
+	private async Task<EmulationStateMessage> RunReplayAsync(
+		ReplayRun run,
+		DateTime stopDate,
+		Task<bool> startPublication)
+	{
+		var token = run.CancellationToken;
+
+		try
+		{
+			if (!await startPublication.WaitAsync(token).ConfigureAwait(false))
+				return null;
+
+			token.ThrowIfCancellationRequested();
+
+			var boards = CheckTradableDates ? await GetBoardsAsync(token).ConfigureAwait(false) : [];
+
+			EmulationStateMessage terminalState = null;
+
+			await foreach (var message in _marketDataManager
+				.StartAsync(boards)
+				.WithCancellation(token)
+				.ConfigureAwait(false))
+			{
+				await _processingGate.WaitAsync(token).ConfigureAwait(false);
+
+				if (message is EmulationStateMessage { State: ChannelStates.Stopping } stopping)
+				{
+					terminalState = stopping;
+					break;
+				}
+
+				await SendOutMessageAsync(message, token).ConfigureAwait(false);
+			}
+
+			return terminalState;
+		}
+		catch (OperationCanceledException) when (token.IsCancellationRequested)
+		{
+			return null;
+		}
+		catch (Exception ex)
+		{
+			return new EmulationStateMessage
+			{
+				LocalTime = stopDate,
+				State = ChannelStates.Stopping,
+				Error = ex,
+			};
+		}
+	}
+
+	private (ReplayRun run, TerminalAction action) RequestStopping(EmulationStateMessage terminalMessage)
+	{
+		ReplayRun run;
+		TerminalAction action;
+		var shouldStop = false;
+		CancellationTokenSource cancellationSource = null;
+
+		using (_processingSync.EnterScope())
+		{
+			run = _processingRun;
+
+			if (_isDisposing)
+				return (run, TerminalAction.Ignore);
+
+			if (run is null)
+			{
+				action = TerminalAction.SendNow;
+			}
+			else if (run.ExplicitStopping is not null || run.TerminalMessage is not null ||
+				run.ResetMessage is not null ||
+				(run.DisconnectMessage is not null && (run.TerminalDecided || run.DisconnectDecided)))
+			{
+				action = TerminalAction.Ignore;
+			}
+			else if (run.LifecycleTask.IsCompleted)
+			{
+				run.ExplicitStopping = terminalMessage;
+				run.TerminalMessage = terminalMessage;
+				run.IsStopping = true;
+				action = TerminalAction.SendNow;
+			}
+			else
+			{
+				run.IsStopping = true;
+				run.ExplicitStopping = terminalMessage;
+				cancellationSource = run.CancellationSource;
+
+				if (run.TerminalDecided)
+				{
+					// Replay callbacks are complete, so a late explicit stop can publish here.
+					run.TerminalMessage = terminalMessage;
+					action = TerminalAction.SendNow;
+				}
+				else
+				{
+					action = TerminalAction.Lifecycle;
+				}
+			}
+
+			if (!_stopRequestInProgress)
+			{
+				_stopRequestInProgress = true;
+				shouldStop = true;
+			}
+		}
+
+		if (shouldStop)
+			StopManager(cancellationSource);
+
+		return (run, action);
+	}
+
+	private (ReplayRun run, TerminalAction action) RequestDisconnect(DisconnectMessage disconnectMessage)
+	{
+		ReplayRun run;
+		TerminalAction action;
+		var shouldStop = false;
+		CancellationTokenSource cancellationSource = null;
+
+		using (_processingSync.EnterScope())
+		{
+			run = _processingRun;
+
+			if (_isDisposing || run?.DisconnectMessage is not null)
+				return (run, TerminalAction.Ignore);
+
+			if (run is null)
+			{
+				action = TerminalAction.SendNow;
+			}
+			else
+			{
+				run.DisconnectMessage = disconnectMessage;
+				run.IsStopping = true;
+				action = run.LifecycleTask.IsCompleted || run.DisconnectDecided
+					? TerminalAction.SendNow
+					: TerminalAction.Lifecycle;
+
+				if (!run.LifecycleTask.IsCompleted)
+					cancellationSource = run.CancellationSource;
+			}
+
+			if (!_stopRequestInProgress)
+			{
+				_stopRequestInProgress = true;
+				shouldStop = true;
+			}
+		}
+
+		if (shouldStop)
+			StopManager(cancellationSource);
+
+		return (run, action);
+	}
+
+	private (ReplayRun run, TerminalAction action) RequestReset(ResetMessage resetMessage)
+	{
+		ReplayRun run;
+		TerminalAction action;
+		var shouldStop = false;
+		CancellationTokenSource cancellationSource = null;
+
+		using (_processingSync.EnterScope())
+		{
+			run = _processingRun;
+
+			if (_isDisposing || _activeReset is not null || run?.ResetMessage is not null)
+				return (run, TerminalAction.Ignore);
+
+			_activeReset = resetMessage;
+
+			if (run is null)
+			{
+				action = TerminalAction.SendNow;
+			}
+			else
+			{
+				run.ResetMessage = resetMessage;
+				run.IsStopping = true;
+				action = run.LifecycleTask.IsCompleted || run.ResetDecided
+					? TerminalAction.SendNow
+					: TerminalAction.Lifecycle;
+
+				if (!run.LifecycleTask.IsCompleted)
+					cancellationSource = run.CancellationSource;
+			}
+
+			if (run is not null && !run.LifecycleTask.IsCompleted && !_stopRequestInProgress)
+			{
+				_stopRequestInProgress = true;
+				shouldStop = true;
+			}
+		}
+
+		if (shouldStop)
+			StopManager(cancellationSource);
+
+		return (run, action);
+	}
+
+	private void StopManager(CancellationTokenSource cancellationSource)
+	{
+		try
+		{
+			_marketDataManager.Stop();
+		}
+		finally
+		{
+			try
+			{
+				Cancel(cancellationSource);
+			}
+			finally
+			{
+				try
+				{
+					ReleaseProcessingGate();
+				}
+				finally
+				{
+					using (_processingSync.EnterScope())
+						_stopRequestInProgress = false;
+				}
+			}
+		}
+	}
+
+	private void ReleaseProcessingGate()
+	{
+		try
+		{
+			_processingGate.Set();
+		}
+		catch (ObjectDisposedException)
+		{
+		}
+	}
+
+	private static void Cancel(CancellationTokenSource cancellationSource)
+	{
+		try
+		{
+			cancellationSource?.Cancel();
+		}
+		catch (ObjectDisposedException)
+		{
+		}
+	}
+
+	private async Task CompleteLifecycleAsync(ReplayRun run)
+	{
+		var replayTerminal = await run.ReplayTask.ConfigureAwait(false);
+		Task startPublication;
+
+		using (_processingSync.EnterScope())
+			startPublication = run.StartPublicationTask;
+
+		await startPublication.ConfigureAwait(false);
+
+		EmulationStateMessage terminalMessage;
+
+		using (_processingSync.EnterScope())
+		{
+			terminalMessage = replayTerminal?.Error is not null
+				? replayTerminal
+				: run.ExplicitStopping ?? replayTerminal;
+
+			run.TerminalMessage = terminalMessage;
+			run.TerminalDecided = true;
+
+			if (terminalMessage is not null)
+				run.IsStopping = true;
+		}
+
+		try
+		{
+			if (replayTerminal?.Error is { } error)
+				await SendLifecycleErrorAsync(error);
+
+			if (terminalMessage is not null)
+				await SendTerminalAsync(run, terminalMessage, CancellationToken.None, true);
+
+			DisconnectMessage disconnectMessage;
+
+			using (_processingSync.EnterScope())
+			{
+				run.DisconnectDecided = true;
+				disconnectMessage = run.DisconnectMessage;
+			}
+
+			if (disconnectMessage is not null)
+				await SendDisconnectAsync(run, disconnectMessage, CancellationToken.None, true);
+
+			ResetMessage resetMessage;
+
+			using (_processingSync.EnterScope())
+			{
+				run.ResetDecided = true;
+				resetMessage = run.ResetMessage;
+			}
+
+			if (resetMessage is not null)
+				await SendResetAsync(run, resetMessage, CancellationToken.None, true);
+		}
+		finally
+		{
+			run.CancellationSource.Dispose();
+		}
+	}
+
+	private bool TryReservePublication()
+	{
+		using (_processingSync.EnterScope())
+			return !_isDisposing;
+	}
+
+	private async ValueTask SendLifecycleErrorAsync(Exception error)
+	{
+		if (!TryReservePublication())
+			return;
+
+		try
+		{
+			await SendOutMessageAsync(error.ToErrorMessage(), CancellationToken.None);
+		}
+		catch (Exception ex)
+		{
+			this.AddErrorLog(ex);
+		}
+	}
+
+	private async ValueTask SendTerminalAsync(
+		ReplayRun run,
+		EmulationStateMessage terminalMessage,
+		CancellationToken cancellationToken,
+		bool logError = false)
+	{
+		if (!TryReservePublication())
+		{
+			MarkTerminalPublicationCompleted(run);
+			return;
+		}
+
+		try
+		{
+			await SendOutMessageAsync(terminalMessage, cancellationToken);
+		}
+		catch (Exception ex) when (logError)
+		{
+			this.AddErrorLog(ex);
+		}
+		finally
+		{
+			MarkTerminalPublicationCompleted(run);
+		}
+	}
+
+	private void MarkTerminalPublicationCompleted(ReplayRun run)
+	{
+		if (run is null)
+			return;
+
+		using (_processingSync.EnterScope())
+			run.TerminalPublicationCompleted = true;
+	}
+
+	private async ValueTask SendDisconnectAsync(
+		ReplayRun run,
+		DisconnectMessage disconnectMessage,
+		CancellationToken cancellationToken,
+		bool logError = false)
+	{
+		if (!TryReservePublication())
+		{
+			MarkDisconnectPublicationCompleted(run);
+			return;
+		}
+
+		try
+		{
+			await SendOutMessageAsync(disconnectMessage, cancellationToken);
+		}
+		catch (Exception ex) when (logError)
+		{
+			this.AddErrorLog(ex);
+		}
+		finally
+		{
+			MarkDisconnectPublicationCompleted(run);
+		}
+	}
+
+	private void MarkDisconnectPublicationCompleted(ReplayRun run)
+	{
+		if (run is null)
+			return;
+
+		using (_processingSync.EnterScope())
+			run.DisconnectPublicationCompleted = true;
+	}
+
+	private async ValueTask SendResetAsync(
+		ReplayRun run,
+		ResetMessage resetMessage,
+		CancellationToken cancellationToken,
+		bool logError = false)
+	{
+		if (!TryReservePublication())
+		{
+			CompleteResetPublication(run, resetMessage);
+			return;
+		}
+
+		try
+		{
+			_marketDataManager.Reset();
+			_supportedMarketDataTypes.Clear();
+			_processingGate.Set();
+
+			using (_processingSync.EnterScope())
+			{
+				if (run is not null && ReferenceEquals(_processingRun, run))
+					_processingRun = null;
+
+				if (ReferenceEquals(_activeReset, resetMessage))
+					_activeReset = null;
+			}
+
+			await SendOutMessageAsync(resetMessage, cancellationToken);
+		}
+		catch (Exception ex) when (logError)
+		{
+			this.AddErrorLog(ex);
+		}
+		finally
+		{
+			CompleteResetPublication(run, resetMessage);
+		}
+	}
+
+	private void CompleteResetPublication(ReplayRun run, ResetMessage resetMessage)
+	{
+		using (_processingSync.EnterScope())
+		{
+			if (ReferenceEquals(_activeReset, resetMessage))
+				_activeReset = null;
+
+			if (run is not null)
+				run.ResetPublicationCompleted = true;
+		}
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		StopProcessing();
+		ReplayRun run;
+		bool shouldStopManager;
+
+		using (_processingSync.EnterScope())
+		{
+			_isDisposing = true;
+			run = _processingRun;
+			shouldStopManager = !_stopRequestInProgress;
+
+			if (shouldStopManager)
+				_stopRequestInProgress = true;
+
+			if (run is not null && !run.LifecycleTask.IsCompleted)
+			{
+				run.IsStopping = true;
+				run.StartPublicationSource?.TrySetResult(false);
+			}
+
+		}
+
+		try
+		{
+			if (shouldStopManager)
+				_marketDataManager.Stop();
+		}
+		finally
+		{
+			try
+			{
+				if (run is not null && !run.LifecycleTask.IsCompleted)
+					Cancel(run.CancellationSource);
+
+				ReleaseProcessingGate();
+			}
+			finally
+			{
+				if (shouldStopManager)
+				{
+					using (_processingSync.EnterScope())
+						_stopRequestInProgress = false;
+				}
+			}
+		}
+
 		base.DisposeManaged();
 	}
 

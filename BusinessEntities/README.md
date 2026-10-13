@@ -16,7 +16,7 @@ The library declares base interfaces for interacting with various data sources a
 - `IConnector` is the main interface combining connectivity, subscriptions, orders and data access. It inherits from `IMarketDataProvider`, `ITransactionProvider`, `ISecurityProvider` and others. A fragment of the interface:
 
 ```csharp
-public interface IConnector : IMessageChannel, IPersistable, ILogReceiver,
+public interface IConnector : IMessageTransport, IAsyncPersistable, ILogReceiver,
         IMarketDataProvider, ITransactionProvider, ISecurityProvider,
         ISubscriptionProvider, ITimeProvider,
         IPortfolioProvider, IPositionProvider
@@ -53,7 +53,7 @@ public static IEnumerable<Exchange> EnumerateExchanges()
 `BusinessEntities.csproj` connects shared settings and package dependencies:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_net.props" />
+  <Import Project="..\props\common_target_net.props" />
   <PropertyGroup>
     <ProjectGuid>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</ProjectGuid>
   </PropertyGroup>

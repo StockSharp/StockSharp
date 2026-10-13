@@ -35,26 +35,25 @@ public partial class MainWindow
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (_fileSystem.FileExists(_connectorFile))
-		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
-		}
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
 		CandleDataTypeEdit.DataType = TimeSpan.FromSeconds(10).TimeFrame();
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		if (_fileSystem.FileExists(_connectorFile))
+			await _connector.LoadAsync(await _connectorFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
 	}
 
-	private void Setting_Click(object sender, RoutedEventArgs e)
+	private async void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_fileSystem, _connectorFile);
+			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 		}
 	}
 
@@ -68,7 +67,7 @@ public partial class MainWindow
 		_connector.Connect();
 	}
 
-	private void Start_Click(object sender, RoutedEventArgs e)
+	private async void Start_Click(object sender, RoutedEventArgs e)
 	{
 		if (PortfolioEditor.SelectedPortfolio == null) return;
 		if (SecurityEditor.SelectedSecurity == null) return;
@@ -88,11 +87,11 @@ public partial class MainWindow
 		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);
 		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 	}
 
-	private void Stop_Click(object sender, RoutedEventArgs e)
+	private async void Stop_Click(object sender, RoutedEventArgs e)
 	{
-		_strategy.Stop();
+		await _strategy.StopAsync();
 	}
 }

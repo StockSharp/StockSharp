@@ -4,6 +4,8 @@ using System;
 
 using Ecng.Logging;
 
+using Ecng.Common;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Quoting;

@@ -5,8 +5,15 @@ using System.Drawing;
 /// <summary>
 /// <see cref="CompositionDiagramElement"/> model.
 /// </summary>
-public interface ICompositionModel : ICloneable<ICompositionModel>
+public interface ICompositionModel
 {
+	/// <summary>
+	/// Create a copy of the model.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ICompositionModel> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// <see cref="ICompositionModelBehavior{TNode, TLink}"/>
 	/// </summary>
@@ -193,35 +200,6 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 			link.IsConnected = false;
 		}
 
-		bool Connect(TLink link, bool checkTypes = false)
-		{
-			if (link.IsReconnecting)
-				return true;
-
-			try
-			{
-				link.IsReconnecting = true;
-				link.IsConnected = true;
-
-				var (from, to) = (link.GetFromSocket(_behavior), link.GetToSocket(_behavior));
-
-				if (from == null || to == null || (checkTypes && !from.CanConnect(to)))
-					return false;
-
-				from.Connect(to);
-				to.Connect(from);
-
-				link.FromPort = from.Id;
-				link.ToPort = to.Id;
-			}
-			finally
-			{
-				link.IsReconnecting = false;
-			}
-
-			return true;
-		}
-
 		var changed = false;
 
 		switch (t.change)
@@ -302,6 +280,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 			case ModelChange.FinishedRedo:
 			case ModelChange.FinishedUndo:
+			case ModelChange.InvalidateRelationships:
 				changed = true;
 				break;
 
@@ -316,6 +295,60 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 		if (changed)
 			ModelChanged?.Invoke();
+	}
+
+	private bool Connect(TLink link, bool checkTypes = false)
+	{
+		if (link.IsReconnecting)
+			return true;
+
+		try
+		{
+			link.IsReconnecting = true;
+			link.IsConnected = true;
+
+			var (from, to) = (link.GetFromSocket(_behavior), link.GetToSocket(_behavior));
+
+			if (from == null || to == null || (checkTypes && !from.CanConnect(to)))
+				return false;
+
+			from.Connect(to);
+			to.Connect(from);
+
+			link.FromPort = from.Id;
+			link.ToPort = to.Id;
+		}
+		finally
+		{
+			link.IsReconnecting = false;
+		}
+
+		return true;
+	}
+
+	// A node read before the type of its element was known joins the model without an element.
+	// When the element arrives it is announced as if the node were added now, and its links are connected.
+	internal void AttachElement(TNode node)
+	{
+		OnElementAdded(node);
+		ConnectLinks(node);
+
+		ModelChanged?.Invoke();
+	}
+
+	// Connects the links of the node whose sockets are both there by now. A link stays unconnected while
+	// the element at its other end is not loaded, or while a composition has not published the socket yet.
+	internal void ConnectLinks(TNode node)
+	{
+		foreach (var link in _behavior.GetLinksForNode(node).ToArray())
+		{
+			var (from, to) = (link.GetFromSocket(_behavior), link.GetToSocket(_behavior));
+
+			if (from is null || to is null || from.IsConnectedTo(to))
+				continue;
+
+			Connect(link);
+		}
 	}
 
 	private void OnElementAdded(TNode baseElement)
@@ -359,7 +392,8 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 		foreach (var link in GetLinks(node, socket).ToArray())
 		{
-			if (!IsConnected(link))
+			// a link to a node whose element is not loaded yet waits for it
+			if (!IsConnected(link) && !IsWaitingForElement(link))
 				_behavior.RemoveLink(link);
 		}
 
@@ -399,6 +433,9 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 	private bool IsConnected(ICompositionModelLink link)
 		=> link.GetFromSocket(_behavior) != null && link.GetToSocket(_behavior) != null;
+
+	private bool IsWaitingForElement(ICompositionModelLink link)
+		=> _behavior.FindNodeByKey(link.From) is { Element: null } || _behavior.FindNodeByKey(link.To) is { Element: null };
 
 	private bool HasUndoManager => UndoManager is not null;
 
@@ -586,19 +623,22 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 		}
 	}
 
-	private CompositionModel<TNode, TLink> Clone()
+	/// <inheritdoc />
+	public async ValueTask<ICompositionModel> CloneAsync(CancellationToken cancellationToken)
 	{
 		var model = new CompositionModel<TNode, TLink>((ICompositionModelBehavior<TNode, TLink>)_behavior.Clone());
 
+		var nodes = new List<TNode>();
+
+		foreach (var node in Nodes)
+			nodes.Add((TNode)await node.CloneAsync(cancellationToken));
+
 		model.ExecuteTransaction("Clone", m =>
 		{
-			m.Nodes = new ObservableCollection<TNode>(Nodes.Select(n => (TNode)n.Clone()));
+			m.Nodes = new ObservableCollection<TNode>(nodes);
 			m.Links = new ObservableCollection<TLink>(Links.Select(l => l.TypedClone()));
 		});
 
 		return model;
 	}
-
-	ICompositionModel ICloneable<ICompositionModel>.Clone() => Clone();
-	object ICloneable.Clone() => Clone();
 }

@@ -51,7 +51,7 @@ public class CandleBuilderTests : BaseTestClass
 		public bool Process(Message message) => true;
 	}
 
-	private static SecurityId CreateSecurityId() => new() { SecurityCode = "TEST", BoardCode = "BOARD" };
+	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId("TEST", "BOARD");
 
 	#endregion
 
@@ -419,6 +419,54 @@ public class CandleBuilderTests : BaseTestClass
 
 	#region RenkoCandleBuilder Tests
 
+	[TestMethod]
+	[DataRow(0)]
+	[DataRow(-1)]
+	public void RenkoCandleBuilder_NonPositiveBoxSize_IsRejected(int boxSize)
+	{
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(boxSize)),
+			}
+		};
+
+		ThrowsExactly<ArgumentOutOfRangeException>(() => builder.Process(subscription, new MockTransform
+		{
+			Price = 100m,
+			Volume = 1m,
+			Time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind(),
+		}).ToArray());
+	}
+
+	[TestMethod]
+	public void RenkoCandleBuilder_BoxTooLargeForThePerValueLimit_IsHandled()
+	{
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(decimal.MaxValue / 2m)),
+			}
+		};
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		builder.Process(subscription, new MockTransform { Price = 0m, Volume = 1m, Time = time }).ToArray();
+		var result = builder.Process(subscription, new MockTransform { Price = 1m, Volume = 2m, Time = time.AddSeconds(1) }).ToArray();
+
+		result.Length.AssertEqual(1);
+		var current = (RenkoCandleMessage)subscription.CurrentCandle;
+		current.State.AssertEqual(CandleStates.Active);
+		current.ClosePrice.AssertEqual(1m);
+		current.TotalVolume.AssertEqual(3m);
+	}
+
 	/// <summary>
 	/// RenkoCandleBuilder: generates multiple bricks on large price movement.
 	/// </summary>
@@ -450,18 +498,273 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, transform2))
 			candles.Add(c);
 
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		(finishedCandles.Count >= 3).AssertTrue("Should generate multiple finished bricks");
+		// Deduplicate by reference identity: the first brick is yielded as Active then mutated to
+		// Finished, so it appears twice. Large move 100 -> 145 = floor(45/10) = 4 finished bricks
+		// (100->110, 110->120, 120->130, 130->140) plus the still-active partial 140->145.
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.OrderBy(c => c.OpenPrice)
+			.ToList();
 
-		// Verify OHLCV on finished bricks - each brick should be valid
-		foreach (var brick in finishedCandles)
+		finishedCandles.Count.AssertEqual(4, "Should generate exactly 4 finished bricks from 100->145 with box size 10");
+
+		// Each finished brick spans exactly one box with exact, contiguous prices.
+		var expectedOpens = new[] { 100m, 110m, 120m, 130m };
+		for (var i = 0; i < finishedCandles.Count; i++)
 		{
+			var brick = finishedCandles[i];
+
 			// Renko: High >= max(Open, Close), Low <= min(Open, Close)
 			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
 			(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
 			(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
 			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Exact brick prices: Open at the box boundary, Close one box higher.
+			brick.OpenPrice.AssertEqual(expectedOpens[i], "Brick Open should be at the box boundary");
+			brick.ClosePrice.AssertEqual(expectedOpens[i] + 10m, "Upward brick Close should be one box above Open");
 		}
+	}
+
+	/// <summary>
+	/// RenkoCandleBuilder: every brick of a large move reaches the connector subscription, although all bricks after
+	/// the first open at the same instant.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_BricksOfOneLargeMove_AllReachTheSubscription()
+	{
+		var securityId = CreateSecurityId();
+		var dataType = DataType.Create<RenkoCandleMessage>(new Unit(10m));
+
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var builderSubscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage { SecurityId = securityId, DataType2 = dataType }
+		};
+
+		var manager = new ConnectorSubscriptionManager(new TestReceiver(), new IncrementalIdGenerator(), true);
+		var subscription = new Subscription(new MarketDataMessage { IsSubscribe = true, SecurityId = securityId, DataType2 = dataType });
+		manager.Subscribe(subscription);
+		manager.ProcessResponse(new SubscriptionResponseMessage { OriginalTransactionId = subscription.TransactionId }, out _, out _, out _);
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var built = new List<decimal>();
+		var delivered = new List<decimal>();
+
+		// 100 -> 145 with a 10 point box finishes four bricks in one update.
+		foreach (var (price, time) in new[] { (100m, baseTime), (145m, baseTime.AddSeconds(1)) })
+		{
+			foreach (var candle in builder.Process(builderSubscription, new MockTransform { Price = price, Volume = 1, Time = time }))
+			{
+				// The builder adapter forwards a copy of every candle the builder yields.
+				var copy = candle.TypedClone();
+				copy.SetSubscriptionIds([subscription.TransactionId]);
+
+				if (copy.State == CandleStates.Finished)
+					built.Add(copy.OpenPrice);
+
+				delivered.AddRange(manager.UpdateCandles(copy).Where(r => r.candle.State == CandleStates.Finished).Select(r => r.candle.OpenPrice));
+			}
+		}
+
+		built.SequenceEqual([100m, 110m, 120m, 130m]).AssertTrue($"The builder finishes four bricks, got {string.Join(", ", built)}.");
+		delivered.SequenceEqual(built).AssertTrue($"Every finished brick must reach the subscription, got the ones opening at {string.Join(", ", delivered)}.");
+	}
+
+	/// <summary>
+	/// RenkoCandleBuilder: a box finer than the price grid still advances the brick series.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_BoxFinerThanPriceStep_StaysBounded()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				PriceStep = 0.1m,
+				// Below PriceStep / 2, so every brick price rounds back onto its own open.
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(0.02m)),
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var candles = new List<CandleMessage>();
+
+		const int tickCount = 100;
+		var price = 100m;
+
+		// A monotone walk of one price step per tick.
+		for (var i = 0; i <= tickCount; i++)
+		{
+			var transform = new MockTransform { Price = price, Volume = 1m, Time = baseTime.AddSeconds(i) };
+
+			foreach (var c in builder.Process(subscription, transform))
+				candles.Add(c);
+
+			price += 0.1m;
+		}
+
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.ToList();
+
+		// Brick prices are snapped onto the security price grid, so one brick per price step is the
+		// most the walk can produce. If a brick cannot advance its own open, every following tick
+		// re-derives the box count from the same stale open and production becomes quadratic.
+		finishedCandles.Count.AssertEqual(tickCount, "Brick count must stay linear in the price path");
+
+		((RenkoCandleMessage)subscription.CurrentCandle).OpenPrice.AssertEqual(110m, "The brick series must advance with the price");
+	}
+
+	/// <summary>
+	/// A gap is ordinary market data: a halt that reopens far away, a fat-fingered print, a feed
+	/// that momentarily quotes another instrument. Whatever the number is, it is one tick, and the
+	/// builder has to keep serving the subscription after it. An exception thrown out of the
+	/// builder takes down the whole candle stream - every chart and every strategy fed by it -
+	/// and names none of the prices that caused it.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_APriceGapTooWideToCountInBoxesLeavesTheStreamRunning()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(0.01m)),
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		foreach (var _ in builder.Process(subscription, new MockTransform { Price = 100m, Volume = 1m, Time = baseTime }))
+		{
+		}
+
+		// 30 000 000 sits 2 999 990 000 boxes of 0.01 above 100 - more boxes than an int can count.
+		var gap = new MockTransform { Price = 30_000_000m, Volume = 1m, Time = baseTime.AddSeconds(1) };
+
+		const int brickLimit = 10_000;
+
+		var produced = 0;
+		Exception error = null;
+
+		try
+		{
+			// Enumerated lazily and cut short, so a builder that means to draw billions of bricks
+			// is reported as unbounded instead of hanging the run.
+			foreach (var _ in builder.Process(subscription, gap))
+			{
+				if (++produced > brickLimit)
+					break;
+			}
+		}
+		catch (Exception ex)
+		{
+			error = ex;
+		}
+
+		error.AssertNull();
+
+		IsLessOrEqual(produced, brickLimit, "one gapped tick must not be answered with an unbounded run of bricks");
+	}
+
+	/// <summary>
+	/// One tick is one number, and the subscriber is holding every candle it is handed. A move
+	/// that is worth a hundred million boxes says the price is broken, not that the user wants a
+	/// hundred million bricks drawn: that is minutes of one thread and gigabytes of messages for
+	/// a chart nobody can read. The builder must bound what a single tick can cost.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_OneTickNeverTurnsIntoAnUnboundedRunOfBricks()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(0.01m)),
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		foreach (var _ in builder.Process(subscription, new MockTransform { Price = 100m, Volume = 1m, Time = baseTime }))
+		{
+		}
+
+		// 1 000 100 is 100 000 000 boxes of 0.01 above 100: a count an int holds comfortably, so
+		// nothing stops the builder from materializing a brick for every one of them.
+		var gap = new MockTransform { Price = 1_000_100m, Volume = 1m, Time = baseTime.AddSeconds(1) };
+
+		const int brickLimit = 100_000;
+
+		var produced = 0;
+
+		// Lazy enumeration cut short at the cap: what is measured is how many bricks the builder
+		// is willing to hand over for a single tick, not how long it takes to hand them over.
+		foreach (var _ in builder.Process(subscription, gap))
+		{
+			if (++produced > brickLimit)
+				break;
+		}
+
+		IsLessOrEqual(produced, brickLimit, "the bricks one tick may produce must be capped");
+	}
+
+	[TestMethod]
+	public void RenkoCandleBuilder_CappedGapPreservesVolumeAndContinuesAtTheObservedPrice()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(1m)),
+			}
+		};
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		builder.Process(subscription, new MockTransform { Price = 100m, Volume = 2m, Time = time }).ToArray();
+
+		var gap = builder.Process(subscription, new MockTransform
+		{
+			Price = 20_100m,
+			Volume = 3m,
+			Time = time.AddSeconds(1),
+		}).Select(c => c.TypedClone()).ToArray();
+
+		IsLessOrEqual(gap.Length, 10_000, "one source value has a bounded output cost");
+		gap.Sum(c => c.TotalVolume).AssertEqual(5m, "the old brick and the gapped tick keep all their volume");
+
+		var current = (RenkoCandleMessage)subscription.CurrentCandle;
+		current.OpenPrice.AssertEqual(20_100m, "a truncated gap is acknowledged instead of being regenerated on every following tick");
+		var carriedVolume = current.TotalVolume;
+
+		var next = builder.Process(subscription, new MockTransform
+		{
+			Price = 20_100.5m,
+			Volume = 1m,
+			Time = time.AddSeconds(2),
+		}).ToArray();
+
+		next.Length.AssertEqual(1, "a sub-box move after the gap updates the current brick once");
+		((RenkoCandleMessage)subscription.CurrentCandle).TotalVolume.AssertEqual(carriedVolume + 1m);
 	}
 
 	/// <summary>
@@ -536,15 +839,31 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, new MockTransform { Price = 55m, Volume = 20, Time = baseTime.AddSeconds(1) }))
 			candles.Add(c);
 
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		(finishedCandles.Count >= 3).AssertTrue("Downward movement should create bricks");
+		// Deduplicate by reference identity (first brick is yielded as Active then mutated to
+		// Finished). Large downward move 100 -> 55 = floor(45/10) = 4 finished bricks
+		// (100->90, 90->80, 80->70, 70->60) plus the still-active partial 60->55.
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.OrderByDescending(c => c.OpenPrice)
+			.ToList();
 
-		// Verify OHLCV on finished bricks - downward bricks should have Open > Close
-		foreach (var brick in finishedCandles)
+		finishedCandles.Count.AssertEqual(4, "Downward movement 100->55 should create exactly 4 bricks");
+
+		// Each downward brick must span exactly one box down: Open - Close == box size.
+		var expectedOpens = new[] { 100m, 90m, 80m, 70m };
+		for (var i = 0; i < finishedCandles.Count; i++)
 		{
-			(brick.OpenPrice >= brick.ClosePrice).AssertTrue("Downward brick: Open should be >= Close");
+			var brick = finishedCandles[i];
+
+			(brick.OpenPrice - brick.ClosePrice).AssertEqual(10m, "Downward brick: Open - Close should equal box size");
 			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
 			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Exact contiguous brick prices.
+			brick.OpenPrice.AssertEqual(expectedOpens[i], "Brick Open should be at the box boundary");
+			brick.ClosePrice.AssertEqual(expectedOpens[i] - 10m, "Downward brick Close should be one box below Open");
 		}
 	}
 
@@ -653,6 +972,56 @@ public class CandleBuilderTests : BaseTestClass
 		AreEqual(1, currentCandle.TotalTicks, "Current candle TotalTicks should be 1");
 	}
 
+	/// <summary>
+	/// A P&amp;F box is timestamped like any other candle: a reader is entitled to take
+	/// <see cref="CandleMessage.CloseTime"/> as the moment the box last moved, even on a box that has
+	/// only just been opened. Without it a freshly created box would leave that time empty, and
+	/// anything that orders, charts or stores candles by their close would put the newest box in 1
+	/// January 0001.
+	/// </summary>
+	[TestMethod]
+	public void PnFCandleBuilder_NewBox_CarriesACloseTime()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new PnFCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<PnFCandleMessage>(new PnFArg { BoxSize = new Unit(1m), ReversalAmount = 3 }),
+			}
+		};
+
+		var baseTime = new DateTime(2025, 3, 4, 10, 0, 0, DateTimeKind.Utc);
+
+		// The very first value opens the first box.
+		builder.Process(subscription, new MockTransform { Price = 100m, Volume = 10, Time = baseTime }).ToArray();
+
+		var firstBox = (PnFCandleMessage)subscription.CurrentCandle;
+		IsNotNull(firstBox);
+		AreEqual(baseTime, firstBox.OpenTime, "the box opens at the time of the value that created it");
+		AreEqual(baseTime, firstBox.CloseTime, "a box that has only just been opened closes at that same time, not at an empty one");
+
+		// The box goes on rising, so it keeps the time of the value that last moved it.
+		builder.Process(subscription, new MockTransform { Price = 105m, Volume = 20, Time = baseTime.AddSeconds(1) }).ToArray();
+
+		AreEqual(baseTime.AddSeconds(1), firstBox.CloseTime, "a box that moved again closes at the time of the value that moved it");
+
+		// A drop of more than the reversal amount finishes that box and opens a new one in the
+		// opposite direction - the case where the new box is created rather than updated.
+		builder.Process(subscription, new MockTransform { Price = 101m, Volume = 15, Time = baseTime.AddSeconds(2) }).ToArray();
+
+		var reversalBox = (PnFCandleMessage)subscription.CurrentCandle;
+		AreNotSame(firstBox, reversalBox, "the reversal opens a new box rather than going on with the old one");
+		AreEqual(CandleStates.Finished, firstBox.State, "the box the reversal left behind is finished");
+		AreEqual(baseTime.AddSeconds(1), firstBox.CloseTime, "the finished box keeps the time it last moved, not the time of the reversal");
+
+		AreEqual(baseTime.AddSeconds(2), reversalBox.OpenTime, "the new box opens at the time of the value that reversed the column");
+		AreEqual(baseTime.AddSeconds(2), reversalBox.CloseTime, "and closes at that same time while it holds only that one value");
+	}
+
 	#endregion
 
 	#region HeikinAshiCandleBuilder Tests
@@ -699,11 +1068,26 @@ public class CandleBuilderTests : BaseTestClass
 		var secondCandle = subscription.CurrentCandle as HeikinAshiCandleMessage;
 		IsNotNull(secondCandle);
 
-		// HA Open = (prevOpen + prevClose) / 2
+		// HA Open = (prevOpen + prevClose) / 2 = (100 + 105) / 2 = 102.5
 		var expectedOpen = (firstOpen + firstClose) / 2;
 		AreEqual(expectedOpen, secondCandle.OpenPrice, "HA Open should be average of prev Open and Close");
 		AreEqual(15m, secondCandle.TotalVolume, "Second candle TotalVolume should be 15");
 		AreEqual(1, secondCandle.TotalTicks, "Second candle TotalTicks should be 1");
+
+		// The smoothed HA Open must stay inside the candle's range. The single raw tick is 115,
+		// so HA Close and the raw High/Low are all 115. The canonical Heikin-Ashi contract is
+		// HA-High = max(rawHigh, HA-Open, HA-Close) and HA-Low = min(rawLow, HA-Open, HA-Close),
+		// which pulls Low down to 102.5 so that Low <= Open <= High holds. The engine sets HA-Open
+		// without correcting High/Low, leaving High = Low = 115 and Open = 102.5 outside [Low, High],
+		// so the assertions below fail today.
+		(secondCandle.LowPrice <= secondCandle.OpenPrice).AssertTrue("HA Low should be <= HA Open");
+		(secondCandle.OpenPrice <= secondCandle.HighPrice).AssertTrue("HA Open should be <= HA High");
+
+		var haClose = secondCandle.ClosePrice;
+		var expectedHigh = 115m.Max(expectedOpen).Max(haClose);
+		var expectedLow = 115m.Min(expectedOpen).Min(haClose);
+		secondCandle.HighPrice.AssertEqual(expectedHigh, "HA High should be max(rawHigh, HA Open, HA Close)");
+		secondCandle.LowPrice.AssertEqual(expectedLow, "HA Low should be min(rawLow, HA Open, HA Close)");
 	}
 
 	/// <summary>
@@ -740,10 +1124,10 @@ public class CandleBuilderTests : BaseTestClass
 		var candle = subscription.CurrentCandle as HeikinAshiCandleMessage;
 		IsNotNull(candle);
 
-		// HA Close = (O + H + L + C) / 4
-		// Note: after each update, close is recalculated, so we verify it's different from last price
-		// The exact calculation depends on intermediate values
-		(candle.ClosePrice != prices.Last()).AssertTrue("HA Close should be smoothed, not raw last price");
+		// HA Close = (O + H + L + C) / 4. This is the first candle, so HA Open equals the raw
+		// Open (100) and the running OHLC is O=100, H=110, L=95, C=105, giving exactly
+		// (100 + 110 + 95 + 105) / 4 = 102.5 - a smoothed value, not the raw last price 105.
+		candle.ClosePrice.AssertEqual(102.5m, "HA Close should be (O + H + L + C) / 4 = 102.5");
 		AreEqual(70m, candle.TotalVolume, "TotalVolume should be 70");
 		AreEqual(4, candle.TotalTicks, "TotalTicks should be 4");
 		// HeikinAshi High = max(High, Open, Close), Low = min(Low, Open, Close)
@@ -875,8 +1259,15 @@ public class CandleBuilderTests : BaseTestClass
 		var earlyTime = new DateTime(2024, 1, 1, 9, 58, 0).UtcKind();
 		var result = builder.Process(subscription, new MockTransform { Price = 50m, Volume = 10, Time = earlyTime }).ToList();
 
-		// Should create new candle for 9:55-10:00 period or be handled appropriately
-		// The exact behavior depends on implementation
+		// A tick belonging to an already passed period cannot close the period being built:
+		// whatever is done with the stale tick, the 10:00 candle stays open and untouched by it.
+		result.Any(c => c.OpenTime == new DateTime(2024, 1, 1, 10, 0, 0).UtcKind())
+			.AssertFalse("the current period must not be finished by a tick from the past");
+
+		var current = subscription.CurrentCandle as TimeFrameCandleMessage;
+		IsNotNull(current);
+		AreEqual(new DateTime(2024, 1, 1, 10, 0, 0).UtcKind(), current.OpenTime, "the candle being built must not move back in time");
+		AreEqual(100m, current.ClosePrice, "a tick from a passed period is not the close of the current one");
 	}
 
 	/// <summary>
@@ -920,6 +1311,143 @@ public class CandleBuilderTests : BaseTestClass
 		AreEqual(95m, candle.LowPrice, "Low should be min price");
 		AreEqual(102m, candle.ClosePrice, "Close should be last price");
 		AreEqual(4, candle.TotalTicks, "Should have 4 ticks");
+	}
+
+	/// <summary>
+	/// TimeFrameCandleBuilder: a tick from a passed period does not make the current period be delivered twice.
+	/// </summary>
+	[TestMethod]
+	public void TimeFrameCandleBuilder_PastTick_DoesNotEmitPeriodTwice()
+	{
+		// A period is closed once and carries every tick that belongs to it; a stale tick arriving
+		// in the middle must not close 10:00 early and let the next tick open 10:00 again.
+		var provider = new MockExchangeInfoProvider();
+		var builder = new TimeFrameCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			}
+		};
+
+		var emitted = new List<CandleMessage>();
+
+		void process(decimal price, DateTime time)
+		{
+			// the builder yields the same instance again and again, so keep a copy of each state
+			foreach (var c in builder.Process(subscription, new MockTransform { Price = price, Volume = 10, Time = time }))
+				emitted.Add(c.TypedClone());
+		}
+
+		var open = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		process(100m, open.AddSeconds(30));
+		process(50m, open.AddSeconds(-30));  // tick from the previous period, out of order
+		process(101m, open.AddSeconds(45));
+		process(102m, open.AddMinutes(1).AddSeconds(10));
+
+		var finished10 = emitted
+			.Where(c => c.State == CandleStates.Finished && c.OpenTime == open)
+			.ToList();
+
+		AreEqual(1, finished10.Count, "the 10:00 period must be finished exactly once");
+		AreEqual(100m, finished10[0].OpenPrice, "Open is the first tick of the period");
+		AreEqual(101m, finished10[0].ClosePrice, "Close is the last tick of the period");
+		AreEqual(2, finished10[0].TotalTicks, "both 10:00 ticks belong to the same candle");
+	}
+
+	/// <summary>
+	/// TimeFrameCandleBuilder: <see cref="TimeFrameCandleBuilder.GenerateEmptyCandles"/> produces the periods without trades.
+	/// </summary>
+	[TestMethod]
+	public void TimeFrameCandleBuilder_GenerateEmptyCandles_FillsSkippedPeriods()
+	{
+		// GenerateEmptyCandles is on by default and promises candles for periods with no trades,
+		// so a gap between two ticks must still deliver the periods in between.
+		var provider = new MockExchangeInfoProvider();
+		var builder = new TimeFrameCandleBuilder(provider);
+
+		builder.GenerateEmptyCandles.AssertTrue("empty candles are generated by default");
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			}
+		};
+
+		var open = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var emitted = new List<CandleMessage>();
+
+		emitted.AddRange(builder.Process(subscription, new MockTransform { Price = 100m, Volume = 10, Time = open.AddSeconds(10) }).Select(c => c.TypedClone()));
+		emitted.AddRange(builder.Process(subscription, new MockTransform { Price = 101m, Volume = 10, Time = open.AddMinutes(3).AddSeconds(10) }).Select(c => c.TypedClone()));
+
+		var openTimes = emitted.Select(c => c.OpenTime).Distinct().ToList();
+
+		openTimes.Contains(open.AddMinutes(1)).AssertTrue("the 10:01 period had no trades and must be delivered as an empty candle");
+		openTimes.Contains(open.AddMinutes(2)).AssertTrue("the 10:02 period had no trades and must be delivered as an empty candle");
+	}
+
+	/// <summary>
+	/// TimeFrameCandleBuilder: with <see cref="TimeFrameCandleBuilder.GenerateEmptyCandles"/> off the periods without trades are skipped.
+	/// </summary>
+	[TestMethod]
+	public void TimeFrameCandleBuilder_GenerateEmptyCandles_Disabled_SkipsPeriods()
+	{
+		// The other half of the same setting: turned off, nothing is invented for periods without trades.
+		var provider = new MockExchangeInfoProvider();
+		var builder = new TimeFrameCandleBuilder(provider) { GenerateEmptyCandles = false };
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			}
+		};
+
+		var open = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var emitted = new List<CandleMessage>();
+
+		emitted.AddRange(builder.Process(subscription, new MockTransform { Price = 100m, Volume = 10, Time = open.AddSeconds(10) }).Select(c => c.TypedClone()));
+		emitted.AddRange(builder.Process(subscription, new MockTransform { Price = 101m, Volume = 10, Time = open.AddMinutes(3).AddSeconds(10) }).Select(c => c.TypedClone()));
+
+		var openTimes = emitted.Select(c => c.OpenTime).Distinct().ToList();
+
+		openTimes.Contains(open.AddMinutes(1)).AssertFalse("nothing must be invented for a period without trades");
+		openTimes.Contains(open.AddMinutes(2)).AssertFalse("nothing must be invented for a period without trades");
+	}
+
+	/// <summary>
+	/// TimeFrameCandleBuilder: the builder offers no setting it cannot honour.
+	/// </summary>
+	/// <remarks>
+	/// A public settable option is a promise: set it and the builder behaves differently. The one named
+	/// Timeout promised to close an unfinished candle a given shift past the period end, and the timer
+	/// that did it worked off a Connector and a CandleSeries. A builder reaches neither today: it is a
+	/// stateless instance registered once in <see cref="CandleBuilderProvider"/> and shared by every
+	/// subscription, and it is only ever entered from <see cref="ICandleBuilder.Process"/>, whose
+	/// incoming value is its only notion of time - a period in which nothing arrives never enters the
+	/// builder at all. Delivering periods without trades is what <see cref="TimeFrameCandleBuilder.GenerateEmptyCandles"/>
+	/// does, and nothing in the library reads Timeout. A value that is accepted, validated, stored and
+	/// round-tripped while changing nothing is worse than no setting at all, so the promise is kept by
+	/// removing it.
+	/// </remarks>
+	[TestMethod]
+	public void TimeFrameCandleBuilder_HasNoTimeoutSetting()
+	{
+		var dead = typeof(TimeFrameCandleBuilder)
+			.GetMember("Timeout", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+			.Select(m => $"{m.MemberType} {m.DeclaringType.Name}.{m.Name}")
+			.ToArray();
+
+		AreEqual(0, dead.Length, $"TimeFrameCandleBuilder still offers a setting nothing acts on: {string.Join(", ", dead)}.");
 	}
 
 	#endregion
@@ -1148,22 +1676,46 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, new MockTransform { Price = 125m, Volume = 60m, Time = baseTime.AddSeconds(1) }))
 			candles.Add(c);
 
-		var finishedBricks = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finishedBricks.Count.AssertEqual(3, "Should have 3 finished bricks from 100->125 with box size 10");
+		var boxSize = 10m;
 
-		var brick = finishedBricks.First() as RenkoCandleMessage;
-		IsNotNull(brick);
+		// The same candle object is yielded first as Active and later mutated to Finished,
+		// so it appears multiple times in the list by reference. Deduplicate by reference
+		// identity (CandleMessage does not override Equals, so Distinct uses reference equality)
+		// before counting. The move 100->125 with box size 10 is floor(25/10) = 2 completed
+		// bricks (100->110, 110->120) plus the still-active partial brick 120->125.
+		var finishedBricks = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.ToList();
 
-		// Verify Renko brick has valid OHLCV structure
-		// High should be >= max(Open, Close), Low should be <= min(Open, Close)
-		(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
-		(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
-		(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
-		(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+		finishedBricks.Count.AssertEqual(2, "Should have 2 finished bricks from 100->125 with box size 10");
 
-		// Volume should be positive
-		(brick.TotalVolume >= 0).AssertTrue("TotalVolume should be >= 0");
-		(brick.TotalTicks >= 1).AssertTrue("TotalTicks should be >= 1");
+		// Canonical Renko contract: every finished brick spans exactly one box, carries at
+		// least one tick and a positive volume, and is contiguous with the next brick
+		// (next.Open == prev.Close). Intermediate bricks produced by the engine are degenerate
+		// (O=H=L=C=openPrice, TotalTicks=null, TotalVolume=0), so these assertions fail today.
+		for (var i = 0; i < finishedBricks.Count; i++)
+		{
+			var brick = finishedBricks[i];
+
+			// High should be >= max(Open, Close), Low should be <= min(Open, Close).
+			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
+			(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
+			(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
+			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Each finished brick must span exactly one box.
+			((brick.ClosePrice - brick.OpenPrice).Abs()).AssertEqual(boxSize, "Finished brick height should equal box size");
+
+			// Every finished brick must carry the tick(s) and volume that drove the move.
+			(brick.TotalTicks >= 1).AssertTrue("Each finished brick should have at least 1 tick");
+			(brick.TotalVolume > 0).AssertTrue("Each finished brick should have positive volume");
+
+			// Bricks must be contiguous: the next brick opens where the previous one closed.
+			if (i > 0)
+				brick.OpenPrice.AssertEqual(finishedBricks[i - 1].ClosePrice, "Brick Open should equal previous brick Close");
+		}
 	}
 
 	/// <summary>
@@ -1467,6 +2019,59 @@ public class CandleBuilderTests : BaseTestClass
 
 		var level51 = levels.First(l => l.Price == 51m);
 		AreEqual(150m, level51.SellVolume, "Level 51 SellVolume should be 150");
+	}
+
+	/// <summary>
+	/// VolumeProfile + Renko: a tick's volume must be counted exactly once across the
+	/// produced volume profiles, even when a single tick triggers a multi-box move.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void RenkoCandleBuilder_VolumeProfile_MultiBoxMove_CountsVolumeOnce()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(10m)), // 10 point brick size
+				IsCalcVolumeProfile = true, // Enable volume profile
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var candles = new List<CandleMessage>();
+
+		// First tick establishes the baseline at 100.
+		foreach (var c in builder.Process(subscription, new MockTransform { Price = 100m, Volume = 50m, Side = Sides.Buy, Time = baseTime }))
+			candles.Add(c);
+
+		// Single tick triggers a multi-box move: 100 -> 125 with box size 10 is floor(25/10) = 2
+		// finished bricks (100->110, 110->120) plus the still-active partial 120->125.
+		foreach (var c in builder.Process(subscription, new MockTransform { Price = 125m, Volume = 60m, Side = Sides.Buy, Time = baseTime.AddSeconds(1) }))
+			candles.Add(c);
+
+		// Total volume actually fed across both ticks.
+		var fedVolume = 50m + 60m;
+
+		// Each yielded candle carries its own VolumeProfile via PriceLevels (a fresh profile is
+		// created per brick). The same candle object is yielded multiple times by reference, so
+		// deduplicate by reference identity before summing to avoid double-reading one profile.
+		var profileVolume = candles
+			.Distinct()
+			.Where(c => c.PriceLevels != null)
+			.SelectMany(c => c.PriceLevels)
+			.Sum(l => l.BuyVolume + l.SellVolume);
+
+		// Canonical contract: a tick's volume is counted exactly once in the profile, so the sum
+		// over every produced profile level must equal the total fed tick volume. The engine calls
+		// VolumeProfile.Update once per finished brick (CandleBuilder.cs:836) and once more at the
+		// end (CandleBuilder.cs:859), so the second tick's volume is multi-counted and this assert
+		// goes red until the over-counting is fixed.
+		profileVolume.AssertEqual(fedVolume, "Volume profile total must equal the fed tick volume (counted once)");
 	}
 
 	#endregion

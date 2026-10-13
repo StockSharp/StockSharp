@@ -143,9 +143,12 @@ public interface ICompositionModelBehavior<TNode, TLink> : ICloneable
 }
 
 /// <summary>
-/// Dummy implementation of <see cref="ICompositionModelBehavior{TNode,TLink}"/>.
+/// In-memory implementation of <see cref="ICompositionModelBehavior{TNode,TLink}"/>: keeps nodes and links
+/// in observable collections and raises <see cref="BehaviorChanged"/> notifications, without any visual or
+/// built-in undo backing of its own (an <see cref="IUndoManager"/> can be attached externally). Suitable for
+/// headless hosts and for UI front-ends that render the model directly (e.g. the Avalonia diagram editor).
 /// </summary>
-public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyCompositionModelNode, DummyCompositionModelLink>
+public class InMemoryCompositionModelBehavior : ICompositionModelBehavior<InMemoryCompositionModelNode, InMemoryCompositionModelLink>
 {
 	/// <inheritdoc/>
 	public ICompositionModel Parent { get; set; }
@@ -170,10 +173,10 @@ public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyComp
 		}
 	}
 
-	private IEnumerable<DummyCompositionModelNode> _nodes = new ObservableCollection<DummyCompositionModelNode>();
+	private IEnumerable<InMemoryCompositionModelNode> _nodes = new ObservableCollection<InMemoryCompositionModelNode>();
 
 	/// <inheritdoc/>
-	public IEnumerable<DummyCompositionModelNode> Nodes
+	public IEnumerable<InMemoryCompositionModelNode> Nodes
 	{
 		get => _nodes;
 		set
@@ -184,10 +187,10 @@ public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyComp
 		}
 	}
 
-	private IEnumerable<DummyCompositionModelLink> _links = new ObservableCollection<DummyCompositionModelLink>();
+	private IEnumerable<InMemoryCompositionModelLink> _links = new ObservableCollection<InMemoryCompositionModelLink>();
 
 	/// <inheritdoc/>
-	public IEnumerable<DummyCompositionModelLink> Links
+	public IEnumerable<InMemoryCompositionModelLink> Links
 	{
 		get => _links;
 		set
@@ -202,37 +205,40 @@ public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyComp
 	public event Action<(ModelChange change, object data, string propName, object oldValue, object oldParam, object newValue, object newParam)> BehaviorChanged;
 
 	/// <inheritdoc/>
-	public DummyCompositionModelNode FindNodeByKey(string key)
+	public InMemoryCompositionModelNode FindNodeByKey(string key)
 		=> Nodes.FirstOrDefault(n => n.Key == key);
 
 	/// <inheritdoc/>
-	public IEnumerable<DummyCompositionModelLink> GetLinksForNode(DummyCompositionModelNode node)
+	public IEnumerable<InMemoryCompositionModelLink> GetLinksForNode(InMemoryCompositionModelNode node)
 		=> Links.Where(l => l.From == node.Key || l.To == node.Key);
 
 	/// <inheritdoc/>
-	public void RaiseCommited(string name, DummyCompositionModelNode node, IUndoableEdit op) => throw new NotSupportedException();
+	public void RaiseCommited(string name, InMemoryCompositionModelNode node, IUndoableEdit op)
+		=> BehaviorChanged?.Invoke((ModelChange.Property, node, name, op, default, default, default));
 	/// <inheritdoc/>
-	public void RaiseLinksRemoved(DummyCompositionModelNode node) => throw new NotSupportedException();
+	public void RaiseLinksRemoved(InMemoryCompositionModelNode node)
+		=> BehaviorChanged?.Invoke((ModelChange.InvalidateRelationships, node, default, default, default, default, default));
 	/// <inheritdoc/>
-	public void RaiseSocketAdded(DummyCompositionModelNode node) => throw new NotSupportedException();
+	public void RaiseSocketAdded(InMemoryCompositionModelNode node)
+		=> BehaviorChanged?.Invoke((ModelChange.InvalidateRelationships, node, default, default, default, default, default));
 
 	/// <inheritdoc/>
-	public void AddLink(DummyCompositionModelLink link)
+	public void AddLink(InMemoryCompositionModelLink link)
 	{
-		((IList<DummyCompositionModelLink>)Links).Add(link);
+		((IList<InMemoryCompositionModelLink>)Links).Add(link);
 		BehaviorChanged?.Invoke((ModelChange.AddedLink, link, default, default, default, default, default));
 	}
 	/// <inheritdoc/>
-	public void RemoveLink(DummyCompositionModelLink link)
+	public void RemoveLink(InMemoryCompositionModelLink link)
 	{
-		((IList<DummyCompositionModelLink>)Links).Remove(link);
+		((IList<InMemoryCompositionModelLink>)Links).Remove(link);
 		BehaviorChanged?.Invoke((ModelChange.RemovedLink, link, default, default, default, default, default));
 	}
 
 	/// <inheritdoc/>
-	public DummyCompositionModelLink AddLink(DummyCompositionModelNode from, string fromPort, DummyCompositionModelNode to, string toPort)
+	public InMemoryCompositionModelLink AddLink(InMemoryCompositionModelNode from, string fromPort, InMemoryCompositionModelNode to, string toPort)
 	{
-		var link = new DummyCompositionModelLink
+		var link = new InMemoryCompositionModelLink
 		{
 			From = from.Key,
 			FromPort = fromPort,
@@ -243,24 +249,29 @@ public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyComp
 		return link;
 	}
 	/// <inheritdoc/>
-	public void RemoveLink(DummyCompositionModelNode from, string fromPort, DummyCompositionModelNode to, string toPort)
+	public void RemoveLink(InMemoryCompositionModelNode from, string fromPort, InMemoryCompositionModelNode to, string toPort)
 	{
-		var links = ((IList<DummyCompositionModelLink>)Links).RemoveWhere(e => e.From == from.Key && e.FromPort == fromPort && e.To == to.Key && e.ToPort == toPort);
+		var links = ((IList<InMemoryCompositionModelLink>)Links).RemoveWhere(e => e.From == from.Key && e.FromPort == fromPort && e.To == to.Key && e.ToPort == toPort);
 
 		foreach (var link in links)
 			BehaviorChanged?.Invoke((ModelChange.RemovedLink, link, default, default, default, default, default));
 	}
 
 	/// <inheritdoc/>
-	public void AddNode(DummyCompositionModelNode node)
+	public void AddNode(InMemoryCompositionModelNode node)
 	{
-		((IList<DummyCompositionModelNode>)Nodes).Add(node);
+		// A freshly added node (e.g. from the palette) carries no key; consumers index nodes/links and render
+		// by key, so assign a unique one. A key supplied by deserialization is preserved.
+		if (node.Key.IsEmpty())
+			node.Key = Guid.NewGuid().To<string>();
+
+		((IList<InMemoryCompositionModelNode>)Nodes).Add(node);
 		BehaviorChanged?.Invoke((ModelChange.AddedNode, node, default, default, default, default, default));
 	}
 	/// <inheritdoc/>
-	public void RemoveNode(DummyCompositionModelNode node)
+	public void RemoveNode(InMemoryCompositionModelNode node)
 	{
-		((IList<DummyCompositionModelNode>)Nodes).Remove(node);
+		((IList<InMemoryCompositionModelNode>)Nodes).Remove(node);
 		BehaviorChanged?.Invoke((ModelChange.RemovedNode, node, default, default, default, default, default));
 	}
 
@@ -283,5 +294,5 @@ public class DummyCompositionModelBehavior : ICompositionModelBehavior<DummyComp
 		return true;
 	}
 
-	object ICloneable.Clone() => new DummyCompositionModelBehavior();
+	object ICloneable.Clone() => new InMemoryCompositionModelBehavior();
 }

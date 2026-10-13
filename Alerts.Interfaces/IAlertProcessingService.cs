@@ -3,7 +3,7 @@ namespace StockSharp.Alerts;
 /// <summary>
 /// Defines an alert processing service.
 /// </summary>
-public interface IAlertProcessingService : IPersistable, ILogSource
+public interface IAlertProcessingService : IAsyncPersistable, ILogSource
 {
 	/// <summary>
 	/// All schemas.

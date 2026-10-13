@@ -269,8 +269,11 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 
 		var valuesByName = values.Where(p => p.Key != _inputSocket).ToDictionary(p => p.Key.Name, p => (object)(int)p.Value.GetValue<decimal>());
 
+		// The property was offered to the author from the socket's type, so it is read back under that type:
+		// a message implements an interface member explicitly, and one name can mean different values on
+		// different interfaces of the same class.
 		object getPropValue(object entity, string propName)
-			=> entity.GetPropValue(propName, (v, n) => v.TryGetVirtualValue(n, out var pv) ? pv : null, valuesByName);
+			=> entity.GetPropValue(Type?.Type, propName, (v, n) => v.TryGetVirtualValue(n, out var pv) ? pv : null, valuesByName);
 
 		if (nextValue is IComplexIndicatorValue complex)
 		{
@@ -316,20 +319,20 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	protected override void SaveState(SettingsStorage storage)
 	{
-		base.Save(storage);
+		base.SaveState(storage);
 
 		if (Scope<CopyPasteContext>.IsDefined)
 			storage.SetValue(nameof(_indicatorType), _indicatorType);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void OnLoading(SettingsStorage storage)
 	{
+		base.OnLoading(storage);
+
 		if (Scope<CopyPasteContext>.IsDefined)
 			_indicatorType = storage.GetValue<Type>(nameof(_indicatorType));
-
-		base.Load(storage);
 	}
 }

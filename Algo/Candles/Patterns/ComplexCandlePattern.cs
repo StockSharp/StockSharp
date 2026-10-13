@@ -36,6 +36,13 @@ public class ComplexCandlePattern : ICandlePattern
 
 	private void UpdateCount() => CandlesCount = Inner.Sum(c => c.CandlesCount);
 
+	/// <inheritdoc />
+	public async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		foreach (var inner in _inner)
+			await inner.PrepareAsync(cancellationToken);
+	}
+
 	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
 	{
 		if(candles.Length != CandlesCount)
@@ -61,22 +68,32 @@ public class ComplexCandlePattern : ICandlePattern
 			throw new InvalidOperationException($"cannot change initialized pattern (name='{Name}', {_inner.Count} inner patterns)");
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var inner = new List<SettingsStorage>();
+
+		foreach (var pattern in Inner)
+			inner.Add(await pattern.SaveEntireAsync(false, cancellationToken));
+
 		storage
 			.Set(nameof(Name), Name)
-			.Set(nameof(Inner), Inner.Select(i => i.SaveEntire(false)).ToArray())
+			.Set(nameof(Inner), inner.ToArray())
 		;
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		EnsureEmpty();
+
+		var inner = new List<ICandlePattern>();
+
+		foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)))
+			inner.Add(await s.LoadEntireAsync<ICandlePattern>(cancellationToken));
 
 		Name = storage.GetValue<string>(nameof(Name));
 
 		_inner.Clear();
-		_inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
+		_inner.AddRange(inner);
 		UpdateCount();
 	}
 

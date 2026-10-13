@@ -3,7 +3,7 @@ namespace StockSharp.MatchingEngine;
 /// <summary>
 /// Interface for controlling margin trading logic.
 /// Leverage is per-position (<see cref="PositionInfo.Leverage"/>).
-/// Margin call/stop-out levels are per-portfolio (<see cref="IPortfolio.MarginCallLevel"/>, <see cref="IPortfolio.StopOutLevel"/>).
+/// Margin call/stop-out levels are per-portfolio (<see cref="EmulatedPortfolio.MarginCallLevel"/>, <see cref="EmulatedPortfolio.StopOutLevel"/>).
 /// </summary>
 public interface IMarginController
 {
@@ -24,7 +24,7 @@ public interface IMarginController
 	/// <param name="volume">Order volume.</param>
 	/// <param name="position">Position info (for leverage). Can be null.</param>
 	/// <returns>Error if insufficient funds, null otherwise.</returns>
-	InvalidOperationException ValidateOrder(IPortfolio portfolio, decimal price, decimal volume, PositionInfo position);
+	InvalidOperationException ValidateOrder(EmulatedPortfolio portfolio, decimal price, decimal volume, PositionInfo position);
 
 	/// <summary>
 	/// Calculate current margin level for a portfolio.
@@ -32,23 +32,23 @@ public interface IMarginController
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="unrealizedPnL">Current unrealized PnL.</param>
 	/// <returns>Margin level ratio (equity / blocked). Returns <see cref="decimal.MaxValue"/> if no blocked money.</returns>
-	decimal CheckMarginLevel(IPortfolio portfolio, decimal unrealizedPnL);
+	decimal CheckMarginLevel(EmulatedPortfolio portfolio, decimal unrealizedPnL);
 
 	/// <summary>
 	/// Check if portfolio is in margin call state.
-	/// Uses <see cref="IPortfolio.MarginCallLevel"/>.
+	/// Uses <see cref="EmulatedPortfolio.MarginCallLevel"/>.
 	/// </summary>
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="unrealizedPnL">Current unrealized PnL.</param>
 	/// <returns>True if margin level is at or below margin call threshold.</returns>
-	bool IsMarginCall(IPortfolio portfolio, decimal unrealizedPnL);
+	bool IsMarginCall(EmulatedPortfolio portfolio, decimal unrealizedPnL);
 
 	/// <summary>
 	/// Check if portfolio is in stop-out state.
-	/// Uses <see cref="IPortfolio.EnableStopOut"/> and <see cref="IPortfolio.StopOutLevel"/>.
+	/// Uses <see cref="EmulatedPortfolio.EnableStopOut"/> and <see cref="EmulatedPortfolio.StopOutLevel"/>.
 	/// </summary>
 	/// <param name="portfolio">Portfolio.</param>
 	/// <param name="unrealizedPnL">Current unrealized PnL.</param>
 	/// <returns>True if stop-out is enabled and margin level is at or below stop-out threshold.</returns>
-	bool IsStopOut(IPortfolio portfolio, decimal unrealizedPnL);
+	bool IsStopOut(EmulatedPortfolio portfolio, decimal unrealizedPnL);
 }

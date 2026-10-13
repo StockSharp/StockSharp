@@ -59,21 +59,9 @@ public class StorageNotParallelizeTests : BaseTestClass
 
 		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo).ToArrayAsync(token);
 
-		CandleMessage prevCandle = null;
-
-		foreach (var c in candles)
-		{
-			if (prevCandle == null)
-			{
-				prevCandle = c.TypedClone();
-				continue;
-			}
-
-			(c.OpenTime > prevCandle.OpenTime ||
-				c.OpenTime == prevCandle.OpenTime && prevCandle.State == CandleStates.Active).AssertTrue();
-
-			prevCandle = c.TypedClone();
-		}
+		candles.Length.AssertGreater(0);
+		candles.All(c => c.State == CandleStates.Finished).AssertTrue();
+		candles.Zip(candles.Skip(1), (prev, current) => current.OpenTime > prev.OpenTime).All(isOrdered => isOrdered).AssertTrue();
 	}
 
 	[TestMethod]

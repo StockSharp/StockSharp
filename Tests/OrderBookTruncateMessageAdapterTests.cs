@@ -29,8 +29,14 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		return msg;
 	}
 
+	/// <summary>
+	/// Someone who asks for five levels gets five levels. The feed underneath may only be able to
+	/// serve ten, and asking it for ten is the right thing to do - but that is the adapter's business,
+	/// not the subscriber's: the extra five are cut off before the book is handed over, and the
+	/// request the subscriber still holds is left as it was written.
+	/// </summary>
 	[TestMethod]
-	public async Task MarketDepthSubscribe_RewritesMaxDepth_ToNearestSupportedDepth()
+	public async Task TruncatedBookReachesTheSubscriberAtTheDepthAsked()
 	{
 		var token = CancellationToken;
 
@@ -43,6 +49,9 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
 		var md = new MarketDataMessage
 		{
 			IsSubscribe = true,
@@ -54,10 +63,23 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(md, token);
 
-		md.MaxDepth.AssertEqual(5);
+		md.MaxDepth.AssertEqual(5, "the subscriber's own request is not rewritten under it");
 
 		inner.InMessages.Count.AssertEqual(1);
 		AreEqual(10, ((MarketDataMessage)inner.InMessages[0]).MaxDepth, "MaxDepth passed to inner adapter.");
+
+		output.Clear();
+
+		// the feed serves the ten levels it was asked for
+		await inner.SendOutMessageAsync(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10), token);
+
+		var book = output.OfType<QuoteChangeMessage>().Single();
+
+		book.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue("the book is delivered to the subscription that asked for it");
+
+		// the five best levels of each side, and nothing of the five behind them
+		AssertQuotes(book.Bids, [(100m, 1m), (99m, 2m), (98m, 3m), (97m, 4m), (96m, 5m)]);
+		AssertQuotes(book.Asks, [(101m, 1m), (102m, 2m), (103m, 3m), (104m, 4m), (105m, 5m)]);
 	}
 
 	[TestMethod]
@@ -340,6 +362,292 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		quote.Bids.Length.AssertEqual(10);
 		quote.Asks.Length.AssertEqual(10);
 	}
+
+	#region Filtered market depth
+
+	// Public book shared by the filtered depth tests: bid 100 holds 10 lots and bid 99 holds 8, so every
+	// expected volume below is that public figure minus the own balance still working at that price.
+	private static QuoteChangeMessage CreatePublicBook(SecurityId securityId, long bookSubscriptionId)
+		=> new QuoteChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10m), new QuoteChange(99m, 8m)],
+			Asks = [new QuoteChange(101m, 12m), new QuoteChange(102m, 9m)],
+		}.SetSubscriptionIds(subscriptionId: bookSubscriptionId);
+
+	// An order announced by the order status subscription names itself by TransactionId.
+	private static ExecutionMessage CreateOwnOrder(SecurityId securityId, long ordersSubscriptionId, long transactionId, Sides side, decimal price, decimal balance)
+		=> new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = securityId,
+			ServerTime = DateTime.UtcNow,
+			TransactionId = transactionId,
+			OrderState = OrderStates.Active,
+			Side = side,
+			OrderPrice = price,
+			OrderVolume = balance,
+			Balance = balance,
+		}.SetSubscriptionIds(subscriptionId: ordersSubscriptionId);
+
+	// A later state of an already known order names that order by OriginalTransactionId.
+	private static ExecutionMessage CreateOwnOrderUpdate(SecurityId securityId, long ordersSubscriptionId, long orderTransactionId, OrderStates state, decimal balance)
+		=> new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = securityId,
+			ServerTime = DateTime.UtcNow,
+			OriginalTransactionId = orderTransactionId,
+			OrderState = state,
+			Balance = balance,
+		}.SetSubscriptionIds(subscriptionId: ordersSubscriptionId);
+
+	private static OrderRegisterMessage CreateRegister(SecurityId securityId, long transactionId, Sides side, decimal price, decimal volume)
+		=> new()
+		{
+			TransactionId = transactionId,
+			SecurityId = securityId,
+			Side = side,
+			Price = price,
+			Volume = volume,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = "TestPf",
+		};
+
+	private static async Task<(long bookId, long ordersId)> SubscribeFilteredAsync(FilteredMarketDepthAdapter adapter, RecordingPassThroughMessageAdapter inner, SecurityId securityId, long transactionId, CancellationToken token)
+	{
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = transactionId,
+			SecurityId = securityId,
+			DataType2 = DataType.FilteredMarketDepth,
+		}, token);
+
+		// The adapter splits the request into a plain book subscription and an order status subscription.
+		var book = inner.InMessages.OfType<MarketDataMessage>().Single(m => m.DataType2 == DataType.MarketDepth);
+		var orders = inner.InMessages.OfType<OrderStatusMessage>().Single();
+
+		return (book.TransactionId, orders.TransactionId);
+	}
+
+	private static QuoteChangeMessage TakeFilteredBook(List<Message> output, long subscribeId)
+	{
+		var book = output.OfType<QuoteChangeMessage>().Single();
+
+		book.IsFiltered.AssertTrue();
+		book.GetSubscriptionIds().SequenceEqual([subscribeId]).AssertTrue();
+
+		output.Clear();
+
+		return book;
+	}
+
+	private static void AssertQuotes(QuoteChange[] quotes, (decimal price, decimal volume)[] expected)
+	{
+		quotes.Length.AssertEqual(expected.Length);
+
+		for (var i = 0; i < expected.Length; i++)
+		{
+			quotes[i].Price.AssertEqual(expected[i].price);
+			quotes[i].Volume.AssertEqual(expected[i].volume);
+		}
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_OwnOrder_IsRemovedFromPublicBookOnce()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateOwnOrder(secId, ordersId, 555, Sides.Buy, 99m, 3m), token);
+
+		// One own buy of 3 working at 99: the 99 bid shows 8 - 3 = 5, every other row is the public one.
+		var book = TakeFilteredBook(output, 1000);
+		AssertQuotes(book.Bids, [(100m, 10m), (99m, 5m)]);
+		AssertQuotes(book.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_SameOwnOrderDeliveredTwice_IsRemovedOnce()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateOwnOrder(secId, ordersId, 555, Sides.Buy, 99m, 3m), token);
+
+		var first = TakeFilteredBook(output, 1000);
+		AssertQuotes(first.Bids, [(100m, 10m), (99m, 5m)]);
+
+		// The same order announced again is still one order of 3 lots, so the 99 bid stays at 8 - 3 = 5.
+		await inner.SendOutMessageAsync(CreateOwnOrder(secId, ordersId, 555, Sides.Buy, 99m, 3m), token);
+
+		var second = TakeFilteredBook(output, 1000);
+		AssertQuotes(second.Bids, [(100m, 10m), (99m, 5m)]);
+		AssertQuotes(second.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_PartiallyFilledOwnOrder_RemovesOnlyRemainingBalance()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+		await inner.SendOutMessageAsync(CreateOwnOrder(secId, ordersId, 555, Sides.Buy, 99m, 3m), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateOwnOrderUpdate(secId, ordersId, 555, OrderStates.Active, 1m), token);
+
+		// 2 of the 3 lots are gone from the book by being traded, only the balance of 1 is still ours: 8 - 1 = 7.
+		var book = TakeFilteredBook(output, 1000);
+		AssertQuotes(book.Bids, [(100m, 10m), (99m, 7m)]);
+		AssertQuotes(book.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_CancelledOwnOrder_ReturnsItsVolumeToTheBook()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+		await inner.SendOutMessageAsync(CreateOwnOrder(secId, ordersId, 555, Sides.Buy, 99m, 3m), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateOwnOrderUpdate(secId, ordersId, 555, OrderStates.Done, 3m), token);
+
+		// Nothing of ours is left working, so the filtered book is the public book again.
+		var book = TakeFilteredBook(output, 1000);
+		AssertQuotes(book.Bids, [(100m, 10m), (99m, 8m)]);
+		AssertQuotes(book.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_ReplacedOwnOrder_MovesRemovedVolumeToTheNewPrice()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await adapter.SendInMessageAsync(CreateRegister(secId, 555, Sides.Buy, 99m, 3m), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+
+		var before = TakeFilteredBook(output, 1000);
+		AssertQuotes(before.Bids, [(100m, 10m), (99m, 5m)]);
+
+		await adapter.SendInMessageAsync(new OrderReplaceMessage
+		{
+			TransactionId = 556,
+			OriginalTransactionId = 555,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 3m,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = "TestPf",
+		}, token);
+
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateOwnOrderUpdate(secId, ordersId, 555, OrderStates.Done, 3m), token);
+
+		// The 3 lots moved from 99 to 100: 99 is whole again at 8, and 100 shows 10 - 3 = 7.
+		var after = TakeFilteredBook(output, 1000);
+		AssertQuotes(after.Bids, [(100m, 7m), (99m, 8m)]);
+		AssertQuotes(after.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	[TestMethod]
+	public async Task FilteredDepth_TwoOwnOrdersAtOnePrice_AreBothAccountedFor()
+	{
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeFilteredAsync(adapter, inner, secId, 1000, token);
+
+		await adapter.SendInMessageAsync(CreateRegister(secId, 555, Sides.Buy, 99m, 3m), token);
+		await adapter.SendInMessageAsync(CreateRegister(secId, 556, Sides.Buy, 99m, 2m), token);
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreatePublicBook(secId, bookId), token);
+
+		// Both orders sit at 99, so 3 + 2 lots come out of that bid: 8 - 5 = 3.
+		var both = TakeFilteredBook(output, 1000);
+		AssertQuotes(both.Bids, [(100m, 10m), (99m, 3m)]);
+
+		await inner.SendOutMessageAsync(CreateOwnOrderUpdate(secId, ordersId, 555, OrderStates.Done, 3m), token);
+
+		// Only the order of 2 lots is left working: 8 - 2 = 6.
+		var left = TakeFilteredBook(output, 1000);
+		AssertQuotes(left.Bids, [(100m, 10m), (99m, 6m)]);
+		AssertQuotes(left.Asks, [(101m, 12m), (102m, 9m)]);
+	}
+
+	#endregion
+
 	#region Mock Manager Tests
 
 	[TestMethod]
@@ -356,17 +664,26 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.MarketDepth,
 			MaxDepth = 10,
 		};
+		var toOut = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
 
 		manager
 			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
-			.Returns((toInner: (Message)toInner, toOut: []));
+			.Returns((toInner: (Message)toInner, toOut: [toOut]));
 
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) =>
+		{
+			output.Add(message);
+			return default;
+		};
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
 		inner.InMessages.Count.AssertEqual(1);
 		inner.InMessages[0].AssertSame(toInner);
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(toOut);
 
 		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
 	}

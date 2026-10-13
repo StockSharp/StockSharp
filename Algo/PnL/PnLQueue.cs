@@ -6,7 +6,7 @@ namespace StockSharp.Algo.PnL;
 public class PnLQueue
 {
 	private Sides _openedPosSide;
-	private readonly SynchronizedStack<RefPair<decimal, decimal>> _openedTrades = [];
+	private readonly SynchronizedQueue<RefPair<decimal, decimal>> _openedTrades = [];
 	private decimal _multiplier;
 
 	private decimal? _lastPrice;
@@ -151,6 +151,11 @@ public class PnLQueue
 		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
+		// The queue closes an open position against trades going the other way, so a trade whose
+		// direction is unknown cannot be told from one that closes it.
+		if (trade.Side is not Sides side)
+			throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(trade));
+
 		var closedVolume = 0m;
 		var pnl = 0m;
 		var volume = trade.SafeGetVolume();
@@ -166,7 +171,7 @@ public class PnLQueue
 			{
 				var currTrade = _openedTrades.Peek();
 
-				if (_openedPosSide != trade.Side)
+				if (_openedPosSide != side)
 				{
 					while (volume > 0)
 					{
@@ -184,7 +189,7 @@ public class PnLQueue
 							continue;
 
 						currTrade = null;
-						_openedTrades.Pop();
+						_openedTrades.Dequeue();
 
 						if (_openedTrades.Count == 0)
 							break;
@@ -194,8 +199,8 @@ public class PnLQueue
 
 			if (volume > 0)
 			{
-				_openedPosSide = trade.Side;
-				_openedTrades.Push(RefTuple.Create(price, volume));
+				_openedPosSide = side;
+				_openedTrades.Enqueue(RefTuple.Create(price, volume));
 			}
 
 			tradePnL = _multiplier * pnl;

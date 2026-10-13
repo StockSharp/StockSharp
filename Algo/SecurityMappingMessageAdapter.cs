@@ -65,9 +65,10 @@ public class SecurityMappingMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="SecurityMappingMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SecurityMappingMessageAdapter(InnerAdapter.TypedClone(), Provider);
+		return new SecurityMappingMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), Provider);
 	}
 }

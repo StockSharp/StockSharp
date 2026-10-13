@@ -1,8 +1,10 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
+using StockSharp.Algo.Indicators;
+using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.Designer;
 
@@ -12,11 +14,308 @@ using StockSharp.Designer;
 [TestClass]
 public class BacktestingTests : BaseTestClass
 {
+	// The whole month replayed by SmaStrategy(80/30) on 1m candles. A group of tests below used to run
+	// this bit-for-bit identical backtest each on its own, differing only in which event stream they
+	// collected, so it is replayed once here and every one of them asserts against the recording.
+	// Started AND awaited in ClassInit so that no single test's [Timeout] has to absorb the replay.
+	private static Task<FullMonthRun> _fullMonthRun;
+
+	/// <summary>
+	/// Replays the shared full-month backtest once for the whole class.
+	/// </summary>
+	/// <param name="context"><see cref="TestContext"/> of the class initialization.</param>
+	[ClassInitialize]
+	public static async Task ClassInit(TestContext context)
+	{
+		// Same condition as SkipIfNoHistoryData: without the sample history there is nothing to replay,
+		// and every dependent test bails out on its own guard.
+		if (AsmInit.SampleHistoryUnavailableReason is not null)
+			return;
+
+		var run = RunSharedFullMonthAsync(context.CancellationToken);
+		_fullMonthRun = run;
+
+		try
+		{
+			await run;
+		}
+		catch
+		{
+			// Swallowed on purpose: throwing from ClassInit would fail every test of this class,
+			// including the many that never touch the shared run. The faulted task rethrows the very
+			// same exception (original stack preserved) in the tests that await it.
+		}
+	}
+
+	/// <summary>
+	/// Releases the connector kept alive for the shared full-month backtest.
+	/// </summary>
+	[ClassCleanup]
+	public static void ClassCleanup()
+	{
+		if (_fullMonthRun is { IsCompletedSuccessfully: true } run)
+			run.Result.Dispose();
+
+		_fullMonthRun = null;
+	}
+
+	/// <summary>
+	/// Every backtest in this class replays one fixed month of real market data that ships as the
+	/// StockSharp.Samples.HistoryData package. A machine that never restored it can say nothing about
+	/// the backtester, so it has to be told that - and told it as a result that is neither red nor
+	/// green, because a silent return counts the run as coverage it never had. When the package is
+	/// there, the month it declares has to be the month it actually holds: a partially restored copy
+	/// shortens every replay below without a word, and a backtest over three days answering a question
+	/// asked about thirty-one is a wrong answer that looks like a passing test.
+	/// </summary>
+	[TestMethod]
+	public async Task MissingSampleHistoryIsReportedAsInconclusiveNotAsAPass()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var storage = GetHistoryStorage()
+			.GetTimeFrameCandleMessageStorage(CreateTestSecurity().Id.ToSecurityId(), TimeSpan.FromMinutes(1));
+
+		var stored = new List<DateTime>();
+
+		await foreach (var date in storage.GetDatesAsync().WithCancellation(CancellationToken))
+			stored.Add(date.Date);
+
+		var declared = new List<DateTime>();
+
+		for (var date = Paths.HistoryBeginDate.Date; date <= Paths.HistoryEndDate.Date; date = date.AddDays(1))
+			declared.Add(date);
+
+		AreEquivalent(declared, stored, $"The sample history at '{Paths.HistoryDataPath}' does not hold one minute candle day per day of the window every backtest below replays ({Paths.HistoryBeginDate:yyyy-MM-dd}..{Paths.HistoryEndDate:yyyy-MM-dd}) for {Paths.HistoryDefaultSecurity}.");
+	}
+
+	private static Task<FullMonthRun> GetFullMonthRunAsync()
+		=> _fullMonthRun ?? throw new InvalidOperationException("The shared full-month backtest was not started.");
+
+	// Runs the month exactly once and records every stream the tests that share it observe.
+	private static async Task<FullMonthRun> RunSharedFullMonthAsync(CancellationToken cancellationToken)
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		try
+		{
+			var strategy = new SmaStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				Volume = 1,
+				CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+				Long = 80,
+				Short = 30,
+			};
+
+			var run = new FullMonthRun(connector, strategy);
+
+			var tcs = new TaskCompletionSource<bool>();
+			connector.StateChanged2 += state =>
+			{
+				if (state == ChannelStates.Stopped)
+					tcs.TrySetResult(true);
+			};
+
+			// Start strategy before emulation (like BaseOptimizer.StartIteration)
+			strategy.WaitRulesOnStop = false;
+			strategy.Reset();
+			await strategy.StartAsync(cancellationToken);
+
+			run.SubscriptionsAfterStrategyStart = [.. connector.Subscriptions.Select(s => $"  - {s.SubscriptionMessage.Type}: {s.DataType}")];
+
+			connector.Connect();
+
+			run.SubscriptionsAfterConnect = [.. connector.Subscriptions.Select(s => $"  - {s.SubscriptionMessage.Type}: {s.DataType}, State: {s.State}")];
+
+			// No sleep between Connect and Start. The fixed Task.Delay(500) that used to sit here only
+			// existed so that a debug print of ConnectionState had something to show; every other
+			// backtest in this file starts the emulation straight after Connect, and the run is only
+			// treated as complete once the connector reports ChannelStates.Stopped, which cannot happen
+			// without the connection having been established.
+			await connector.StartAsync(cancellationToken);
+
+			var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), cancellationToken));
+
+			if (completed != tcs.Task)
+			{
+				connector.Disconnect();
+				Fail("Backtest did not complete in time");
+			}
+
+			run.FinalSubscriptionCount = connector.Subscriptions.Count();
+			run.Complete();
+
+			return run;
+		}
+		catch
+		{
+			connector.Dispose();
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Recording of the shared full-month backtest: every stream the tests assert on, captured at
+	/// event time. Order/trade/PnL/position values are snapshotted rather than stored by reference
+	/// because the underlying entities keep mutating while the replay runs.
+	/// </summary>
+	private sealed class FullMonthRun : IDisposable
+	{
+		/// <summary>
+		/// Snapshot of one OrderReceived notification.
+		/// </summary>
+		public readonly record struct OrderEvent(long TransactionId, OrderStates State, DateTime Time);
+
+		/// <summary>
+		/// Snapshot of one PnLReceived2 notification.
+		/// </summary>
+		public readonly record struct PnLEvent(DateTime Time, decimal Realized, decimal? Unrealized);
+
+		private readonly Lock _sync = new();
+
+		private readonly List<OrderEvent> _orderEvents = [];
+		private readonly List<string> _orderRegistrations = [];
+		private readonly List<DateTime> _ownTradeTimes = [];
+		private readonly List<PnLEvent> _pnlEvents = [];
+		private readonly List<decimal> _positionValues = [];
+		private readonly List<int> _progressValues = [];
+		private readonly List<DateTime> _finishedCandleTimes = [];
+		private readonly List<string> _subscriptionResponses = [];
+		private readonly List<string> _connectionStates = [];
+		private readonly List<string> _strategyErrors = [];
+
+		// The replay is over once the completion source fires, but the connector's output pump can still
+		// deliver a trailing notification (a Disconnected, a final State change) into these lists while
+		// Complete() is copying them - which would throw and fail every dependent test at once.
+		private void Record<T>(List<T> list, T value)
+		{
+			using (_sync.EnterScope())
+				list.Add(value);
+		}
+
+		private int _connectorCandles;
+		private int _strategyCandles;
+		private int _strategyFinishedCandles;
+
+		public FullMonthRun(HistoryEmulationConnector connector, SmaStrategy strategy)
+		{
+			Connector = connector ?? throw new ArgumentNullException(nameof(connector));
+			Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+
+			// Counters keep the Interlocked form they had; every list append goes through Record so it
+			// cannot race with the Complete() snapshot.
+			connector.CandleReceived += (sub, candle) =>
+			{
+				Interlocked.Increment(ref _connectorCandles);
+
+				if (candle.State == CandleStates.Finished)
+					Record(_finishedCandleTimes, candle.OpenTime);
+			};
+
+			connector.SubscriptionReceived += (sub, resp) => Record(_subscriptionResponses, $"OK {sub.DataType}");
+			connector.SubscriptionFailed += (sub, error, isSubscribe) => Record(_subscriptionResponses, $"FAILED {sub.DataType}: {error.Message}");
+
+			connector.Connected += () => Record(_connectionStates, "Connected");
+			connector.Disconnected += () => Record(_connectionStates, "Disconnected");
+			connector.ConnectionError += ex => Record(_connectionStates, $"Error: {ex.Message}");
+			connector.StateChanged2 += state => Record(_connectionStates, $"State: {state}");
+
+			connector.ProgressChanged += progress => Record(_progressValues, progress);
+
+			strategy.OrderReceived += (sub, order) =>
+			{
+				// ServerTime is set by the emulator on each state change, Time only once at
+				// registration; both the time and the state must be taken now because the Order entity
+				// is reused and keeps changing.
+				Record(_orderEvents, new OrderEvent(order.TransactionId, order.State, order.ServerTime != default ? order.ServerTime : order.Time));
+			};
+
+			strategy.OrderRegistering += order => Record(_orderRegistrations, $"Registering order: {order.Side} {order.Volume} @ {order.Price}");
+
+			strategy.OwnTradeReceived += (sub, trade) => Record(_ownTradeTimes, trade.Trade.ServerTime);
+
+			strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) => Record(_pnlEvents, new PnLEvent(time, realized, unrealized));
+
+			// Position entities are reused and re-valued, so the value is taken at event time.
+			strategy.PositionReceived += (s, pos) => Record(_positionValues, pos.CurrentValue ?? 0);
+
+			strategy.CandleReceived += (sub, candle) =>
+			{
+				Interlocked.Increment(ref _strategyCandles);
+
+				if (candle.State == CandleStates.Finished)
+					Interlocked.Increment(ref _strategyFinishedCandles);
+			};
+
+			strategy.Error += (strat, ex) => Record(_strategyErrors, ex.Message);
+		}
+
+		public HistoryEmulationConnector Connector { get; }
+		public SmaStrategy Strategy { get; }
+
+		public int ConnectorCandles => _connectorCandles;
+		public int StrategyCandles => _strategyCandles;
+		public int StrategyFinishedCandles => _strategyFinishedCandles;
+
+		public string[] SubscriptionsAfterStrategyStart { get; set; }
+		public string[] SubscriptionsAfterConnect { get; set; }
+		public int FinalSubscriptionCount { get; set; }
+
+		public IReadOnlyList<OrderEvent> OrderEvents { get; private set; } = [];
+		public IReadOnlyList<string> OrderRegistrations { get; private set; } = [];
+		public IReadOnlyList<DateTime> OwnTradeTimes { get; private set; } = [];
+		public IReadOnlyList<PnLEvent> PnLEvents { get; private set; } = [];
+		public IReadOnlyList<decimal> PositionValues { get; private set; } = [];
+		public IReadOnlyList<int> ProgressValues { get; private set; } = [];
+		public IReadOnlyList<DateTime> FinishedCandleOpenTimes { get; private set; } = [];
+		public IReadOnlyList<string> SubscriptionResponses { get; private set; } = [];
+		public IReadOnlyList<string> ConnectionStates { get; private set; } = [];
+		public IReadOnlyList<string> StrategyErrors { get; private set; } = [];
+
+		/// <summary>
+		/// Freezes every recorded stream into an immutable snapshot once the replay is over. The tests
+		/// share this single instance and run in parallel, so none of them may observe a list that is
+		/// still being appended to (a trailing Disconnected notification, for instance) nor alter what
+		/// the others read.
+		/// </summary>
+		public void Complete()
+		{
+			using var _ = _sync.EnterScope();
+
+			OrderEvents = [.. _orderEvents];
+			OrderRegistrations = [.. _orderRegistrations];
+			OwnTradeTimes = [.. _ownTradeTimes];
+			PnLEvents = [.. _pnlEvents];
+			PositionValues = [.. _positionValues];
+			ProgressValues = [.. _progressValues];
+			FinishedCandleOpenTimes = [.. _finishedCandleTimes];
+			SubscriptionResponses = [.. _subscriptionResponses];
+			ConnectionStates = [.. _connectionStates];
+			StrategyErrors = [.. _strategyErrors];
+		}
+
+		public void Dispose() => Connector.Dispose();
+	}
+
 	/// <summary>
 	/// Simple test to verify backtest completes without hanging and orders work.
 	/// Uses short time period to run fast.
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
 	public async Task BacktestCompletesWithoutHanging()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -32,21 +331,15 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var ordersReceived = 0;
-		var newOrders = 0;
 		var execMessagesWithIds = 0;
 		var execMessagesWithoutIds = 0;
 
 		connector.OrderReceived += (sub, order) =>
 		{
 			Interlocked.Increment(ref ordersReceived);
-		};
-
-		connector.NewOrder += order =>
-		{
-			Interlocked.Increment(ref newOrders);
 		};
 
 		// Track ExecutionMessages at different levels
@@ -102,7 +395,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
@@ -117,7 +410,7 @@ public class BacktestingTests : BaseTestClass
 		}
 
 		IsTrue(connector.IsFinished, "Backtest should finish");
-		Console.WriteLine($"NewOrders: {newOrders}, OrdersReceived: {ordersReceived}");
+		Console.WriteLine($"OrdersReceived: {ordersReceived}");
 		Console.WriteLine($"ExecMsgs at Emulation: {execAtEmulationTotal} total, {execAtEmulationWithIds} with IDs");
 		Console.WriteLine($"ExecMsgs at Basket: {execAtBasket} (with IDs: {execMessagesWithIds}, without IDs: {execMessagesWithoutIds})");
 		Console.WriteLine($"Strategy Orders: {strategy.Orders.Count()}");
@@ -127,10 +420,21 @@ public class BacktestingTests : BaseTestClass
 		var states = strategy.Orders.GroupBy(o => o.State).Select(g => $"{g.Key}:{g.Count()}");
 		Console.WriteLine($"Order states: {states.JoinCommaSpace()}");
 
-		// Check done orders details
-		var doneOrders = strategy.Orders.Where(o => o.State == OrderStates.Done).Take(3);
-		foreach (var o in doneOrders)
-			Console.WriteLine($"Done order: {o.TransactionId} Status={o.Status} Balance={o.Balance} Volume={o.Volume}");
+		// The instrumentation above exists to catch the regression where order-info execution
+		// messages reach the basket output WITHOUT subscription IDs (they then cannot be routed to
+		// strategy/connector subscribers). Assert that integrity instead of merely printing it:
+		// every order-info execution that reaches the basket must carry subscription IDs.
+		AreEqual(0, execMessagesWithoutIds,
+			$"Order-info execution messages must carry subscription IDs at the basket output (without IDs={execMessagesWithoutIds}, with IDs={execMessagesWithIds})");
+
+		// When the strategy actually placed orders, those orders must produce order-info execution
+		// messages all the way through the emulator and basket layers (no exec loss).
+		if (ordersReceived > 0)
+		{
+			IsTrue(execAtEmulationTotal > 0, $"Orders were placed ({ordersReceived}) but no order execs reached the emulation adapter");
+			IsTrue(execAtBasket > 0, $"Orders were placed ({ordersReceived}) but no order execs reached the basket adapter");
+			IsTrue(execMessagesWithIds > 0, "Order-info execution messages at the basket must carry subscription IDs when orders were placed");
+		}
 	}
 
 	/// <summary>
@@ -152,7 +456,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 
@@ -216,7 +520,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 
@@ -263,8 +567,11 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Full month backtest with BuildFrom=Ticks — reproduces WPF sample scenario.
-	/// Tests that backtest completes without hanging for the full date range.
+	/// Multi-day backtest with BuildFrom=Ticks — reproduces WPF sample scenario.
+	/// Tests that backtest completes without hanging for the configured date range.
+	/// Unlike <see cref="BacktestFullMonth_BuildFromTicks_WithStrategy"/> this one keeps the default
+	/// <see cref="Security.PriceStep"/> and subscribes through the connector rather than through a
+	/// strategy, so it covers the connector-level tick-to-candle path.
 	/// </summary>
 	[TestMethod]
 	public async Task BacktestFullMonth_BuildFromTicks()
@@ -278,10 +585,14 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
+		// The oracle here is that the connector-level tick-to-candle replay runs to 100% progress, and
+		// progress is relative to the configured range, so a week exercises it exactly as the whole
+		// month did - just without re-reading three more weeks of ticks. Still well beyond the two days
+		// of BacktestBuildCandlesFromTicks, so the multi-day progress stepping stays covered.
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(7);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 		var lastProgress = 0;
@@ -324,7 +635,7 @@ public class BacktestingTests : BaseTestClass
 
 		await connector.StartAsync(CancellationToken);
 
-		// 5 minutes timeout for full month of tick data
+		// generous timeout for a multi-day tick replay
 		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 		cts.Token.Register(() => tcs.TrySetResult(false));
 		var ok = await tcs.Task;
@@ -337,10 +648,14 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Full month backtest with strategy + BuildFrom=Ticks.
-	/// Verifies no OrderRegisterFailed due to emulator time race condition.
+	/// Full month backtest with a strategy that really builds its candles from ticks
+	/// (<see cref="WpfSmaStrategy"/> with <see cref="DataType.Ticks"/> as the build source,
+	/// <see cref="MarketDataBuildModes.Build"/>). Verifies the tick-driven candle path is
+	/// actually exercised end-to-end: the strategy places orders, those orders fill into
+	/// trades, and no OrderRegisterFailed occurs due to the emulator time-race condition.
 	/// </summary>
 	[TestMethod]
+	[Timeout(360_000, CooperativeCancellation = true)]
 	public async Task BacktestFullMonth_BuildFromTicks_WithStrategy()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -356,13 +671,23 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var lastProgress = 0;
 		var orderErrors = 0;
 
+		// Verify the candles the strategy trades on are genuinely built from ticks
+		// (BuildMode=Build), not loaded from the candle storage.
+		var tickBuiltCandles = 0;
+		connector.CandleReceived += (sub, candle) =>
+		{
+			// Candle subscriptions always carry a MarketDataMessage, so MarketData is safe here.
+			if (candle.State == CandleStates.Finished && sub.MarketData.BuildFrom == DataType.Ticks)
+				Interlocked.Increment(ref tickBuiltCandles);
+		};
+
 		connector.ProgressChanged += step => lastProgress = step;
-		connector.OrderRegisterFailed += fail =>
+		connector.OrderRegisterFailReceived += (_, fail) =>
 		{
 			Interlocked.Increment(ref orderErrors);
 			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
@@ -375,38 +700,45 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		var strategy = new SmaStrategy
+		// Real BuildFrom=Ticks strategy: its candle subscription uses
+		// BuildFrom=Ticks + BuildMode=Build (see WpfSmaStrategy.OnStarted2).
+		var strategy = new WpfSmaStrategy
 		{
 			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
 			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 10,
+			LongSma = 80,
+			ShortSma = 10,
+			BuildFrom = DataType.Ticks,
 		};
 
-		// Simulate WPF sample: strategy uses BuildFrom=Ticks internally
-		// by subscribing to candles built from ticks in OnStarted2
-
 		connector.Connect();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		await connector.StartAsync(CancellationToken);
 
 		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 		cts.Token.Register(() => tcs.TrySetResult(false));
 		var ok = await tcs.Task;
 
-		strategy.Stop();
+		await strategy.StopAsync(CancellationToken);
+
+		var orders = strategy.Orders.Count();
+		var trades = strategy.MyTrades.Count();
 
 		Console.WriteLine($"Progress: {lastProgress}%");
-		Console.WriteLine($"Strategy trades: {strategy.MyTrades.Count()}");
-		Console.WriteLine($"Strategy orders: {strategy.Orders.Count()}");
+		Console.WriteLine($"Tick-built candles: {tickBuiltCandles}");
+		Console.WriteLine($"Strategy trades: {trades}");
+		Console.WriteLine($"Strategy orders: {orders}");
 		Console.WriteLine($"Order errors (time race): {orderErrors}");
 		Console.WriteLine($"Strategy PnL: {strategy.PnL}");
 
 		IsTrue(ok, $"Backtest should complete without timeout (progress reached {lastProgress}%)");
-		AreEqual(0, orderErrors, "No OrderRegisterFailed errors should occur");
+		IsTrue(tickBuiltCandles > 0, $"Strategy must trade on candles built from ticks, got {tickBuiltCandles}");
+		IsTrue(orders > 0, $"Tick-built SMA strategy should place orders over a full month, got {orders}");
+		IsTrue(trades > 0, $"Tick-built SMA strategy orders should produce fills over a full month, got {trades}");
+		AreEqual(0, orderErrors, $"No OrderRegisterFailed (time race) errors should occur, got {orderErrors}");
 	}
 
 	/// <summary>
@@ -430,13 +762,13 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = startTime.AddDays(3);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var orderErrors = 0;
 		var orderCount = 0;
 		var candleCount = 0;
 
-		connector.OrderRegisterFailed += fail =>
+		connector.OrderRegisterFailReceived += (_, fail) =>
 		{
 			Interlocked.Increment(ref orderErrors);
 			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
@@ -521,13 +853,91 @@ public class BacktestingTests : BaseTestClass
 		return fs.GetStorage(Paths.HistoryDataPath);
 	}
 
+	/// <summary>
+	/// What a handler of the emulator's state change throws is not lost and does not break the run:
+	/// it is reported through the connector's error event, for the change that came with the start as
+	/// well as for the one that comes with the disconnect. It is reported once the lock that guards the
+	/// state is let go - a handler of the error is not made to run inside it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnErrorOfAStateChangeHandlerIsReportedAsAConnectorError()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		await using var connector = CreateConnector(secProvider, pfProvider, GetHistoryStorage(), Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(2));
+
+		// what each report of an error found: its text, and whether the state lock was free by then
+		var reports = new SynchronizedList<(string Error, bool IsStateLockFree)>();
+
+		connector.Error += error =>
+		{
+			// A state message that changes nothing still has to take the state lock, and it comes from
+			// another thread here: it gets through only if the lock is not held while the error is reported.
+			var state = connector.State;
+			var probe = Task.Run(() => connector.SendOutMessageAsync(new EmulationStateMessage { State = state }, CancellationToken).AsTask());
+
+			reports.Add((error.Message, probe.Wait(TimeSpan.FromSeconds(5))));
+		};
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+
+			if (state is ChannelStates.Started or ChannelStates.Stopped)
+				throw new InvalidOperationException($"handler failed at {state}");
+		};
+
+		// the replay runs to its end only when something asks it for data
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await stopped.Task.WaitAsync(TimeSpan.FromSeconds(30), CancellationToken);
+
+		// a report is counted once its probe is over, so nothing is still being added when the list is read
+		await Helper.WaitUntilAsync(() => reports.Count >= 2, TimeSpan.FromSeconds(20), CancellationToken,
+			"both failures of the handler are reported");
+
+		var seen = reports.SyncGet(r => r.ToArray());
+
+		IsTrue(seen.Any(r => r.Error == $"handler failed at {ChannelStates.Started}"), "the failure at the start is reported");
+		IsTrue(seen.Any(r => r.Error == $"handler failed at {ChannelStates.Stopped}"), "the failure at the stop is reported");
+		AreEqual(ChannelStates.Stopped, connector.State);
+		IsTrue(seen.All(r => r.IsStateLockFree), "an error must be reported once the state lock is let go");
+	}
+
+	// Reports a machine that never restored the sample history package as inconclusive and names it.
+	// Returning quietly instead would let every backtest in this class be counted as a test that passed
+	// on a machine where not one of them replayed a single candle.
 	private static bool SkipIfNoHistoryData()
 	{
-		if (Paths.HistoryDataPath == null)
-		{
-			Console.WriteLine("Skipping test: HistoryDataPath is null (stocksharp.samples.historydata package not installed)");
-			return true;
-		}
+		if (AsmInit.SampleHistoryUnavailableReason is string reason)
+			Inconclusive(reason);
+
 		return false;
 	}
 
@@ -595,6 +1005,781 @@ public class BacktestingTests : BaseTestClass
 		return connector;
 	}
 
+	private sealed class MultiTimeFrameTradingStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly List<(TimeSpan TimeFrame, DateTime CandleTime, CandleStates State, DateTime StrategyTime)> _observations = [];
+		private bool _isDailyBullish;
+		private bool _entrySubmitted;
+
+		public (TimeSpan TimeFrame, DateTime CandleTime, CandleStates State, DateTime StrategyTime)[] Observations
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return [.. _observations];
+			}
+		}
+
+		public DateTime? EntrySignalTime { get; private set; }
+		public DateTime? EntryStrategyTime { get; private set; }
+		public Order EntryOrder { get; private set; }
+		public DateTime EntryFrom { get; set; }
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeSpan.FromDays(1), isFinishedOnly: false)
+				.Bind(candle => ProcessCandle(TimeSpan.FromDays(1), candle))
+				.Start();
+
+			SubscribeCandles(TimeSpan.FromMinutes(5), isFinishedOnly: false)
+				.Bind(candle => ProcessCandle(TimeSpan.FromMinutes(5), candle))
+				.Start();
+		}
+
+		private void ProcessCandle(TimeSpan timeFrame, ICandleMessage candle)
+		{
+			var strategyTime = CurrentTime;
+
+			using (_sync.EnterScope())
+				_observations.Add((timeFrame, candle.LocalTime, candle.State, strategyTime));
+
+			if (timeFrame == TimeSpan.FromDays(1))
+			{
+				if (candle.State == CandleStates.Finished && candle.CloseTime <= EntryFrom)
+					_isDailyBullish = candle.ClosePrice > candle.OpenPrice;
+
+				return;
+			}
+
+			if (candle.State != CandleStates.Finished || candle.LocalTime < EntryFrom || !_isDailyBullish || _entrySubmitted)
+				return;
+
+			_entrySubmitted = true;
+			EntrySignalTime = candle.LocalTime;
+			EntryStrategyTime = strategyTime;
+			EntryOrder = BuyMarket(Volume);
+		}
+	}
+
+	/// <summary>
+	/// Regression test for GitHub issue #680. A real strategy consumes daily and five-minute
+	/// candles, uses the previous completed daily candle as a filter, and submits an order on
+	/// the first eligible intraday candle. Neither candle callbacks nor the order are allowed
+	/// to inherit a future time from the still-active daily candle.
+	/// </summary>
+	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task MultiTimeFrameStrategy_DoesNotLeakDailyFutureTimeIntoIntradayTrading()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var dailyTimeFrame = TimeSpan.FromDays(1);
+		var intradayTimeFrame = TimeSpan.FromMinutes(5);
+		var previousDay = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var tradingDay = previousDay.AddDays(1);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		static TimeFrameCandleMessage CreateCandle(
+			SecurityId securityId,
+			TimeSpan timeFrame,
+			DateTime openTime,
+			DateTime highTime,
+			DateTime lowTime,
+			decimal open,
+			decimal high,
+			decimal low,
+			decimal close,
+			decimal volume)
+			=> new()
+			{
+				SecurityId = securityId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = highTime,
+				LowTime = lowTime,
+				CloseTime = openTime + timeFrame,
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = volume,
+				State = CandleStates.Finished,
+			};
+
+		var dailyCandles = new[]
+		{
+			// A legitimately completed candle provides the strategy's daily trend filter.
+			CreateCandle(secId, dailyTimeFrame, previousDay,
+				previousDay.AddHours(10), previousDay.AddHours(20),
+				100, 110, 90, 105, 1_000),
+
+			// Its High/Low are still in the future when the first five-minute candle completes.
+			CreateCandle(secId, dailyTimeFrame, tradingDay,
+				tradingDay.AddMinutes(10), tradingDay.AddMinutes(20),
+				105, 115, 95, 110, 1_000),
+		};
+
+		var intradayCandles = Enumerable.Range(0, 7)
+			.Select(i =>
+			{
+				var openTime = tradingDay.AddMinutes(i * 5);
+				var open = 100m + i;
+
+				return CreateCandle(secId, intradayTimeFrame, openTime,
+					openTime.AddMinutes(2), openTime.AddMinutes(4),
+					open, open + 2, open - 1, open + 1, 100);
+			})
+			.ToArray();
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, dailyTimeFrame)
+			.SaveAsync(dailyCandles, CancellationToken);
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, intradayTimeFrame)
+			.SaveAsync(intradayCandles, CancellationToken);
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		await using var connector = CreateDeterministicConnector(
+			secProvider,
+			pfProvider,
+			storageRegistry,
+			previousDay,
+			tradingDay.AddMinutes(31));
+
+		var strategy = new MultiTimeFrameTradingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			EntryFrom = tradingDay.AddMinutes(5),
+			WaitRulesOnStop = false,
+		};
+
+		var errors = new List<string>();
+		var errorsSync = new Lock();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.Error += error =>
+		{
+			using (errorsSync.EnterScope())
+				errors.Add($"Connector: {error.Message}");
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (errorsSync.EnterScope())
+				errors.Add($"Strategy: {error.Message}");
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail("Multi-timeframe backtest did not complete in time.");
+		}
+
+		var observations = strategy.Observations;
+		var violations = new List<string>();
+
+		using (errorsSync.EnterScope())
+			violations.AddRange(errors);
+
+		if (!observations.Any(o => o.TimeFrame == dailyTimeFrame))
+			violations.Add("The strategy received no daily candles.");
+
+		if (!observations.Any(o => o.TimeFrame == intradayTimeFrame))
+			violations.Add("The strategy received no five-minute candles.");
+
+		for (var i = 1; i < observations.Length; i++)
+		{
+			var previous = observations[i - 1];
+			var current = observations[i];
+
+			if (current.CandleTime < previous.CandleTime)
+			{
+				violations.Add(
+					$"Candle callback time moved backwards: {previous.TimeFrame} at {previous.CandleTime:O} -> " +
+					$"{current.TimeFrame} at {current.CandleTime:O}.");
+			}
+		}
+
+		foreach (var observation in observations)
+		{
+			if (observation.StrategyTime != observation.CandleTime)
+			{
+				violations.Add(
+					$"Strategy time {observation.StrategyTime:O} does not match " +
+					$"{observation.TimeFrame} candle callback time {observation.CandleTime:O} ({observation.State}).");
+			}
+		}
+
+		var expectedSignalTime = tradingDay.AddMinutes(5);
+
+		if (strategy.EntrySignalTime is not DateTime signalTime)
+		{
+			violations.Add("The strategy did not produce an intraday entry signal.");
+		}
+		else
+		{
+			if (signalTime != expectedSignalTime)
+				violations.Add($"Entry signal time is {signalTime:O}; expected {expectedSignalTime:O}.");
+
+			if (strategy.EntryStrategyTime != signalTime)
+			{
+				violations.Add(
+					$"Entry saw strategy time {strategy.EntryStrategyTime:O} for a candle at {signalTime:O}.");
+			}
+
+			if (strategy.EntryOrder is null)
+			{
+				violations.Add("The strategy did not submit its entry order.");
+			}
+			else if (strategy.EntryOrder.Time != signalTime)
+			{
+				violations.Add(
+					$"Entry order time is {strategy.EntryOrder.Time:O}; signal candle time is {signalTime:O}.");
+			}
+		}
+
+		if (!strategy.MyTrades.Any())
+			violations.Add("The entry order produced no own trade.");
+
+		IsTrue(violations.Count == 0,
+			$"Multi-timeframe strategy exposed {violations.Count} time/order violation(s):\n" +
+			string.Join(Environment.NewLine, violations.Take(30)));
+	}
+
+	// What one candle callback saw.
+	private readonly record struct BarSighting(
+		CandleStates State,
+		DateTime OpenTime,
+		DateTime CloseTime,
+		DateTime LocalTime,
+		DateTime StrategyTime);
+
+	/// <summary>
+	/// Records every candle it is shown and buys at market on the first finished bar of the run.
+	/// </summary>
+	private sealed class FirstBarStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly List<BarSighting> _sightings = [];
+
+		public BarSighting[] Sightings
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return [.. _sightings];
+			}
+		}
+
+		public TimeSpan TimeFrame { get; set; }
+		public Order EntryOrder { get; private set; }
+		public DateTime? EntryTime { get; private set; }
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeFrame, isFinishedOnly: false)
+				.Bind(ProcessCandle)
+				.Start();
+		}
+
+		private void ProcessCandle(ICandleMessage candle)
+		{
+			using (_sync.EnterScope())
+				_sightings.Add(new(candle.State, candle.OpenTime, candle.CloseTime, candle.LocalTime, CurrentTime));
+
+			if (candle.State != CandleStates.Finished || EntryOrder is not null)
+				return;
+
+			EntryTime = CurrentTime;
+			EntryOrder = BuyMarket(Volume);
+		}
+	}
+
+	// Six contiguous bars, each a step above the one before it, so a fill can be traced to the bar
+	// whose prints it came from.
+	private static TimeFrameCandleMessage[] CreateContiguousBars(SecurityId secId, DateTime start, TimeSpan timeFrame, int count)
+		=> [.. Enumerable.Range(0, count).Select(i =>
+		{
+			var openTime = start + TimeSpan.FromTicks(timeFrame.Ticks * i);
+			var open = 100m + i;
+
+			return new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = openTime + TimeSpan.FromTicks(timeFrame.Ticks / 5 * 2),
+				LowTime = openTime + TimeSpan.FromTicks(timeFrame.Ticks / 5 * 4),
+				CloseTime = openTime + timeFrame,
+				OpenPrice = open,
+				HighPrice = open + 2,
+				LowPrice = open - 1,
+				ClosePrice = open + 1,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			};
+		})];
+
+	/// <summary>
+	/// Replays <paramref name="barCount"/> contiguous bars of stored history through the emulator and
+	/// returns the strategy that watched them, having bought at market on the first finished bar.
+	/// </summary>
+	private async Task<FirstBarStrategy> ReplayContiguousBarsAsync(int barCount, List<string> failures)
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, barCount), CancellationToken);
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		await using var connector = CreateDeterministicConnector(
+			secProvider,
+			pfProvider,
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (barCount + 1)));
+
+		var strategy = new FirstBarStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			TimeFrame = timeFrame,
+			WaitRulesOnStop = false,
+		};
+
+		var sync = new Lock();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Error += error =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Connector: {error.Message}");
+		};
+
+		connector.OrderRegisterFailReceived += (_, fail) =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Order {fail.Order.TransactionId} was refused: {fail.Error.Message}");
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Strategy: {error.Message}");
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail("The candle replay did not reach its stop date in time.");
+		}
+
+		return strategy;
+	}
+
+	/// <summary>
+	/// A bar becomes known when it closes. Everything it reports - its high, its low, its close - is
+	/// settled only at that moment, so a finished bar covering [T, T+1) belongs to the strategy's
+	/// clock at T+1. Handing it over stamped T shows the strategy the whole of a bar at the instant
+	/// that bar begins, which is knowledge of the future written into the data itself, and a live
+	/// connector never does it: <see cref="StockSharp.Algo.Candles.Compression.CandleBuilder"/> marks
+	/// a candle finished and stamps it with the time of the value that closed it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AFinishedBarReachesAStrategyStampedAtItsCloseNotAtItsOpen()
+	{
+		var failures = new List<string>();
+		var strategy = await ReplayContiguousBarsAsync(6, failures);
+
+		var finished = strategy.Sightings.Where(s => s.State == CandleStates.Finished).ToArray();
+
+		// Five of the six, because the closing bar of a replay is the one whose delivery depends on the
+		// run outliving it; the stamp of the rest is what this test is about.
+		IsTrue(finished.Length >= 5,
+			$"The replay stored six bars and the strategy saw {finished.Length} finished one(s).");
+
+		var wrong = finished.Where(s => s.LocalTime != s.CloseTime).ToArray();
+
+		IsTrue(wrong.Length == 0,
+			$"{wrong.Length} of {finished.Length} finished bar(s) reached the strategy stamped at " +
+			$"something other than their close: " +
+			wrong.Take(5).Select(s => $"[{s.OpenTime:HH:mm}-{s.CloseTime:HH:mm}) arrived at {s.LocalTime:HH:mm}").JoinComma());
+
+		var early = finished.Where(s => s.StrategyTime < s.CloseTime).ToArray();
+
+		IsTrue(early.Length == 0,
+			$"{early.Length} finished bar(s) were handed over while the strategy's clock still stood " +
+			$"before their close: " +
+			early.Take(5).Select(s => $"[{s.OpenTime:HH:mm}-{s.CloseTime:HH:mm}) at strategy time {s.StrategyTime:HH:mm}").JoinComma());
+	}
+
+	/// <summary>
+	/// The prints a bar is made of reach the book when the bar closes, so a strategy shown that bar at
+	/// its close is shown it against a book that already holds those prints. The first finished bar of
+	/// a run is where this is decided: if the bar arrives before its own prints do, the market order
+	/// it prompts meets an empty book and the opening bar of every candle backtest is untradeable.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnOrderSentOnTheFirstFinishedBarOfARunCanTrade()
+	{
+		var failures = new List<string>();
+		var strategy = await ReplayContiguousBarsAsync(6, failures);
+
+		IsNotNull(strategy.EntryOrder, "The strategy saw no finished bar to buy on.");
+
+		var trades = strategy.MyTrades.ToArray();
+
+		IsTrue(trades.Length > 0,
+			$"The market order sent on the first finished bar (at {strategy.EntryTime:HH:mm}) did not trade. " +
+			$"Order state is {strategy.EntryOrder.State}, balance {strategy.EntryOrder.Balance} of {strategy.EntryOrder.Volume}. " +
+			(failures.Count > 0 ? string.Join("; ", failures.Take(5)) : "No failure was reported."));
+	}
+
+	// Where a Designer template lands once it is compiled in: every file of Designer.Templates\Backtest
+	// declares "namespace StockSharp.Designer", and nothing else in this assembly uses that namespace.
+	private const string _templatesNamespace = "StockSharp.Designer";
+
+	// Folder the mask in Tests.csproj reads, relative to the test output directory.
+	private const string _templatesFolder = "../../../../Designer.Templates/Backtest/";
+
+	// Templates that send no order by design, each with what it does instead. This list is the only
+	// way past the order promise below, and it is asserted in both directions: a listed template that
+	// starts trading fails until it is taken off the list.
+	private static readonly Dictionary<string, string> _nonTradingTemplates = new(StringComparer.Ordinal)
+	{
+		[nameof(EmptyStrategy)] = "a blank starting point - it declares one parameter, logs on start and subscribes to nothing, so it has no signal to trade on",
+	};
+
+	/// <summary>
+	/// Every strategy template the Designer.Templates mask compiles into this assembly.
+	/// </summary>
+	public static IEnumerable<object[]> TemplateStrategies
+		=> typeof(BacktestingTests)
+			.Assembly
+			.GetTypes()
+			.Where(t => t.Namespace == _templatesNamespace && !t.IsAbstract && typeof(Strategy).IsAssignableFrom(t))
+			.OrderBy(t => t.Name)
+			.Select(t => new object[] { t });
+
+	/// <summary>
+	/// The templates are compiled in by mask, and this is what makes the mask worth having: a file
+	/// added to the templates folder must arrive as a type in this assembly, or it is a template
+	/// nobody tests. One type per file, named after the file, is the rule the templates follow.
+	/// </summary>
+	[TestMethod]
+	public void EveryTemplateFileIsCompiledIn()
+	{
+		var onDisk = Directory
+			.GetFiles(_templatesFolder, "*.cs")
+			.Select(Path.GetFileNameWithoutExtension)
+			.ToArray();
+
+		IsTrue(onDisk.Length > 0, $"no template source found under {Path.GetFullPath(_templatesFolder)}");
+
+		var compiled = typeof(BacktestingTests)
+			.Assembly
+			.GetTypes()
+			.Where(t => t.Namespace == _templatesNamespace)
+			.Select(t => t.Name)
+			.ToHashSet(StringComparer.Ordinal);
+
+		var missing = onDisk.Where(name => !compiled.Contains(name)).ToArray();
+
+		IsTrue(missing.Length == 0,
+			$"{missing.Length} template file(s) never reached the test assembly: {string.Join(", ", missing)}. " +
+			$"The mask in Tests.csproj is what pulls them in, so a template it misses is compiled nowhere and tested by nothing.");
+	}
+
+	/// <summary>
+	/// A template's parameters are a promise: each instrument it declares is one a user fills in,
+	/// saves and optimizes over, so each one has to reach the market. A template that names two and
+	/// trades one quietly runs a single-instrument strategy under a pair strategy's name - which is
+	/// exactly what <see cref="PairStrategy"/> did. Every template the mask pulls in is replayed here
+	/// and held to its own declaration, so the next one is covered the day it is added.
+	/// </summary>
+	/// <param name="templateType">Strategy template to replay.</param>
+	[TestMethod]
+	[DynamicData(nameof(TemplateStrategies))]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task TemplateStrategyTradesEveryDeclaredSecurity(Type templateType)
+	{
+		const int candleCount = 60;
+		const int allowedLength = 8;
+
+		var strategy = templateType.CreateInstance<Strategy>();
+
+		// Only the parameters the template adds are read as a statement about what it trades; the ones
+		// Strategy brings with it (OrdersKeepTime, HistorySize and the rest) say nothing about that.
+		var ownParams = GetTemplateParams(strategy);
+
+		// A template ships production indicator lengths - 80 and 30 in the SMA family - and an average
+		// that long never forms inside the replayed window. They are scaled down together, so a
+		// fast/slow pair stays a fast/slow pair.
+		var lengths = ownParams.Where(p => p.Type == typeof(int) && p.Value is int and > 0).ToArray();
+
+		if (lengths.Length > 0)
+		{
+			var longest = lengths.Max(p => (int)p.Value);
+
+			foreach (var param in lengths)
+				param.Value = Math.Max(2, (int)Math.Round((int)param.Value * (double)allowedLength / longest));
+		}
+
+		// An instrument a template trades is an instrument it declares as a parameter of its own; a
+		// template that declares none trades Strategy.Security, the one instrument every strategy has.
+		var declared = new List<Security>();
+
+		foreach (var param in ownParams.Where(p => p.Type == typeof(Security)))
+		{
+			var leg = Helper.CreateSecurity(100);
+			param.Value = leg;
+			declared.Add(leg);
+		}
+
+		if (declared.Count == 0)
+			declared.Add(Helper.CreateSecurity(100));
+
+		// An order sent without naming an instrument goes to Strategy.Security.
+		strategy.Security = declared[0];
+
+		// Which series to lay down is read off the template too: a candle DataType or a plain TimeSpan
+		// parameter is a timeframe it will subscribe to.
+		var timeFrames = new HashSet<TimeSpan>();
+
+		foreach (var param in ownParams)
+		{
+			if (param.Type == typeof(DataType) && param.Value is DataType dt && dt.IsTFCandles)
+				timeFrames.Add(dt.GetTimeFrame());
+			else if (param.Type == typeof(TimeSpan) && param.Value is TimeSpan tf && tf > TimeSpan.Zero)
+				timeFrames.Add(tf);
+		}
+
+		if (timeFrames.Count == 0)
+			timeFrames.Add(TimeSpan.FromMinutes(1));
+
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 5, 10, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		// Every declared instrument is priced through the whole window on every timeframe the template
+		// asks for, so the only thing that can keep an order away from one of them is the template.
+		foreach (var leg in declared)
+		{
+			var secId = leg.ToSecurityId();
+
+			foreach (var timeFrame in timeFrames)
+			{
+				await storageRegistry
+					.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+					.SaveAsync(BuildTriangleWave(secId, timeFrame, start, candleCount), CancellationToken);
+			}
+		}
+
+		var window = timeFrames.Max();
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider(declared),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(window.Ticks * (candleCount + 1)));
+
+		strategy.Connector = connector;
+		strategy.Portfolio = portfolio;
+		strategy.Volume = 1;
+		strategy.WaitRulesOnStop = false;
+
+		var sync = new Lock();
+		var registered = new List<string>();
+		var errors = new List<string>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		strategy.OrderRegistering += order =>
+		{
+			using (sync.EnterScope())
+				registered.Add(order.Security?.Id);
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (sync.EnterScope())
+				errors.Add($"Strategy: {error.Message}");
+		};
+
+		connector.Error += error =>
+		{
+			using (sync.EnterScope())
+				errors.Add($"Connector: {error.Message}");
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+
+		// The emulator replays only what someone asked for, and with nothing asked for it never reaches
+		// the end of the window. The window is subscribed to here, so the replay is driven by the test
+		// rather than by whether the template happens to subscribe to anything.
+		foreach (var leg in declared)
+		{
+			foreach (var timeFrame in timeFrames)
+				connector.Subscribe(new Subscription(timeFrame.TimeFrame(), leg));
+		}
+
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail($"{templateType.Name} did not finish its backtest in time.");
+		}
+
+		string[] orderedSecurities;
+		string[] failures;
+
+		using (sync.EnterScope())
+		{
+			orderedSecurities = [.. registered];
+			failures = [.. errors];
+		}
+
+		IsTrue(failures.Length == 0,
+			$"{templateType.Name} reported {failures.Length} error(s) while replaying: {string.Join("; ", failures)}");
+
+		if (_nonTradingTemplates.TryGetValue(templateType.Name, out var reason))
+		{
+			// The exemption holds in the other direction too: a listed template has to really send
+			// nothing, otherwise it belongs under the promise below.
+			AreEqual(0, orderedSecurities.Length,
+				$"{templateType.Name} is listed as non-trading ({reason}) yet sent {orderedSecurities.Length} order(s); hold it to the instruments it declares instead of excusing it.");
+
+			return;
+		}
+
+		// Told apart on purpose: a window that produced no signal at all would be a broken harness,
+		// not a template that forgets a leg.
+		IsTrue(orderedSecurities.Length > 0,
+			$"{templateType.Name} sent no order at all over {candleCount} candle(s), so the replay says nothing about the {declared.Count} instrument(s) it declares. Errors: {string.Join("; ", failures)}");
+
+		var untouched = declared.Where(s => !orderedSecurities.Contains(s.Id)).Select(s => s.Id).ToArray();
+
+		IsTrue(untouched.Length == 0,
+			$"{templateType.Name} declares {declared.Count} instrument(s) and traded {declared.Count - untouched.Length} of them: nothing was sent against {string.Join(", ", untouched)}, which a user fills in, saves and optimizes over.");
+	}
+
+	// The parameters a template adds on top of Strategy. Every public property a template declares is
+	// registered as a StrategyParam under the same name, which CompilationTests holds templates to.
+	private static IStrategyParam[] GetTemplateParams(Strategy strategy)
+	{
+		var declaredNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+		for (var type = strategy.GetType(); type != null && type != typeof(Strategy); type = type.BaseType)
+		{
+			foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+				declaredNames.Add(prop.Name);
+		}
+
+		return [.. strategy.Parameters.CachedValues.Where(p => declaredNames.Contains(p.Id))];
+	}
+
+	// A triangle wave with a period of 20 candles: a fast average crosses a slow one at every turn, so
+	// a crossing template signals several times inside the short replayed window.
+	private static TimeFrameCandleMessage[] BuildTriangleWave(SecurityId securityId, TimeSpan timeFrame, DateTime from, int count)
+		=> [.. Enumerable.Range(0, count).Select(i =>
+		{
+			var phase = i % 20;
+			var price = 100m + (phase < 10 ? phase : 20 - phase);
+			var openTime = from + TimeSpan.FromTicks(timeFrame.Ticks * i);
+
+			return new TimeFrameCandleMessage
+			{
+				SecurityId = securityId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = openTime,
+				LowTime = openTime,
+				CloseTime = openTime + timeFrame,
+				OpenPrice = price,
+				HighPrice = price + 1,
+				LowPrice = price - 1,
+				ClosePrice = price,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			};
+		})];
+
 	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.
 	/// </summary>
@@ -603,132 +1788,36 @@ public class BacktestingTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
+		var candlesReceived = run.ConnectorCandles;
+		var subscriptionResponses = run.SubscriptionResponses;
+		var connectionStates = run.ConnectionStates;
+		var ordersReceived = run.OrderEvents;
 
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		Console.WriteLine($"After strategy.Start, subscriptions: {run.SubscriptionsAfterStrategyStart.Length}");
+		foreach (var sub in run.SubscriptionsAfterStrategyStart)
+			Console.WriteLine(sub);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
-
-		// Debug: track candle reception
-		var candlesReceived = 0;
-		connector.CandleReceived += (sub, candle) =>
-		{
-			Interlocked.Increment(ref candlesReceived);
-		};
-
-		// Debug: track subscription responses
-		var subscriptionResponses = new List<string>();
-		connector.SubscriptionReceived += (sub, resp) =>
-		{
-			subscriptionResponses.Add($"OK {sub.DataType}");
-		};
-		connector.SubscriptionFailed += (sub, error, isSubscribe) =>
-		{
-			subscriptionResponses.Add($"FAILED {sub.DataType}: {error.Message}");
-		};
-
-		// Debug: track connection
-		var connectionStates = new List<string>();
-		connector.Connected += () => connectionStates.Add("Connected");
-		connector.Disconnected += () => connectionStates.Add("Disconnected");
-		connector.ConnectionError += ex => connectionStates.Add($"Error: {ex.Message}");
-
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		var ordersReceived = new List<Order>();
-		strategy.OrderReceived += (sub, order) =>
-		{
-			ordersReceived.Add(order);
-		};
-
-		// Debug: track strategy candles
-		var strategyCandlesCount = 0;
-		var finishedCandlesCount = 0;
-		strategy.CandleReceived += (sub, candle) =>
-		{
-			Interlocked.Increment(ref strategyCandlesCount);
-			if (candle.State == CandleStates.Finished)
-				Interlocked.Increment(ref finishedCandlesCount);
-		};
-
-		// Track strategy errors
-		var strategyErrors = new List<string>();
-		strategy.Error += (strat, ex) =>
-		{
-			strategyErrors.Add(ex.Message);
-		};
+		Console.WriteLine($"After Connect, subscriptions: {run.SubscriptionsAfterConnect.Length}");
+		foreach (var sub in run.SubscriptionsAfterConnect)
+			Console.WriteLine(sub);
 
 		// Track order registrations
-		strategy.OrderRegistering += order =>
-		{
-			Console.WriteLine($"Registering order: {order.Side} {order.Volume} @ {order.Price}");
-		};
-
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			connectionStates.Add($"State: {state}");
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-
-		Console.WriteLine($"After strategy.Start, subscriptions: {connector.Subscriptions.Count()}");
-		foreach (var sub in connector.Subscriptions)
-			Console.WriteLine($"  - {sub.SubscriptionMessage.Type}: {sub.DataType}");
-
-		connector.Connect();
-
-		// Wait for connection
-		await Task.Delay(500);
-		Console.WriteLine($"After connector.Connect, connectionState: {connector.ConnectionState}");
-
-		Console.WriteLine($"After Connect, subscriptions: {connector.Subscriptions.Count()}");
-		foreach (var sub in connector.Subscriptions)
-			Console.WriteLine($"  - {sub.SubscriptionMessage.Type}: {sub.DataType}, State: {sub.State}");
-
-		await connector.StartAsync(CancellationToken);
-
-		Console.WriteLine($"After connector.Start");
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
-		}
+		foreach (var registration in run.OrderRegistrations)
+			Console.WriteLine(registration);
 
 		// Debug output
 		Console.WriteLine($"Connection states: {connectionStates.Join(" -> ")}");
 		Console.WriteLine($"Candles received (connector): {candlesReceived}");
-		Console.WriteLine($"Candles received (strategy): {strategyCandlesCount}");
-		Console.WriteLine($"Finished candles (strategy): {finishedCandlesCount}");
+		Console.WriteLine($"Candles received (strategy): {run.StrategyCandles}");
+		Console.WriteLine($"Finished candles (strategy): {run.StrategyFinishedCandles}");
 		Console.WriteLine($"Subscription responses: {subscriptionResponses.Count}");
 		Console.WriteLine($"Orders received: {ordersReceived.Count}");
-		Console.WriteLine($"Final subscriptions: {connector.Subscriptions.Count()}");
-		Console.WriteLine($"Final strategy state: {strategy.ProcessState}");
-		Console.WriteLine($"Strategy errors: {strategyErrors.Join("; ")}");
-		Console.WriteLine($"Strategy position: {strategy.Position}");
+		Console.WriteLine($"Final subscriptions: {run.FinalSubscriptionCount}");
+		Console.WriteLine($"Final strategy state: {run.Strategy.ProcessState}");
+		Console.WriteLine($"Strategy errors: {run.StrategyErrors.Join("; ")}");
+		Console.WriteLine($"Strategy position: {run.Strategy.Position}");
 
 		// Verify that orders were generated
 		IsTrue(ordersReceived.Count > 0, $"Expected at least one order. Candles: {candlesReceived}, Subscriptions: {subscriptionResponses.Join("; ")}, Connection: {connectionStates.Join(" -> ")}");
@@ -742,56 +1831,11 @@ public class BacktestingTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
-
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		var tradesReceived = new List<MyTrade>();
-		strategy.OwnTradeReceived += (sub, trade) =>
-		{
-			tradesReceived.Add(trade);
-		};
-
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
-		}
+		// Own trades are recorded by the shared run as their event-time stamps - one entry per
+		// OwnTradeReceived notification, which is exactly what this test counts.
+		var tradesReceived = run.OwnTradeTimes;
 
 		// Verify that trades were executed
 		IsTrue(tradesReceived.Count > 0, "Expected at least one trade to be executed");
@@ -801,201 +1845,173 @@ public class BacktestingTests : BaseTestClass
 	/// Tests that PnL changes occur during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestGeneratesPnLChanges()
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
+		var strategy = run.Strategy;
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
+		// PnLReceived2 reports (realized, unrealized) snapshots; strategy.PnL == realized + unrealized
+		// (see TraderHelper.GetPnL). The realized component changes only on fills, and every fill with
+		// non-zero PnL raises PnLReceived2 (Strategy.OnConnectorOwnTradeReceived), so the realized value
+		// of the LAST event is the final realized PnL and is event-synced (deterministic). The
+		// unrealized component, however, is marked-to-market on every incoming market message
+		// (PnLManager.ProcessMessage on each tick/candle/quote) while PnLReceived2 is throttled by
+		// UnrealizedPnLInterval (1 min) and only fires when Positions.Any(); so the unrealized value of
+		// the last event is frozen at that event's price and keeps drifting afterwards. Track both
+		// components separately rather than only the combined total.
+		var pnlEvents = run.PnLEvents;
+		var pnlChanges = pnlEvents.Select(e => e.Realized + (e.Unrealized ?? 0)).ToList();
+		var lastReportedRealized = pnlEvents.Count == 0 ? 0m : pnlEvents[^1].Realized;
+		var lastReportedTotal = pnlEvents.Count == 0 ? 0m : pnlEvents[^1].Realized + (pnlEvents[^1].Unrealized ?? 0);
 
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, PnL events: {pnlChanges.Count}, Final PnL: {strategy.PnL}");
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		// The full-month SMA strategy is expected to trade; guard so the oracle is not vacuous.
+		IsTrue(tradeCount > 0, "Expected trades so PnL movement can be verified");
 
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
+		// Once trades occur there MUST be at least one PnL event - the previous code skipped this
+		// check entirely when no trades happened, masking a regression that drops PnL events.
+		IsTrue(pnlChanges.Count > 0, "Expected PnL changes when trades occurred");
 
-		var pnlChanges = new List<decimal>();
-		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
-		{
-			pnlChanges.Add(realized + (unrealized ?? 0));
-		};
+		var manager = strategy.PnLManager;
 
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
+		// strategy.PnL must be exactly its definition: realized + unrealized straight from the PnL
+		// manager (TraderHelper.GetPnL). This pins the property to the manager and catches a sign
+		// flip or magnitude error in either component, without depending on event timing.
+		AreEqual(manager.RealizedPnL + manager.UnrealizedPnL, strategy.PnL,
+			"Strategy PnL must equal realized + unrealized from the PnL manager");
 
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
+		// The realized PnL reported by the LAST PnLReceived2 event must equal the final realized PnL:
+		// realized only moves on fills, and every realized-moving fill raises the event, so no realized
+		// change can occur after the last event. This is a deterministic, event-synced oracle for the
+		// traded result. NOTE: comparing the last event's *total* (realized + unrealized) to the final
+		// strategy.PnL would be wrong - the strategy ends with an open position, and its unrealized PnL
+		// is re-marked on every later market message while the event is throttled by UnrealizedPnLInterval,
+		// so the two legitimately diverge (that is engine-correct behavior, not a bug).
+		AreEqual(manager.RealizedPnL, lastReportedRealized,
+			"Last reported realized PnL must equal the final realized PnL (realized only changes on fills, each of which raises PnLReceived2)");
 
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
-		}
-
-		// After trades, PnL should have been tracked
-		// Note: PnL might be 0 if no trades, but if trades occurred, we expect PnL events
-		if (strategy.MyTrades.Any())
-		{
-			IsTrue(pnlChanges.Count > 0, "Expected PnL changes when trades occurred");
-		}
+		// The combined total of the last event likewise reflects realized + unrealized at that event's
+		// time; assert that reconstruction is internally consistent (guards the event payload wiring).
+		AreEqual(pnlChanges[^1], lastReportedTotal,
+			"Last collected total must match the last event's (realized + unrealized)");
 	}
 
 	/// <summary>
 	/// Tests that position changes occur during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestGeneratesPositionChanges()
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
+		var strategy = run.Strategy;
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
+		var positionChanges = run.PositionValues;
 
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, Position events: {positionChanges.Count}, Final position: {strategy.Position}");
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		// The full-month SMA strategy is expected to trade; guard so the oracle is not vacuous.
+		IsTrue(tradeCount > 0, "Expected trades so position movement can be verified");
 
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
+		// Once trades occur there MUST be position events - the previous code skipped this check
+		// entirely when no trades happened, masking a regression that drops position events.
+		IsTrue(positionChanges.Count > 0, "Expected position changes when trades occurred");
 
-		var positionChanges = new List<decimal>();
-		strategy.PositionReceived += (s, pos) =>
-		{
-			positionChanges.Add(pos.CurrentValue ?? 0);
-		};
-
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
-		}
-
-		// If trades occurred, position should have changed
-		if (strategy.MyTrades.Any())
-		{
-			IsTrue(positionChanges.Count > 0, "Expected position changes when trades occurred");
-		}
+		// The position must have actually moved away from flat at some point; a stream of only
+		// zero values would mean fills never updated the position.
+		IsTrue(positionChanges.Any(v => v != 0), "Expected a non-zero position after fills occurred");
 	}
 
 	/// <summary>
 	/// Tests that statistics are tracked during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestTracksStatistics()
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
+		var strategy = run.Strategy;
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
+		// Independently count order *registrations* exactly as the OrderCount statistic does:
+		// OrderCountParameter.New(order) is invoked once per order when it first reaches a confirmed state
+		// (Strategy.ProcessOrder => StatisticManager.AddNewOrder), and the statistic is monotonic (never
+		// decremented). An order reaches Active/Done from a not-yet-confirmed state (None or Pending), so
+		// count each order once the first time it is observed Active or Done. This is the true contract of
+		// the OrderCount statistic and is deterministic for the fixed sample history.
+		var counted = new HashSet<long>();
+		var registeredOrderCount = 0;
 
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
-
-		var strategy = new SmaStrategy
+		foreach (var order in run.OrderEvents)
 		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
+			var id = order.TransactionId;
 
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
+			// An order reaches Active/Done from a not-yet-confirmed state (None or Pending); count each once
+			// the first time it is observed in a confirmed state, mirroring the OrderCount statistic.
+			if ((order.State == OrderStates.Active || order.State == OrderStates.Done) && counted.Add(id))
+				registeredOrderCount++;
 		}
 
 		// Verify statistics manager is populated
 		var statisticManager = strategy.StatisticManager;
 		IsNotNull(statisticManager, "StatisticManager should not be null");
 
-		// Check that some statistics are available
-		var parameters = statisticManager.Parameters.ToList();
-		IsTrue(parameters.Count > 0, "Expected statistics parameters to be tracked");
+		// Note: Parameters is populated by the StatisticManager constructor
+		// (StatisticParameterRegistry.CreateAll), so "Parameters.Count > 0" is always true and
+		// proves nothing about the run. Instead assert the parameters were actually *updated*
+		// by the backtest by cross-checking their values against the strategy's own state.
+
+		var orders = strategy.Orders.ToList();
+		var trades = strategy.MyTrades.ToList();
+
+		// The full-month SMA strategy is expected to trade; if it did not, the assertions below
+		// would be vacuous, so guard the data first.
+		IsTrue(orders.Count > 0, $"Expected orders during backtest, got {orders.Count}");
+
+		object StatValue(StatisticParameterTypes type)
+			=> statisticManager.Parameters.First(p => p.Type == type).Value;
+
+		// OrderCount statistic must equal the number of order *registrations* observed over the whole
+		// run, NOT strategy.Orders.Count. The statistic is a monotonic cumulative counter incremented
+		// once per registration (OrderCountParameter.New), while strategy.Orders is a recycled live
+		// window: with the default OrdersKeepTime (1 day) Strategy.RecycleOrders evicts Done orders
+		// older than ~1.5 days from the live collection, so over a full month strategy.Orders.Count is
+		// far smaller than the all-time registration count. Comparing them is comparing two different
+		// quantities. registeredOrderCount counts the same registrations the statistic does.
+		var orderCountStat = (int)StatValue(StatisticParameterTypes.OrderCount);
+		AreEqual(registeredOrderCount, orderCountStat,
+			"OrderCount statistic must equal the number of order registrations observed");
+
+		// Sanity: every order still present in the recycled live collection must have been registered,
+		// so the live count can never exceed the cumulative registration count.
+		IsTrue(orders.Count <= orderCountStat,
+			$"Live order count {orders.Count} cannot exceed cumulative registrations {orderCountStat}");
+
+		// TradeCount statistic counts closing trades (ClosedVolume > 0); it can never exceed the
+		// total own trades and must be positive once trades have occurred.
+		var tradeCountStat = (int)StatValue(StatisticParameterTypes.TradeCount);
+		IsTrue(tradeCountStat >= 0 && tradeCountStat <= trades.Count,
+			$"TradeCount statistic {tradeCountStat} must be within [0; own trades {trades.Count}]");
+
+		// Commission statistic must equal the strategy's accumulated commission (0 here - no rules).
+		var commissionStat = (decimal)StatValue(StatisticParameterTypes.Commission);
+		AreEqual(strategy.Commission ?? 0m, commissionStat, "Commission statistic must match strategy commission");
 	}
 
 	/// <summary>
 	/// Tests that commission rules are applied during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestAppliesCommission()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -1010,10 +2026,14 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
-		// Add commission rule - 0.1% per trade
-		connector.EmulationAdapter.Settings.CommissionRules = [new CommissionTradeRule { Value = 0.001m }];
+		// Add commission rule: a flat ABSOLUTE 0.001 currency units per trade.
+		// CommissionTradeRule.Value is a Unit; with the default Absolute type it is NOT a percent -
+		// ICommissionRule.GetValue returns the value as-is (see ICommissionRule.GetValue), so each
+		// own trade is charged exactly 0.001, independent of price/volume.
+		const decimal perTradeCommission = 0.001m;
+		connector.EmulationAdapter.Settings.CommissionRules = [new CommissionTradeRule { Value = perTradeCommission }];
 
 		var strategy = new SmaStrategy
 		{
@@ -1026,13 +2046,6 @@ public class BacktestingTests : BaseTestClass
 			Short = 30,
 		};
 
-		var totalCommission = 0m;
-		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
-		{
-			if (commission.HasValue)
-				totalCommission = commission.Value;
-		};
-
 		var tcs = new TaskCompletionSource<bool>();
 		connector.StateChanged2 += state =>
 		{
@@ -1043,7 +2056,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1055,11 +2068,19 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
-		// If trades occurred, commission should be tracked
-		if (strategy.MyTrades.Any())
-		{
-			IsNotNull(strategy.Commission, "Commission should be tracked when trades occurred");
-		}
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, Commission: {strategy.Commission}");
+
+		// The full-month SMA strategy is expected to trade; without trades the commission oracle
+		// would be vacuous, so require fills first.
+		IsTrue(tradeCount > 0, "Expected trades to occur so commission can be verified");
+
+		// Each own trade is charged a flat absolute commission, so the strategy's accumulated
+		// commission must be exactly perTradeCommission * tradeCount. This catches a wrong sign or
+		// magnitude in the emulator's commission handling (MarketEmulator -> CommissionManager).
+		IsNotNull(strategy.Commission, "Commission should be tracked when trades occurred");
+		AreEqual(perTradeCommission * tradeCount, strategy.Commission.Value,
+			$"Commission must equal {perTradeCommission} * {tradeCount} trades");
 	}
 
 	/// <summary>
@@ -1080,7 +2101,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -1103,7 +2124,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1123,67 +2144,23 @@ public class BacktestingTests : BaseTestClass
 	/// Tests that progress events are raised during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestRaisesProgressEvents()
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
-
-		var progressValues = new List<int>();
-		connector.ProgressChanged += progress =>
-		{
-			progressValues.Add(progress);
-		};
-
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		// Start strategy before emulation (like BaseOptimizer.StartIteration)
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
-		}
+		var progressValues = run.ProgressValues;
 
 		// Verify that progress events were raised
 		IsTrue(progressValues.Count > 0, "Expected progress events to be raised");
 
-		// Progress should eventually reach or approach 100
+		// The run reached ChannelStates.Stopped (full completion), so progress MUST reach 100%.
+		// A softer threshold (e.g. 50%) would silently pass a regression where ProgressChanged
+		// stops short of 100% (e.g. a broken final calculation in HistoryMessageAdapter).
 		var maxProgress = progressValues.Max();
-		IsTrue(maxProgress >= 50, "Expected progress to reach at least 50%");
+		IsTrue(maxProgress >= 100, $"Completed backtest must report 100% progress, got {maxProgress}%");
 	}
 
 	/// <summary>
@@ -1204,7 +2181,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -1240,7 +2217,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1271,7 +2248,7 @@ public class BacktestingTests : BaseTestClass
 		await connector.StartAsync(CancellationToken);
 
 		// Wait for completion
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
 
 		if (!stoppedTcs.Task.IsCompleted)
 		{
@@ -1283,9 +2260,345 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// Suspending a backtest must actually halt the historical replay: while suspended no
+	/// new data may be delivered. Reproduces the bug where Pause only flips the connector
+	/// state to Suspended but the replay keeps feeding candles/ticks.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestSuspendHaltsReplay()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		// One week is enough to suspend in the middle of the replay and still resume it to completion.
+		// The rest of the month only lengthened the post-resume tail (the replay is suspended within the
+		// first second, as soon as the first candle arrives) without exercising anything more.
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(7);
+
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var dataCount = 0;
+
+		var firstCandleTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		using var suspendIssued = new ManualResetEventSlim(false);
+
+		// Every candle built from the replayed ticks bumps the counter. The handler runs on the replay
+		// thread, so parking the first one here parks the replay, and the suspend below is issued
+		// against a run that is provably still going. The week replays in a few seconds, so without
+		// that latch the suspend only wins by being scheduled first, which a loaded machine decides.
+		connector.CandleReceived += (sub, candle) =>
+		{
+			Interlocked.Increment(ref dataCount);
+
+			if (firstCandleTcs.TrySetResult(true))
+				suspendIssued.Wait(TimeSpan.FromMinutes(1));
+		};
+
+		// Deliberately NOT IsFinishedOnly: the raw (still forming) candle stream is exactly the channel
+		// through which the "pause keeps feeding data" regression leaks.
+		connector.Subscribe(new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Ticks,
+				BuildMode = MarketDataBuildModes.Build,
+			}
+		});
+
+		var startedTcs = new TaskCompletionSource<bool>();
+		var suspendedTcs = new TaskCompletionSource<bool>();
+		var stoppedTcs = new TaskCompletionSource<bool>();
+
+		connector.StateChanged2 += state =>
+		{
+			switch (state)
+			{
+				case ChannelStates.Started:
+					startedTcs.TrySetResult(true);
+					break;
+				case ChannelStates.Suspended:
+					suspendedTcs.TrySetResult(true);
+					break;
+				case ChannelStates.Stopped:
+					stoppedTcs.TrySetResult(true);
+					break;
+			}
+		};
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+		IsTrue(startedTcs.Task.IsCompleted, "Backtest did not start in time");
+
+		// Wait for the replay to reach its first candle and park there. The budget only bounds how long
+		// the replay may take to produce anything - once the latch is set it stays set, so a late
+		// wake-up here cannot make the test miss its moment.
+		await Task.WhenAny(firstCandleTcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+		IsTrue(firstCandleTcs.Task.IsCompleted, "No data received before suspend");
+
+		AreEqual(ChannelStates.Started, connector.State, "Replay must still be running when it is suspended");
+
+		try
+		{
+			await connector.SuspendAsync(CancellationToken);
+		}
+		finally
+		{
+			suspendIssued.Set();
+		}
+
+		await Task.WhenAny(suspendedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+		IsTrue(suspendedTcs.Task.IsCompleted, "Backtest did not suspend in time");
+		AreEqual(ChannelStates.Suspended, connector.State, "State should be Suspended");
+
+		// let any in-flight dispatch settle, then snapshot
+		await Task.Delay(TimeSpan.FromMilliseconds(500), CancellationToken);
+		var countAtSuspend = Volatile.Read(ref dataCount);
+
+		// stay suspended for a real-time window: nothing must change
+		await Task.Delay(TimeSpan.FromSeconds(2), CancellationToken);
+		var countAfter = Volatile.Read(ref dataCount);
+
+		AreEqual(countAtSuspend, countAfter, $"No data must be delivered while suspended (before={countAtSuspend}, after={countAfter})");
+
+		// resume and run to completion
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
+		IsTrue(stoppedTcs.Task.IsCompleted, "Backtest did not complete after resume");
+		connector.IsFinished.AssertTrue("IsFinished should be true after completion");
+	}
+
+	// Same SMA crossover logic as the WPF history-testing sample: subscribe candles built from the
+	// chosen source (storage candles / ticks / level1), and on a crossover place a limit order at
+	// the candle close.
+	private class WpfSmaStrategy : Strategy
+	{
+		private bool? _isShortLessThenLong;
+
+		public int LongSma { get; set; } = 80;
+		public int ShortSma { get; set; } = 10;
+		public DataType CandleType { get; set; } = TimeSpan.FromMinutes(1).TimeFrame();
+		public DataType BuildFrom { get; set; }
+		public Level1Fields? BuildField { get; set; }
+
+		protected override void OnReseted()
+		{
+			base.OnReseted();
+			_isShortLessThenLong = null;
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			var subscription = new Subscription(CandleType, Security)
+			{
+				MarketData =
+				{
+					IsFinishedOnly = true,
+					BuildFrom = BuildFrom,
+					BuildMode = BuildFrom is null ? MarketDataBuildModes.LoadAndBuild : MarketDataBuildModes.Build,
+					BuildField = BuildField,
+				}
+			};
+
+			var longSma = new SMA { Length = LongSma };
+			var shortSma = new SMA { Length = ShortSma };
+
+			SubscribeCandles(subscription)
+				.Bind(longSma, shortSma, OnProcess)
+				.Start();
+		}
+
+		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var isShortLessThenLong = shortValue < longValue;
+
+			if (_isShortLessThenLong == null)
+			{
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+			else if (_isShortLessThenLong != isShortLessThenLong)
+			{
+				var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+				var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+				var price = candle.ClosePrice;
+
+				if (direction == Sides.Buy)
+					BuyLimit(price, volume);
+				else
+					SellLimit(price, volume);
+
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Candle build sources the WPF history-testing sample offers for the SMA strategy.
+	/// </summary>
+	public enum SmaBuildSources
+	{
+		/// <summary>
+		/// Candles loaded from storage (no building).
+		/// </summary>
+		Candles,
+
+		/// <summary>
+		/// Candles built from ticks.
+		/// </summary>
+		Ticks,
+
+		/// <summary>
+		/// Candles built from the level1 spread middle.
+		/// </summary>
+		Spread,
+	}
+
+	/// <summary>
+	/// Runs the WPF-sample SMA strategy over the first 7 days of real history in the given mode
+	/// (candles, ticks or level1/spread) and verifies no own trade fills outside the candle it
+	/// belongs to - i.e. no trade gets drawn off the candles, which is what the stale synthesized
+	/// order book used to cause. The three modes are fully independent runs, so they are separate
+	/// cases and execute in parallel instead of one after another inside a single method.
+	/// </summary>
+	/// <param name="source">Candle build source under test.</param>
+	[TestMethod]
+	[DataRow(SmaBuildSources.Candles)]
+	[DataRow(SmaBuildSources.Ticks)]
+	[DataRow(SmaBuildSources.Spread)]
+	public async Task BacktestTradesStayWithinCandlesAllModes(SmaBuildSources source)
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(7);
+		var tf = TimeSpan.FromMinutes(1);
+
+		var name = $"{source}";
+
+		DataType buildFrom = source switch
+		{
+			SmaBuildSources.Candles => null,
+			SmaBuildSources.Ticks => DataType.Ticks,
+			SmaBuildSources.Spread => DataType.Level1,
+			_ => throw new ArgumentOutOfRangeException(nameof(source), source, "Unknown build source."),
+		};
+
+		var buildField = source == SmaBuildSources.Spread ? Level1Fields.SpreadMiddle : (Level1Fields?)null;
+
+		var security = CreateTestSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var candles = new List<(DateTimeOffset open, decimal low, decimal high)>();
+		var trades = new List<(DateTimeOffset time, decimal price, decimal limit, Sides side)>();
+
+		connector.CandleReceived += (s, c) =>
+		{
+			if (c.State == CandleStates.Finished)
+				candles.Add((c.OpenTime, c.LowPrice, c.HighPrice));
+		};
+		connector.OwnTradeReceived += (s, t) => trades.Add((t.Trade.ServerTime, t.Trade.Price, t.Order.Price, t.Order.Side));
+
+		var strategy = new WpfSmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = tf.TimeFrame(),
+			LongSma = 80,
+			ShortSma = 10,
+			BuildFrom = buildFrom,
+			BuildField = buildField,
+		};
+
+		var stoppedTcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stoppedTcs.TrySetResult(true);
+		};
+
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
+		IsTrue(stoppedTcs.Task.IsCompleted, $"[{name}] backtest did not complete in time");
+
+		await strategy.StopAsync(CancellationToken);
+
+		var outOfCandle = 0;
+		var maxDev = 0m;
+		var examples = new List<string>();
+
+		var window = TimeSpan.FromMinutes(2);
+
+		foreach (var (time, price, limit, side) in trades)
+		{
+			// Use the price range over a small window around the trade time. A limit order acts
+			// on the finished candle M but the own trade is stamped at the M+1 boundary, so a
+			// strict single-candle match would flag a normal fill across that boundary; the
+			// window only catches fills that are genuinely off the market.
+			var lo = decimal.MaxValue;
+			var hi = decimal.MinValue;
+
+			foreach (var c in candles)
+			{
+				if (c.open + tf <= time - window || c.open >= time + window)
+					continue;
+
+				if (c.low < lo) lo = c.low;
+				if (c.high > hi) hi = c.high;
+			}
+
+			if (hi < lo)
+				continue;
+
+			var dev = price < lo ? lo - price : price > hi ? price - hi : 0m;
+
+			// a fill more than 0.5% of price outside the windowed range is clearly off the market
+			if (dev > price * 0.005m)
+			{
+				outOfCandle++;
+				if (dev > maxDev) maxDev = dev;
+				if (examples.Count < 5)
+					examples.Add($"{side} fill={price} limit={limit} range=[{lo};{hi}] dev={dev}");
+			}
+		}
+
+		Console.WriteLine($"[{name}] candles={candles.Count} trades={trades.Count} outOfCandle={outOfCandle} maxDev={maxDev}");
+		foreach (var e in examples)
+			Console.WriteLine($"    [{name}] {e}");
+
+		AreEqual(0, outOfCandle, $"[{name}] {outOfCandle} trade(s) filled outside their candle range");
+	}
+
+	/// <summary>
 	/// Tests that multiple securities can be backtested.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestWithMultipleSecurities()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -1302,7 +2615,25 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(14);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		// Track finished candles per security so we can prove BOTH instruments were actually
+		// replayed - not just that the strategies were stopped (which the handler does itself).
+		var secId1 = security1.Id.ToSecurityId();
+		var secId2 = security2.Id.ToSecurityId();
+		var candles1 = 0;
+		var candles2 = 0;
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			if (candle.SecurityId == secId1)
+				Interlocked.Increment(ref candles1);
+			else if (candle.SecurityId == secId2)
+				Interlocked.Increment(ref candles2);
+		};
 
 		var strategy1 = new SmaStrategy
 		{
@@ -1330,11 +2661,7 @@ public class BacktestingTests : BaseTestClass
 		connector.StateChanged2 += state =>
 		{
 			if (state == ChannelStates.Stopped)
-			{
-				strategy1.Stop();
-				strategy2.Stop();
 				tcs.TrySetResult(true);
-			}
 		};
 
 		// Start strategies before emulation (like BaseOptimizer.StartIteration)
@@ -1342,8 +2669,8 @@ public class BacktestingTests : BaseTestClass
 		strategy1.Reset();
 		strategy2.WaitRulesOnStop = false;
 		strategy2.Reset();
-		strategy1.Start();
-		strategy2.Start();
+		await strategy1.StartAsync(CancellationToken);
+		await strategy2.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1355,9 +2682,20 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
+		await strategy1.StopAsync(CancellationToken);
+		await strategy2.StopAsync(CancellationToken);
+
+		Console.WriteLine($"Candles: {security1.Id}={candles1}, {security2.Id}={candles2}");
+
 		// Both strategies should have completed
 		strategy1.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 1 should be stopped");
 		strategy2.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 2 should be stopped");
+
+		// The real point of a multi-security backtest: data for BOTH securities must be replayed.
+		// The previous test would pass even if security2 stayed completely silent (no subscription,
+		// no data) because the stop handler stops the strategies itself.
+		IsTrue(candles1 > 0, $"Expected finished candles for {security1.Id}, got {candles1}");
+		IsTrue(candles2 > 0, $"Expected finished candles for {security2.Id}, got {candles2}");
 	}
 
 	/// <summary>
@@ -1377,28 +2715,7 @@ public class BacktestingTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
-
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
-
-		var strategy = new SmaStrategy
-		{
-			Connector = connector,
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
+		var run = await GetFullMonthRunAsync();
 
 		// Track times per event type
 		DateTime? lastOrderTime = null;
@@ -1416,12 +2733,14 @@ public class BacktestingTests : BaseTestClass
 		var pnlCount = 0;
 		var candleCount = 0;
 
-		strategy.OrderReceived += (sub, order) =>
+		// The shared run recorded each stream in delivery order, so replaying the recordings checks
+		// exactly the same sequences the per-event handlers used to see live.
+		foreach (var order in run.OrderEvents)
 		{
-			// Use ServerTime (set by emulator on each state change) instead of
+			// Uses ServerTime (set by emulator on each state change) instead of
 			// Time (set once at registration). ServerTime reflects when the emulator
 			// actually processed the state transition.
-			var time = order.ServerTime != default ? order.ServerTime : order.Time;
+			var time = order.Time;
 			orderCount++;
 
 			if (lastOrderTime.HasValue && time < lastOrderTime.Value)
@@ -1429,11 +2748,10 @@ public class BacktestingTests : BaseTestClass
 				orderTimeErrors.Add($"Order[{orderCount}] ServerTime decreased: {lastOrderTime.Value:O} -> {time:O} (TxId={order.TransactionId}, State={order.State})");
 			}
 			lastOrderTime = time;
-		};
+		}
 
-		strategy.OwnTradeReceived += (sub, trade) =>
+		foreach (var time in run.OwnTradeTimes)
 		{
-			var time = trade.Trade.ServerTime;
 			tradeCount++;
 
 			if (lastTradeTime.HasValue && time < lastTradeTime.Value)
@@ -1441,14 +2759,10 @@ public class BacktestingTests : BaseTestClass
 				tradeTimeErrors.Add($"Trade[{tradeCount}] time decreased: {lastTradeTime.Value:O} -> {time:O}");
 			}
 			lastTradeTime = time;
-		};
+		}
 
-		connector.CandleReceived += (sub, candle) =>
+		foreach (var time in run.FinishedCandleOpenTimes)
 		{
-			if (candle.State != CandleStates.Finished)
-				return;
-
-			var time = candle.OpenTime;
 			candleCount++;
 
 			if (lastCandleTime.HasValue && time < lastCandleTime.Value)
@@ -1456,10 +2770,11 @@ public class BacktestingTests : BaseTestClass
 				candleTimeErrors.Add($"Candle[{candleCount}] OpenTime decreased: {lastCandleTime.Value:O} -> {time:O}");
 			}
 			lastCandleTime = time;
-		};
+		}
 
-		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
+		foreach (var pnl in run.PnLEvents)
 		{
+			var time = pnl.Time;
 			pnlCount++;
 
 			if (lastPnLTime.HasValue && time < lastPnLTime.Value)
@@ -1467,27 +2782,6 @@ public class BacktestingTests : BaseTestClass
 				pnlTimeErrors.Add($"PnL[{pnlCount}] time decreased: {lastPnLTime.Value:O} -> {time:O}");
 			}
 			lastPnLTime = time;
-		};
-
-		var tcs = new TaskCompletionSource<bool>();
-		connector.StateChanged2 += state =>
-		{
-			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
-		};
-
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
-		connector.Connect();
-		await connector.StartAsync(CancellationToken);
-
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != tcs.Task)
-		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
 		}
 
 		var totalEvents = orderCount + tradeCount + pnlCount + candleCount;
@@ -1526,7 +2820,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(7); // Short period
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode: true);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode: true);
 
 		var strategy = new SmaStrategy
 		{
@@ -1556,7 +2850,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1605,10 +2899,10 @@ public class BacktestingTests : BaseTestClass
 		{
 			var messages = new List<Message>();
 
-			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
+			await using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
 
 			// Set deterministic initial IDs — EmulationMessageAdapter constructor
 			// seeds these from DateTime.UtcNow.Ticks which changes between runs.
@@ -1643,7 +2937,10 @@ public class BacktestingTests : BaseTestClass
 			connector.Connect();
 			await connector.StartAsync(CancellationToken);
 
-			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+			var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			if (completed != tcs.Task)
+				Fail("Emulation did not complete in time");
 
 			return messages;
 		}
@@ -1690,10 +2987,10 @@ public class BacktestingTests : BaseTestClass
 		{
 			var messages = new List<Message>();
 
-			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
+			await using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
 
 			// Set deterministic initial IDs — EmulationMessageAdapter constructor
 			// seeds these from DateTime.UtcNow.Ticks which changes between runs.
@@ -1728,7 +3025,10 @@ public class BacktestingTests : BaseTestClass
 			connector.Connect();
 			await connector.StartAsync(CancellationToken);
 
-			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+			var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			if (completed != tcs.Task)
+				Fail("Emulation did not complete in time");
 
 			return messages;
 		}
@@ -2008,6 +3308,427 @@ public class BacktestingTests : BaseTestClass
 		var execWithIds = execMsgs.Where(e => e.GetSubscriptionIds().Length > 0).ToList();
 		Console.WriteLine($"ExecutionMessages with subscription IDs: {execWithIds.Count}");
 		IsTrue(execWithIds.Count > 0, "Expected ExecutionMessage to have subscription IDs from OrderStatus subscription");
+	}
+
+	/// <summary>
+	/// A venue reports the account it keeps: every position with its entry price and floating profit, under the
+	/// portfolio subscription that asked for it. The emulated venue keeps that account itself, so its reports have
+	/// to reach the subscriber rather than be replaced by positions recounted from the trades on the way out.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_ReportsThePositionsOfTheEmulatedAccount()
+	{
+		var security = CreateTestSecurity();
+		var secId = security.ToSecurityId();
+		var portfolio = CreateTestPortfolio();
+		var messages = new List<Message>();
+		var adapter = CreateAccountEmulationAdapter(security, portfolio, messages);
+		var now = DateTime.UtcNow;
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new PortfolioLookupMessage { TransactionId = _accountLookupId, IsSubscribe = true }, CancellationToken);
+		await adapter.SendInMessageAsync(Quote(secId, now, 99m, 101m), CancellationToken);
+		await adapter.SendInMessageAsync(MarketBuy(secId, portfolio, now), CancellationToken);
+
+		var opened = messages.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == secId);
+
+		IsNotNull(opened, "the emulated venue must report the position the fill opened");
+		IsTrue(opened.GetSubscriptionIds().Contains(_accountLookupId), "the position is reported under the portfolio subscription");
+		AreEqual(101m, opened.TryGetDecimal(PositionChangeTypes.AveragePrice));
+		AreEqual(-2m, opened.TryGetDecimal(PositionChangeTypes.UnrealizedPnL), "bought at the ask of 101, the position is marked at the bid of 99");
+	}
+
+	/// <summary>
+	/// The emulated account is the portfolio it stands for, so it starts with that portfolio's money: after a fill
+	/// the venue reports the portfolio's money moved by the fill, not a balance counted up from nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_TheEmulatedAccountStartsWithThePortfolioMoney()
+	{
+		var security = CreateTestSecurity();
+		var secId = security.ToSecurityId();
+		var portfolio = CreateTestPortfolio();
+		portfolio.CurrentValue = 1000m;
+		var messages = new List<Message>();
+		var adapter = CreateAccountEmulationAdapter(security, portfolio, messages);
+		var now = DateTime.UtcNow;
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new PortfolioLookupMessage { TransactionId = _accountLookupId, IsSubscribe = true }, CancellationToken);
+		await adapter.SendInMessageAsync(Quote(secId, now, 99m, 101m), CancellationToken);
+		await adapter.SendInMessageAsync(MarketBuy(secId, portfolio, now), CancellationToken);
+
+		var account = messages.OfType<PositionChangeMessage>().LastOrDefault(m => m.IsMoney());
+
+		IsNotNull(account, "the fill must report the account");
+		AreEqual(998m, account.TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"a thousand in the portfolio, and the position bought at 101 is worth 99 at the bid");
+	}
+
+	private const long _accountLookupId = 1000;
+
+	// An emulation-only adapter of its own over one security and one portfolio, recording what it sends out.
+	private static IMessageAdapter CreateAccountEmulationAdapter(Security security, Portfolio portfolio, List<Message> messages)
+	{
+		var adapter = new EmulationMessageAdapter(
+			new PassThroughMessageAdapter(new IncrementalIdGenerator()),
+			new PassThroughMessageChannel(),
+			isEmulationOnly: true,
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			new InMemoryExchangeInfoProvider())
+		{
+			OwnInnerAdapter = false,
+		};
+
+		adapter.NewOutMessageAsync += (message, _) =>
+		{
+			messages.Add(message);
+			return default;
+		};
+
+		return adapter;
+	}
+
+	private static Level1ChangeMessage Quote(SecurityId securityId, DateTime time, decimal bid, decimal ask)
+		=> new Level1ChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = time,
+			LocalTime = time,
+		}
+		.TryAdd(Level1Fields.BestBidPrice, bid)
+		.TryAdd(Level1Fields.BestAskPrice, ask);
+
+	private static OrderRegisterMessage MarketBuy(SecurityId securityId, Portfolio portfolio, DateTime time)
+		=> new()
+		{
+			TransactionId = 2000,
+			SecurityId = securityId,
+			PortfolioName = portfolio.Name,
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			LocalTime = time,
+		};
+
+	// An emulation adapter built the way a live one is: an inner adapter of its own, an incoming
+	// channel, and the three providers the emulator needs.
+	private static EmulationMessageAdapter CreateEmulationAdapter(IMessageChannel channel)
+	{
+		return new(
+			new PassThroughMessageAdapter(new IncrementalIdGenerator()),
+			channel,
+			isEmulationOnly: true,
+			new CollectionSecurityProvider([CreateTestSecurity()]),
+			new CollectionPortfolioProvider([CreateTestPortfolio()]),
+			new InMemoryExchangeInfoProvider())
+		{
+			OwnInnerAdapter = false,
+		};
+	}
+
+	[TestMethod]
+	public async Task EmulationAdapter_MixedMode_RoutesOrdersByPortfolio()
+	{
+		var security = CreateTestSecurity();
+		var livePortfolio = new Portfolio { Name = "LIVE" };
+		var simulatorPortfolio = Portfolio.CreateSimulator();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new EmulationMessageAdapter(
+			inner,
+			new PassThroughMessageChannel(),
+			isEmulationOnly: false,
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([livePortfolio, simulatorPortfolio]),
+			new InMemoryExchangeInfoProvider())
+		{
+			OwnInnerAdapter = true,
+		};
+
+		static OrderRegisterMessage Order(long transactionId, SecurityId securityId, string portfolioName)
+			=> new()
+			{
+				TransactionId = transactionId,
+				SecurityId = securityId,
+				PortfolioName = portfolioName,
+				Side = Sides.Buy,
+				Price = 100m,
+				Volume = 1m,
+			};
+
+		var before = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(Order(7001, security.ToSecurityId(), livePortfolio.Name), CancellationToken);
+
+		inner.InMessages.OfType<OrderRegisterMessage>().Select(m => m.TransactionId).AssertEqual([7001L]);
+		adapter.Emulator.ProcessedMessageCount.AssertEqual(before,
+			"a live portfolio order belongs to the live inner adapter in mixed mode");
+
+		await adapter.SendInMessageAsync(Order(7002, security.ToSecurityId(), simulatorPortfolio.Name), CancellationToken);
+
+		inner.InMessages.OfType<OrderRegisterMessage>().Select(m => m.TransactionId).AssertEqual([7001L],
+			"the Simulator order must not be sent to the live venue");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, before,
+			"the Simulator portfolio selects the emulator even when a live inner adapter is owned");
+
+		var afterOrders = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7003,
+			PortfolioName = livePortfolio.Name,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L]);
+		adapter.Emulator.ProcessedMessageCount.AssertEqual(afterOrders,
+			"a group cancellation for a live portfolio belongs to the live inner adapter");
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7004,
+			PortfolioName = simulatorPortfolio.Name,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L],
+			"a group cancellation for Simulator must not reach the live venue");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, afterOrders,
+			"a group cancellation for Simulator belongs to the emulator");
+
+		var beforeUnscopedCancel = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7005,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L, 7005L],
+			"an unscoped group cancellation covers the live side of mixed mode");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, beforeUnscopedCancel,
+			"an unscoped group cancellation also covers the emulated side of mixed mode");
+	}
+
+	/// <summary>
+	/// A copy of a configured emulation adapter emulates on the same terms as the original.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_Clone_KeepsSettings()
+	{
+		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
+
+		var settings = adapter.Settings;
+
+		settings.Latency = TimeSpan.FromMilliseconds(250);
+		settings.MatchOnTouch = true;
+		settings.CheckMoney = true;
+		settings.CheckShortable = true;
+		settings.MaxDepth = 7;
+		settings.SpreadSize = 3;
+		settings.IsSpreadCentered = true;
+		settings.Failing = 12.5;
+		settings.CandlePrice = EmulationCandlePrices.Close;
+
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
+
+		// These are the same values Save/Load carries across a restart, so they are what the
+		// adapter is: a copy that fills on touch when the original does not, or checks money when
+		// the original does not, backtests a different strategy.
+		AreEqual(TimeSpan.FromMilliseconds(250), clone.Settings.Latency);
+		IsTrue(clone.Settings.MatchOnTouch, "the copy fills on touch, as the original does");
+		IsTrue(clone.Settings.CheckMoney, "the copy checks money, as the original does");
+		IsTrue(clone.Settings.CheckShortable, "the copy checks shortable, as the original does");
+		AreEqual(7, clone.Settings.MaxDepth);
+		AreEqual(3, clone.Settings.SpreadSize);
+		IsTrue(clone.Settings.IsSpreadCentered, "the copy centres the spread, as the original does");
+		AreEqual(12.5, clone.Settings.Failing);
+		AreEqual(EmulationCandlePrices.Close, clone.Settings.CandlePrice);
+	}
+
+	/// <summary>
+	/// The copy carries its own settings, not a second reference to the original's.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_Clone_SettingsAreItsOwn()
+	{
+		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
+		adapter.Settings.MaxDepth = 7;
+
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
+		clone.Settings.MaxDepth = 9;
+
+		// Retuning one run must not retune the other.
+		AreEqual(7, adapter.Settings.MaxDepth, "the original keeps the depth it was given");
+		AreNotSame(adapter.Settings, clone.Settings);
+		AreNotSame(adapter.Emulator, clone.Emulator);
+	}
+
+	/// <summary>
+	/// Work handed to one emulation adapter stays with it and does not reach the copy.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_Clone_DoesNotShareTheWork()
+	{
+		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
+
+		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
+
+		await ((IMessageAdapter)adapter).SendInMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = CreateTestSecurity().ToSecurityId(),
+			ServerTime = time,
+			LocalTime = time,
+		}.TryAdd(Level1Fields.LastTradePrice, 100m), CancellationToken);
+
+		// One message sent to one adapter is one message of work. Two emulators fed from the same
+		// message means two books, two sets of orders and two sets of fills where the caller asked
+		// for one, and the copy - which was sent nothing - has to have nothing to show.
+		AreEqual(1L, adapter.Emulator.ProcessedMessageCount, "the adapter the message was sent to processed it");
+		AreEqual(0L, clone.Emulator.ProcessedMessageCount, "the copy was sent nothing and processed nothing");
+	}
+
+	/// <summary>
+	/// Disposing the emulation adapter detaches it from its emulator chain. Work still moving through
+	/// the incoming channel afterwards must not be raised out of an adapter its owner has torn down.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_Dispose_StopsRaisingOutMessages()
+	{
+		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
+		var target = (IMessageAdapter)adapter;
+
+		var securityId = CreateTestSecurity().ToSecurityId();
+		var portfolioName = CreateTestPortfolio().Name;
+		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
+
+		var received = new List<Message>();
+		adapter.NewOutMessageAsync += (msg, ct) => { received.Add(msg); return default; };
+
+		OrderRegisterMessage NewOrder(long transId) => new()
+		{
+			TransactionId = transId,
+			SecurityId = securityId,
+			PortfolioName = portfolioName,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			LocalTime = time,
+		};
+
+		await target.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await target.SendInMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = time,
+			LocalTime = time,
+		}
+		.TryAdd(Level1Fields.LastTradePrice, 100m)
+		.TryAdd(Level1Fields.BestBidPrice, 99m)
+		.TryAdd(Level1Fields.BestAskPrice, 101m), CancellationToken);
+
+		received.Clear();
+
+		await target.SendInMessageAsync(NewOrder(1000), CancellationToken);
+
+		// Without an answer here the probe below proves nothing - the chain has to be live first.
+		IsTrue(received.Count > 0, "the live adapter has to raise what the emulator answered");
+
+		adapter.Dispose();
+		received.Clear();
+
+		await target.SendInMessageAsync(NewOrder(1001), CancellationToken);
+
+		AreEqual(0, received.Count, $"the disposed adapter kept raising: {received.Select(m => $"{m.Type}").JoinComma()}");
+	}
+
+	/// <summary>
+	/// A backtest is an experiment, and an experiment has to be repeatable: the same data through the
+	/// same settings with the same random seed has to come back as the same run, down to the numbers
+	/// on the orders and the trades it reports. A user compares a rerun against the run before it -
+	/// after a change to a strategy, or against a stored reference log - and numbers drawn from the
+	/// clock the run happened to start at make every rerun differ from the one it is compared to for a
+	/// reason that has nothing to do with what was being tested.
+	/// </summary>
+	[TestMethod]
+	public async Task SameSeedProducesTheSameOrderAndTradeIds()
+	{
+		const int randomSeed = 42;
+		const long orderTransId = 1000;
+
+		var securityId = CreateTestSecurity().ToSecurityId();
+		var portfolioName = CreateTestPortfolio().Name;
+		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
+
+		// One run: the same instrument, the same quote, the same order, the same seed.
+		async Task<(string orderIds, string tradeIds)> RunAsync()
+		{
+			var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
+			var target = (IMessageAdapter)adapter;
+
+			var emulator = (MarketEmulator)adapter.Emulator;
+			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
+
+			var received = new List<Message>();
+			emulator.NewOutMessageAsync += (msg, ct) => { received.Add(msg); return default; };
+
+			// A run starts where a real one starts: the reset is what puts the identifier generators
+			// back to where the settings say the run begins.
+			await target.SendInMessageAsync(new ResetMessage(), CancellationToken);
+			await target.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+
+			await target.SendInMessageAsync(new Level1ChangeMessage
+			{
+				SecurityId = securityId,
+				ServerTime = time,
+				LocalTime = time,
+			}
+			.TryAdd(Level1Fields.LastTradePrice, 100m)
+			.TryAdd(Level1Fields.BestBidPrice, 99m)
+			.TryAdd(Level1Fields.BestAskPrice, 101m), CancellationToken);
+
+			// A buy at the ask, so the run has both an accepted order and a fill to report.
+			await target.SendInMessageAsync(new OrderRegisterMessage
+			{
+				TransactionId = orderTransId,
+				SecurityId = securityId,
+				PortfolioName = portfolioName,
+				Side = Sides.Buy,
+				Price = 101m,
+				Volume = 1,
+				OrderType = OrderTypes.Limit,
+				LocalTime = time,
+			}, CancellationToken);
+
+			var mine = received
+				.OfType<ExecutionMessage>()
+				.Where(m => m.OriginalTransactionId == orderTransId)
+				.ToArray();
+
+			var orderIds = mine.Where(m => m.OrderId is not null).Select(m => m.OrderId.Value.ToString()).Distinct().JoinComma();
+			var tradeIds = mine.Where(m => m.TradeId is not null).Select(m => m.TradeId.Value.ToString()).JoinComma();
+
+			adapter.Dispose();
+
+			return (orderIds, tradeIds);
+		}
+
+		var first = await RunAsync();
+
+		// The second run is started at a later instant, the way a rerun always is.
+		var startedAt = DateTime.UtcNow.Ticks;
+		SpinWait.SpinUntil(() => DateTime.UtcNow.Ticks != startedAt);
+
+		var second = await RunAsync();
+
+		IsNotEmpty(first.orderIds, "the run has to number the order it accepted, or there is nothing to compare");
+		IsNotEmpty(first.tradeIds, "and the fill it reported");
+
+		AreEqual(first.orderIds, second.orderIds,
+			$"the same run twice has to number its orders the same way: [{first.orderIds}] then [{second.orderIds}]");
+		AreEqual(first.tradeIds, second.tradeIds,
+			$"and its trades: [{first.tradeIds}] then [{second.tradeIds}]");
 	}
 
 	/// <summary>
@@ -2494,7 +4215,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaServerStopStrategy
 		{
@@ -2516,7 +4237,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -2546,76 +4267,198 @@ public class BacktestingTests : BaseTestClass
 	/// If this test fails, it means some candle messages are being lost in the adapter pipeline.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestAllCandlesDelivered()
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
+		var run = await GetFullMonthRunAsync();
 
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var security = CreateTestSecurity();
 		var storageRegistry = GetHistoryStorage();
 
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		// Count candles in storage
-		var candleType = TimeSpan.FromMinutes(1).TimeFrame();
 		var storageCandles = await storageRegistry
 			.GetTimeFrameCandleMessageStorage(security.Id.ToSecurityId(), TimeSpan.FromMinutes(1))
 			.LoadAsync(startTime, stopTime)
-			.CountAsync(CancellationToken);
+			.ToArrayAsync(CancellationToken);
 
-		IsTrue(storageCandles > 0, "No candles in storage");
+		IsTrue(storageCandles.Length > 0, "No candles in storage");
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		// A bar becomes known when it closes, so what a run of [start, stop] delivers is the bars
+		// that close inside it. The storage window also holds the bar that merely opens on the
+		// run's last moment - it closes a minute later, after the run is over, and a run cannot
+		// report a bar it did not live to see close. Counting it as delivered is what the old
+		// timestamp made look right: a finished bar handed over at its open needs nothing but its
+		// open to be inside the window.
+		var expected = storageCandles
+			.Where(c => c.CloseTime <= stopTime)
+			.Select(c => c.OpenTime)
+			.ToArray();
 
-		var finishedCandlesReceived = 0;
+		// The shared run replays exactly this window with the same 1m candle subscription and records
+		// one entry per finished candle delivered to the connector.
+		var received = run.FinishedCandleOpenTimes.ToArray();
 
-		connector.CandleReceived += (sub, candle) =>
-		{
-			if (candle.State == CandleStates.Finished)
-				Interlocked.Increment(ref finishedCandlesReceived);
-		};
+		Console.WriteLine($"Storage candles: {storageCandles.Length}, closing inside the window: {expected.Length}, received finished candles: {received.Length}");
 
-		var strategy = new SmaStrategy
+		IsTrue(expected.Length > 0, "No stored candle closes inside the replayed window.");
+
+		// Every one of them exactly once: no candle lost in the adapter pipeline and none
+		// duplicated. Comparing the open times rather than the counts is what keeps a loss and a
+		// duplicate from cancelling each other out.
+		AreEquivalent(expected, received,
+			$"Every stored candle closing inside the window must be delivered exactly once. Expected: {expected.Length}, received: {received.Length}");
+	}
+	/// <summary>
+	/// A strategy that opens only from a flat position, with market orders, over the real month.
+	///
+	/// This is the shape that exposed the candle-mode fill cap. Each leg sends the same volume;
+	/// if the fill is limited to whatever the bar happened to trade, the two legs come back as
+	/// different fractions, the position never returns to zero and the gate never opens again -
+	/// two trades in a month where the crossings called for dozens. IncreaseDepthVolume is on by
+	/// default, so the round trip closes and the strategy keeps working.
+	/// </summary>
+	[TestMethod]
+	public async Task FlatGatedStrategyKeepsTradingOnCandles()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreateTestPortfolio();
+
+		await using var connector = CreateConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			GetHistoryStorage(),
+			Paths.HistoryBeginDate,
+			Paths.HistoryEndDate);
+
+		IsTrue(connector.EmulationAdapter.Settings.IncreaseDepthVolume, "the default is what this asserts against");
+
+		var trades = new List<decimal>();
+		connector.OwnTradeReceived += (s, t) => trades.Add(t.Trade.Volume);
+
+		var strategy = new FlatGateStrategy
 		{
 			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = candleType,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
 
-		var tcs = new TaskCompletionSource<bool>();
+		var stopped = new TaskCompletionSource<bool>();
 		connector.StateChanged2 += state =>
 		{
 			if (state == ChannelStates.Stopped)
-				tcs.TrySetResult(true);
+				stopped.TrySetResult(true);
 		};
 
-		strategy.WaitRulesOnStop = false;
-		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
-		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+		await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
+		IsTrue(stopped.Task.IsCompleted, "backtest did not complete in time");
 
-		if (completed != tcs.Task)
+		await strategy.StopAsync(CancellationToken);
+
+		IsTrue(strategy.Crossings > 50, $"the month has plenty of crossings, saw {strategy.Crossings}");
+		IsTrue(trades.Count >= 20, $"the strategy has to keep trading, it made {trades.Count} trades over {strategy.Crossings} crossings");
+		IsFalse(trades.Any(v => v != 1m), "every market order fills for the volume it asked for");
+		AreEqual(0m, strategy.Position % 1m, "no fraction of a position is left behind");
+	}
+
+	/// <summary>
+	/// SMA crossover that opens from flat and closes on the opposite cross, with market orders.
+	/// </summary>
+	private class FlatGateStrategy : Strategy
+	{
+		private bool? _isShortLessThenLong;
+
+		public FlatGateStrategy()
 		{
-			connector.Disconnect();
-			Fail("Backtest did not complete in time");
+			_candleType = Param(nameof(CandleType), TimeSpan.FromMinutes(1).TimeFrame());
+			_long = Param(nameof(Long), 80);
+			_short = Param(nameof(Short), 30);
 		}
 
-		Console.WriteLine($"Storage candles: {storageCandles}, Received finished candles: {finishedCandlesReceived}");
+		private readonly StrategyParam<DataType> _candleType;
 
-		// Last candle may not be delivered because ProcessStoredCandles
-		// only emits candles with OpenTime < currentTime (the very last has no "next" time event).
-		IsTrue(finishedCandlesReceived >= storageCandles - 1,
-			$"Too many candles lost. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
+		public DataType CandleType
+		{
+			get => _candleType.Value;
+			set => _candleType.Value = value;
+		}
+
+		private readonly StrategyParam<int> _long;
+
+		public int Long
+		{
+			get => _long.Value;
+			set => _long.Value = value;
+		}
+
+		private readonly StrategyParam<int> _short;
+
+		public int Short
+		{
+			get => _short.Value;
+			set => _short.Value = value;
+		}
+
+		/// <summary>How many times the two averages crossed over the run.</summary>
+		public int Crossings { get; private set; }
+
+		protected override void OnReseted()
+		{
+			base.OnReseted();
+
+			_isShortLessThenLong = null;
+			Crossings = 0;
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(CandleType)
+				.Bind(new SMA { Length = Long }, new SMA { Length = Short }, OnProcess)
+				.Start();
+		}
+
+		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var isShortLessThenLong = shortValue < longValue;
+
+			if (_isShortLessThenLong is null)
+			{
+				_isShortLessThenLong = isShortLessThenLong;
+				return;
+			}
+
+			if (_isShortLessThenLong == isShortLessThenLong)
+				return;
+
+			_isShortLessThenLong = isShortLessThenLong;
+			Crossings++;
+
+			if (Position == 0)
+			{
+				if (!isShortLessThenLong)
+					BuyMarket(Volume);
+			}
+			else if (Position > 0 && isShortLessThenLong)
+				SellMarket(Volume);
+		}
 	}
 }

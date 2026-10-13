@@ -30,7 +30,7 @@ public class LatencyManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderReplace_CallsBothAddMethods()
+	public void OrderReplace_CallsAddRegistrationOnly()
 	{
 		var mockState = new Mock<ILatencyManagerState>();
 		var mgr = new LatencyManager(mockState.Object);
@@ -38,8 +38,8 @@ public class LatencyManagerMockTests : BaseTestClass
 
 		mgr.ProcessMessage(new OrderReplaceMessage { TransactionId = 5, LocalTime = t0 });
 
-		mockState.Verify(s => s.AddCancellation(5, t0), Times.Once);
 		mockState.Verify(s => s.AddRegistration(5, t0), Times.Once);
+		mockState.Verify(s => s.AddCancellation(It.IsAny<long>(), It.IsAny<DateTime>()), Times.Never);
 	}
 
 	[TestMethod]

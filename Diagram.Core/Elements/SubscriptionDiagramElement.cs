@@ -100,9 +100,9 @@ public abstract class SubscriptionDiagramElement : DiagramElement
 	protected abstract Subscription OnCreateSubscription(Security security);
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void LoadState(SettingsStorage storage)
 	{
-		base.Load(storage);
+		base.LoadState(storage);
 
 		if (_signalInput != null)
 			AddSignalInputSocket();

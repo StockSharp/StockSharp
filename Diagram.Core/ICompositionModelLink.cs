@@ -37,9 +37,9 @@ public interface ICompositionModelLink : ICloneable
 }
 
 /// <summary>
-/// Dummy implementation of <see cref="ICompositionModelLink"/>.
+/// In-memory implementation of <see cref="ICompositionModelLink"/>.
 /// </summary>
-public class DummyCompositionModelLink : ICompositionModelLink
+public class InMemoryCompositionModelLink : ICompositionModelLink
 {
 	bool ICompositionModelLink.IsReconnecting { get; set; }
 	bool ICompositionModelLink.IsConnected { get; set; }
@@ -53,7 +53,7 @@ public class DummyCompositionModelLink : ICompositionModelLink
 	/// <inheritdoc/>
 	public string FromPort { get; set; }
 
-	object ICloneable.Clone() => new DummyCompositionModelLink
+	object ICloneable.Clone() => new InMemoryCompositionModelLink
 	{
 		From = From,
 		To = To,

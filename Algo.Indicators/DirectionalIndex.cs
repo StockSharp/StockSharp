@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DMIKey,
 	Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/dmi.html")]
 [IndicatorOut(typeof(IDirectionalIndexValue))]
 public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>
@@ -85,16 +86,16 @@ public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 		Length = storage.GetValue<int>(nameof(Length));
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 		storage.SetValue(nameof(Length), Length);
 	}
 

@@ -182,9 +182,8 @@ public class GpuMarketMeannessIndexCalculator : GpuIndicatorCalculatorBase<Marke
 
 			if (bufferCount == L)
 			{
-				// Buffer is full. Remove the oldest transition.
-				// CPU: UpdateChanges(Buffer[0], Buffer[1], isRemoving=true)
-				// Buffer[0] is at globalIdx - L, Buffer[1] is at globalIdx - L + 1
+				// The window is full, so the oldest transition leaves it: the one from Buffer[0] to
+				// Buffer[1], which are the bars L and L-1 back.
 				var oldPrice = ExtractPrice(flatCandles[globalIdx - L], priceType);
 				var nextOldPrice = ExtractPrice(flatCandles[globalIdx - L + 1], priceType);
 
@@ -194,12 +193,20 @@ public class GpuMarketMeannessIndexCalculator : GpuIndicatorCalculatorBase<Marke
 				if (oldDirection != 0)
 					priceChanges--;
 
-				// CPU checks: if (currentDirection != _prevDirection && _prevDirection != 0)
-				// Here _prevDirection is the CURRENT prevDirection state (not the one at removal time)
-				if (oldDirection != prevDirection && prevDirection != 0)
-					directionChanges--;
+				// A direction change belongs to a pair of neighbouring transitions, so what leaves
+				// with the oldest one is its comparison against the transition that FOLLOWED it -
+				// Buffer[1] to Buffer[2] - not against the newest direction in the series. The two
+				// coincide only by accident, which is why the drift stayed small enough to look
+				// like rounding.
+				if (oldDirection != 0 && L > 2)
+				{
+					var thirdOldPrice = ExtractPrice(flatCandles[globalIdx - L + 2], priceType);
+					var followingDiff = thirdOldPrice - nextOldPrice;
+					var followingDirection = followingDiff > 0f ? 1 : followingDiff < 0f ? -1 : 0;
 
-				// CPU does NOT update _prevDirection when isRemoving
+					if (followingDirection != oldDirection)
+						directionChanges--;
+				}
 			}
 
 			// CPU: Buffer.PushBack(price), then if (Buffer.Count > 1) UpdateChanges(Buffer[^2], price, false)

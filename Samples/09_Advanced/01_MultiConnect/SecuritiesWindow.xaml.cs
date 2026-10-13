@@ -21,6 +21,8 @@ using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventA
 
 public partial class SecuritiesWindow
 {
+	// SettingsWindow of the published StockSharp.Xaml package takes its settings as IPersistable.
+#pragma warning disable CS0618
 	private class DatesSettings : NotifiableObject, IPersistable
 	{
 		private DateTime? _from;
@@ -123,6 +125,7 @@ public partial class SecuritiesWindow
 			throw new NotSupportedException();
 		}
 	}
+#pragma warning restore CS0618
 
 	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new();
 	private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new();
@@ -137,8 +140,10 @@ public partial class SecuritiesWindow
 
 	private static Connector Connector => MainWindow.Instance.MainPanel.Connector;
 
-	private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
+	private async void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 	{
+		var adapterTimeFrames = await Connector.Adapter.GetTimeFramesAsync().ToArrayAsync();
+
 		UpdateTimeFrames(new[]
 		{
 			TimeSpan.FromMinutes(1),
@@ -147,9 +152,7 @@ public partial class SecuritiesWindow
 			TimeSpan.FromMinutes(30),
 			TimeSpan.FromHours(1),
 			TimeSpan.FromDays(1),
-#pragma warning disable CS0618 // Type or member is obsolete
-		}.Concat(Connector.Adapter.GetTimeFrames()).OrderBy().Distinct());
-#pragma warning restore CS0618 // Type or member is obsolete
+		}.Concat(adapterTimeFrames).OrderBy().Distinct());
 	}
 
 	public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)
@@ -390,7 +393,7 @@ public partial class SecuritiesWindow
 	{
 		var connector = Connector;
 
-		var settings = new Level1DatesSettings { From = DateTime.Today.AddDays(-1) };
+		var settings = new Level1DatesSettings { From = DateTime.UtcNow.Date.AddDays(-1) };
 
 		var wnd = new SettingsWindow { Settings = settings };
 
@@ -432,7 +435,7 @@ public partial class SecuritiesWindow
 	{
 		var connector = Connector;
 
-		var settings = new DatesSettings { From = DateTime.Today.AddDays(-1) };
+		var settings = new DatesSettings { From = DateTime.UtcNow.Date.AddDays(-1) };
 
 		var wnd = new SettingsWindow { Settings = settings };
 
@@ -494,7 +497,7 @@ public partial class SecuritiesWindow
 		if (range.TotalYears() > 5)
 			range = TimeSpan.FromTicks(TimeHelper.TicksPerYear * 5);
 
-		var settings = new DatesSettings { From = DateTime.Today - range };
+		var settings = new DatesSettings { From = DateTime.UtcNow.Date - range };
 
 		var wnd = new SettingsWindow { Settings = settings };
 

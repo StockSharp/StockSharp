@@ -5,6 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
+[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BoardsKey)]
 public class BoardMessage : BaseSubscriptionIdMessage<BoardMessage>
 {
 	/// <summary>

@@ -61,6 +61,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 							_positionManager.ProcessMessage(message);
 					}
 
+					await RaiseNewOutMessageAsync(lookupMsg.CreateResponse(), cancellationToken);
 					await RaiseNewOutMessageAsync(lookupMsg.CreateResult(), cancellationToken);
 				}
 				else
@@ -118,6 +119,8 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="PositionMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new PositionMessageAdapter(InnerAdapter.TypedClone(), _positionManager.Clone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new PositionMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _positionManager.CloneAsync(cancellationToken));
 }

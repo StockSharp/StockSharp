@@ -13,27 +13,28 @@ public class CommissionMessageAdapter(IMessageAdapter innerAdapter, ICommissionM
 	private readonly ICommissionManager _commissionManager = commissionManager ?? throw new ArgumentNullException(nameof(commissionManager));
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		_commissionManager.Process(message);
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await _commissionManager.ProcessAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
-			execMsg.Commission = _commissionManager.Process(execMsg);
+			execMsg.Commission = await _commissionManager.ProcessAsync(execMsg, cancellationToken);
 
-		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
 	/// Create a copy of <see cref="CommissionMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new CommissionMessageAdapter(InnerAdapter.TypedClone(), _commissionManager.Clone());
+		return new CommissionMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _commissionManager.CloneAsync(cancellationToken));
 	}
 }

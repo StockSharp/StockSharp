@@ -103,7 +103,7 @@ public class QuotingEngine
 		var bestPrice = _behavior.CalculateBestPrice(
 			_security, _mdProvider, _quotingSide,
 			input.BestBidPrice, input.BestAskPrice,
-			input.LastTradePrice, input.LastTradeVolume,
+			input.LastTradePrice, input.LastTradeVolume, input.LastTradeSeq,
 			input.Bids, input.Asks);
 
 		if (bestPrice == null)

@@ -1,4 +1,6 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
+
+using System.Runtime.CompilerServices;
 
 using Ecng.Reflection;
 
@@ -712,6 +714,18 @@ static class Helper
 		return new() { SecurityCode = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null), BoardCode = BoardCodes.Test };
 	}
 
+	/// <summary>
+	/// Creates an id with the given codes. Unlike <see cref="CreateSecurityId()"/> it is stable
+	/// across calls, which tests comparing or storing the same security by id depend on.
+	/// </summary>
+	/// <param name="code">Security code.</param>
+	/// <param name="boardCode">Board code.</param>
+	/// <returns>Security id.</returns>
+	public static SecurityId CreateSecurityId(string code, string boardCode)
+	{
+		return new() { SecurityCode = code, BoardCode = boardCode };
+	}
+
 	public static Security CreateSecurity(decimal lastTickPrice = default)
 	{
 		var security = new Security
@@ -747,6 +761,71 @@ static class Helper
 	public static Portfolio CreatePortfolio()
 	{
 		return Portfolio.CreateSimulator();
+	}
+
+	/// <summary>
+	/// Assert the invariants every portfolio row must satisfy, whichever emulator produced it.
+	/// </summary>
+	/// <remarks>
+	/// An account is reported on two kinds of row and they must not be confused: the account's cash,
+	/// named <see cref="SecurityId.Money"/>, and a holding of an instrument, named after that
+	/// instrument. Telling them apart is what every consumer does first - storage resolves the
+	/// instrument before it writes the row, and MONEY@ALL resolves to none - so a row that carries a
+	/// lot quantity under the money id is not merely mislabelled, it is discarded on the way out.
+	///
+	/// This is asserted on the emitting side rather than in any one test, because comparing two
+	/// implementations against each other cannot catch a mistake both of them make: the emulators
+	/// each emitted a fill's position row as money, agreed with one another perfectly, and the whole
+	/// comparison suite stayed green over it.
+	/// </remarks>
+	/// <param name="message">The message the emulator emitted.</param>
+	public static void CheckPortfolioRowContract(Message message)
+	{
+		if (message is not PositionChangeMessage posMsg)
+			return;
+
+		var isMoney = posMsg.SecurityId == SecurityId.Money;
+
+		// An average price belongs to a holding of something. Money has no average price, so a row
+		// carrying one is describing an instrument and must name it.
+		if (posMsg.Changes.ContainsKey(PositionChangeTypes.AveragePrice))
+			isMoney.AssertFalse($"a row carrying {nameof(PositionChangeTypes.AveragePrice)} describes an instrument and must name it, not {nameof(SecurityId.Money)}");
+
+		// Realized PnL is an account-wide total, not a per-instrument one, and it is what tells the
+		// cash row apart from the position row emitted beside it.
+		if (posMsg.Changes.ContainsKey(PositionChangeTypes.RealizedPnL))
+			isMoney.AssertTrue($"a row carrying {nameof(PositionChangeTypes.RealizedPnL)} is the account's cash row and must be named {nameof(SecurityId.Money)}, not {posMsg.SecurityId}");
+
+		// A row about an instrument has to say which one; default() names nothing at all.
+		if (!isMoney)
+			posMsg.SecurityId.AssertNotEqual(default, "a position row must name the instrument it describes");
+	}
+
+	// Changes are the whole payload of a Level1/position message, so this is an equality check:
+	// the same set of keys and the same value under every key. A key on one side only fails, in
+	// every mode - a round-trip that drops a field or fills a default of its own is a defect, not
+	// a normalisation. The single difference the contract allows is the isMls one: a store that
+	// keeps time to the millisecond gets the expected DateTime truncated the same way first.
+	private static void CheckChangesEqual<TField>(IDictionary<TField, object> expected, IDictionary<TField, object> actual, bool isMls, string name)
+	{
+		expected.AssertNotNull($"{name}: expected changes are missing");
+		actual.AssertNotNull($"{name}: actual changes are missing");
+
+		var missing = expected.Keys.Where(k => !actual.ContainsKey(k)).ToArray();
+		var extra = actual.Keys.Where(k => !expected.ContainsKey(k)).ToArray();
+
+		missing.Length.AssertEqual(0, $"{name}: changes not found in actual: {missing.Select(k => k.ToString()).JoinCommaSpace()}");
+		extra.Length.AssertEqual(0, $"{name}: changes present in actual only: {extra.Select(k => k.ToString()).JoinCommaSpace()}");
+
+		foreach (var pair in expected)
+		{
+			var expectedValue = pair.Value;
+
+			if (expectedValue is DateTime dt)
+				expectedValue = dt.TruncateTime(isMls);
+
+			actual[pair.Key].AssertEqual(expectedValue, $"{name}: {pair.Key}");
+		}
 	}
 
 	public static void CheckEqual<T>(T expected, T actual, bool isMls = false, bool isSerializer = false, bool checkExtended = false, bool skipLocalTime = false, bool skipOriginalTransactionId = false)
@@ -944,33 +1023,7 @@ static class Helper
 			a.SeqNum.AssertEqual(e.SeqNum);
 			a.BuildFrom.AssertEqual(e.BuildFrom);
 
-			if (!isSerializer)
-			{
-				var d1 = e.Changes;
-				var d2 = a.Changes;
-
-				//d2.Count.AssertEqual(d1.Count);
-
-				var notFound = new HashSet<Level1Fields>();
-
-				foreach (var p1 in d1)
-				{
-					if (!d2.TryGetValue(p1.Key, out var value))
-					{
-						notFound.Add(p1.Key);
-						continue;
-					}
-
-					var expectedValue = p1.Value;
-
-					if (expectedValue is DateTime dto)
-						expectedValue = dto.TruncateTime(isMls);
-
-					value.AssertEqual(expectedValue);
-				}
-
-				notFound.Count.AssertEqual(0);
-			}
+			CheckChangesEqual(e.Changes, a.Changes, isMls, nameof(Level1ChangeMessage));
 		}
 		else if (type == typeof(PositionChangeMessage))
 		{
@@ -993,28 +1046,7 @@ static class Helper
 			a.BuildFrom.AssertEqual(e.BuildFrom);
 			a.Side.AssertEqual(e.Side);
 
-			if (!isSerializer)
-			{
-				var d1 = e.Changes;
-				var d2 = a.Changes;
-
-				//d2.Count.AssertEqual(d1.Count);
-
-				var notFound = new HashSet<PositionChangeTypes>();
-
-				foreach (var p1 in d1)
-				{
-					if (!d2.TryGetValue(p1.Key, out var value))
-					{
-						notFound.Add(p1.Key);
-						continue;
-					}
-
-					value.AssertEqual(p1.Value);
-				}
-
-				notFound.Count.AssertEqual(0);
-			}
+			CheckChangesEqual(e.Changes, a.Changes, isMls, nameof(PositionChangeMessage));
 		}
 		else if (type == typeof(QuoteChangeMessage))
 		{
@@ -1052,6 +1084,14 @@ static class Helper
 			a.Action.AssertEqual(e.Action);
 			a.StartPosition.AssertEqual(e.StartPosition);
 			a.EndPosition.AssertEqual(e.EndPosition);
+
+			var expectedInner = e.InnerQuotes ?? [];
+			var actualInner = a.InnerQuotes ?? [];
+
+			actualInner.Length.AssertEqual(expectedInner.Length);
+
+			for (var i = 0; i < expectedInner.Length; i++)
+				CheckEqual(expectedInner[i], actualInner[i], isMls, isSerializer);
 		}
 		else if (type == typeof(ExecutionMessage))
 		{
@@ -1236,12 +1276,9 @@ static class Helper
 
 			a.Count.AssertEqual(e.Count);
 
-			if (!isSerializer)
+			foreach (var key in a.Keys.OrderBy())
 			{
-				foreach (var key in a.Keys.OrderBy())
-				{
-					CheckEqual(a[key], e[key]);
-				}
+				CheckEqual(e[key], a[key], isMls, isSerializer);
 			}
 		}
 		else if (type == typeof(SettingsStorage[]))
@@ -1823,4 +1860,53 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
+
+	/// <summary>
+	/// The budget a wait gets when the caller names none. Generous, because the suite runs its test
+	/// methods in parallel and a wait sized for an idle machine measures the scheduler.
+	/// </summary>
+	public static TimeSpan DefaultWaitTimeout { get; } = TimeSpan.FromSeconds(30);
+
+	/// <summary>
+	/// Waits for a state something else reaches on its own thread. A sleep long enough on an idle
+	/// machine is not long enough on a loaded one, and the test then fails for the machine it ran on.
+	/// </summary>
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="timeout">How long it is given.</param>
+	/// <param name="expectation">What the condition stands for, reported on timeout.</param>
+	/// <exception cref="TimeoutException">The condition did not come true within <paramref name="timeout"/>.</exception>
+	public static Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, string expectation)
+		=> WaitUntilAsync(condition, timeout, default, expectation);
+
+	/// <summary>
+	/// Waits on the default budget, naming the condition's own source text when it does not come true.
+	/// </summary>
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="expectation">Supplied by the compiler from <paramref name="condition"/>.</param>
+	/// <exception cref="TimeoutException">The condition did not come true in time.</exception>
+	public static Task WaitUntilAsync(Func<bool> condition, CancellationToken cancellationToken,
+		[CallerArgumentExpression(nameof(condition))] string expectation = null)
+		=> WaitUntilAsync(condition, DefaultWaitTimeout, cancellationToken, expectation);
+
+	/// <summary>
+	/// Waits for a condition on a named budget, naming the condition's own source text when it does
+	/// not come true.
+	/// </summary>
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="timeout">How long it is given.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="expectation">Supplied by the compiler from <paramref name="condition"/>.</param>
+	/// <exception cref="TimeoutException">The condition did not come true within <paramref name="timeout"/>.</exception>
+	public static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, CancellationToken cancellationToken,
+		[CallerArgumentExpression(nameof(condition))] string expectation = null)
+	{
+		var deadline = DateTime.UtcNow + timeout;
+
+		while (!condition() && DateTime.UtcNow < deadline)
+			await Task.Delay(10, cancellationToken);
+
+		if (!condition())
+			throw new TimeoutException($"Timed out after {timeout} waiting for: {expectation}");
+	}
 }

@@ -82,7 +82,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ManagerSaveLoad()
+	public async Task ManagerSaveLoad()
 	{
 		var manager = new RiskManager();
 
@@ -102,10 +102,10 @@ public class RiskTests : BaseTestClass
 		manager.Rules.Add(positionRule);
 
 		var storage = new SettingsStorage();
-		manager.Save(storage);
+		await manager.SaveAsync(storage, CancellationToken);
 
 		var newManager = new RiskManager();
-		newManager.Load(storage);
+		await newManager.LoadAsync(storage, CancellationToken);
 
 		newManager.Rules.Count.AssertEqual(2);
 
@@ -146,28 +146,7 @@ public class RiskTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
-
-		rule.ProcessMessage(positionMsg).AssertTrue();
-	}
-
-	[TestMethod]
-	public void PnLLimit()
-	{
-		var rule = new RiskPnLRule
-		{
-			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
-			Action = RiskActions.ClosePositions
-		};
-
-		var positionMsg = new PositionChangeMessage
-		{
-			SecurityId = SecurityId.Money,
-			ServerTime = DateTime.UtcNow,
-			PortfolioName = _pfName
-		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
-
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -900m);
 		rule.ProcessMessage(positionMsg).AssertFalse();
 
 		positionMsg = new PositionChangeMessage
@@ -176,7 +155,7 @@ public class RiskTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -1200m);
 
 		rule.ProcessMessage(positionMsg).AssertTrue();
 	}
@@ -191,16 +170,21 @@ public class RiskTests : BaseTestClass
 
 		var positionMsg = new PositionChangeMessage
 		{
-			SecurityId = Helper.CreateSecurityId(),
+			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
 
-		rule.ProcessMessage(positionMsg);
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg.Changes[PositionChangeTypes.CurrentValue] = -1500m;
+		rule.ProcessMessage(positionMsg).AssertTrue();
 
 		rule.Reset();
 
+		rule.ProcessMessage(positionMsg).AssertFalse();
+		positionMsg.Changes[PositionChangeTypes.CurrentValue] = -900m;
 		rule.ProcessMessage(positionMsg).AssertFalse();
 	}
 
@@ -715,6 +699,42 @@ public class RiskTests : BaseTestClass
 		ThrowsExactly<ArgumentOutOfRangeException>(() => rule.Volume = -100);
 	}
 
+	/// <summary>
+	/// A limit of zero is no limit: that is what zero means everywhere else in this family - PnL, position
+	/// size, slippage and commission all stand down at zero - and it is what a rule holds before a user has
+	/// typed a number into it. Treating it as a threshold instead makes the rule fire on the very first
+	/// order and stop the trading of anyone who added it and had not configured it yet.
+	/// </summary>
+	[TestMethod]
+	public void OrderVolumeZeroLimitMeansNoLimit()
+	{
+		var rule = new RiskOrderVolumeRule
+		{
+			Volume = 0,
+			Action = RiskActions.StopTrading
+		};
+
+		var orderRegMsg = new OrderRegisterMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Volume = 500
+		};
+
+		rule.ProcessMessage(orderRegMsg).AssertFalse();
+
+		// An order of no volume is no more of a breach than any other.
+		orderRegMsg.Volume = 0;
+		rule.ProcessMessage(orderRegMsg).AssertFalse();
+
+		var orderReplaceMsg = new OrderReplaceMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Volume = 800
+		};
+
+		rule.ProcessMessage(orderReplaceMsg).AssertFalse();
+	}
+
 	[TestMethod]
 	public void OrderFreq()
 	{
@@ -775,6 +795,66 @@ public class RiskTests : BaseTestClass
 
 		rule.ProcessMessage(orderMsg).AssertFalse();
 		rule.ProcessMessage(orderMsg).AssertTrue();
+	}
+
+	[TestMethod]
+	public void OrderFreqCountOne()
+	{
+		// Count is the number of orders per interval that trips the rule,
+		// so a limit of one is reached by the very first order.
+		var rule = new RiskOrderFreqRule
+		{
+			Count = 1,
+			Interval = TimeSpan.FromSeconds(10),
+			Action = RiskActions.CancelOrders
+		};
+
+		var startTime = DateTime.UtcNow;
+
+		var firstOrderMsg = new OrderRegisterMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime
+		};
+
+		rule.ProcessMessage(firstOrderMsg).AssertTrue();
+
+		var secondOrderMsg = new OrderRegisterMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime.AddSeconds(1)
+		};
+
+		rule.ProcessMessage(secondOrderMsg).AssertTrue();
+	}
+
+	[TestMethod]
+	public void OrderFreqIntervalBoundary()
+	{
+		// The monitored interval is half-open: an order exactly at start + Interval falls
+		// outside the window and opens a new one, counted from that order alone.
+		var rule = new RiskOrderFreqRule
+		{
+			Count = 3,
+			Interval = TimeSpan.FromSeconds(10),
+			Action = RiskActions.CancelOrders
+		};
+
+		var startTime = DateTime.UtcNow;
+
+		OrderRegisterMessage createOrder(TimeSpan offset) => new()
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime + offset
+		};
+
+		rule.ProcessMessage(createOrder(TimeSpan.Zero)).AssertFalse();
+		rule.ProcessMessage(createOrder(TimeSpan.FromSeconds(1))).AssertFalse();
+
+		rule.ProcessMessage(createOrder(TimeSpan.FromSeconds(10))).AssertFalse();
+
+		rule.ProcessMessage(createOrder(TimeSpan.FromSeconds(11))).AssertFalse();
+		rule.ProcessMessage(createOrder(TimeSpan.FromSeconds(12))).AssertTrue();
 	}
 
 	[TestMethod]
@@ -860,6 +940,40 @@ public class RiskTests : BaseTestClass
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
+	/// <summary>
+	/// A limit of zero is no limit: that is what zero means everywhere else in this family - PnL, position
+	/// size, slippage and commission all stand down at zero - and it is what a rule holds before a user has
+	/// typed a number into it. Treating it as a threshold instead makes the rule fire on the very first
+	/// trade that comes back, cancelling the orders of anyone who added it and had not configured it yet.
+	/// </summary>
+	[TestMethod]
+	public void TradeVolumeZeroLimitMeansNoLimit()
+	{
+		var rule = new RiskTradeVolumeRule
+		{
+			Volume = 0,
+			Action = RiskActions.CancelOrders
+		};
+
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100,
+			TradeVolume = 500
+		};
+
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		// A trade of no volume is no more of a breach than any other.
+		execMsg.TradeVolume = 0;
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.TradeVolume = null;
+		rule.ProcessMessage(execMsg).AssertFalse();
+	}
+
 	[TestMethod]
 	public void TradeFreq()
 	{
@@ -893,6 +1007,75 @@ public class RiskTests : BaseTestClass
 		};
 
 		rule.ProcessMessage(tradeMsg2).AssertTrue();
+	}
+
+	[TestMethod]
+	public void TradeFreqCountOne()
+	{
+		// Count is the number of trades per interval that trips the rule,
+		// so a limit of one is reached by the very first trade.
+		var rule = new RiskTradeFreqRule
+		{
+			Count = 1,
+			Interval = TimeSpan.FromSeconds(5),
+			Action = RiskActions.StopTrading
+		};
+
+		var startTime = DateTime.UtcNow;
+
+		var tradeMsg1 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime,
+			TradePrice = 100,
+			TradeVolume = 10
+		};
+
+		rule.ProcessMessage(tradeMsg1).AssertTrue();
+
+		var tradeMsg2 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime.AddSeconds(1),
+			TradePrice = 100,
+			TradeVolume = 20
+		};
+
+		rule.ProcessMessage(tradeMsg2).AssertTrue();
+	}
+
+	[TestMethod]
+	public void TradeFreqIntervalBoundary()
+	{
+		// The monitored interval is half-open: a trade exactly at start + Interval falls
+		// outside the window and opens a new one, counted from that trade alone.
+		var rule = new RiskTradeFreqRule
+		{
+			Count = 3,
+			Interval = TimeSpan.FromSeconds(10),
+			Action = RiskActions.StopTrading
+		};
+
+		var startTime = DateTime.UtcNow;
+
+		ExecutionMessage createTrade(TimeSpan offset) => new()
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			LocalTime = startTime + offset,
+			TradePrice = 100,
+			TradeVolume = 10
+		};
+
+		rule.ProcessMessage(createTrade(TimeSpan.Zero)).AssertFalse();
+		rule.ProcessMessage(createTrade(TimeSpan.FromSeconds(1))).AssertFalse();
+
+		rule.ProcessMessage(createTrade(TimeSpan.FromSeconds(10))).AssertFalse();
+
+		rule.ProcessMessage(createTrade(TimeSpan.FromSeconds(11))).AssertFalse();
+		rule.ProcessMessage(createTrade(TimeSpan.FromSeconds(12))).AssertTrue();
 	}
 
 	[TestMethod]
@@ -948,7 +1131,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad()
+	public async Task SaveLoad()
 	{
 		var originalRule = new RiskPnLRule
 		{
@@ -956,10 +1139,10 @@ public class RiskTests : BaseTestClass
 			Action = RiskActions.StopTrading
 		};
 
-		var storage = originalRule.Save();
+		var storage = await originalRule.SaveAsync(CancellationToken);
 
 		var restoredRule = new RiskPnLRule();
-		restoredRule.Load(storage);
+		await restoredRule.LoadAsync(storage, CancellationToken);
 
 		restoredRule.PnL.Value.AssertEqual(1500);
 		restoredRule.PnL.Type.AssertEqual(UnitTypes.Percent);
@@ -1006,7 +1189,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Serialization()
+	public async Task Serialization()
 	{
 		IRiskRuleProvider provider = new InMemoryRiskRuleProvider();
 
@@ -1049,10 +1232,10 @@ public class RiskTests : BaseTestClass
 				prop.SetValue(rule, value);
 			}
 
-			var storage = rule.Save();
+			var storage = await rule.SaveAsync(CancellationToken);
 
 			var restored = ruleType.CreateInstance<IRiskRule>();
-			restored.Load(storage);
+			await restored.LoadAsync(storage, CancellationToken);
 
 			foreach (var prop in props)
 			{
@@ -1078,14 +1261,14 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = 200m,
+			Commission = 300m,
 			TradePrice = 100,
 			TradeVolume = 10
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = 600m;
+		execMsg.Commission = 300m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1103,14 +1286,14 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = -200m,
+			Commission = -300m,
 			TradePrice = 100,
 			TradeVolume = 10
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = -600m;
+		execMsg.Commission = -300m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1128,19 +1311,13 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = 50,
+			Commission = 60,
 			HasOrderInfo = true
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = 150m;
-		rule.ProcessMessage(execMsg).AssertTrue();
-
-		execMsg.Commission = -180;
-		rule.ProcessMessage(execMsg).AssertFalse();
-
-		execMsg.Commission = 120m;
+		execMsg.Commission = 60m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1158,19 +1335,13 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = -50,
+			Commission = -60,
 			HasOrderInfo = true
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = -150m;
-		rule.ProcessMessage(execMsg).AssertTrue();
-
-		execMsg.Commission = 180m;
-		rule.ProcessMessage(execMsg).AssertFalse();
-
-		execMsg.Commission = -120m;
+		execMsg.Commission = -60m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1212,6 +1383,61 @@ public class RiskTests : BaseTestClass
 		var cancelMsg = testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
 		cancelMsg.AssertNotNull();
 		cancelMsg.Mode.AssertEqual(OrderGroupCancelModes.ClosePositions);
+	}
+
+	/// <summary>
+	/// A rule whose action is to close positions says nothing about the order that tripped it, and
+	/// whichever way that order goes the sender is entitled to learn of it: the order reaches the
+	/// trading system, or it comes back refused. Turning the order into the close-positions command
+	/// and sending nothing else leaves the sender holding a transaction id that will never be
+	/// answered - waiting on an order that was never placed and never refused, while the strategy
+	/// behind it believes it is in the market.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderThatTripsAClosePositionsRuleIsStillAnsweredFor()
+	{
+		var token = CancellationToken;
+
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.ClosePositions,
+		});
+
+		const long transactionId = 501;
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = transactionId,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		var cancelMsg = testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>().FirstOrDefault();
+		cancelMsg.AssertNotNull("the order broke the volume limit, so the rule has to close positions");
+		cancelMsg.Mode.AssertEqual(OrderGroupCancelModes.ClosePositions);
+
+		var reachedTradingSystem = testAdapter.ReceivedMessages
+			.OfType<OrderRegisterMessage>()
+			.Any(m => m.TransactionId == transactionId);
+
+		var cameBackRefused = messages
+			.OfType<ExecutionMessage>()
+			.Any(m => m.OriginalTransactionId == transactionId && m.OrderState == OrderStates.Failed);
+
+		IsTrue(reachedTradingSystem || cameBackRefused,
+			"the order that tripped the rule was neither placed nor refused: nothing about transaction " +
+			$"{transactionId} reached the trading system and nothing about it came back to the sender");
 	}
 
 	[TestMethod]
@@ -1301,6 +1527,317 @@ public class RiskTests : BaseTestClass
 		execMsg.Error.AssertNotNull();
 	}
 
+	/// <summary>
+	/// Once a rule has stopped trading, only the rule itself reporting the limit respected again
+	/// may lift the block. A user is entitled to expect that market data flowing through the
+	/// adapter - a tick on an unrelated security says nothing about the portfolio loss - leaves
+	/// the block in place; otherwise the very next quote silently re-enables trading that the
+	/// risk manager refused.
+	/// </summary>
+	[TestMethod]
+	public async Task AdapterTradingStaysBlockedWhenAnUnrelatedTickArrives()
+	{
+		var token = CancellationToken;
+
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskPnLRule
+		{
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
+			Action = RiskActions.StopTrading
+		});
+
+		var secId = Helper.CreateSecurityId();
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		}.Add(PositionChangeTypes.CurrentValue, 0m), token);
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		}.Add(PositionChangeTypes.CurrentValue, -1500m), token);
+
+		messages.Clear();
+		testAdapter.ReceivedMessages.Clear();
+
+		// A tick carries no portfolio value, so the loss that stopped trading still stands.
+		await adapter.SendInMessageAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			TradeId = 1,
+			TradePrice = 100,
+			TradeVolume = 1,
+		}, token);
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			PortfolioName = _pfName
+		}, token);
+
+		messages.OfType<ExecutionMessage>()
+			.FirstOrDefault(x => x.OriginalTransactionId == 1 && x.OrderState == OrderStates.Failed)
+			.AssertNotNull("the loss still stands, so the order must be refused");
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.FirstOrDefault(x => x.TransactionId == 1)
+			.AssertNull("a refused order must never reach the inner adapter");
+
+		messages.Clear();
+		testAdapter.ReceivedMessages.Clear();
+
+		// Only the rule's own subject - the money position - may lift the block.
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		}.Add(PositionChangeTypes.CurrentValue, -500m), token);
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			PortfolioName = _pfName
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.FirstOrDefault(x => x.TransactionId == 2)
+			.AssertNotNull("the loss is back within the limit, so the order must pass");
+	}
+
+	[TestMethod]
+	public async Task AdapterOrderVolumeBlockCanBeLiftedByASafeOrder()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+
+		var secId = Helper.CreateSecurityId();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 5,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNotNull("the same rule has observed a safe order, so trading must resume for it");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNull("an order that clears the volume rule must not be refused by the stale block");
+	}
+
+	[TestMethod]
+	public async Task AdapterOrderVolumeBlockCanBeLiftedByASafeReplace()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderReplaceMessage
+		{
+			TransactionId = 2,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 5,
+			PortfolioName = "ANOTHER_PORTFOLIO",
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderReplaceMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNotNull("register and replace are inputs of the same global order-volume rule");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNull("the safe replacement must clear the stale global volume block");
+	}
+
+	[TestMethod]
+	public async Task AdapterBlockedOrderStillDispatchesOtherTriggeredRiskActions()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.ClosePositions,
+		});
+
+		var secId = Helper.CreateSecurityId();
+
+		// The first breach establishes the StopTrading block.
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		// The next breach is refused by StopTrading, but the other rule still owes ClosePositions.
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>()
+			.SingleOrDefault(m => m.Mode == OrderGroupCancelModes.ClosePositions)
+			.AssertNotNull("ClosePositions is an independent triggered action and must still be dispatched");
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNull("the existing StopTrading block must still refuse the original order");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNotNull("the refused order must receive a terminal response");
+	}
+
+	[TestMethod]
+	public async Task AdapterOutputResetClearsTradingBlock()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskPnLRule
+		{
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
+			Action = RiskActions.StopTrading,
+		});
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+		}.Add(PositionChangeTypes.CurrentValue, 0m), token);
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+		}.Add(PositionChangeTypes.CurrentValue, -1500m), token);
+
+		await testAdapter.EmitOutAsync(new ResetMessage(), token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 3,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 3)
+			.AssertNotNull("an inner reset must clear adapter-local StopTrading state");
+	}
+
+	/// <summary>
+	/// A user whose loss returns within the configured limit is entitled to trade again without
+	/// restarting anything: the next order must reach the inner adapter instead of being refused.
+	/// </summary>
 	[TestMethod]
 	public async Task AdapterTradingUnblocks()
 	{
@@ -1470,7 +2007,11 @@ public class RiskTests : BaseTestClass
 			return base.SendInMessageAsync(message, cancellationToken);
 		}
 
-		public override IMessageAdapter Clone() => new TestInnerAdapter();
+		public ValueTask EmitOutAsync(Message message, CancellationToken cancellationToken)
+			=> SendOutMessageAsync(message, cancellationToken);
+
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestInnerAdapter());
 	}
 
 	[TestMethod]

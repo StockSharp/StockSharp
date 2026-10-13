@@ -98,6 +98,8 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 			ServerTime = DateTime.Now,
 			TradePrice = 100m,
 			TradeVolume = 500m,
+			OriginSide = Sides.Buy,
+			OpenInterest = 1000m,
 		};
 		transform.Process(tick);
 
@@ -105,8 +107,13 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 		transform.Process(new ResetMessage());
 
 		// State should be cleared
-		AreEqual(default, ((ICandleBuilderValueTransform)transform).Time);
-		AreEqual(0m, ((ICandleBuilderValueTransform)transform).Price);
+		var state = (ICandleBuilderValueTransform)transform;
+		AreEqual(default, state.Time);
+		AreEqual(0m, state.Price);
+		IsNull(state.Volume);
+		IsNull(state.Side);
+		IsNull(state.OpenInterest);
+		IsNull(state.PriceLevels);
 	}
 
 	#endregion
@@ -379,7 +386,7 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void QuoteTransform_SpreadMiddle_OneSideMissing_ReturnsFalse()
+	public void QuoteTransform_SpreadMiddle_BothSidesMissing_ReturnsFalse()
 	{
 		var transform = new QuoteCandleBuilderValueTransform(0.01m, 1m)
 		{
@@ -395,7 +402,26 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 
 		var result = transform.Process(depth);
 
-		IsFalse(result, "SpreadMiddle requires both sides");
+		IsFalse(result, "SpreadMiddle requires at least one side");
+	}
+
+	[TestMethod]
+	public void QuoteTransform_SpreadMiddle_OneSidePresent_UsesAvailablePrice()
+	{
+		var transform = new QuoteCandleBuilderValueTransform(0.01m, 1m)
+		{
+			Type = Level1Fields.SpreadMiddle
+		};
+
+		var depth = new QuoteChangeMessage
+		{
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(99m, 1000m)],
+			Asks = [],
+		};
+
+		IsTrue(transform.Process(depth));
+		AreEqual(99m, ((ICandleBuilderValueTransform)transform).Price);
 	}
 
 	#endregion

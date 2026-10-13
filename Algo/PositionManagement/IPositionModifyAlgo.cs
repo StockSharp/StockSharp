@@ -98,24 +98,31 @@ public interface IPositionModifyAlgo : IDisposable
 	void UpdateOrderBook(IOrderBookMessage depth);
 
 	/// <summary>
-	/// Get the next action to take.
+	/// Get the next action to take. The call advances the algorithm: a returned
+	/// <see cref="PositionModifyAction.ActionTypes.Register"/> counts as dispatched, so the caller
+	/// places it and reports back through <see cref="OnOrderMatched"/>, <see cref="OnOrderFailed"/>
+	/// or <see cref="OnOrderCanceled"/>. An action that is discarded leaves the algorithm waiting
+	/// for a report that never comes.
 	/// </summary>
 	PositionModifyAction GetNextAction();
 
 	/// <summary>
-	/// Notify that an order was matched (fully filled).
+	/// Notify that an order was matched.
 	/// </summary>
+	/// <param name="matchedVolume">Volume that traded since the previous notification for this order: a caller
+	/// reporting every partial fill passes the increment, one reporting only the end passes the whole traded
+	/// volume. The same volume is never reported twice.</param>
 	void OnOrderMatched(decimal matchedVolume);
 
 	/// <summary>
-	/// Notify that an order failed.
+	/// Notify that an order failed. Nothing traded.
 	/// </summary>
 	void OnOrderFailed();
 
 	/// <summary>
 	/// Notify that an order was canceled.
 	/// </summary>
-	/// <param name="matchedVolume">Volume that was matched before cancellation.</param>
+	/// <param name="matchedVolume">Volume that traded since the previous notification and before cancellation.</param>
 	void OnOrderCanceled(decimal matchedVolume);
 
 	/// <summary>

@@ -79,6 +79,21 @@ public class GpuSmaCalculator : GpuIndicatorCalculatorBase<SimpleMovingAverage, 
 			totalSize += len;
 		}
 
+		if (totalSize == 0)
+		{
+			var empty = new GpuIndicatorResult[seriesCount][][];
+
+			for (var s = 0; s < seriesCount; s++)
+			{
+				empty[s] = new GpuIndicatorResult[parameters.Length][];
+
+				for (var p = 0; p < parameters.Length; p++)
+					empty[s][p] = [];
+			}
+
+			return empty;
+		}
+
 		var flatCandles = new GpuCandle[totalSize];
 		var maxLen = 0;
 		var offset = 0;
@@ -157,6 +172,9 @@ public class GpuSmaCalculator : GpuIndicatorCalculatorBase<SimpleMovingAverage, 
 
 		var prm = parameters[paramIdx];
 		var L = prm.Length;
+		if (L <= 0)
+			return;
+
 		if (candleIdx < L - 1)
 			return;
 

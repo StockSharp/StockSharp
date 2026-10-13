@@ -50,9 +50,10 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 	/// <summary>
 	/// Create a copy of <see cref="PnLMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new PnLMessageAdapter(InnerAdapter.TypedClone(), _pnlManager.Clone());
+		return new PnLMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _pnlManager.CloneAsync(cancellationToken));
 	}
 }

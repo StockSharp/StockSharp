@@ -50,7 +50,7 @@ public struct GpuZigZagResult : IGpuIndicatorResult
 	public float Value;
 
 	/// <summary>
-	/// Number of bars since the last extremum.
+	/// Number of bars back to the reported extremum.
 	/// </summary>
 	public int Shift;
 
@@ -235,6 +235,8 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 				continue;
 			}
 
+			var hadLastExtremum = hasLastExtremum;
+
 			if (!hasLastExtremum)
 			{
 				lastExtremum = price;
@@ -247,6 +249,7 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 				hasTrend = true;
 			}
 
+			var currentShift = hadLastExtremum ? shift + 1 : 0;
 			var threshold = MathF.Abs(lastExtremum * deviation);
 			var changeTrend = false;
 
@@ -255,6 +258,7 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 				if (lastExtremum < price)
 				{
 					lastExtremum = price;
+					currentShift = 0;
 				}
 				else if (price <= lastExtremum - threshold)
 				{
@@ -266,6 +270,7 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 				if (lastExtremum > price)
 				{
 					lastExtremum = price;
+					currentShift = 0;
 				}
 				else if (price >= lastExtremum + threshold)
 				{
@@ -277,7 +282,7 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 			{
 				Time = candle.Time,
 				Value = float.NaN,
-				Shift = shift,
+				Shift = currentShift,
 				IsUp = (byte)(isUpTrend ? 1 : 0),
 				IsFormed = 1,
 			};
@@ -289,12 +294,12 @@ public class GpuZigZagCalculator : GpuIndicatorCalculatorBase<ZigZag, GpuZigZagP
 
 				isUpTrend = !isUpTrend;
 				lastExtremum = price;
-				shift = 1;
+				shift = 0;
 			}
 			else
 			{
 				flatResults[resIndex] = result;
-				shift++;
+				shift = currentShift;
 			}
 
 			prevPrice = price;

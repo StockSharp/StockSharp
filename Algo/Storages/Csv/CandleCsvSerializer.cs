@@ -32,9 +32,9 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 
 				while (await reader.NextLineAsync(cancellationToken))
 				{
-					var message = serializer.Read(reader, this);
-
-					var openTime = message.OpenTime;
+					// Only the open time is needed here. Building a whole candle per row - prices,
+					// volume, build-from, seq num - merely to count the rows dominated this read.
+					var openTime = reader.ReadTime(Date);
 
 					if (!firstTimeRead)
 					{

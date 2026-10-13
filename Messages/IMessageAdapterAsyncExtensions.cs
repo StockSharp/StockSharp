@@ -1,6 +1,7 @@
-namespace StockSharp.Messages;
+﻿namespace StockSharp.Messages;
 
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading.Channels;
 
 /// <summary>
@@ -9,13 +10,13 @@ using System.Threading.Channels;
 public static class IMessageAdapterAsyncExtensions
 {
 	/// <summary>
-	/// Async connect for <see cref="IMessageAdapter"/> via <see cref="ConnectMessage"/>.
+	/// Async connect for <see cref="IMessageTransport"/> via <see cref="ConnectMessage"/>.
 	/// Completes when an outgoing <see cref="ConnectMessage"/> without error is received.
 	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="adapter"><see cref="IMessageTransport"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="ValueTask"/></returns>
-	public static async ValueTask ConnectAsync(this IMessageAdapter adapter, CancellationToken cancellationToken)
+	public static async ValueTask ConnectAsync(this IMessageTransport adapter, CancellationToken cancellationToken)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -49,13 +50,13 @@ public static class IMessageAdapterAsyncExtensions
 	}
 
 	/// <summary>
-	/// Async disconnect for <see cref="IMessageAdapter"/> via <see cref="DisconnectMessage"/>.
+	/// Async disconnect for <see cref="IMessageTransport"/> via <see cref="DisconnectMessage"/>.
 	/// Completes when an outgoing <see cref="DisconnectMessage"/> without error is received.
 	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="adapter"><see cref="IMessageTransport"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="ValueTask"/></returns>
-	public static async ValueTask DisconnectAsync(this IMessageAdapter adapter, CancellationToken cancellationToken)
+	public static async ValueTask DisconnectAsync(this IMessageTransport adapter, CancellationToken cancellationToken)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -142,7 +143,15 @@ public static class IMessageAdapterAsyncExtensions
 			else if (msg is ISubscriptionIdMessage sid)
 			{
 				var ids = sid.GetSubscriptionIds();
-				if (ids.Contains(subId) && msg is T t)
+
+				// An adapter driven directly tags what it sends out with the original transaction id and
+				// leaves the subscription identifiers alone, because those are filled in later by
+				// BasketMessageAdapter. Nothing fills them here, so matching on them alone discards every
+				// message and leaves the caller with a subscription that finishes empty.
+				var matched = ids.Contains(subId) ||
+					(ids.Length == 0 && msg is IOriginalTransactionIdMessage orig && orig.OriginalTransactionId == subId);
+
+				if (matched && msg is T t)
 				{
 					channel.Writer.TryWrite(t);
 				}
@@ -153,22 +162,7 @@ public static class IMessageAdapterAsyncExtensions
 
 		adapter.NewOutMessageAsync += OnOut;
 
-		using var ctr = cancellationToken.Register(() =>
-		{
-			try
-			{
-				var unsub = subscription.TypedClone();
-				unsub.IsSubscribe = false;
-				unsub.OriginalTransactionId = subId;
-				unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-				_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
-			}
-			catch { /* ignore */ }
-			finally
-			{
-				channel.Writer.TryComplete();
-			}
-		});
+		using var ctr = cancellationToken.Register(() => channel.Writer.TryComplete());
 
 		try
 		{
@@ -210,6 +204,22 @@ public static class IMessageAdapterAsyncExtensions
 		finally
 		{
 			adapter.NewOutMessageAsync -= OnOut;
+
+			// Send the unsubscribe on cancellation so it reaches the adapter. The cancellation callback can
+			// miss it because the enumerator may unwind on the token before the registered callback runs, so
+			// issue it from the finally that always runs.
+			if (cancellationToken.IsCancellationRequested)
+			{
+				try
+				{
+					var unsub = subscription.TypedClone();
+					unsub.IsSubscribe = false;
+					unsub.OriginalTransactionId = subId;
+					unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+					_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
+				}
+				catch { /* ignore */ }
+			}
 		}
 	}
 
@@ -229,6 +239,8 @@ public static class IMessageAdapterAsyncExtensions
 		if (adapter is null)			throw new ArgumentNullException(nameof(adapter));
 		if (subscription is null)		throw new ArgumentNullException(nameof(subscription));
 
+		cancellationToken.ThrowIfCancellationRequested();
+
 		if (subscription.TransactionId == 0)
 			subscription.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
@@ -238,8 +250,9 @@ public static class IMessageAdapterAsyncExtensions
 
 		var startedTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		var finishedTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var failedTcs = new TaskCompletionSource<Exception>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var failedTcs = new TaskCompletionSource<ExceptionDispatchInfo>(TaskCreationOptions.RunContinuationsAsynchronously);
 		var unsubTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var cancelledTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		long unsubTransId = 0;
 
 		ValueTask OnOut(Message msg, CancellationToken ct)
@@ -249,7 +262,7 @@ public static class IMessageAdapterAsyncExtensions
 				if (resp.OriginalTransactionId == subId)
 				{
 					if (resp.Error != null)
-						failedTcs.TrySetException(resp.Error);
+						failedTcs.TrySetResult(ExceptionDispatchInfo.Capture(resp.Error));
 					else
 						startedTcs.TrySetResult(true);
 				}
@@ -270,51 +283,179 @@ public static class IMessageAdapterAsyncExtensions
 
 		adapter.NewOutMessageAsync += OnOut;
 
-		using var ctr = cancellationToken.Register(() =>
+		using var ctr = cancellationToken.Register(() => cancelledTcs.TrySetResult(true));
+
+		static void ObserveFault(Task task)
+		{
+			if (task.IsCompleted)
+			{
+				_ = task.Exception;
+				return;
+			}
+
+			_ = task.ContinueWith(
+				static completed => _ = completed.Exception,
+				CancellationToken.None,
+				TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+				TaskScheduler.Default);
+		}
+
+		ISubscriptionMessage CreateUnsubscribe()
+		{
+			var unsub = subscription.TypedClone();
+
+			unsub.IsSubscribe = false;
+			unsub.OriginalTransactionId = subId;
+			unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+			return unsub;
+		}
+
+		async ValueTask SendUnsubscribeAsync(ISubscriptionMessage unsub, bool waitForResponse)
 		{
 			try
 			{
-				var unsub = subscription.TypedClone();
-
-				unsub.IsSubscribe = false;
-				unsub.OriginalTransactionId = subId;
-				unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-
 				Interlocked.Exchange(ref unsubTransId, unsub.TransactionId);
 
-				_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
+				using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+				// The caller token is already cancelled and the one-second limit only bounds
+				// our wait. Do not cancel the actual cleanup send: a slow but valid adapter
+				// must still be allowed to remove the subscription after we return.
+				var sendTask = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None).AsTask();
+
+				try
+				{
+					await sendTask.WithCancellation(timeoutCts.Token);
+
+					if (waitForResponse)
+						await unsubTcs.Task.WithCancellation(timeoutCts.Token);
+				}
+				catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
+				{
+					ObserveFault(sendTask);
+
+					// Cancellation cleanup is best effort and bounded so a broken adapter cannot
+					// hold the caller (and a test host) indefinitely.
+				}
+				catch
+				{
+					// The subscription is already being cancelled. Do not replace the original
+					// cancellation with an unsubscribe failure.
+				}
 			}
 			catch
 			{
-				unsubTcs.TrySetResult(true);
+				// Cancellation cleanup is best effort.
 			}
-		});
+		}
 
-		try
+		async ValueTask UnsubscribeAsync()
 		{
-			await adapter.SendInMessageAsync((Message)subscription, cancellationToken);
+			try
+			{
+				await SendUnsubscribeAsync(CreateUnsubscribe(), true);
+			}
+			catch
+			{
+				// Cloning or assigning an unsubscribe id can fail for a custom message.
+				// Cancellation still has to complete promptly.
+			}
+		}
 
-			var first = await Task.WhenAny(startedTcs.Task, failedTcs.Task).NoWait();
+		void UnsubscribeAfterSubscribe(Task subscribeTask)
+		{
+			ISubscriptionMessage unsub;
 
-			if (first == failedTcs.Task)
-				await failedTcs.Task.NoWait();
+			try
+			{
+				// Capture the request before returning control to the caller, who may reuse
+				// or mutate the original subscription after cancellation completes.
+				unsub = CreateUnsubscribe();
+			}
+			catch
+			{
+				ObserveFault(subscribeTask);
+				return;
+			}
 
-			if (subscription.To == null)
+			async Task CleanupAsync()
 			{
 				try
 				{
-					await Task.Delay(Timeout.Infinite, cancellationToken).NoWait();
+					await subscribeTask.NoWait();
 				}
-				catch (OperationCanceledException)
+				catch
 				{
-					// Wait for unsubscribe response with short timeout
-					// Don't wait too long - user cancelled, so exit promptly
-					await Task.WhenAny(unsubTcs.Task, Task.Delay(TimeSpan.FromSeconds(1))).NoWait();
+					// A faulted or cancelled send may still have partially applied the
+					// subscription, so preserve ordering and issue cleanup after it settles.
 				}
+
+				// The public operation has already completed and detached OnOut, therefore
+				// only bound the transport send; do not wait for an acknowledgement here.
+				await SendUnsubscribeAsync(unsub, false);
+			}
+
+			_ = CleanupAsync();
+		}
+
+		try
+		{
+			Task subscribeTask = null;
+
+			try
+			{
+				subscribeTask = adapter.SendInMessageAsync((Message)subscription, cancellationToken).AsTask();
+				await subscribeTask.WithCancellation(cancellationToken);
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				if (subscribeTask is { IsCompleted: false })
+					UnsubscribeAfterSubscribe(subscribeTask);
+				else
+				{
+					if (subscribeTask != null)
+						ObserveFault(subscribeTask);
+
+					await UnsubscribeAsync();
+				}
+
+				if (subscription.To == null)
+					return;
+
+				throw;
+			}
+
+			var first = await Task.WhenAny(startedTcs.Task, failedTcs.Task, cancelledTcs.Task).NoWait();
+
+			if (first == failedTcs.Task)
+				(await failedTcs.Task.NoWait()).Throw();
+			else if (first == cancelledTcs.Task)
+			{
+				await UnsubscribeAsync();
+
+				if (subscription.To == null)
+					return;
+
+				cancellationToken.ThrowIfCancellationRequested();
+			}
+
+			if (subscription.To == null)
+			{
+				await cancelledTcs.Task.NoWait();
+				await UnsubscribeAsync();
 			}
 			else
 			{
-				await finishedTcs.Task.NoWait();
+				var completed = await Task.WhenAny(finishedTcs.Task, failedTcs.Task, cancelledTcs.Task).NoWait();
+
+				if (completed == failedTcs.Task)
+					(await failedTcs.Task.NoWait()).Throw();
+				else if (completed == cancelledTcs.Task)
+				{
+					await UnsubscribeAsync();
+					cancellationToken.ThrowIfCancellationRequested();
+				}
+				else
+					await finishedTcs.Task.NoWait();
 			}
 		}
 		finally

@@ -12,8 +12,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 		{
 		}
 
-		public override IMessageAdapter Clone()
-			=> new TestWrapper(InnerAdapter.TypedClone());
+		public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new TestWrapper(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 
 	private sealed class TestInnerAdapter : MessageAdapter
@@ -37,10 +37,6 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		public override IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
 			=> _supported.ToAsyncEnumerable();
-	}
-
-	private sealed class TestReceiver : TestLogReceiver
-	{
 	}
 
 	[TestMethod]
@@ -190,6 +186,20 @@ public class CandleBuilderManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].Type.AssertEqual(MessageTypes.Reset);
 		toOut.Length.AssertEqual(0);
+
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		tick.SetSubscriptionIds([100]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+		forward.AssertSame(tick);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -247,10 +257,19 @@ public class CandleBuilderManagerTests : BaseTestClass
 		tick2.SetSubscriptionIds([parentTransId]);
 		var (fwd2, extra2) = await manager.ProcessOutMessageAsync(tick2, CancellationToken);
 
-		// Should produce a finished candle
+		// The second tick finalizes the previous minute and starts the next one.
 		var candles = extra2.OfType<CandleMessage>().ToArray();
-		IsTrue(candles.Length >= 1, $"Expected at least 1 candle, got {candles.Length}");
-		candles[0].SecurityId.AssertEqual(secId);
+		candles.Length.AssertEqual(2);
+
+		var finished = candles.Single(c => c.OpenTime == baseTime);
+		finished.State.AssertEqual(CandleStates.Finished);
+		finished.SecurityId.AssertEqual(secId);
+		finished.ClosePrice.AssertEqual(100m);
+
+		var active = candles.Single(c => c.OpenTime == baseTime.AddMinutes(1));
+		active.State.AssertEqual(CandleStates.Active);
+		active.SecurityId.AssertEqual(secId);
+		active.ClosePrice.AssertEqual(120m);
 	}
 
 	[TestMethod]
@@ -294,7 +313,22 @@ public class CandleBuilderManagerTests : BaseTestClass
 		sent.IsSubscribe.AssertFalse();
 		sent.OriginalTransactionId.AssertEqual(1);
 		sent.TransactionId.AssertEqual(2);
+		sent.DataType2.AssertEqual(DataType.Ticks);
 		toOut.Length.AssertEqual(0);
+
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		tick.SetSubscriptionIds([1]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+		forward.AssertSame(tick);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -381,6 +415,44 @@ public class CandleBuilderManagerTests : BaseTestClass
 		finished.OriginalTransactionId.AssertEqual(1);
 	}
 
+	/// <summary>
+	/// A series that finished on its own is answered here when the caller gives it up afterwards: nothing is left
+	/// upstream to unsubscribe from, and the adapter below no longer knows the id.
+	/// </summary>
+	[TestMethod]
+	public async Task Unsubscribe_AfterSeriesFinished_IsAnsweredWithoutGoingUpstream()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// The source ends and finishes the series while the caller's unsubscribe is already on its way.
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+		}, CancellationToken);
+
+		toInner.Length.AssertEqual(0, "A finished series has nothing left upstream to give up.");
+		toOut.Length.AssertEqual(1);
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull("Giving up a series that has already finished is not an error.");
+	}
+
 	[TestMethod]
 	public async Task SubscriptionOnline_ForwardedCorrectly()
 	{
@@ -420,7 +492,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task Tick_WithMultipleSubscriptionIds_CandleHasAllIds()
+	public async Task Tick_WithMultipleSubscriptionIds_EachCandleHasOnlyItsOwnId()
 	{
 		var manager = CreateManager(out _, out _);
 
@@ -469,10 +541,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var candles = extraOut.OfType<CandleMessage>().ToArray();
 		candles.Length.AssertEqual(2, "Should produce 2 candles (one per subscription)");
 
-		var allIds = candles.SelectMany(c => c.GetSubscriptionIds()).Distinct().ToArray();
-		allIds.Length.AssertEqual(2, "Candles should contain both subscription IDs");
-		allIds.Count(id => id == 1).AssertEqual(1, "Candles should contain first subscription ID");
-		allIds.Count(id => id == 2).AssertEqual(1, "Candles should contain second subscription ID");
+		candles.Single(c => c.GetSubscriptionIds().SequenceEqual([1L]));
+		candles.Single(c => c.GetSubscriptionIds().SequenceEqual([2L]));
 	}
 
 	[TestMethod]
@@ -512,7 +582,13 @@ public class CandleBuilderManagerTests : BaseTestClass
 		candles.Length.AssertEqual(1, "Should produce exactly 1 candle");
 
 		var ids = candles[0].GetSubscriptionIds();
-		ids.Count(id => id == 1).AssertEqual(1, "Should contain known subscription ID");
+		ids.SequenceEqual([1L]).AssertTrue("Candle should contain only the known subscription ID");
+
+		forward.AssertNotNull();
+		forward.AssertSame(tick);
+		forward.To<ISubscriptionIdMessage>().GetSubscriptionIds()
+			.SequenceEqual([999L])
+			.AssertTrue("Forwarded tick should retain only the unconsumed subscription ID");
 	}
 
 	[TestMethod]

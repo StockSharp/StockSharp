@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
-    <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)BinanceHistory\BinanceHistory.csproj" />
   </ItemGroup>
 </Project>

@@ -48,10 +48,12 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 				await storage.SaveAsync(b, cancellationToken);
 
 				count += b.Length;
-
-				if (b.LastOrDefault() is IServerTimeMessage timeMsg)
-					lastTime = timeMsg.ServerTime;
 			}
+
+			// Regrouping by security is how the data is stored, not the order it was given in, so the
+			// resume point is the last message the caller sent rather than the last group written.
+			if (batch.LastOrDefault() is IServerTimeMessage timeMsg)
+				lastTime = timeMsg.ServerTime;
 		}
 
 		return (count, lastTime);

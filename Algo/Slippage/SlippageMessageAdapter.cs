@@ -36,9 +36,10 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 	/// <summary>
 	/// Create a copy of <see cref="SlippageMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SlippageMessageAdapter(InnerAdapter.TypedClone(), _slippageManager.Clone());
+		return new SlippageMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _slippageManager.CloneAsync(cancellationToken));
 	}
 }

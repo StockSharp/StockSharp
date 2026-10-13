@@ -92,7 +92,7 @@ public class CandlePatternIndicator : BaseIndicator
 	private readonly List<ICandleMessage> _buffer = [];
 
 	/// <summary>
-	/// Candle pattern.
+	/// Candle pattern. It is prepared by <see cref="PrepareAsync"/>.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -144,6 +144,11 @@ public class CandlePatternIndicator : BaseIndicator
 	public override int NumValuesToInitialize => Pattern?.CandlesCount ?? 0;
 
 	/// <inheritdoc />
+	public override ValueTask PrepareAsync(CancellationToken cancellationToken)
+		// a pattern without candles is never evaluated by the indicator
+		=> Pattern is { CandlesCount: > 0 } pattern ? pattern.PrepareAsync(cancellationToken) : default;
+
+	/// <inheritdoc />
 	public sealed override void Reset()
 	{
 		Name = (Pattern?.Name).IsEmpty(LocalizedStrings.Pattern);
@@ -153,9 +158,9 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		EnsureProvider();
 		var patternName = storage.GetValue<string>(nameof(Pattern));
@@ -173,9 +178,9 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		if(Pattern != null)
 			storage.SetValue(nameof(Pattern), Pattern.Name);

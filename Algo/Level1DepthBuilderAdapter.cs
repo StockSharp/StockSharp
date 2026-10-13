@@ -66,6 +66,8 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="Level1DepthBuilderAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new Level1DepthBuilderAdapter(InnerAdapter.TypedClone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new Level1DepthBuilderAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 }

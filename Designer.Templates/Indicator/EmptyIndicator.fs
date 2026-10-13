@@ -3,6 +3,8 @@
 namespace StockSharp.Designer
 
 open System
+open System.Threading
+open System.Threading.Tasks
 open Ecng.Common
 open Ecng.Serialization
 
@@ -27,6 +29,9 @@ type EmptyIndicator() as this =
     let mutable changeValue = 20
     let mutable counter = 0
     let mutable isFormedValue = false
+    // where the random decisions below come from - hand in a seeded source to repeat a run,
+    // or a stub to state in a test what the values will be
+    let mutable randomProvider: IRandomProvider = DefaultRandomProvider.Instance
 
     /// <summary>
     /// The percentage value (+/-) used to modify the input price.
@@ -36,6 +41,13 @@ type EmptyIndicator() as this =
         and set value =
             changeValue <- value
             this.Reset()
+
+    /// <summary>
+    /// The source the random decisions are drawn from.
+    /// </summary>
+    member this.RandomProvider
+        with get () = randomProvider
+        and set value = randomProvider <- value
 
     /// <summary>
     /// Defines if the indicator has formed (became ready for trading).
@@ -55,7 +67,7 @@ type EmptyIndicator() as this =
     /// </summary>
     override this.OnProcess(input: IIndicatorValue) : IIndicatorValue =
         // every 10th call try to return an "empty" value
-        if RandomGen.GetInt(0, 10) = 0 then
+        if randomProvider.GetInt(0, 10) = 0 then
             // empty value still contains just time, no actual data
             DecimalIndicatorValue(this, input.Time)
         else
@@ -69,28 +81,36 @@ type EmptyIndicator() as this =
             let mutable value = input.ToDecimal()
 
             // random change by a factor of +/- Change%
-            let randomFactor = decimal (RandomGen.GetInt(-changeValue, changeValue)) / 100m
+            let randomFactor = decimal (randomProvider.GetInt(-changeValue, changeValue)) / 100m
             value <- value + (value * randomFactor)
 
             // return final indicator value
             let result = DecimalIndicatorValue(this, value, input.Time)
             // randomly mark it as final or not
-            result.IsFinal <- RandomGen.GetBool()
+            result.IsFinal <- randomProvider.GetBool()
             result
 
     /// <summary>
     /// Load indicator settings from a given <see cref="SettingsStorage"/>.
     /// </summary>
-    override this.Load(storage: SettingsStorage) =
-        base.Load(storage)
-        this.Change <- storage.GetValue<int>(nameof(this.Change))
+    override this.LoadAsync(storage: SettingsStorage, cancellationToken: CancellationToken) : Task =
+        let baseLoad = base.LoadAsync(storage, cancellationToken)
+
+        task {
+            do! baseLoad
+            this.Change <- storage.GetValue<int>(nameof(this.Change))
+        } :> Task
 
     /// <summary>
     /// Save indicator settings to a given <see cref="SettingsStorage"/>.
     /// </summary>
-    override this.Save(storage: SettingsStorage) =
-        base.Save(storage)
-        storage.SetValue(nameof(this.Change), this.Change)
+    override this.SaveAsync(storage: SettingsStorage, cancellationToken: CancellationToken) : Task =
+        let baseSave = base.SaveAsync(storage, cancellationToken)
+
+        task {
+            do! baseSave
+            storage.SetValue(nameof(this.Change), this.Change)
+        } :> Task
 
     /// <summary>
     /// A string representation that includes the current <see cref="Change"/> value.

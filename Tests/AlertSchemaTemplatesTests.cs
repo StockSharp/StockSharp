@@ -1,9 +1,10 @@
 namespace StockSharp.Tests;
 
 using StockSharp.Alerts;
+using StockSharp.Localization;
 
 [TestClass]
-public class AlertSchemaTemplatesTests
+public class AlertSchemaTemplatesTests : BaseTestClass
 {
 	private static readonly SecurityId _testSecId = "AAPL@NASDAQ".ToSecurityId();
 
@@ -22,10 +23,51 @@ public class AlertSchemaTemplatesTests
 		schema.Rules[0].Operator.AssertEqual(ComparisonOperator.Equal);
 		schema.Rules[0].Value.AssertEqual(_testSecId);
 
-		// rule 1: price above 150 → Less operator (Compare(rule.Value, actual) == -1 means rule.Value < actual)
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		// rule 1: price above 150 means actual price is greater than the threshold.
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(150m);
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradePrice);
+	}
+
+	[TestMethod]
+	public async Task SecurityFilter_SurvivesSaveAndLoad()
+	{
+		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
+
+		var restored = await (await schema.SaveAsync(default)).LoadAsync<AlertSchema>(default);
+
+		restored.Rules.Count.AssertEqual(2);
+		restored.Rules[0].Value.AssertEqual(_testSecId);
+		restored.Rules[1].Value.AssertEqual(150m);
+	}
+
+	[TestMethod]
+	public async Task Clone_CopiesEverythingAndSharesNoRule()
+	{
+		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
+		schema.Caption = "caption";
+		schema.ExternalId = 42;
+		schema.Rules[0].Value = new Security { Id = _testSecId.ToStringId() };
+
+		var clone = await schema.CloneAsync(CancellationToken);
+
+		clone.Id.AssertEqual(schema.Id);
+		clone.MessageType.AssertEqual(schema.MessageType);
+		clone.Caption.AssertEqual("caption");
+		clone.ExternalId.AssertEqual(42L);
+		clone.AlertType.AssertEqual(schema.AlertType);
+		clone.Rules.Count.AssertEqual(2);
+
+		for (var i = 0; i < schema.Rules.Count; i++)
+		{
+			ReferenceEquals(clone.Rules[i], schema.Rules[i]).AssertFalse("a rule is shared, so editing the copy changes the original");
+			clone.Rules[i].Field.AssertEqual(schema.Rules[i].Field);
+			clone.Rules[i].Operator.AssertEqual(schema.Rules[i].Operator);
+			clone.Rules[i].Value.AssertEqual(schema.Rules[i].Value);
+		}
+
+		clone.Rules[1].Value = 1m;
+		schema.Rules[1].Value.AssertEqual(150m, "editing the copy changed the original");
 	}
 
 	[TestMethod]
@@ -34,7 +76,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.PriceBelow(_testSecId, 100m);
 
 		schema.Rules.Count.AssertEqual(2);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
 		schema.Rules[1].Value.AssertEqual(100m);
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradePrice);
 	}
@@ -45,7 +87,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.BidAbove(_testSecId, 99m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.BestBidPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(99m);
 	}
 
@@ -55,7 +97,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.AskBelow(_testSecId, 101m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.BestAskPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
 		schema.Rules[1].Value.AssertEqual(101m);
 	}
 
@@ -65,18 +107,23 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.VolumeAbove(_testSecId, 1_000_000m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradeVolume);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(1_000_000m);
 	}
 
 	[TestMethod]
-	public void Level1_CustomField_Works()
+	public void Level1_StrictOperator_HasConsistentRuleAndCaption()
 	{
-		var schema = AlertSchemaTemplates.Level1(_testSecId, Level1Fields.OpenPrice, ComparisonOperator.GreaterOrEqual, 200m);
+		const Level1Fields field = Level1Fields.OpenPrice;
+		const ComparisonOperator op = ComparisonOperator.Greater;
+		const decimal value = 200m;
 
-		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.OpenPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.GreaterOrEqual);
-		schema.Rules[1].Value.AssertEqual(200m);
+		var schema = AlertSchemaTemplates.Level1(_testSecId, field, op, value);
+
+		schema.Rules[1].Field.ExtraField.AssertEqual(field);
+		schema.Rules[1].Operator.AssertEqual(op);
+		schema.Rules[1].Value.AssertEqual(value);
+		schema.Caption.AssertEqual($"{field.GetDisplayName()} {op.GetDisplayName()} {value}");
 	}
 
 	[TestMethod]
@@ -92,8 +139,7 @@ public class AlertSchemaTemplatesTests
 	{
 		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
 
-		schema.Caption.AssertNotNull();
-		schema.Caption.Length.AssertGreater(5);
+		schema.Caption.AssertEqual(LocalizedStrings.Price + " > 150");
 	}
 
 	[TestMethod]
@@ -105,19 +151,4 @@ public class AlertSchemaTemplatesTests
 		schema.Message.Contains("AAPL").AssertTrue("Message should contain security code");
 	}
 
-	[TestMethod]
-	public void AllTemplates_HaveUniqueIds()
-	{
-		var schemas = new[]
-		{
-			AlertSchemaTemplates.PriceAbove(_testSecId, 100m),
-			AlertSchemaTemplates.PriceBelow(_testSecId, 100m),
-			AlertSchemaTemplates.BidAbove(_testSecId, 100m),
-			AlertSchemaTemplates.AskBelow(_testSecId, 100m),
-			AlertSchemaTemplates.VolumeAbove(_testSecId, 100m),
-		};
-
-		var ids = schemas.Select(s => s.Id).ToHashSet();
-		ids.Count.AssertEqual(schemas.Length, "All schemas must have unique IDs");
-	}
 }

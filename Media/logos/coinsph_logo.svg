@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Coins.ph">
+  <circle cx="512" cy="512" r="500" fill="#f5b335"/>
+  <circle cx="512" cy="512" r="430" fill="#1574cf"/>
+  <path fill="#fff" d="M716 356c-50-57-119-88-197-88-145 0-263 109-263 244s118 244 263 244c78 0 147-31 197-88l-91-75c-27 31-64 47-106 47-77 0-139-57-139-128s62-128 139-128c42 0 79 16 106 47z"/>
+  <circle cx="715" cy="512" r="58" fill="#fff"/>
+</svg>

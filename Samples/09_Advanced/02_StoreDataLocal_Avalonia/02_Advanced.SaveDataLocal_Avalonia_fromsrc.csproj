@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <Import Project="..\..\common_connectors.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.Charting.Avalonia\Xaml.Charting.Avalonia.csproj" />
+    <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Common_Avalonia\AdvancedConnectorWorkspace.axaml.cs" Link="AdvancedConnectorWorkspace.axaml.cs" />
+    <AvaloniaResource Include="..\Common_Avalonia\AdvancedConnectorWorkspace.axaml" Link="AdvancedConnectorWorkspace.axaml" />
+  </ItemGroup>
+</Project>

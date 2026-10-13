@@ -108,7 +108,7 @@ public partial class MainWindow
 
 		StatisticParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 
 		_connector.Connect();
 		await _connector.SendInMessageAsync(new CommissionRuleMessage

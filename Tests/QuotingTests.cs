@@ -66,7 +66,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), MarketPriceTypes.Following);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.51m); // bestBidPrice + priceOffset
@@ -80,7 +80,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), MarketPriceTypes.Following);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.50m); // bestAskPrice - priceOffset
@@ -94,7 +94,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), MarketPriceTypes.Opposite);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.52m); // bestAskPrice + priceOffset
@@ -108,7 +108,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), MarketPriceTypes.Middle);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.52m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.52m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.52m); // (100.50 + 100.52) / 2 + 0.01 = 100.51 + 0.01
@@ -122,7 +122,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m), MarketPriceTypes.Following);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, null, null, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, null, null, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.51m); // lastTradePrice + priceOffset
@@ -171,6 +171,18 @@ public class QuotingTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Market_NeedQuoting_PriceDifferenceEqualsOffset_ReturnsBestPrice()
+	{
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
+
+		var result = behavior.NeedQuoting(
+			security, mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.51m);
+
+		result.AssertEqual(100.51m);
+	}
+
+	[TestMethod]
 	public void Market_NeedQuoting_VolumeChanged_ReturnsBestPrice()
 	{
 		// Arrange
@@ -207,7 +219,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LimitQuotingBehavior(limitPrice);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 100.50m, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 100.50m, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(limitPrice);
@@ -249,7 +261,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new BestByVolumeQuotingBehavior(new Unit(1400m));
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(bids.ElementAt(1).Price); // Volume 1000 + 500 = 1500 > 1400, so second level price
@@ -263,7 +275,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new BestByVolumeQuotingBehavior(new Unit(1500m));
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(asks.Last().Price); // Total volume 800+400+200 = 1400 < 1500, so last quote
@@ -278,7 +290,7 @@ public class QuotingTests : BaseTestClass
 		var emptyQuotes = Array.Empty<QuoteChange>();
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, emptyQuotes, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, emptyQuotes, asks);
 		
 		// Assert
 		result.AssertEqual(_lastTradePrice);
@@ -293,7 +305,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LevelQuotingBehavior(level, false);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.48m); // (100.49 + 100.48) / 2 = 100.485 -> 100.48
@@ -308,7 +320,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LevelQuotingBehavior(level, false);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Sell, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(100.52m); // (100.51 + 100.52) / 2 = 100.515 -> 100.52
@@ -323,7 +335,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LevelQuotingBehavior(level, true);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		var expectedToPrice = 100.49m + (-1) * 4 * 0.01m; // fromPrice + direction * length * pip
@@ -340,7 +352,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LevelQuotingBehavior(level, false);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		var expectedResult = ((100.49m + 100.48m) / 2).Round(2); // (fromPrice + lastPrice) / 2, ���������� �� 2 ������
@@ -357,7 +369,7 @@ public class QuotingTests : BaseTestClass
 		var emptyQuotes = Array.Empty<QuoteChange>();
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, emptyQuotes, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, emptyQuotes, asks);
 		
 		// Assert
 		result.AssertEqual(_lastTradePrice);
@@ -372,7 +384,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LevelQuotingBehavior(level, false);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertNull();
@@ -386,7 +398,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LastTradeQuotingBehavior(new Unit(0.01m));
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(_lastTradePrice);
@@ -400,7 +412,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new LastTradeQuotingBehavior(new Unit(0.01m));
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, null, null, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, null, null, 1, bids, asks);
 		
 		// Assert
 		result.AssertNull();
@@ -429,9 +441,9 @@ public class QuotingTests : BaseTestClass
 		
 		// Assert - Should not throw
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 100.50m, _lastTradeVolume, [], []);
+			100.50m, 100.51m, 100.50m, _lastTradeVolume, 1, [], []);
 		
-		result.AssertEqual(100.50m); // ���������� 100.505 -> 100.50
+		result.AssertEqual(100.50m);
 	}
 
 	[TestMethod]
@@ -443,7 +455,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new TheorPriceQuotingBehavior(range);
 		
 		// Act
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, asks);
 		
 		// Assert
 		result.AssertEqual(bids.First().Price);
@@ -465,6 +477,7 @@ public class QuotingTests : BaseTestClass
 		
 		// Assert
 		result.AssertNull();
+		mdProvider.Verify(p => p.GetSecurityValue(security, Level1Fields.TheorPrice), Times.Once);
 	}
 
 	[TestMethod]
@@ -553,7 +566,7 @@ public class QuotingTests : BaseTestClass
 		
 		// Act & Assert
 		ThrowsExactly<InvalidOperationException>(() =>
-			behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, [], []));
+			behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, [], []));
 	}
 
 	[TestMethod]
@@ -580,7 +593,7 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new BestByVolumeQuotingBehavior(null);
 		
 		// Assert - Should not throw and behavior should work with default Unit
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume,
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1,
 			[new QuoteChange(100.50m, 1000)],
 			[new QuoteChange(100.51m, 800)]);
 		
@@ -611,7 +624,7 @@ public class QuotingTests : BaseTestClass
 		
 		// Act
 		var result = behavior.CalculateBestPrice(securityWithoutPriceStep, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, []);
+			100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, 1, bids, []);
 
 		result.AssertEqual(100.48m);
 	}
@@ -636,7 +649,7 @@ public class QuotingTests : BaseTestClass
 		{
 			new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m)),
 			new BestByPriceQuotingBehavior(new Unit(0.01m)),
-			new LimitQuotingBehavior(100.50m),
+			new LimitQuotingBehavior(99.75m),
 			new BestByVolumeQuotingBehavior(new Unit(500m)),
 			new LevelQuotingBehavior(new Range<int>(0, 1), false),
 			new LastTradeQuotingBehavior(new Unit(0.01m))
@@ -646,13 +659,13 @@ public class QuotingTests : BaseTestClass
 		{
 			// Act
 			var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-				null, null, _lastTradePrice, _lastTradeVolume, emptyBids, emptyAsks);
+				null, null, _lastTradePrice, _lastTradeVolume, 1, emptyBids, emptyAsks);
 			
 			// Assert - Should handle gracefully without throwing
 			// Most should return lastTradePrice or null, LimitQuotingBehavior should return limit price
 			if (behavior is LimitQuotingBehavior)
 			{
-				result.AssertEqual(_lastTradePrice);
+				result.AssertEqual(99.75m);
 			}
 			else if (behavior is MarketQuotingBehavior)
 			{
@@ -684,7 +697,7 @@ public class QuotingTests : BaseTestClass
 		{
 			// Act - Test with all null prices
 			var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-				null, null, null, null, [], []);
+				null, null, null, null, 1, [], []);
 			
 			// Assert - Should handle gracefully
 			if (behavior is LimitQuotingBehavior)
@@ -705,7 +718,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns((decimal?)null);
 
@@ -732,7 +745,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns(100m);
 
@@ -769,7 +782,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns(102m);
 
@@ -811,7 +824,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns(100m);
 
@@ -937,7 +950,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns(100m);
 
@@ -979,7 +992,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns((decimal?)null); // No market data
 
@@ -1006,7 +1019,7 @@ public class QuotingTests : BaseTestClass
 		var (_, _, behavior, _, _, _, _, engine) = CreateContext();
 		behavior.Setup(b => b.CalculateBestPrice(
 			It.IsAny<Security>(), It.IsAny<IMarketDataProvider>(), It.IsAny<Sides>(),
-			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(),
+			It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<decimal?>(), It.IsAny<long>(),
 			It.IsAny<QuoteChange[]>(), It.IsAny<QuoteChange[]>()))
 			.Returns((decimal?)null);
 
@@ -1107,6 +1120,25 @@ public class QuotingTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void IsTimeOut_AtTimeoutBoundary_ReturnsTrue()
+	{
+		var (mdProvider, _, behavior, security, portfolio, _, _, _) = CreateContext();
+		var startTime = DateTime.UtcNow;
+		var engine = new QuotingEngine(
+			behavior.Object,
+			security,
+			portfolio,
+			Sides.Buy,
+			100m,
+			50m,
+			TimeSpan.FromMinutes(5),
+			mdProvider.Object,
+			startTime);
+
+		engine.IsTimeOut(startTime.AddMinutes(5)).AssertTrue();
+	}
+
+	[TestMethod]
 	public void IsTimeOut_NoTimeout_ReturnsFalse()
 	{
 		// Arrange
@@ -1142,11 +1174,11 @@ public class QuotingTests : BaseTestClass
 
 		// Act - First trade: price 100, volume 50
 		var result1 = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 100m, 50m, [], []);
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
 
 		// Second trade: price 102, volume 50
 		var result2 = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 102m, 50m, [], []);
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
 
 		// Assert
 		result1.AssertEqual(100m); // VWAP = 100*50/50 = 100
@@ -1162,7 +1194,7 @@ public class QuotingTests : BaseTestClass
 
 		// Act
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, null, null, [], []);
+			100.50m, 100.51m, null, null, 1, [], []);
 
 		// Assert
 		result.AssertNull();
@@ -1177,11 +1209,11 @@ public class QuotingTests : BaseTestClass
 
 		// First accumulate some data
 		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 100m, 50m, [], []);
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
 
 		// Act - Price provided but no volume
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 102m, null, [], []);
+			100.50m, 100.51m, 102m, null, 2, [], []);
 
 		// Assert - Returns cached VWAP since we can't accumulate without volume
 		result.AssertEqual(100m);
@@ -1266,9 +1298,87 @@ public class QuotingTests : BaseTestClass
 
 		// Assert - Should not throw
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 100m, 50m, [], []);
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
 
 		result.AssertEqual(100m);
+	}
+
+	// QuotingProcessor keeps the last trade in a field and rebuilds the input snapshot on every
+	// trigger, so the same trade reaches CalculateBestPrice repeatedly and must be weighted once.
+	[TestMethod]
+	public void VWAP_CalculateBestPrice_SameTradeRepeated_DoesNotDiluteNextTrade()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new VWAPQuotingBehavior(new Unit(0.01m));
+
+		// Act - one trade, the same trade replayed by another trigger, then a genuinely new trade
+		var first = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		var repeated = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		var afterNew = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
+
+		// Assert
+		first.AssertEqual(100m);
+		repeated.AssertEqual(100m); // the replay adds no weight
+		afterNew.AssertEqual(101m); // (100*50 + 102*50) / 100 - the replay must not dilute this
+	}
+
+	// A trade replayed between two new ones must not gain a second share of the weighting.
+	[TestMethod]
+	public void VWAP_CalculateBestPrice_RepeatBetweenNewTrades_CountsOnce()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new VWAPQuotingBehavior(new Unit(0.01m));
+
+		// Act - new, new, the second one replayed, new
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 104m, 50m, 2, [], []);
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 104m, 50m, 2, [], []);
+
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 120m, 50m, 3, [], []);
+
+		// Assert - three trades of equal volume: (100 + 104 + 120) / 3
+		result.AssertEqual(108m);
+	}
+
+	// The processor never fills LastTradeVolume, so a replayed trade commonly arrives without one
+	// and must leave the running average exactly where it was.
+	[TestMethod]
+	public void VWAP_CalculateBestPrice_RepeatWithoutVolume_DoesNotMoveAverage()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new VWAPQuotingBehavior(new Unit(0.01m));
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		// Act - the same price replayed twice with no volume, then a genuinely new trade
+		var firstRepeat = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, null, 1, [], []);
+
+		var secondRepeat = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, null, 1, [], []);
+
+		var afterNew = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
+
+		// Assert
+		firstRepeat.AssertEqual(100m);
+		secondRepeat.AssertEqual(100m);
+		afterNew.AssertEqual(101m); // (100*50 + 102*50) / 100
 	}
 
 	#endregion
@@ -1284,13 +1394,13 @@ public class QuotingTests : BaseTestClass
 
 		// Act - Add multiple prices
 		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 100m, 50m, [], []);
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
 
 		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 102m, 50m, [], []);
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
 
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, 104m, 50m, [], []);
+			100.50m, 100.51m, 104m, 50m, 3, [], []);
 
 		// Assert - Average of 100, 102, 104 = 102
 		result.AssertEqual(102m);
@@ -1305,7 +1415,7 @@ public class QuotingTests : BaseTestClass
 
 		// Act
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
-			100.50m, 100.51m, null, null, [], []);
+			100.50m, 100.51m, null, null, 1, [], []);
 
 		// Assert
 		result.AssertNull();
@@ -1319,10 +1429,10 @@ public class QuotingTests : BaseTestClass
 		IQuotingBehavior behavior = new TWAPQuotingBehavior(TimeSpan.FromSeconds(1), priceBufferSize: 3);
 
 		// Act - Add 4 prices (buffer size is 3)
-		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 100m, 50m, [], []);
-		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 102m, 50m, [], []);
-		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 104m, 50m, [], []);
-		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 106m, 50m, [], []);
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 100m, 50m, 1, [], []);
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 102m, 50m, 2, [], []);
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 104m, 50m, 3, [], []);
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, 106m, 50m, 4, [], []);
 
 		// Assert - Only last 3 prices: 102, 104, 106 -> average = 104
 		result.AssertEqual(104m);
@@ -1406,6 +1516,78 @@ public class QuotingTests : BaseTestClass
 		// Act & Assert
 		ThrowsExactly<ArgumentOutOfRangeException>(() =>
 			new TWAPQuotingBehavior(TimeSpan.FromSeconds(-1)));
+	}
+
+	// QuotingProcessor keeps the last trade in a field and rebuilds the input snapshot on every
+	// trigger, so a replayed trade must not take a slot in the averaging window.
+	[TestMethod]
+	public void TWAP_CalculateBestPrice_SameTradeRepeated_DoesNotMoveAverage()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new TWAPQuotingBehavior(TimeSpan.FromSeconds(1), priceBufferSize: 2);
+
+		// Act - two trades fill the window, then the second one is replayed
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		var beforeRepeat = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
+
+		var afterRepeat = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 102m, 50m, 2, [], []);
+
+		// Assert - the replay must not evict 100 from the window
+		beforeRepeat.AssertEqual(101m);
+		afterRepeat.AssertEqual(101m);
+	}
+
+	// A trade replayed between two new ones must not gain a second share of the average.
+	[TestMethod]
+	public void TWAP_CalculateBestPrice_RepeatBetweenNewTrades_CountsOnce()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new TWAPQuotingBehavior(TimeSpan.FromSeconds(1));
+
+		// Act - new, new, the second one replayed, new
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 100m, 50m, 1, [], []);
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 104m, 50m, 2, [], []);
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 104m, 50m, 2, [], []);
+
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 120m, 50m, 3, [], []);
+
+		// Assert - three trades: (100 + 104 + 120) / 3
+		result.AssertEqual(108m);
+	}
+
+	// A price that returns to an earlier value after moving away is a new trade, not a replay,
+	// so it must still be averaged in.
+	[TestMethod]
+	public void TWAP_CalculateBestPrice_PriceReturnsToEarlierValue_CountsAsNewTrade()
+	{
+		// Arrange
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new TWAPQuotingBehavior(TimeSpan.FromSeconds(1));
+
+		// Act - the price moves away and comes back
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 99m, 50m, 1, [], []);
+
+		behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 108m, 50m, 2, [], []);
+
+		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
+			100.50m, 100.51m, 99m, 50m, 3, [], []);
+
+		// Assert - three trades: (99 + 108 + 99) / 3
+		result.AssertEqual(102m);
 	}
 
 	#endregion

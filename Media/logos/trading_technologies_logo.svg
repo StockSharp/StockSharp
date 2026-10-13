@@ -1,21 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000" height="1000" viewBox="500 500 1000 1000" xml:space="preserve">
-<g transform="matrix(1 0 0 1 540 540)" id="d89bd8d7-a94b-4a05-bdfa-2923a78df13a"  >
-<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-540" y="-540" rx="0" ry="0" width="1080" height="1080" />
-</g>
-<g transform="matrix(1 0 0 1 540 540)">
-</g>
-<g transform="matrix(1 0 0 1 526.6 526.55)"  >
-<polygon style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(145,213,228); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="18.85,-13.45 13.45,-18.85 -18.85,13.45 -13.45,18.85 " />
-</g>
-<g transform="matrix(1 0 0 1 535.35 560.8)"  >
-<polygon style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,73,100); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-11.5,-4.7 4.7,11.5 11.5,4.7 -4.7,-11.5 " />
-</g>
-<g transform="matrix(1 0 0 1 552.7 535.35)"  >
-<polygon style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,149,214); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="4.65,19.55 19.55,4.65 -4.65,-19.55 -19.55,-4.65 " />
-</g>
-<g transform="matrix(1 0 0 1 535.3 548.05)"  >
-<polygon style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(56,146,154); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  points="-4.65,-14.85 -19.55,0.05 -14.15,5.45 -4.75,-3.95 14.05,14.85 19.55,9.45 " />
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 66">
+  <polygon fill="#91d5e4" points="38,6 32.6,.6 .3,32.9 5.7,38.3"/>
+  <polygon fill="#004964" points="16.4,49 32.6,65.2 39.4,58.4 23.2,42.2"/>
+  <polygon fill="#0095d6" points="49.9,47.8 64.8,32.9 40.6,8.7 25.7,23.6"/>
+  <polygon fill="#38929a" points="23.2,26.1 8.3,41 13.7,46.4 23.1,37 41.9,55.8 47.4,50.4"/>
 </svg>

@@ -94,7 +94,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 			Value = value;
 		}
 
-		public void Load(SettingsStorage storage)
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
 			try
 			{
@@ -103,7 +103,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 				}
 				else if (Type == typeof(Security))
 				{
-					LoadSecurity(storage.GetValue<string>(_valueKey));
+					await LoadSecurityAsync(storage.GetValue<string>(_valueKey), cancellationToken);
 				}
 				else if (Type == typeof(Portfolio))
 				{
@@ -120,7 +120,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 					var value = storage.TryGetValue(_valueKey);
 
 					Value = value is SettingsStorage settingsStorage
-						? settingsStorage.LoadEntire<IPersistable>()
+						? await settingsStorage.LoadEntireAsync<object>(cancellationToken)
 						: value;
 				}
 			}
@@ -134,7 +134,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 			}
 		}
 
-		public void Save(SettingsStorage storage)
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
 			switch (Value)
 			{
@@ -149,8 +149,8 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 				case Portfolio pf:
 					storage.SetValue(_valueKey, pf.Name);
 					break;
-				case IPersistable persistable:
-					storage.SetValue(_valueKey, persistable.SaveEntire(false));
+				case { } persistable when persistable.GetType().IsPersistable():
+					storage.SetValue(_valueKey, await persistable.SaveEntireAsync(false, cancellationToken));
 					break;
 				default:
 					storage.SetValue(_valueKey, Value);
@@ -158,7 +158,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 			}
 		}
 
-		private void LoadSecurity(string id)
+		private async ValueTask LoadSecurityAsync(string id, CancellationToken cancellationToken)
 		{
 			UnsubscribeFromSecurities();
 
@@ -172,7 +172,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 
 			var secProvider = ServicesRegistry.SecurityProvider;
 			var exchangeInfoProvider = ServicesRegistry.ExchangeInfoProvider;
-			var security = secProvider.LookupById(_securityId);
+			var security = await secProvider.LookupByIdAsync(_securityId.ToSecurityId(), cancellationToken);
 
 			if (security != null)
 			{

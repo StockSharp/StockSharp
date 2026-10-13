@@ -11,7 +11,10 @@ namespace StockSharp.Algo.Commissions;
 public class CommissionOrderVolumeRule : CommissionRule
 {
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+		=> new(Calculate(message));
+
+	private decimal? Calculate(ExecutionMessage message)
 	{
 		if (!message.HasOrderInfo())
 			return null;
@@ -21,6 +24,9 @@ public class CommissionOrderVolumeRule : CommissionRule
 
 		if (Value.Type == UnitTypes.Percent)
 		{
+			if (price is null or 0m)
+				return null;
+
 			// percent of turnover
 			return price * volume * (Value.Value / 100m);
 		}

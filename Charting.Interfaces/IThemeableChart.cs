@@ -3,7 +3,7 @@ namespace StockSharp.Charting;
 /// <summary>
 /// Base interface for all chart components.
 /// </summary>
-public interface IThemeableChart : IPersistable
+public interface IThemeableChart : IAsyncPersistable
 {
 	/// <summary>
 	/// The name of the graphic theme.

@@ -197,16 +197,12 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 			candle = null;
 
-			if (_currentCandle != null && _currentCandle.OpenTime == message.OpenTime)
-			{
-				if (_currentCandle.State == CandleStates.Finished)
-					return false;
+			// Only a time-frame candle is identified by its open time. Other candles can finish several at one instant and
+			// carry no identity (identical tick candles are legitimate), so any message after a finished one passes, repeats too.
+			if (message is ITimeFrameCandleMessage && _currentCandle?.State == CandleStates.Finished && _currentCandle.OpenTime == message.OpenTime)
+				return false;
 
-				_currentCandle = message;
-			}
-			else
-				_currentCandle = message;
-
+			_currentCandle = message;
 			candle = _currentCandle;
 			return true;
 		}
@@ -566,6 +562,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 		var unsubscribe = subscription.SubscriptionMessage.TypedClone();
 
 		unsubscribe.IsSubscribe = false;
+		// The clone can carry the subscribe request's timestamp. This is a new command, so leave it for
+		// Connector.SendInMessageAsync to stamp with the current time at the transport boundary.
+		((Message)unsubscribe).LocalTime = default;
 
 		// some subscription can be only for subscribe
 		if (unsubscribe.IsSubscribe)
@@ -688,6 +687,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				}
 
 				info.HasResult = false;
+
+				// Closing the connection asked for the subscription to be taken off. It is asked for again here.
+				info.IsUnsubscribing = false;
 				info.Subscription.TransactionId = newId;
 				requests.Add(info.CreateSubscriptionContinue(), info);
 			}

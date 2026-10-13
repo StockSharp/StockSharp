@@ -60,7 +60,8 @@ public class RemoteFileMessage : BaseSubscriptionIdMessage<RemoteFileMessage>, I
 		base.CopyTo(destination);
 
 		destination.TransactionId = TransactionId;
-		destination.Body = Body;
+		// The body is the payload, so the copy gets its own buffer instead of the one this message reads from.
+		destination.Body = [.. Body];
 		destination.SecurityId = SecurityId;
 		destination.FileDataType = FileDataType?.TypedClone();
 		destination.Date = Date;

@@ -185,10 +185,6 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<(string, Type)> SecurityExtendedFields { get; } = [];
-
-	/// <inheritdoc />
-	[Browsable(false)]
 	public virtual IEnumerable<int> SupportedOrderBookDepths => [];
 
 	/// <inheritdoc />
@@ -503,7 +499,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	{
 		if (mdMsg.IsSubscribe)
 		{
-			var now = DateTime.UtcNow;
+			var now = CurrentTime;
 
 			var from = mdMsg.From;
 			var to = mdMsg.To;
@@ -626,7 +622,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
 			this.AddSupportedMarketDataType(dt);
 
-		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return _newOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	/// <summary>
@@ -776,7 +772,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
@@ -794,7 +790,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		}
 
 		if (storage.ContainsKey(nameof(ReConnectionSettings)))
-			ReConnectionSettings.Load(storage, nameof(ReConnectionSettings));
+			await ReConnectionSettings.LoadAsync(storage, nameof(ReConnectionSettings), cancellationToken);
 
 		EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 		IterationInterval = storage.GetValue(nameof(IterationInterval), IterationInterval);
@@ -802,40 +798,36 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		MaxParallelMessages = storage.GetValue(nameof(MaxParallelMessages), MaxParallelMessages);
 		FaultDelay = storage.GetValue(nameof(FaultDelay), FaultDelay);
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Id), Id)
 			.Set(nameof(HeartbeatInterval), HeartbeatInterval)
 			.Set(nameof(SupportedInMessages), Do.Invariant(() => SupportedInMessages.Select(t => t.To<string>()).ToArray()))
-			.Set(nameof(ReConnectionSettings), ReConnectionSettings.Save())
+			.Set(nameof(ReConnectionSettings), await ReConnectionSettings.SaveAsync(cancellationToken))
 			.Set(nameof(EnqueueSubscriptions), EnqueueSubscriptions)
 			.Set(nameof(IterationInterval), IterationInterval)
 			.Set(nameof(MaxParallelMessages), MaxParallelMessages)
 			.Set(nameof(FaultDelay), FaultDelay)
 		;
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <summary>
 	/// Create a copy of <see cref="MessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public virtual IMessageAdapter Clone()
+	public virtual async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = GetType().CreateInstance<MessageAdapter>(TransactionIdGenerator);
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
-	}
-
-	object ICloneable.Clone()
-	{
-		return Clone();
 	}
 
 	private PropertyChangedEventHandler _propertyChanged;

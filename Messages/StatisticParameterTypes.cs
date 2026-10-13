@@ -204,4 +204,19 @@ public enum StatisticParameterTypes
 	/// Maximum profit value for the period, expressed as a percentage.
 	/// </summary>
 	MaxProfitPercent,
+
+	/// <summary>
+	/// The share of the observed time a position was open, expressed as a percentage.
+	/// </summary>
+	TimeInMarket,
+
+	/// <summary>
+	/// How long a position is held on average.
+	/// </summary>
+	AverageHoldingTime,
+
+	/// <summary>
+	/// The share of the net result made by the single most profitable trade, expressed as a percentage.
+	/// </summary>
+	LargestTradeShare,
 }

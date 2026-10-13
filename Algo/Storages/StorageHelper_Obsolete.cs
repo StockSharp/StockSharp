@@ -215,7 +215,7 @@ static partial class StorageHelper
 	/// <param name="security">Security.</param>
 	/// <param name="forced">Forced update.</param>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
-	//[Obsolete("Use SaveAsync method instead.")]
+	[Obsolete("Use SaveAsync method instead.")]
 	public static void Save(this ISecurityStorage storage, Security security, bool forced)
 	{
 		if (storage is null)

@@ -97,7 +97,11 @@ public class RandomDiagramElement : DiagramElement
 
 	private void RaiseRandomOuput(DateTime time)
 	{
-		var value = RandomGen.GetDecimal(Min, Max, 2);
+		// The source belongs to the strategy rather than to this element, so a whole diagram
+		// draws from one place - a seeded one to repeat a backtest, a stub to state in a test
+		// what the values will be. An element with no strategy behind it falls back to the
+		// shared unseeded source.
+		var value = (Strategy?.RandomProvider ?? DefaultRandomProvider.Instance).GetDecimal(Min, Max, 2);
 		RaiseProcessOutput(_outputSocket, time, (Unit)value);
 	}
 

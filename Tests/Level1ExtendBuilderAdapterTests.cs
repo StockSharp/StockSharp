@@ -36,7 +36,8 @@ public class Level1ExtendBuilderAdapterTests : BaseTestClass
 			return default;
 		}
 
-		public override IMessageAdapter Clone() => new TestInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestInnerAdapter(TransactionIdGenerator));
 
 		/// <summary>
 		/// Simulate inner adapter emitting an outgoing message.
@@ -417,6 +418,9 @@ public class Level1ExtendBuilderAdapterTests : BaseTestClass
 		AreEqual(61200m, (decimal)l1.Changes[Level1Fields.HighPrice]);
 		AreEqual(60900m, (decimal)l1.Changes[Level1Fields.LowPrice]);
 		AreEqual(61100m, (decimal)l1.Changes[Level1Fields.ClosePrice]);
+		AreEqual(100m, (decimal)l1.Changes[Level1Fields.Volume]);
+		AreEqual(candle.CloseTime, l1.ServerTime);
+		AreEqual(candle.SecurityId, l1.SecurityId);
 
 		// Candle should NOT be passed through (fully consumed)
 		AreEqual(0, output.OfType<TimeFrameCandleMessage>().Count());

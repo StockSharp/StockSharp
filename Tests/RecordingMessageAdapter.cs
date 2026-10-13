@@ -15,6 +15,6 @@ sealed class RecordingMessageAdapter : MessageAdapter
 		return default;
 	}
 
-	public override IMessageAdapter Clone()
-		=> new RecordingMessageAdapter(TransactionIdGenerator);
+	public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new(new RecordingMessageAdapter(TransactionIdGenerator));
 }

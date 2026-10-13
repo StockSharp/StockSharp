@@ -41,8 +41,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlert(AlertNotifications.Popup, "TestCaption", "TestMessage");
 
-		// Wait for async task to complete
-		await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => mockService.Notifications.Count > 0, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count, "Should have one notification");
 		var (type, _, _, caption, message, _) = mockService.Notifications[0];
@@ -70,7 +69,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertPopup("PopupMessage");
 
-		await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => mockService.Notifications.Count > 0, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Popup, mockService.Notifications[0].type);
@@ -87,7 +86,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertSound("SoundMessage");
 
-		await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => mockService.Notifications.Count > 0, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Sound, mockService.Notifications[0].type);
@@ -102,7 +101,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertLog("LogMessage");
 
-		await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => mockService.Notifications.Count > 0, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Log, mockService.Notifications[0].type);

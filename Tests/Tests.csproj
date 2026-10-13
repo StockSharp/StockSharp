@@ -1,8 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_tests.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_target_tests.props" />
   <ItemGroup>
-    <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
-    <Compile Include="..\Designer.Templates\Backtest\SmaServerStopStrategy.cs" Link="SmaServerStopStrategy.cs" />
+    <!-- Every strategy template is compiled in by mask, so one added later is tested without being
+         listed here. The Custom and Indicator templates stay out: CompilationTests already compiles
+         those from source with the Designer compiler and drives them, and nothing in this assembly
+         would test a second, linked copy. -->
+    <Compile Include="..\Designer.Templates\Backtest\*.cs" Link="%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
@@ -25,7 +28,10 @@
     <ProjectReference Include="..\Algo.Indicators\Algo.Indicators.csproj" />
     <ProjectReference Include="..\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
+    <ProjectReference Include="..\Fix.Core\Fix.Core.csproj" />
+    <ProjectReference Include="..\Fix.Dialects\Fix.Dialects.csproj" />
     <ProjectReference Include="..\MatchingEngine\MatchingEngine.csproj" />
+    <ProjectReference Include="..\Media.Generator\Media.Generator.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />
     <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
   </ItemGroup>

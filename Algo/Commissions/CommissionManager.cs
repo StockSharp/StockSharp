@@ -32,7 +32,7 @@ public class CommissionManager : ICommissionManager
 	}
 
 	/// <inheritdoc />
-	public virtual decimal? Process(Message message)
+	public virtual async ValueTask<decimal?> ProcessAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -52,7 +52,7 @@ public class CommissionManager : ICommissionManager
 
 				foreach (var rule in _rules.Cache)
 				{
-					var ruleCom = rule.Process(execMsg);
+					var ruleCom = await rule.ProcessAsync(execMsg, cancellationToken);
 
 					if (ruleCom != null)
 						commission = (commission ?? 0) + ruleCom.Value;
@@ -75,28 +75,40 @@ public class CommissionManager : ICommissionManager
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var rules = new List<ICommissionRule>();
+
+		foreach (var s in storage.GetValue<SettingsStorage[]>(nameof(Rules)))
+			rules.Add(await s.LoadEntireAsync<ICommissionRule>(cancellationToken));
+
 		Rules.Clear();
-		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<ICommissionRule>()));
+		Rules.AddRange(rules);
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
+		var rules = new List<SettingsStorage>();
+
+		foreach (var rule in Rules)
+			rules.Add(await rule.SaveEntireAsync(false, cancellationToken));
+
+		storage.SetValue(nameof(Rules), rules.ToArray());
 	}
 
 	/// <inheritdoc />
-	public ICommissionManager Clone()
+	public async ValueTask<ICommissionManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new CommissionManager();
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

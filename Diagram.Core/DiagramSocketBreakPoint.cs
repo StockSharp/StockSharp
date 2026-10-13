@@ -9,7 +9,7 @@ using System.Reflection;
 /// Initialize <see cref="DiagramSocketBreakpoint"/>.
 /// </remarks>
 /// <param name="socket">Diagram socket.</param>
-public class DiagramSocketBreakpoint(DiagramSocket socket) : IPersistable
+public class DiagramSocketBreakpoint(DiagramSocket socket) : IAsyncPersistable
 {
 	/// <summary>
 	/// Diagram socket.
@@ -41,26 +41,34 @@ public class DiagramSocketBreakpoint(DiagramSocket socket) : IPersistable
 		return true;
 	}
 
-	#region IPersistable
+	#region IAsyncPersistable
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage == null)
 			throw new ArgumentNullException(nameof(storage));
+
+		return Task.CompletedTask;
 	}
 
 	#endregion
@@ -133,17 +141,17 @@ class RangeDiagramSocketBreakpoint<TValue>(DiagramSocket socket) : DiagramSocket
 		return true;
 	}
 
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		MinValue = storage.GetValue(nameof(MinValue), MinValue);
 		MaxValue = storage.GetValue(nameof(MaxValue), MaxValue);
 	}
 
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(MinValue), MinValue);
 		storage.SetValue(nameof(MaxValue), MaxValue);
@@ -169,16 +177,16 @@ class BooleanDiagramSocketBreakpoint(DiagramSocket socket) : DiagramSocketBreakp
 		return value as bool? == Value;
 	}
 
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Value = storage.GetValue(nameof(Value), Value);
 	}
 
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Value), Value);
 	}
@@ -204,16 +212,16 @@ class EnumDiagramSocketBreakpoint<TEnum>(DiagramSocket socket) : DiagramSocketBr
 		return (value as TEnum?)?.Equals(Value) == true;
 	}
 
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Value = storage.GetValue(nameof(Value), Value);
 	}
 
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Value), Value);
 	}

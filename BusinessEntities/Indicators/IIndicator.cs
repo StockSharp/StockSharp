@@ -53,8 +53,15 @@ public class SourceItemsSource : ItemsSourceBase<Level1Fields>
 /// <summary>
 /// The interface describing indicator.
 /// </summary>
-public interface IIndicator : IPersistable, ICloneable<IIndicator>
+public interface IIndicator : IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the indicator.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IIndicator> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Unique ID.
 	/// </summary>
@@ -130,6 +137,13 @@ public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	/// Indicator color. If <see langword="null"/> then the color will be automatically selected.
 	/// </summary>
 	Color? Color => null;
+
+	/// <summary>
+	/// Prepare the indicator for <see cref="Process"/>: do what has to be awaited before the first value.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask PrepareAsync(CancellationToken cancellationToken) => default;
 
 	/// <summary>
 	/// Indicates whether the indicator has been preloaded with historical/external values.

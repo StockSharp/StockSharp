@@ -229,6 +229,8 @@ public class GpuTroughCalculator : GpuIndicatorCalculatorBase<Trough, GpuTroughP
 			var price = candle.Low;
 			var resIndex = resBase + i;
 
+			var hadExtremum = hasExtremum;
+
 			if (!hasExtremum)
 			{
 				lastExtremum = price;
@@ -245,11 +247,16 @@ public class GpuTroughCalculator : GpuIndicatorCalculatorBase<Trough, GpuTroughP
 			var threshold = lastExtremum * deviation;
 			var changeTrend = false;
 
+			// Bars counted back from this bar to the one holding the extremum: the bar that beats the
+			// extremum holds it, every later bar moves it one further back.
+			var currentShift = hadExtremum ? shift + 1 : 0;
+
 			if (currentTrend)
 			{
 				if (lastExtremum < price)
 				{
 					lastExtremum = price;
+					currentShift = 0;
 				}
 				else if (price <= (lastExtremum - threshold))
 				{
@@ -261,6 +268,7 @@ public class GpuTroughCalculator : GpuIndicatorCalculatorBase<Trough, GpuTroughP
 				if (lastExtremum > price)
 				{
 					lastExtremum = price;
+					currentShift = 0;
 				}
 				else if (price >= (lastExtremum + threshold))
 				{
@@ -274,14 +282,14 @@ public class GpuTroughCalculator : GpuIndicatorCalculatorBase<Trough, GpuTroughP
 				{
 					Time = candle.Time,
 					Value = lastExtremum,
-					Shift = shift,
+					Shift = currentShift,
 					IsUp = (byte)(currentTrend ? 1 : 0),
 					IsFormed = 1
 				};
 
 				isUpTrend = !currentTrend;
 				lastExtremum = price;
-				shift = 1;
+				shift = 0;
 			}
 			else
 			{
@@ -295,7 +303,7 @@ public class GpuTroughCalculator : GpuIndicatorCalculatorBase<Trough, GpuTroughP
 				};
 
 				isUpTrend = currentTrend;
-				shift++;
+				shift = currentShift;
 			}
 
 			prevPrice = price;

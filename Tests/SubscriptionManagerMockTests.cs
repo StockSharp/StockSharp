@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionManagerMockTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static SubscriptionManager CreateManager(Mock<ISubscriptionManagerState> stateMock)
 	{
 		return new SubscriptionManager(
@@ -95,7 +93,7 @@ public class SubscriptionManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Unsubscribe_ExistingSubscription_UpdatesState()
+	public void Unsubscribe_ExistingSubscription_RemovesState()
 	{
 		var stateMock = new Mock<ISubscriptionManagerState>();
 		var subscription = (ISubscriptionMessage)new MarketDataMessage
@@ -119,8 +117,14 @@ public class SubscriptionManagerMockTests : BaseTestClass
 
 		var (toInner, toOut) = mgr.ProcessInMessage(unsubMsg);
 
-		stateMock.Verify(s => s.UpdateSubscriptionState(1, It.IsAny<SubscriptionStates>()), Times.Once);
+		stateMock.Verify(s => s.RemoveSubscription(1), Times.Once);
+		stateMock.Verify(s => s.UpdateSubscriptionState(1, It.IsAny<SubscriptionStates>()), Times.Never);
 		toInner.Length.AssertEqual(1);
+		var sent = toInner[0].To<MarketDataMessage>();
+		sent.IsSubscribe.AssertFalse();
+		sent.OriginalTransactionId.AssertEqual(1);
+		sent.TransactionId.AssertEqual(100);
+		sent.DataType2.AssertEqual(DataType.Ticks);
 	}
 
 	[TestMethod]
@@ -145,7 +149,13 @@ public class SubscriptionManagerMockTests : BaseTestClass
 
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
-		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		var response = toOut[0].To<SubscriptionResponseMessage>();
+
+		// The caller is waiting on the transaction it sent, not on the one it asked about: an answer
+		// addressed to a subscription that does not exist is one nobody is listening for.
+		response.OriginalTransactionId.AssertEqual(100);
+		response.Error.AssertNotNull();
+		response.Error.Message.Contains("1").AssertTrue("the error still has to name the subscription that was not found");
 	}
 
 	[TestMethod]

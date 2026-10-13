@@ -1,12 +1,8 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class SubscriptionManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	[TestMethod]
 	public void Subscribe_FromFuture_ClampsToNow()
 	{
@@ -31,6 +27,181 @@ public class SubscriptionManagerTests : BaseTestClass
 		var sent = (MarketDataMessage)toInner[0];
 		sent.From.AssertEqual(logReceiver.CurrentTime);
 		message.From.AssertEqual(logReceiver.CurrentTime.AddHours(1));
+	}
+
+	/// <summary>
+	/// Starting a live subscription now is only half of what the clamp is for; the other half is
+	/// that it stays a live subscription. If the request were answered here instead of travelling,
+	/// or the venue's online report not passed on, the client would hold a subscription that never
+	/// delivers - which is the very outcome a start in the future would otherwise produce.
+	/// </summary>
+	[TestMethod]
+	public void Subscribe_FromFuture_TravelsOnAndGoesOnline()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = logReceiver.CurrentTime.AddHours(1),
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toOut.Length.AssertEqual(0, "nothing is answered here - the venue is the one with the data");
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.From.AssertEqual(logReceiver.CurrentTime);
+		IsNull(sent.To, "an endless subscription keeps having no end");
+
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		var (forward, extraOut) = manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		IsNotNull(forward, "the client has to hear that its subscription is live");
+		forward.Type.AssertEqual(MessageTypes.SubscriptionOnline);
+		extraOut.Length.AssertEqual(0);
+	}
+
+	/// <summary>
+	/// A bounded request asks what is stored between two points, and both points are the question.
+	/// Pulling its lower bound forward to now answers a different one: a single far-future day
+	/// becomes decades, which the venue either refuses outright or serves at great length. An
+	/// online subscription is the case the clamp exists for - it cannot start before the data does
+	/// - and that stays as it was.
+	/// </summary>
+	[TestMethod]
+	public void Subscribe_BoundedRangeInFuture_KeepsItsBounds()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var from = logReceiver.CurrentTime.AddYears(70);
+		var to = from.AddDays(1);
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = from,
+			To = to,
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.From.AssertEqual(from);
+		sent.To.AssertEqual(to);
+	}
+
+	/// <summary>
+	/// A zero-length range is still a request, and a request is acknowledged before it is answered:
+	/// the connector raises "subscription started" from the response and from nothing else, so a
+	/// bare result leaves the caller holding a subscription it was never told it had.
+	/// </summary>
+	[TestMethod]
+	public void Subscribe_EmptyRange_IsAcknowledgedBeforeBeingFinished()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var from = logReceiver.CurrentTime;
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = from,
+			To = from,
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toInner.Length.AssertEqual(0, "there is nothing between these two points to ask the venue for");
+		toOut.Length.AssertEqual(2, "the request is acknowledged, then finished");
+
+		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse, "the acknowledgement comes first");
+
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.OriginalTransactionId.AssertEqual(100);
+		IsNull(response.Error, "an empty range is an empty answer, not a refusal");
+
+		toOut[1].Type.AssertEqual(MessageTypes.SubscriptionFinished);
+		((SubscriptionFinishedMessage)toOut[1]).OriginalTransactionId.AssertEqual(100);
+	}
+
+	/// <summary>
+	/// Asking for yesterday is the everyday shape of a history request, and it is the one case a
+	/// clamp must never touch: pulled forward to now, the request names a window that has not
+	/// happened yet and comes back empty. It also has to be recognised as history rather than as a
+	/// live feed, or the rows the venue replays arrive naming no subscription and are dropped before
+	/// the caller ever sees them.
+	/// </summary>
+	[TestMethod]
+	public void AHistoryRequestForYesterdayIsAskedForExactlyAsItWasWritten()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+		var from = logReceiver.CurrentTime.AddDays(-1);
+		var to = logReceiver.CurrentTime.AddHours(-1);
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 102,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = from,
+			To = to,
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toOut.Length.AssertEqual(0, "what happened yesterday is the venue's to answer, not this manager's");
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.From.AssertEqual(from, "the window the caller asked for starts where the caller said it starts");
+		sent.To.AssertEqual(to, "and ends where the caller said it ends");
+
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 102 });
+
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			OriginalTransactionId = 102,
+			ServerTime = from.AddMinutes(1),
+			TradePrice = 10m,
+			TradeVolume = 1m,
+		};
+
+		var (forward, _) = manager.ProcessOutMessage(tick);
+
+		forward.AssertNotNull("the replayed rows are the whole point of the request");
+		((ExecutionMessage)forward).GetSubscriptionIds().AssertContains(102L, "and each has to name the request it answers");
+
+		var (finished, _) = manager.ProcessOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 102 });
+
+		finished.AssertNotNull("the caller has to be told the replay is over, or it waits forever");
 	}
 
 	[TestMethod]
@@ -119,6 +290,39 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		// Confirm resubscription
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 102 });
+	}
+
+	[TestMethod]
+	public void Unsubscribe_PreservesCurrentRequestTime()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+		var subscribeTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var unsubscribeTime = subscribeTime.AddMinutes(1);
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = subscribeTime,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		var (toInner, _) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = unsubscribeTime,
+		});
+
+		toInner.Single().LocalTime.AssertEqual(unsubscribeTime,
+			"The upstream unsubscribe must carry the time of the current command, not the old subscribe time");
 	}
 
 	[TestMethod]
@@ -254,6 +458,161 @@ public class SubscriptionManagerTests : BaseTestClass
 		((SubscriptionResponseMessage)toOut[0]).Error.AssertNotNull();
 	}
 
+	[TestMethod]
+	public void UnsubscribeAfterFinished_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+		manager.ProcessOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 1 });
+
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		toInner.Length.AssertEqual(0, "a finished upstream stream has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull();
+	}
+
+	[TestMethod]
+	public void UnsubscribeAfterError_ReturnsNotFoundBecauseTheSubscriptionWasRemoved()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("refused"),
+		});
+
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		toInner.Length.AssertEqual(0);
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNotNull("the failed subscription was already removed and must not report a false unsubscribe success");
+	}
+
+	/// <summary>
+	/// A caller may give up on a subscription while it is still waiting for the venue's answer, and
+	/// that request has to go somewhere - passed on, or answered here. Dropping it with a log line
+	/// leaves the caller with an unsubscribe that will never be replied to. Which of the two the
+	/// pipeline chooses is a design decision; that it does neither is not.
+	/// </summary>
+	[TestMethod]
+	public void Unsubscribe_BeforeResponse_IsNotDropped()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		var subscribe = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+
+		manager.ProcessInMessage(subscribe).toInner.Length.AssertEqual(1);
+		// no response from the venue yet - the subscription is sent but not confirmed
+
+		var unsubscribe = new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(unsubscribe);
+
+		IsTrue(toInner.Length + toOut.Length > 0, "an unsubscribe sent before the subscription was confirmed must be passed on or answered, not swallowed");
+	}
+
+	/// <summary>
+	/// Once the caller has given a subscription up, a confirmation arriving afterwards cannot bring
+	/// it back: data for it must not reach a caller that has already stopped listening.
+	/// </summary>
+	[TestMethod]
+	public void Unsubscribe_BeforeResponse_LateOk_DoesNotReviveSubscription()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		// the venue's confirmation for the original subscribe arrives after the caller gave it up
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([100]);
+
+		var (forward, _) = manager.ProcessOutMessage(tick);
+
+		forward.AssertNull("a late confirmation must not revive a subscription the caller has already given up");
+	}
+
 	#endregion
 
 	#region Message Without Subscription Tests
@@ -282,7 +641,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_WithNoSubscriptionId_PassesThrough()
+	public void OutMessage_UnsolicitedWithoutSubscriptionId_PassesThroughUnchanged()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -299,8 +658,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
 
-		// Message should be forwarded (current behavior - not filtered)
-		forward.AssertNotNull();
+		forward.AssertSame(dataMessage);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1096,8 +1455,19 @@ public class SubscriptionManagerTests : BaseTestClass
 		var (toInner, toOut) = manager.ProcessInMessage(unsubscribeLevel1);
 		toInner.Length.AssertEqual(1);
 
-		// Ticks subscription should still work
-		// (No direct way to verify in manager, but unsubscribe should only affect Level1)
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		tick.SetSubscriptionIds([101]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(tick);
+		forward.AssertSame(tick);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	#endregion

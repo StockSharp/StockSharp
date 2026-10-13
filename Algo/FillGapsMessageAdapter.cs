@@ -124,7 +124,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 		{
 			var current = info.Current;
 
-			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTime, info.Days, cancellationToken);
+			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.Date.AddDays(1), info.Original.To ?? CurrentTime, info.Days, cancellationToken);
 
 			if (gapsStart is null)
 			{
@@ -168,7 +168,8 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 	/// <summary>
 	/// Create a copy of <see cref="FillGapsMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
-		=> new FillGapsMessageAdapter(InnerAdapter.TypedClone(), _behaviour);
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new FillGapsMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _behaviour);
 }

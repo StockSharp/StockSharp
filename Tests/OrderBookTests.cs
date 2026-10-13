@@ -47,6 +47,35 @@ public class OrderBookTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void AddQuote_SameTransactionId_ReplacesVolumeWithoutInflatingTotal()
+	{
+		var book = new OrderBook(CreateSecId());
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 10, Volume = 10 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		AreEqual(7m, book.GetVolumeAtPrice(Sides.Buy, 100));
+		IsNotNull(book.BestBid);
+		AreEqual(100m, book.BestBid.Value.price);
+		AreEqual(7m, book.BestBid.Value.volume);
+		AreEqual(7m, book.TotalBidVolume);
+	}
+
+	[TestMethod]
+	public void RemoveQuote_AfterSameTransactionIdReplacement_ClearsTotalVolume()
+	{
+		var book = new OrderBook(CreateSecId());
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 10, Volume = 10 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		IsTrue(book.RemoveQuote(1, Sides.Buy, 100));
+		AreEqual(0m, book.GetVolumeAtPrice(Sides.Buy, 100));
+		IsNull(book.BestBid);
+		AreEqual(0m, book.TotalBidVolume);
+	}
+
+	[TestMethod]
 	public void BestBid_ReturnsHighestBidPrice()
 	{
 		var book = new OrderBook(CreateSecId());
@@ -311,32 +340,6 @@ public class OrderBookTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TrimToDepth_RemovesWorstLevels()
-	{
-		var book = new OrderBook(CreateSecId());
-
-		for (int i = 0; i < 10; i++)
-		{
-			book.AddQuote(new EmulatorOrder
-			{
-				TransactionId = i + 1,
-				Side = Sides.Buy,
-				Price = 100 - i,
-				Balance = 10,
-				Volume = 10
-			});
-		}
-
-		AreEqual(10, book.BidLevels);
-
-		var removed = book.TrimToDepth(Sides.Buy, 5).ToList();
-
-		AreEqual(5, book.BidLevels);
-		AreEqual(5, removed.Count);
-		AreEqual(100m, book.BestBid.Value.price);
-	}
-
-	[TestMethod]
 	public void ConsumeVolume_ConsumesFromBestPrice()
 	{
 		var book = new OrderBook(CreateSecId());
@@ -353,6 +356,50 @@ public class OrderBookTests : BaseTestClass
 		AreEqual(102m, executions[1].price);
 		AreEqual(15m, executions[1].volume);
 		AreEqual(35m, book.TotalAskVolume); // 60 - 25 = 35
+	}
+
+	[TestMethod]
+	public void ConsumeVolume_UpdatesCachedOrderVolume()
+	{
+		var book = new OrderBook(CreateSecId());
+		var firstOrder = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Sell,
+			Price = 101,
+			Balance = 5,
+			Volume = 5,
+		};
+		var secondOrder = new EmulatorOrder
+		{
+			TransactionId = 2,
+			Side = Sides.Sell,
+			Price = 101,
+			Balance = 7,
+			Volume = 7,
+		};
+
+		book.UpdateLevel(Sides.Sell, 101, 3);
+		book.AddQuote(firstOrder);
+		book.AddQuote(secondOrder);
+
+		var execution = book.ConsumeVolume(Sides.Sell, 101m, 6m).Single();
+
+		AreEqual(6m, execution.volume);
+		AreEqual(2m, firstOrder.Balance);
+		AreEqual(7m, secondOrder.Balance);
+		AreEqual(9m, book.TotalAskVolume);
+		AreEqual(9m, book.GetVolumeAtPrice(Sides.Sell, 101m));
+		AreEqual(9m, book.BestAsk.Value.volume);
+		AreEqual(9m, book.GetLevels(Sides.Sell).Single().Volume);
+		AreEqual(9m, book.ToMessage(default, default).Asks.Single().Volume);
+
+		IsTrue(book.RemoveQuote(firstOrder.TransactionId, firstOrder.Side, firstOrder.Price));
+		AreEqual(7m, book.TotalAskVolume);
+
+		AreEqual(7m, book.ConsumeVolume(Sides.Sell, 101m, 7m).Single().volume);
+		AreEqual(0m, book.TotalAskVolume);
+		IsFalse(book.HasLevel(Sides.Sell, secondOrder.Price));
 	}
 
 	[TestMethod]

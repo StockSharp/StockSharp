@@ -53,10 +53,12 @@ public class DataTypeTests : BaseTestClass
 	[TestMethod]
 	public void CandleSources_Contains_Expected()
 	{
+		DataType.CandleSources.Count.AssertEqual(4);
 		Assert.Contains(DataType.Ticks, DataType.CandleSources);
 		Assert.Contains(DataType.Level1, DataType.CandleSources);
 		Assert.Contains(DataType.MarketDepth, DataType.CandleSources);
 		Assert.Contains(DataType.OrderLog, DataType.CandleSources);
+		DataType.Transactions.IsCandleSource.AssertFalse();
 	}
 
 	[TestMethod]
@@ -135,30 +137,66 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Save_Load_NonCandle()
+	public void SerializableString_EveryCandleTypeIsShort()
+	{
+		// A candle type is written wherever one is configured or stored, so leaving one without
+		// an alias spells it out by its message type while its siblings stay readable.
+		foreach (var type in Messages.Extensions.AllCandleTypes)
+		{
+			var dt = DataType.Create(type, null);
+
+			DataType.TryGetAlias(dt, out var alias).AssertTrue($"{type.Name} has no alias");
+			alias.Contains('.').AssertFalse($"the alias of {type.Name} is a type name: '{alias}'");
+		}
+	}
+
+	[TestMethod]
+	public async Task Save_Load_NonCandle()
 	{
 		var dt = DataType.Create<Level1ChangeMessage>();
 		var storage = new SettingsStorage();
-		dt.Save(storage);
+		await dt.SaveAsync(storage, CancellationToken);
 
 		var loaded = new DataType();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.AreEqual(dt);
 		loaded.AreEqual(DataType.Level1);
 	}
 
 	[TestMethod]
-	public void Save_Load()
+	public async Task Save_Load()
 	{
 		var dt = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
 		var storage = new SettingsStorage();
-		dt.Save(storage);
+		await dt.SaveAsync(storage, CancellationToken);
 
 		var loaded = new DataType();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.AreEqual(dt);
+	}
+
+	[TestMethod]
+	public async Task Load_Replaces_Derived_State()
+	{
+		var dataType = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
+
+		dataType.IsCandles.AssertTrue();
+		dataType.IsMarketData.AssertTrue();
+		dataType.IsSecurityRequired.AssertTrue();
+		dataType.IsNonSecurity.AssertFalse();
+
+		var storage = new SettingsStorage();
+		await DataType.Securities.SaveAsync(storage, CancellationToken);
+		await dataType.LoadAsync(storage, CancellationToken);
+
+		dataType.AreEqual(DataType.Securities);
+		dataType.Arg.AssertNull();
+		dataType.IsCandles.AssertFalse();
+		dataType.IsMarketData.AssertFalse();
+		dataType.IsSecurityRequired.AssertFalse();
+		dataType.IsNonSecurity.AssertTrue();
 	}
 
 	[TestMethod]
@@ -384,11 +422,175 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToString_NullMessageType_WithArg_DoesNotThrow()
+	public void ToString_NullMessageType_WithName_ReturnsName()
 	{
 		var dt = new DataType();
 		dt.SetName("custom-name");
 		var s = dt.ToString();
 		s.AssertEqual("custom-name");
+	}
+
+	/// <summary>
+	/// A data type is named in words, not by the class of its messages.
+	/// </summary>
+	/// <remarks>
+	/// The list a data type is chosen from offered "BoardMessage" between the securities and the transactions, and an
+	/// import of board states would have been called "BoardStateMessage".
+	/// </remarks>
+	[TestMethod]
+	public void EveryDataTypeIsNamedInWords()
+	{
+		DataType[] types =
+		[
+			DataType.Ticks, DataType.Level1, DataType.OrderLog, DataType.MarketDepth, DataType.Transactions,
+			DataType.PositionChanges, DataType.News, DataType.Securities, DataType.Board, DataType.BoardState,
+		];
+
+		foreach (var type in types)
+		{
+			var name = type.ToString();
+
+			IsFalse(name.IsEmpty(), $"{type.MessageType.Name}");
+			IsFalse(name.EndsWith(nameof(Message)), name);
+		}
+	}
+
+	private static DataType Minute => TimeSpan.FromMinutes(1).TimeFrame();
+
+	private static IndicatorSpec Sma(DataType candleType, params (string Key, object Value)[] parameters)
+		=> IndicatorSpec.Create("SMA", candleType, parameters.Select(p => new KeyValuePair<string, object>(p.Key, p.Value)));
+
+	[TestMethod]
+	public void IndicatorSpec_SameComputation_IsTheSameSpec()
+	{
+		var one = Sma(Minute, ("Length", 20));
+		var two = Sma(Minute, ("Length", 20));
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ParameterOrder_DoesNotChangeIt()
+	{
+		var one = Sma(Minute, ("Length", 20), ("Shift", 2));
+		var two = Sma(Minute, ("Shift", 2), ("Length", 20));
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode(), "parameters are a set, so their order must not reach the hash");
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_KindAndParameterNames_AreMatchedIgnoringCase()
+	{
+		var one = Sma(Minute, ("Length", 20));
+		var two = IndicatorSpec.Create("sma", Minute, [new("length", 20)]);
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ADifferentSeries_IsADifferentComputation()
+	{
+		AreNotEqual(Sma(Minute, ("Length", 20)), Sma(TimeSpan.FromHours(1).TimeFrame(), ("Length", 20)));
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ADifferentParameterValue_IsADifferentComputation()
+	{
+		AreNotEqual(Sma(Minute, ("Length", 20)), Sma(Minute, ("Length", 10)));
+	}
+
+	/// <summary>
+	/// A length written in code is an int and the same length off a JSON frame is a long, and boxed
+	/// values of different types are never equal. Both have to name the same computation.
+	/// </summary>
+	[TestMethod]
+	public void IndicatorSpec_TheSameNumberWrittenDifferently_IsTheSameParameter()
+	{
+		var fromCode = Sma(Minute, ("Length", 20));
+		var fromWire = Sma(Minute, ("Length", 20L));
+
+		AreEqual(fromCode, fromWire);
+		AreEqual(fromCode.GetHashCode(), fromWire.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_OneParameterNamedTwice_IsRefused()
+	{
+		Throws<ArgumentException>(() => IndicatorSpec.Create("SMA", Minute,
+		[
+			new("Length", 20),
+			new("length", 5),
+		]));
+	}
+
+	[TestMethod]
+	public void Indicator_NamesADataTypeTwoEqualRequestsShare()
+	{
+		var one = DataType.Indicator(Sma(Minute, ("Length", 20)));
+		var two = DataType.Indicator(Sma(Minute, ("Length", 20)));
+
+		AreEqual(one, two, "two clients asking for the same indicator must land on one subscription");
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+		IsTrue(one.IsIndicator);
+
+		AreNotEqual(one, DataType.Indicator(Sma(Minute, ("Length", 10))));
+	}
+
+	[TestMethod]
+	public async Task Indicator_SurvivesBeingSavedAndLoaded()
+	{
+		var original = DataType.Indicator(Sma(Minute, ("Length", 20)));
+
+		var restored = await (await original.SaveAsync(CancellationToken)).LoadAsync<DataType>(CancellationToken);
+
+		AreEqual(original, restored);
+
+		var spec = (IndicatorSpec)restored.Arg;
+
+		AreEqual("SMA", spec.Kind);
+		AreEqual(Minute, spec.CandleType);
+		AreEqual(20, spec.Parameters["Length"].To<int>());
+	}
+
+	/// <summary>
+	/// A specification is a value whose contents do not change once built, so what it hands out must
+	/// offer no way to write into it: a caller holding Parameters as a writable dictionary can edit
+	/// a specification other code is already using.
+	/// </summary>
+	[TestMethod]
+	public void IndicatorSpec_HandsOutParametersThatCannotBeWritten()
+	{
+		var spec = Sma(Minute, ("Length", 20));
+
+		var writable = spec.Parameters as IDictionary<string, object>;
+
+		IsTrue(writable is null || writable.IsReadOnly, "Parameters is handed out as a writable dictionary");
+	}
+
+	/// <summary>
+	/// What a write attempt costs: a request registered under Length=20 is looked up by an identical
+	/// request, and it must still be found after someone has tried to rewrite the parameters of the
+	/// specification the registration was made under.
+	/// </summary>
+	[TestMethod]
+	public void IndicatorSpec_SurvivesAWriteAttemptOnWhatItHandedOut()
+	{
+		var spec = Sma(Minute, ("Length", 20));
+
+		var subscriptions = new Dictionary<DataType, string>
+		{
+			{ DataType.Indicator(spec), "sma-20" },
+		};
+
+		// A read-only view either is not a writable dictionary at all or refuses the write; both are
+		// correct, and either way the specification must still say 20.
+		if (spec.Parameters is IDictionary<string, object> writable && !writable.IsReadOnly)
+			writable["Length"] = 50L;
+
+		AreEqual(20, spec.Parameters["Length"].To<int>());
+		IsTrue(subscriptions.ContainsKey(DataType.Indicator(Sma(Minute, ("Length", 20)))), "the subscription registered under Length=20 is no longer found");
 	}
 }

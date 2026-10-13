@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OrderBookIncrementManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static QuoteChangeMessage CreateIncrement(SecurityId securityId, DateTime serverTime, QuoteChangeStates state, long[] subscriptionIds, QuoteChange[] bids = null, QuoteChange[] asks = null)
 	{
 		var msg = new QuoteChangeMessage
@@ -66,7 +62,8 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Subscribe_MarketDepth_AddsSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
+		var state = new OrderBookIncrementManagerState();
+		var manager = new OrderBookIncrementManager(logReceiver, state);
 
 		var secId = Helper.CreateSecurityId();
 
@@ -83,13 +80,15 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(subscribeMsg);
 		toOut.Length.AssertEqual(0);
+		state.ContainsSubscription(100).AssertTrue();
 	}
 
 	[TestMethod]
 	public void Subscribe_AllSecurity_AddsAllSecSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
+		var state = new OrderBookIncrementManagerState();
+		var manager = new OrderBookIncrementManager(logReceiver, state);
 
 		var subscribeMsg = new MarketDataMessage
 		{
@@ -104,6 +103,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(subscribeMsg);
 		toOut.Length.AssertEqual(0);
+		state.GetAllSecSubscriptionIds().SequenceEqual([100L]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -180,6 +180,9 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		built.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
 		built.Bids.Length.AssertEqual(2);
 		built.Asks.Length.AssertEqual(1);
+		built.Bids[0].Price.AssertEqual(100m);
+		built.Bids[1].Price.AssertEqual(99m);
+		built.Asks[0].Price.AssertEqual(101m);
 	}
 
 	[TestMethod]
@@ -309,7 +312,8 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void SubscriptionFinished_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
+		var state = new OrderBookIncrementManagerState();
+		var manager = new OrderBookIncrementManager(logReceiver, state);
 
 		var secId = Helper.CreateSecurityId();
 
@@ -331,13 +335,15 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 
 		forward.AssertSame(finishedMsg);
 		extraOut.Length.AssertEqual(0);
+		state.ContainsSubscription(1).AssertFalse();
 	}
 
 	[TestMethod]
 	public void Unsubscribe_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
+		var state = new OrderBookIncrementManagerState();
+		var manager = new OrderBookIncrementManager(logReceiver, state);
 
 		var secId = Helper.CreateSecurityId();
 
@@ -365,10 +371,11 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(unsubscribeMsg);
 		toOut.Length.AssertEqual(0);
+		state.ContainsSubscription(1).AssertFalse();
 	}
 
 	[TestMethod]
-	public void SubscriptionOnline_MovesToOnline()
+	public void SubscriptionOnline_ForwardsMessage()
 	{
 		var logReceiver = new TestReceiver();
 		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());

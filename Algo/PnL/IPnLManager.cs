@@ -3,8 +3,15 @@ namespace StockSharp.Algo.PnL;
 /// <summary>
 /// The interface of the profit-loss calculation manager.
 /// </summary>
-public interface IPnLManager : IPersistable, ICloneable<IPnLManager>
+public interface IPnLManager : IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the manager.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// The value of realized profit-loss.
 	/// </summary>

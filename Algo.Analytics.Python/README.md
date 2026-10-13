@@ -1,8 +1,8 @@
 # Algo.Analytics.Python
 
-This folder contains sample analytics scripts for the [StockSharp](https://stocksharp.com) trading platform written in **IronPython**. Each script implements the `IAnalyticsScript` interface and can be executed inside StockSharp Designer or any application that supports analytics scripts.
+This folder contains sample analytics scripts for the [StockSharp](https://stocksharp.com/en) trading platform written in **IronPython**. Each script implements the `IAnalyticsScript` interface and can be executed inside StockSharp Designer or any application that supports analytics scripts.
 
-These examples illustrate the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/topics/hydra/analytics.html) for usage details.
+These examples illustrate the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/en/topics/hydra/analytics.html) for usage details.
 
 The examples demonstrate how to analyse market data and visualize the results using StockSharp API. They can be used as a starting point for developing your own analytics tools or trading algorithms in Python.
 

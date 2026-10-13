@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" role="img" aria-label="Coinone">
+  <defs>
+    <linearGradient id="coinone-gradient" x1="20%" y1="5%" x2="70%" y2="95%">
+      <stop offset="0" stop-color="#0059ff"/>
+      <stop offset="1" stop-color="#5b8dff"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#coinone-gradient)" d="M23.32 14s-1.72 2.6-3.09 4.25c-1.7 2-3.5 3.25-6.25 3.25A7.32 7.32 0 0 1 6.62 14 7.31 7.35 0 0 1 14 6.51c2.75 0 4.55 1.21 6.25 3.24C21.6 11.4 23.32 14 23.32 14l3.3-4.56a13.41 13.41 0 1 0 0 9.12Z"/>
+</svg>

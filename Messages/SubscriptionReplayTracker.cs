@@ -58,28 +58,16 @@ public class SubscriptionReplayTracker
 		=> _subscriptions.Remove(originalTransactionId);
 
 	/// <summary>
-	/// Get all active subscriptions for replay after reconnection.
-	/// Returns clones with <see cref="ISubscriptionMessage.From"/> = null and new transaction IDs,
-	/// and drains the returned entries from the tracker. The caller is expected to re-feed
-	/// the cloned messages through the adapter pipeline, which re-populates the tracker via
-	/// <see cref="Track"/> under the new transaction IDs.
+	/// Get all active subscriptions for replay after an internal reconnect.
+	/// Returns clones with <see cref="ISubscriptionMessage.From"/> = null under the
+	/// original transaction IDs so the reconnect stays transparent to code above
+	/// the adapter — external subscribers keep receiving data under the txId they
+	/// originally subscribed with.
 	/// </summary>
-	/// <param name="idGenerator">Transaction ID generator for assigning new IDs to replayed subscriptions.</param>
 	/// <returns>Cloned subscription messages ready to be re-sent.</returns>
-	public IEnumerable<ISubscriptionMessage> GetSubscriptionsForReplay(IdGenerator idGenerator)
+	public IEnumerable<ISubscriptionMessage> GetSubscriptionsForReplay()
 	{
-		if (idGenerator is null)
-			throw new ArgumentNullException(nameof(idGenerator));
-
-		// Drain as we snapshot: the pipeline will re-Track each clone under a fresh
-		// transaction ID, so stale entries must go or the tracker grows linearly
-		// across reconnects.
-		var snapshot = _subscriptions.SyncGet(d =>
-		{
-			var all = d.Values.ToArray();
-			d.Clear();
-			return all;
-		});
+		var snapshot = _subscriptions.SyncGet(d => d.Values.ToArray());
 
 		foreach (var subscription in snapshot)
 		{
@@ -87,7 +75,6 @@ public class SubscriptionReplayTracker
 
 			clone.From = null;
 			clone.To = null;
-			clone.TransactionId = idGenerator.GetNextId();
 
 			yield return clone;
 		}

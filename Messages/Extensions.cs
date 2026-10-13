@@ -215,22 +215,31 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Cast <see cref="OrderMessage"/> to the <see cref="ExecutionMessage"/>.
+	/// Create a rejection of the specified order request.
 	/// </summary>
 	/// <param name="message"><see cref="OrderMessage"/>.</param>
 	/// <param name="error">Error info.</param>
 	/// <returns><see cref="ExecutionMessage"/>.</returns>
-	public static ExecutionMessage CreateReply(this OrderMessage message, Exception error = null)
+	/// <exception cref="ArgumentException"><paramref name="message"/> asks for a snapshot rather than naming an order.</exception>
+	public static ExecutionMessage CreateReply(this OrderMessage message, Exception error)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
+		if (error is null)
+			throw new ArgumentNullException(nameof(error));
+
+		// OrderStatusMessage is an OrderCancelMessage by inheritance, but it asks for a snapshot and
+		// names no order. Refusing it this way hands the receiver an order nobody placed.
+		if (message is OrderStatusMessage)
+			throw new ArgumentException($"{nameof(OrderStatusMessage)} names no order to reject.", nameof(message));
+
+		// The rejection names the request and nothing else. Both sides number their own orders, so
+		// the transaction identifies the order without repeating what the request already said.
 		var reply = message.TransactionId.CreateOrderReply(message.LocalTime);
 
 		reply.Error = error;
-
-		if (error != null)
-			reply.OrderState = OrderStates.Failed;
+		reply.OrderState = OrderStates.Failed;
 
 		return reply;
 	}
@@ -798,7 +807,10 @@ public static partial class Extensions
 		_candleDataTypes.Add(type, messageType);
 		_dataTypeArgConverters.Add(messageType, (p1, p2));
 		_fileNames.Add(DataType.Create(messageType, null), fileName);
-		_candleArgTypes.Add(messageType, messageType.CreateInstance<ICandleMessage>().ArgType);
+		// The arg type is what this registration is generic over, so it needs no instance. Creating one
+		// reflectively also kept the parameterless constructor alive only by convention, which a trimmed or
+		// NativeAOT build does not honour.
+		_candleArgTypes.Add(messageType, typeof(TArg));
 		_candleArgValidators.Add(messageType, a => argValidator((TArg)a));
 
 		if (isBuildOnly)
@@ -966,7 +978,7 @@ public static partial class Extensions
 		if (messageType == null)
 			throw new ArgumentNullException(nameof(messageType));
 
-		return messageType.IsSubclassOf(typeof(CandleMessage));
+		return DataType.IsCandleMessageType(messageType);
 	}
 
 	/// <summary>
@@ -1847,6 +1859,39 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Get identifiers of the requests the specified message answers.
+	/// </summary>
+	/// <remarks>
+	/// Extends <see cref="GetSubscriptionIds(ISubscriptionIdMessage)"/> by the case of a reply that carries
+	/// no subscription tag at all: such a message names only <see cref="IOriginalTransactionIdMessage.OriginalTransactionId"/>,
+	/// the transaction of the request it answers, and that transaction is the single subscription it belongs to.
+	/// Null is rejected the same way as by the neighbouring methods: a message being dispatched is never absent,
+	/// so a null here is a defect of the caller and must surface instead of passing for "answers nothing".
+	/// </remarks>
+	/// <param name="message">Message.</param>
+	/// <returns>Identifiers, empty when the message answers nothing.</returns>
+	/// <exception cref="ArgumentNullException"><paramref name="message"/> is <see langword="null"/>.</exception>
+	public static long[] GetAnsweredSubscriptionIds(this Message message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		if (message is ISubscriptionIdMessage subscrMsg)
+		{
+			if (subscrMsg.SubscriptionIds is { Length: > 0 } ids)
+				return ids;
+
+			if (subscrMsg.SubscriptionId != 0)
+				return [subscrMsg.SubscriptionId];
+		}
+
+		if (message is IOriginalTransactionIdMessage originMsg && originMsg.OriginalTransactionId != 0)
+			return [originMsg.OriginalTransactionId];
+
+		return [];
+	}
+
+	/// <summary>
 	/// Determines whether the <paramref name="execMsg"/> contains market-data info.
 	/// </summary>
 	/// <param name="execMsg">The message contains information about the execution.</param>
@@ -2218,7 +2263,13 @@ public static partial class Extensions
 
 		try
 		{
-			return (name.To<CurrencyTypes>(), null);
+			// MICEX names the rouble in more than one way, and only one of them is the ISO code the enum
+			// carries, so the others are mapped here rather than left to fail parsing.
+			return (name switch
+			{
+				"SUR" or "RUR" => CurrencyTypes.RUB,
+				_ => name.To<CurrencyTypes>(),
+			}, null);
 		}
 		catch (Exception ex)
 		{
@@ -2559,6 +2610,9 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(states));
 
 		if (criteria.SecurityId != default && criteria.SecurityId != transaction.SecurityId)
+			return false;
+
+		if (criteria.SecurityIds.Length > 0 && !criteria.SecurityIds.Contains(transaction.SecurityId))
 			return false;
 
 		if (states.Count > 0 && transaction.OrderState != null && !states.Contains(transaction.OrderState.Value))
@@ -3022,8 +3076,8 @@ public static partial class Extensions
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
 			BuildFrom = DataType.MarketDepth,
-			Bids = spreadQuotes.bids.Concat(bids),
-			Asks = spreadQuotes.asks.Concat(asks),
+			Bids = [.. spreadQuotes.bids.Concat(bids)],
+			Asks = [.. spreadQuotes.asks.Concat(asks)],
 		};
 	}
 
@@ -3072,38 +3126,25 @@ public static partial class Extensions
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
 			return ([], []);
 
-		var bids = new List<QuoteChange>();
-		var asks = new List<QuoteChange>();
+		var prices = new List<decimal>();
 
-		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
-		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
-
-		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxDepth)
+		for (var price = bidPrice + priceRange; price < askPrice && prices.Count < maxDepth; price += priceRange)
 		{
-			var wasBid = currentBidPrice;
-			var wasAsk = currentAskPrice;
+			var p = price.ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+			if (p <= bidPrice || p >= askPrice)
+				continue;
 
-			if (wasBid > currentBidPrice)
-				break;
-
-			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
-				bids.Add(new() { Price = currentBidPrice });
-
-			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
-
-			if (wasAsk < currentAskPrice)
-				break;
-
-			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
-				asks.Insert(0, new() { Price = currentAskPrice });
-
-			if (wasBid == currentBidPrice && wasAsk == currentAskPrice)
-				break;
+			if (prices.Count == 0 || prices[^1] != p)
+				prices.Add(p);
 		}
 
-		return (bids.ToArray(), asks.ToArray());
+		var bidCount = (prices.Count + 1) / 2;
+
+		return (
+			[.. prices.Take(bidCount).Reverse().Select(p => new QuoteChange { Price = p })],
+			[.. prices.Skip(bidCount).Select(p => new QuoteChange { Price = p })]
+		);
 	}
 
 	/// <summary>
@@ -3653,6 +3694,11 @@ public static partial class Extensions
 		if (execMsg is null)
 			throw new ArgumentNullException(nameof(execMsg));
 
+		// The result is an order to place, and an order with no side cannot be placed. Refusing here
+		// names the message that lacks one, rather than sending a buy nobody asked for.
+		if (execMsg.Side is not Sides side)
+			throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(execMsg));
+
 		return new OrderRegisterMessage
 		{
 			SecurityId = execMsg.SecurityId,
@@ -3664,7 +3710,7 @@ public static partial class Extensions
 			ClientCode = execMsg.ClientCode,
 			BrokerCode = execMsg.BrokerCode,
 			Comment = execMsg.Comment,
-			Side = execMsg.Side,
+			Side = side,
 			TimeInForce = execMsg.TimeInForce,
 			TillDate = execMsg.ExpiryDate,
 			VisibleVolume = execMsg.VisibleVolume,
@@ -4470,9 +4516,11 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// get icon uri
+	/// The drawing under a key, as the <c>pack://</c> address WPF resolves.
 	/// </summary>
-	public static Uri MakeVectorIconUri(this string key) => new($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/{key}.svg");
+	/// <param name="key">Icon key.</param>
+	/// <returns>Icon url.</returns>
+	public static Uri MakeVectorIconUri(this string key) => new($"pack://application:,,,{VectorIconPath(key)}");
 
 	/// <summary>
 	/// Try get <see cref="VectorIconAttribute.Icon"/> path.
@@ -4480,14 +4528,7 @@ public static partial class Extensions
 	/// <param name="type">Component type with applied <see cref="VectorIconAttribute"/>.</param>
 	/// <returns>Icon url.</returns>
 	public static Uri TryGetVectorIcon(this Type type)
-	{
-		var attr = type.GetAttribute<VectorIconAttribute>();
-
-		if (attr is null)
-			return null;
-
-		return MakeVectorIconUri(attr.Icon);
-	}
+		=> type.VectorIcon(MakeVectorIconUri);
 
 	/// <summary>
 	///
@@ -4496,6 +4537,29 @@ public static partial class Extensions
 	/// <returns>Icon url.</returns>
 	public static Uri TryGetIconUrl(this Type type)
 		=> type.GetIconUrl() ?? type.TryGetVectorIcon();
+
+	/// <summary>
+	/// The drawing under a key, as a path relative to the assembly that carries it - the form a logo
+	/// attribute uses, which every platform resolves.
+	/// </summary>
+	/// <param name="key">Icon key.</param>
+	/// <returns>Icon path.</returns>
+	public static Uri MakeVectorIconPath(this string key)
+		=> new(VectorIconPath(key), UriKind.Relative);
+
+	/// <summary>
+	/// The icon a type names - a logo or a drawing - as a path every platform resolves.
+	/// </summary>
+	/// <param name="type">Component type.</param>
+	/// <returns>Icon path, or <see langword="null"/> when the type names none.</returns>
+	public static Uri TryGetIconPath(this Type type)
+		=> type.GetIconUrl() ?? type.VectorIcon(MakeVectorIconPath);
+
+	private static string VectorIconPath(string key)
+		=> $"/StockSharp.Xaml;component/IconsSvg/{key}.svg";
+
+	private static Uri VectorIcon(this Type type, Func<string, Uri> address)
+		=> type.GetAttribute<VectorIconAttribute>() is { } attr ? address(attr.Icon) : null;
 
 	/// <summary>
 	/// Get typed <see cref="CommandMessage.ObjectId"/>.
@@ -4619,6 +4683,9 @@ public static partial class Extensions
 
 		if (msg is null)
 			throw new ArgumentNullException(nameof(msg));
+
+		if (msg.Skip is not null)
+			set = set.Skip((int)msg.Skip.Value);
 
 		if (msg.Count is not null)
 			set = set.Take((int)msg.Count.Value);

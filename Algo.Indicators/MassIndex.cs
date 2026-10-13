@@ -42,6 +42,9 @@ public class MassIndex : DecimalLengthIndicator
 		get => _singleEma.Length;
 		set
 		{
+			if (value < 2)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_singleEma.Length = _doubleEma.Length = value;
 			Reset();
 		}
@@ -68,7 +71,12 @@ public class MassIndex : DecimalLengthIndicator
 
 		if (_doubleEma.IsFormed)
 		{
-			var emaRatio = singleEma.ToDecimal(Source) / doubleEma.ToDecimal(Source);
+			var doubleEmaValue = doubleEma.ToDecimal(Source);
+
+			if (doubleEmaValue == 0)
+				return null;
+
+			var emaRatio = singleEma.ToDecimal(Source) / doubleEmaValue;
 			var sumValue = _sum.Process(input, emaRatio);
 
 			if (_sum.IsFormed)
@@ -79,17 +87,17 @@ public class MassIndex : DecimalLengthIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(EmaLength), EmaLength);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		EmaLength = storage.GetValue<int>(nameof(EmaLength));
 	}

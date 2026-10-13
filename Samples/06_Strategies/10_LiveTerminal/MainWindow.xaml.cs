@@ -3,7 +3,9 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -41,6 +43,11 @@ public partial class MainWindow
 	private readonly string _settingsFile;
 
 	private readonly ChannelExecutor _executor;
+	private readonly IEntityRegistry _entityRegistry;
+	private readonly ISnapshotRegistry _snapshotRegistry;
+	private Task _loading = Task.CompletedTask;
+	private bool _isClosing;
+	private bool _isReleased;
 
 	public readonly IFileSystem FileSystem = Paths.FileSystem;
 
@@ -48,6 +55,9 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 		Instance = this;
+
+		// connecting waits until the stored entities are read
+		ConnectBtn.IsEnabled = false;
 
 		Title = Title.Put(LocalizedStrings.Strategies);
 
@@ -78,6 +88,9 @@ public partial class MainWindow
 
 		var snapshotRegistry = new SnapshotRegistry(fs, Path.Combine(path, "Snapshots"));
 
+		_entityRegistry = entityRegistry;
+		_snapshotRegistry = snapshotRegistry;
+
 		Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer())
 		{
 			Adapter =
@@ -96,10 +109,9 @@ public partial class MainWindow
 		_portfoliosWindow = new PortfoliosWindow();
 		_myTradesWindow = new MyTradesWindow();
 
-		InitConnector(entityRegistry, snapshotRegistry);
+		InitConnector();
 
 		_strategiesWindow = new StrategiesWindow();
-		_strategiesWindow.LoadStrategies(path);
 
 		_ordersWindow.MakeHideable();
 		_myTradesWindow.MakeHideable();
@@ -108,12 +120,55 @@ public partial class MainWindow
 		_portfoliosWindow.MakeHideable();
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
-		ThemeExtensions.ApplyDefaultTheme();
+		_loading = LoadAsync();
+		await _loading;
 	}
 
-	private void InitConnector(IEntityRegistry entityRegistry, ISnapshotRegistry snapshotRegistry)
+	private async Task LoadAsync()
+	{
+		ThemeExtensions.ApplyDefaultTheme();
+
+		if (Connector.StorageAdapter != null)
+		{
+			await _entityRegistry.InitAsync(default);
+			await _snapshotRegistry.InitAsync(default);
+
+			if (_isClosing)
+				return;
+
+			Connector.LookupAll();
+		}
+
+		ConnectBtn.IsEnabled = true;
+
+		try
+		{
+			if (_settingsFile.IsConfigExists(FileSystem))
+			{
+				var settings = await _settingsFile.DeserializeAsync<SettingsStorage>(FileSystem, default);
+
+				var ctx = new ContinueOnExceptionContext();
+				ctx.Error += ex => ex.LogError();
+
+				using (ctx.ToScope())
+					if (settings is not null)
+						await Connector.LoadAsync(settings, default);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+
+		if (_isClosing)
+			return;
+
+		await _strategiesWindow.LoadStrategiesAsync(Path.GetDirectoryName(_settingsFile), default);
+	}
+
+	private void InitConnector()
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += () =>
@@ -163,57 +218,62 @@ public partial class MainWindow
 		if (Connector.StorageAdapter == null)
 			return;
 
-		AsyncHelper.Run(async () =>
-		{
-			await entityRegistry.InitAsync(default);
-			await snapshotRegistry.InitAsync(default);
-		});
-
-		Connector.LookupAll();
-
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
+	}
+
+	protected override async void OnClosing(CancelEventArgs e)
+	{
+		if (_isReleased)
+		{
+			base.OnClosing(e);
+			return;
+		}
+
+		// the window stays open until the queued writes are on the disk
+		e.Cancel = true;
+
+		if (_isClosing)
+			return;
+
+		_isClosing = true;
+		IsEnabled = false;
+
+		// what is being loaded has to be over before the connector it loads into is released;
+		// a failure of the load is reported by the load itself
+		await Task.WhenAny(_loading);
 
 		try
 		{
-			if (_settingsFile.IsConfigExists(FileSystem))
-			{
-				var ctx = new ContinueOnExceptionContext();
-				ctx.Error += ex => ex.LogError();
+			_ordersWindow.DeleteHideable();
+			_myTradesWindow.DeleteHideable();
+			_strategiesWindow.DeleteHideable();
+			_securitiesWindow.DeleteHideable();
+			_portfoliosWindow.DeleteHideable();
 
-				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(FileSystem));
-			}
+			_securitiesWindow.Close();
+			_strategiesWindow.Close();
+			_myTradesWindow.Close();
+			_ordersWindow.Close();
+			_portfoliosWindow.Close();
+
+			await Connector.DisposeAsync();
+
+			await _executor.DisposeAsync();
 		}
-		catch
+		finally
 		{
+			_isReleased = true;
+
+			// a window refuses Close while it is still handling the first attempt to close it
+			await Dispatcher.Yield();
+			Close();
 		}
 	}
 
-	protected override void OnClosing(CancelEventArgs e)
-	{
-		_ordersWindow.DeleteHideable();
-		_myTradesWindow.DeleteHideable();
-		_strategiesWindow.DeleteHideable();
-		_securitiesWindow.DeleteHideable();
-		_portfoliosWindow.DeleteHideable();
-
-		_securitiesWindow.Close();
-		_strategiesWindow.Close();
-		_myTradesWindow.Close();
-		_ordersWindow.Close();
-		_portfoliosWindow.Close();
-
-		Connector.Dispose();
-
-		AsyncHelper.Run(_executor.DisposeAsync);
-
-		base.OnClosing(e);
-	}
-
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this))
-			Connector.Save().Serialize(FileSystem, _settingsFile);
+			await (await Connector.SaveAsync(default)).SerializeAsync(FileSystem, _settingsFile, true, default);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)

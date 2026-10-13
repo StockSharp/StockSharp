@@ -5,8 +5,15 @@ using System.Security;
 /// <summary>
 /// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 /// </summary>
-public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver, ICloneable<IMessageAdapter>
+public interface IMessageAdapter : IMessageTransport, IAsyncPersistable, ILogReceiver
 {
+	/// <summary>
+	/// Create a copy of the adapter.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Transaction id generator.
 	/// </summary>
@@ -99,11 +106,6 @@ public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver
 	/// Message adapter categories.
 	/// </summary>
 	MessageAdapterCategories Categories { get; }
-
-	/// <summary>
-	/// Names of extended security fields in <see cref="SecurityMessage"/>.
-	/// </summary>
-	IEnumerable<(string name, Type type)> SecurityExtendedFields { get; }
 
 	/// <summary>
 	/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
@@ -315,6 +317,17 @@ public interface IDemoAdapter
 	/// Connect to demo trading instead of real trading server.
 	/// </summary>
 	bool IsDemo { get; set; }
+}
+
+/// <summary>
+/// Message adapter, provided <see cref="IsBinaryEnabled"/> property.
+/// </summary>
+public interface IBinaryAdapter
+{
+	/// <summary>
+	/// Enable binary mode.
+	/// </summary>
+	bool IsBinaryEnabled { get; set; }
 }
 
 /// <summary>

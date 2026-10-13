@@ -53,7 +53,7 @@ public interface IMarketDataStorageDrive
 /// <summary>
 /// The interface, describing the storage (database, file etc.).
 /// </summary>
-public interface IMarketDataDrive : IPersistable, IDisposable
+public interface IMarketDataDrive : IAsyncPersistable, IDisposable
 {
 	/// <summary>
 	/// Path to market data.
@@ -133,18 +133,26 @@ public abstract class BaseMarketDataDrive : Disposable, IMarketDataDrive
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Path = storage.GetValue<string>(nameof(Path));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Path), Path);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />

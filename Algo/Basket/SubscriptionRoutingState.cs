@@ -7,6 +7,7 @@ public class SubscriptionRoutingState : ISubscriptionRoutingState
 {
 	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter[] adapters, DataType dt)> _subscriptions = [];
 	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter adapter)> _requestsById = [];
+	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _unsubscribesById = [];
 
 	/// <inheritdoc />
 	public void AddSubscription(long transactionId, ISubscriptionMessage message, IMessageAdapter[] adapters, DataType dataType)
@@ -71,9 +72,28 @@ public class SubscriptionRoutingState : ISubscriptionRoutingState
 	}
 
 	/// <inheritdoc />
+	public void AddUnsubscribe(long transactionId, ISubscriptionMessage message)
+	{
+		_unsubscribesById[transactionId] = message;
+	}
+
+	/// <inheritdoc />
+	public bool TryGetUnsubscribe(long transactionId, out ISubscriptionMessage message)
+	{
+		return _unsubscribesById.TryGetValue(transactionId, out message);
+	}
+
+	/// <inheritdoc />
+	public bool RemoveUnsubscribe(long transactionId)
+	{
+		return _unsubscribesById.Remove(transactionId);
+	}
+
+	/// <inheritdoc />
 	public void Clear()
 	{
 		_subscriptions.Clear();
 		_requestsById.Clear();
+		_unsubscribesById.Clear();
 	}
 }

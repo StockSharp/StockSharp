@@ -36,45 +36,36 @@ public class StorageFillGapsBehaviour(IMarketDataDrive drive, StorageFormats for
 			return default;
 
 		var dates = _drive.GetStorageDrive(secId, dataType, format).GetDatesAsync();
-		var existing = await dates.Where(d => from <= d || d <= to).ToHashSetAsync(cancellationToken: cancellationToken);
+		var fromDate = from.Date;
+		var toDate = to.Date;
+		var existing = await dates
+			.Select(d => d.Date)
+			.Where(d => fromDate <= d && d <= toDate)
+			.ToHashSetAsync(cancellationToken: cancellationToken);
+
+		if (existing.Count == 0)
+			return (from, to);
 
 		DateTime? gapStart = null;
-		DateTime? gapEnd = null;
+		DateTime? lastMissing = null;
 
-		if (existing.Count > 0)
+		foreach (var required in fromDate.Range(toDate, TimeSpan.FromDays(1)).Where(d => fillGaps == FillGapsDays.All || !d.DayOfWeek.IsWeekend()))
 		{
-			foreach (var required in from.Date.Range(to.Date, TimeSpan.FromDays(1)).Where(d => fillGaps == FillGapsDays.All || !d.DayOfWeek.IsWeekend()))
+			if (existing.Contains(required))
 			{
-				if (existing.Remove(required))
-				{
-					if (gapEnd is not null)
-						break;
+				if (gapStart is not null)
+					return (gapStart, lastMissing.Value.EndOfDay().Min(to));
 
-					continue;
-				}
-
-				gapStart ??= required;
-
-				if (existing.Count > 0)
-				{
-					gapEnd = required.EndOfDay();
-
-					if (fillGaps != FillGapsDays.All && required.DayOfWeek == DayOfWeek.Friday)
-						break;
-				}
-				else
-				{
-					gapEnd = to;
-					break;
-				}
+				continue;
 			}
-		}
-		else
-		{
-			gapStart = from;
-			gapEnd = to;
+
+			gapStart ??= required == fromDate ? from : required;
+			lastMissing = required;
+
+			if (fillGaps != FillGapsDays.All && required.DayOfWeek == DayOfWeek.Friday && existing.Any(d => d > required))
+				return (gapStart, required.EndOfDay().Min(to));
 		}
 
-		return (gapStart, gapEnd);
+		return gapStart is null ? default : (gapStart, to);
 	}
 }

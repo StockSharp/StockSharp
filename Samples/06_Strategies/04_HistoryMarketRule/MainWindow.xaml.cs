@@ -83,7 +83,7 @@ public partial class MainWindow
 		//_logManager.Sources.Add(_connector);
 		_logManager.Sources.Add(_strategy);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 		
 		_connector.Connect();
 		await _connector.StartAsync();

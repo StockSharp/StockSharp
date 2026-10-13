@@ -7,7 +7,7 @@ using Ecng.Reflection;
 /// <summary>
 /// Tracking field info.
 /// </summary>
-public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
+public class AlertRuleField : Equatable<AlertRuleField>, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertRuleField"/>.
@@ -67,7 +67,9 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage.ContainsKey(_propKey))
 			Property = storage.GetValue<SettingsStorage>(_propKey).ToMember<PropertyInfo>();
@@ -79,7 +81,7 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 				Property = parts[0].To<Type>().GetMember<PropertyInfo>(parts[1]);
 		}
 
-		ExtraField = storage.GetValue<SettingsStorage>(nameof(ExtraField))?.FromStorage();
+		ExtraField = storage.GetValue<SettingsStorage>(nameof(ExtraField)) is { } extraFieldStorage ? await extraFieldStorage.FromStorageAsync(cancellationToken) : null;
 
 		UpdateState();
 	}
@@ -88,10 +90,12 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(_propKey, Property.ToStorage(false));
-		storage.SetValue(nameof(ExtraField), ExtraField?.ToStorage());
+		storage.SetValue(nameof(ExtraField), ExtraField is null ? null : await ExtraField.ToStorageAsync(false, cancellationToken));
 	}
 
 	private void UpdateState()
@@ -104,13 +108,15 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 		else
 		{
 			DisplayName = ExtraField.GetDisplayName();
-			
-			ValueType = typeof(decimal);
 
-			if (ExtraField is Level1Fields l1)
+			// the extra field names an entry inside a change dictionary, so the type to compare
+			// through is the one that entry really holds and not the money-like default.
+			ValueType = ExtraField switch
 			{
-				ValueType = l1.ToType();
-			}
+				Level1Fields l1 => l1.ToType(),
+				PositionChangeTypes pos => pos.ToType(),
+				_ => typeof(decimal),
+			};
 		}
 	}
 
@@ -163,7 +169,5 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public override AlertRuleField Clone()
-	{
-		return PersistableHelper.Clone(this);
-	}
+		=> (AlertRuleField)MemberwiseClone();
 }

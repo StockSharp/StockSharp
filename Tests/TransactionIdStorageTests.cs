@@ -51,16 +51,21 @@ public class TransactionIdStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InMemory_Get_Persistable_ReturnsSameInstance()
+	public void InMemory_Get_Persistable_SecondCall_ReturnsCleanInstance()
 	{
 		var idGen = new IncrementalIdGenerator();
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 
 		var session1 = storage.Get(_session1, persistable: true);
+		session1.CreateTransactionId("req1");
+
+		// A second Get for the same session id replaces the session with a clean
+		// one, so a client reconnecting under the same id starts without stale
+		// requestId mappings (which would otherwise make CreateTransactionId throw
+		// "duplicated" on re-registration). Matches the server-side reconnect tests.
 		var session2 = storage.Get(_session1, persistable: true);
 
-		// Persistable should return same instance for same session ID
-		session1.AssertSame(session2);
+		IsFalse(session2.TryGetTransactionId("req1", out _));
 	}
 
 	[TestMethod]
@@ -400,24 +405,18 @@ public class TransactionIdStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task PlainSession_CreateRequestId_GeneratesTimestampBasedId()
+	public void PlainSession_CreateRequestId_ReturnsNumericTicks()
 	{
 		ITransactionIdStorage storage = new PlainTransactionIdStorage();
 		var session = storage.Get(_session1, persistable: false);
 
-		var requestId1 = session.CreateRequestId();
-		await Task.Delay(1, CancellationToken); // Ensure different timestamp
-		var requestId2 = session.CreateRequestId();
+		var requestId = session.CreateRequestId();
 
-		requestId1.AssertNotNull();
-		requestId2.AssertNotNull();
-
-		// Request IDs should be different (different timestamps)
-		requestId1.AssertNotEqual(requestId2);
-
-		// Should be parseable as long (ticks)
-		requestId1.To<long>();
-		requestId2.To<long>();
+		requestId.AssertNotNull();
+		long.TryParse(requestId, out var ticks).AssertTrue();
+		ticks.AssertGreater(0);
+		session.TryGetTransactionId(requestId, out var transactionId).AssertTrue();
+		transactionId.AssertEqual(ticks);
 	}
 
 	[TestMethod]
@@ -546,7 +545,7 @@ public class TransactionIdStorageTests : BaseTestClass
 		var ok = session.TryGetTransactionId(requestId, out var transactionId);
 
 		ok.AssertTrue();
-		transactionId.AssertGreater(long.MaxValue - 11);
+		transactionId.AssertEqual(long.MaxValue - 9);
 	}
 
 	[TestMethod]

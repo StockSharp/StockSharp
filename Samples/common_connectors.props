@@ -1,9 +1,9 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <PackageReference Include="StockSharp.Binance" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Okex" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.GateIO" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Bitmex" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)Binance\Binance.csproj" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)Okex\Okex.csproj" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)GateIO\GateIO.csproj" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)Bitmex\Bitmex.csproj" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)Fix\Fix.csproj" />
   </ItemGroup>
 </Project>

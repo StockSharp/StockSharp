@@ -41,7 +41,7 @@ public class GeneticOptimizer : BaseOptimizer
 			Strategy strategy;
 
 			using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-				strategy = _strategy.Clone();
+				strategy = await _strategy.CloneAsync(cancellationToken);
 
 			strategy.Security = _strategy.Security;
 
@@ -72,11 +72,11 @@ public class GeneticOptimizer : BaseOptimizer
 			try
 			{
 				await _optimizer.TryNextRunAsync(_startTime, _stopTime,
-					pfProvider =>
+					(pfProvider, _) =>
 					{
 						strategy.Portfolio = pfProvider.LookupByPortfolioName((_strategy.Portfolio?.Name).IsEmpty(Extensions.SimulatorPortfolioName));
 
-						return (strategy, parameters);
+						return new((strategy, parameters));
 					},
 					adapterCache,
 					storageCache,
@@ -187,6 +187,18 @@ public class GeneticOptimizer : BaseOptimizer
 	public GeneticSettings Settings { get; } = new();
 
 	/// <summary>
+	/// The event of generation change. The argument is the number of generations the search
+	/// has been through, counted from one.
+	/// </summary>
+	/// <remarks>
+	/// A genetic search runs no known number of iterations - it ends when it stops improving,
+	/// and a chromosome whose fitness is already known costs no iteration at all - so
+	/// generations against <see cref="GeneticSettings.GenerationsMax"/> are the only measure
+	/// of how far it has come.
+	/// </remarks>
+	public event Action<int> GenerationChanged;
+
+	/// <summary>
 	/// Try to consume one iteration from the limit.
 	/// </summary>
 	/// <returns>True if iteration was consumed, false if limit reached.</returns>
@@ -219,20 +231,63 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
-	private GeneticAlgorithm SetupGA(
+	private async ValueTask<GeneticAlgorithm> SetupGAAsync(
 		DateTime startTime, DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
 		Func<Strategy, decimal> calcFitness,
 		ISelection selection,
 		ICrossover crossover,
-		IMutation mutation)
+		IMutation mutation,
+		CancellationToken cancellationToken)
 	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
 
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
+
+		// A genetic search is worth re-running: it lands on a set of parameters, and the only
+		// way to arrive at that set again is to walk the same path. The source is the one the
+		// strategy under search carries, so a caller seeds one thing and the whole run repeats.
+		var random = strategy.RandomProvider;
+
+		static decimal GetDecimalGridValue(IRandomProvider random, decimal from, decimal to, decimal step)
+		{
+			if (step == 0)
+				throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+
+			var min = from.Min(to);
+			var max = from.Max(to);
+			step = step.Abs();
+
+			var maxIndex = decimal.Floor((max - min) / step);
+
+			if (maxIndex > long.MaxValue)
+				throw new ArgumentOutOfRangeException(nameof(step));
+
+			return min + random.GetLong(0, (long)maxIndex) * step;
+		}
+
+		static double GetDoubleGridValue(IRandomProvider random, double from, double to, double step)
+		{
+			if (step == 0)
+				throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+
+			var min = from.Min(to);
+			var max = from.Max(to);
+			step = step.Abs();
+
+			var maxIndex = Math.Floor((max - min) / step);
+
+			if (double.IsNaN(maxIndex) || double.IsInfinity(maxIndex) || maxIndex > long.MaxValue)
+				throw new ArgumentOutOfRangeException(nameof(step));
+
+			return (min + random.GetLong(0, (long)maxIndex) * step).Min(max);
+		}
 
 		var paramArr = parameters.Select(t =>
 		{
@@ -240,7 +295,7 @@ public class GeneticOptimizer : BaseOptimizer
 			var values = t.values?.Cast<object>().ToArray();
 
 			if (values?.Length > 0)
-				return (param, () => RandomGen.GetElement(values));
+				return (param, () => random.GetElement(values));
 
 			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.From));
 			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.Until));
@@ -260,90 +315,46 @@ public class GeneticOptimizer : BaseOptimizer
 				var tu = (Unit)to;
 				var su = (Unit)step;
 
-				if (su.Value == 0)
-					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-				else if (su.Value < 0)
-				{
-					(fu, tu) = (tu, fu);
-					su = new(su.Value.Abs(), su.Type);
-				}
+				if (fu.Type != tu.Type || su.Type != fu.Type)
+					throw new ArgumentException("Unit range and step types must match.");
 
-				var scale = su.Value.GetDecimalInfo().EffectiveScale;
-
-				getValue = () => new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, scale).Round(su.Value, null), fu.Type);
+				getValue = () => new Unit(GetDecimalGridValue(random, fu.Value, tu.Value, su.Value), fu.Type);
 			}
 			else if (type == typeof(decimal))
 			{
-				var fd = (decimal)from;
-				var td = (decimal)to;
-				var sd = (decimal)step;
+				var fd = from.To<decimal>();
+				var td = to.To<decimal>();
+				var sd = step.To<decimal>();
 
-				if (sd == 0)
-					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-				else if (sd < 0)
-				{
-					(fd, td) = (td, fd);
-					sd = sd.Abs();
-				}
-
-				var scale = sd.GetDecimalInfo().EffectiveScale;
-
-				getValue = () => RandomGen.GetDecimal(fd, td, scale).Round(sd, null);
+				getValue = () => GetDecimalGridValue(random, fd, td, sd);
 			}
 			else if (type == typeof(bool))
 			{
-				getValue = () => RandomGen.GetBool();
+				var fb = from.To<bool>();
+				var tb = to.To<bool>();
+
+				getValue = () => fb == tb ? fb : random.GetBool();
 			}
 			else if (type.IsPrimitive() || type == typeof(TimeSpan))
 			{
 				if (type.IsNumeric() && !type.IsNumericInteger())
 				{
-					var fd = (decimal)from;
-					var td = (decimal)to;
-					var sd = step.To<decimal>();
+					var fd = from.To<double>();
+					var td = to.To<double>();
+					var sd = step.To<double>();
 
-					if (sd == 0)
-						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-					else if (sd < 0)
-					{
-						(fd, td) = (td, fd);
-						sd = sd.Abs();
-					}
-
-					var scale = sd.GetDecimalInfo().EffectiveScale;
-
-					getValue = () =>
-					{
-						var d = RandomGen.GetDecimal(fd, td, scale);
-
-						if (sd != 1)
-							d = (d / sd) * sd;
-
-						return d.To(type);
-					};
+					getValue = () => GetDoubleGridValue(random, fd, td, sd).To(type);
 				}
 				else
 				{
-					var fl = from.To<long>();
-					var tl = to.To<long>();
-					var sl = step.To<long>();
-
-					if (sl == 0)
-						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-					else if (sl < 0)
-					{
-						(fl, tl) = (tl, fl);
-						sl = sl.Abs();
-					}
+					var fl = type == typeof(TimeSpan) ? ((TimeSpan)from).Ticks : from.To<decimal>();
+					var tl = type == typeof(TimeSpan) ? ((TimeSpan)to).Ticks : to.To<decimal>();
+					var sl = type == typeof(TimeSpan) ? ((TimeSpan)step).Ticks : step.To<decimal>();
 
 					getValue = () =>
 					{
-						var l = RandomGen.GetLong(fl, tl);
-
-						if (sl != 1)
-							l = (l / sl) * sl;
-
-						return l.To(type);
+						var value = GetDecimalGridValue(random, fl, tl, sl);
+						return type == typeof(TimeSpan) ? TimeSpan.FromTicks((long)value) : value.To(type);
 					};
 				}
 			}
@@ -355,7 +366,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
-		calcFitness ??= _formulaProvider.Compile(Settings.Fitness);
+		calcFitness ??= await _formulaProvider.CompileAsync(Settings.Fitness, cancellationToken);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
@@ -404,6 +415,8 @@ public class GeneticOptimizer : BaseOptimizer
 			Reinsertion = Settings.Reinsertion.CreateInstance<IReinsertion>(),
 		};
 
+		_ga.GenerationRan += (s, e) => GenerationChanged?.Invoke(((IGeneticAlgorithm)s).GenerationsNumber);
+
 		return _ga;
 	}
 
@@ -432,7 +445,9 @@ public class GeneticOptimizer : BaseOptimizer
 		IMutation mutation = default,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
-		var ga = SetupGA(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation);
+		cancellationToken.ThrowIfCancellationRequested();
+
+		var ga = await SetupGAAsync(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation, cancellationToken);
 
 		var estimatedIterations = Settings.Population * 1.Max(Settings.GenerationsMax);
 		var maxIters = EmulationSettings.MaxIterations;
@@ -440,33 +455,65 @@ public class GeneticOptimizer : BaseOptimizer
 			estimatedIterations = maxIters;
 
 		InitializeRunAsync(estimatedIterations, cancellationToken);
+		var runToken = RunToken;
 
-		// Stop GA when cancelled
-		cancellationToken.Register(() =>
+		void StopGa()
 		{
 			try { ga.Stop(); } catch (InvalidOperationException) { }
-		});
+		}
 
-		_ = Task.Run(() =>
+		void StopAfterInitialGeneration(object sender, EventArgs e)
+		{
+			if (runToken.IsCancellationRequested)
+				StopGa();
+		}
+
+		// Stop GA when cancelled
+		ga.GenerationRan += StopAfterInitialGeneration;
+		using var cancellationRegistration = runToken.Register(StopGa);
+
+		var gaCompletion = Task.Run(() =>
 		{
 			try
 			{
+				if (runToken.IsCancellationRequested)
+					return;
+
 				ga.Start();
 			}
-			catch (Exception ex) when (cancellationToken.IsCancellationRequested)
+			catch (Exception ex) when (runToken.IsCancellationRequested)
 			{
 				this.AddWarningLog("GA cancelled: {0}", ex.Message);
 			}
 			finally
 			{
+				ga.GenerationRan -= StopAfterInitialGeneration;
 				CompleteChannel();
 				_ga = null;
 			}
 		}, CancellationToken.None);
 
-		await foreach (var result in ReadResultsAsync(cancellationToken))
+		var readerCompleted = false;
+		try
 		{
-			yield return result;
+			await foreach (var result in ReadResultsAsync(cancellationToken))
+			{
+				yield return result;
+			}
+
+			readerCompleted = true;
+		}
+		finally
+		{
+			try
+			{
+				if (!readerCompleted)
+					CancelRun();
+			}
+			finally
+			{
+				await gaCompletion.ConfigureAwait(false);
+			}
 		}
 	}
 }

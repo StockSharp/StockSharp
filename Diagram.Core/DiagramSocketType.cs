@@ -5,7 +5,7 @@ using System.Drawing;
 /// <summary>
 /// Connection type.
 /// </summary>
-public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyChanged, IPersistable
+public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyChanged, IAsyncPersistable
 {
 	private string _name = string.Empty;
 
@@ -131,28 +131,36 @@ public class DiagramSocketType : Equatable<DiagramSocketType>, INotifyPropertyCh
 
 	#endregion
 
-	#region IPersistable
+	#region IAsyncPersistable
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Type = storage.GetValue<string>(nameof(Type)).To<Type>();
 		Name = storage.GetValue<string>(nameof(Name));
 		Color = storage.GetValue<Color>(nameof(Color));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Type), Type.GetTypeName(false));
 		storage.SetValue(nameof(Name), Name);
 		storage.SetValue(nameof(Color), Color);
+
+		return Task.CompletedTask;
 	}
 
 	#endregion

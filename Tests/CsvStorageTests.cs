@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 using System.Text;
@@ -909,6 +909,34 @@ public class CsvStorageTests : BaseTestClass
 	#region CsvExtendedInfoStorage Tests
 
 	[TestMethod]
+	public void CsvExtendedInfo_NothingStoredYetIsNoneRatherThanNothingAtAll()
+	{
+		var executor = CreateExecutor(CancellationToken);
+		var (fs, path) = CreateFs("extinfo-empty");
+		var storage = (IExtendedInfoStorage)new CsvExtendedInfoStorage(fs, path, executor);
+
+		// Read before anything has been stored and before the storage has been initialized, which is when
+		// an editor bound to this list is built.
+		IsNotNull(storage.Storages);
+		AreEqual(0, storage.Storages.Count());
+	}
+
+	[TestMethod]
+	public async Task CsvExtendedInfo_ARelativePathIsOneDirectoryForAllTheStorageDoes()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var fs = new MemoryFileSystem();
+		var storage = new CsvExtendedInfoStorage(fs, Path.Combine("extinfo-relative", "Extended info"), executor);
+
+		// The directory the constructor makes is the one that is read afterwards.
+		var errors = await storage.InitAsync(token);
+
+		AreEqual(0, errors.Count);
+		AreEqual(0, ((IExtendedInfoStorage)storage).Storages.Count());
+	}
+
+	[TestMethod]
 	public async Task CsvExtendedInfo_CreateAndAdd()
 	{
 		var token = CancellationToken;
@@ -1062,6 +1090,48 @@ public class CsvStorageTests : BaseTestClass
 
 		var items = await storage.GetAsync(token);
 		AreEqual(0, items.Length);
+	}
+
+	/// <summary>
+	/// Init-then-append on the same on-disk CSV must not leak the file handle
+	/// from InitAsync's reader, otherwise TryAddAsync's MoveFile fails on
+	/// LocalFileSystem. MemoryFileSystem has no real handles, so this one
+	/// runs against LocalFileSystem.
+	/// </summary>
+	[TestMethod]
+	public async Task CsvNativeId_Reload_ThenAppend_LocalFs_NoHandleLeak()
+	{
+		var token = CancellationToken;
+		var fs = new LocalFileSystem();
+		var path = fs.GetSubTemp("nativeids");
+
+		var executor1 = CreateExecutor(token);
+		var provider1 = new CsvNativeIdStorageProvider(fs, path, executor1);
+		await provider1.InitAsync(token);
+		var storage1 = provider1.GetStorage("MarketData");
+		await storage1.TryAddAsync(new SecurityId { SecurityCode = "AAA", BoardCode = "T" }, 1L, true, token);
+		await FlushAsync(executor1, token);
+		await provider1.DisposeAsync();
+
+		// Second provider over the same on-disk file. InitAsync reads the
+		// existing CSV — that's the path that used to leak a file handle.
+		var executor2 = CreateExecutor(token);
+		var provider2 = new CsvNativeIdStorageProvider(fs, path, executor2);
+		await provider2.InitAsync(token);
+		var storage2 = provider2.GetStorage("MarketData");
+
+		// Appending an item must trigger WriteItemsToFile → CommitAsync →
+		// MoveFile, which on LocalFileSystem requires the existing CSV to be
+		// unlocked. With the leaked reader handle this throws IOException
+		// "process cannot access the file because it is being used by another
+		// process".
+		await storage2.TryAddAsync(new SecurityId { SecurityCode = "BBB", BoardCode = "T" }, 2L, true, token);
+		await FlushAsync(executor2, token);
+
+		// Cleanly close — also exercises the dispose chain that surfaced the
+		// secondary ObjectDisposedException once the half-broken commit left
+		// TransactionFileStream._temp in a bad state.
+		await provider2.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -1733,9 +1803,12 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(exchange1);
 		await FlushAsync(executor, token);
 
-		// Try to add duplicate - should fail
-		var added = registry.Exchanges.Contains(exchange2);
-		IsTrue(added, "Duplicate should be detected");
+		// Adding the same key again must not replace or duplicate the existing entity.
+		registry.Exchanges.Add(exchange2);
+		await FlushAsync(executor, token);
+
+		registry.Exchanges.Count.AssertEqual(1);
+		registry.Exchanges.ReadById("TEST").CountryCode.AssertEqual(CountryCodes.US);
 
 		await registry.DisposeAsync();
 	}
@@ -1752,10 +1825,8 @@ public class CsvStorageTests : BaseTestClass
 		// CreateArchivedCopy is false by default
 		IsFalse(exchanges.CreateArchivedCopy);
 
-		ThrowsExactly<NotSupportedException>(() =>
-		{
-			var copy = exchanges.GetCopy();
-		});
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await exchanges.GetCopyAsync(token));
 
 		await registry.DisposeAsync();
 	}
@@ -1772,9 +1843,8 @@ public class CsvStorageTests : BaseTestClass
 		exchanges.CreateArchivedCopy = true;
 		await FlushAsync(executor, token);
 
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
-		IsGreaterOrEqual(0, copy.Length);
 
 		// Decompress and verify - basic check
 		using var memStream = new MemoryStream(copy);
@@ -1783,7 +1853,7 @@ public class CsvStorageTests : BaseTestClass
 		gzipStream.CopyTo(resultStream);
 		var decompressed = resultStream.ToArray();
 
-		IsNotNull(decompressed);
+		decompressed.Length.AssertEqual(0);
 
 		await registry.DisposeAsync();
 	}
@@ -1810,7 +1880,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get archived copy
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
 		IsNotEmpty(copy);
 
@@ -1847,10 +1917,10 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 
 		// Get second copy - should be cached
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 
 		// Should be the same instance (cached)
 		AreSame(copy1, copy2);
@@ -1874,7 +1944,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1889,7 +1959,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1926,7 +1996,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1942,7 +2012,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1978,7 +2048,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1995,7 +2065,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2028,7 +2098,7 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(new Exchange { Name = "NYSE", CountryCode = CountryCodes.US });
 		await FlushAsync(executor, token);
 
-		var exchangeCopy = exchangesList.GetCopy();
+		var exchangeCopy = await exchangesList.GetCopyAsync(token);
 		IsNotNull(exchangeCopy);
 		IsNotEmpty(exchangeCopy);
 
@@ -2038,7 +2108,7 @@ public class CsvStorageTests : BaseTestClass
 		registry.Portfolios.Add(new Portfolio { Name = "PORT1", Currency = CurrencyTypes.USD });
 		await FlushAsync(executor, token);
 
-		var portfolioCopy = portfoliosList.GetCopy();
+		var portfolioCopy = await portfoliosList.GetCopyAsync(token);
 		IsNotNull(portfolioCopy);
 		IsNotEmpty(portfolioCopy);
 
@@ -2091,7 +2161,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get compressed copy
-		var compressed = exchanges.GetCopy();
+		var compressed = await exchanges.GetCopyAsync(token);
 		byte[] decompressed;
 		using (var memStream = new MemoryStream(compressed))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2130,17 +2200,15 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(new Exchange { Name = "TEST", CountryCode = CountryCodes.US });
 		await FlushAsync(executor, token);
 
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
 
 		// Disable
 		exchanges.CreateArchivedCopy = false;
 
 		// Should throw when disabled
-		ThrowsExactly<NotSupportedException>(() =>
-		{
-			var copy2 = exchanges.GetCopy();
-		});
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await exchanges.GetCopyAsync(token));
 
 		await registry.DisposeAsync();
 	}
@@ -2168,16 +2236,12 @@ public class CsvStorageTests : BaseTestClass
 		}
 		await FlushAsync(executor, token);
 
-		byte[] copy1 = null;
 		// Measure time for first call (creates and caches)
-		var sw1 = Watch.Do(() => copy1 = exchanges.GetCopy());
+		var (copy1, sw1) = await Watch.DoAsync(() => exchanges.GetCopyAsync(token));
 
-		// Measure time for second call (should use cache)
-		var sw2 = Watch.Do(() => exchanges.GetCopy());
-
-		// Cached call should be much faster
-		IsTrue(sw2 < sw1,
-			$"Cached call ({sw2.TotalMilliseconds}ms) should be faster than first call ({sw1.TotalMilliseconds}ms)");
+		// The cached call returns the cached byte array instance.
+		var copy2 = await exchanges.GetCopyAsync(token);
+		copy2.AssertSame(copy1);
 
 		// Verify data integrity
 		string content;

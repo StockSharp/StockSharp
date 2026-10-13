@@ -42,7 +42,7 @@ public abstract class OrderCondition : Cloneable<OrderCondition>
 	{
 		var clone = GetType().CreateInstance<OrderCondition>();
 		clone.Parameters.Clear(); // removing pre-defined values
-		clone.Parameters.AddRange(_parameters.SyncGet(d => d.Select(p => new KeyValuePair<string, object>(p.Key, p.Value is ICloneable cl ? cl.Clone() : (p.Value is IPersistable pers ? pers.Clone() : p.Value))).ToArray()));
+		clone.Parameters.AddRange(_parameters.SyncGet(d => d.Select(p => new KeyValuePair<string, object>(p.Key, p.Value is ICloneable cl ? cl.Clone() : p.Value)).ToArray()));
 		return clone;
 	}
 
@@ -120,6 +120,36 @@ public interface IStopLossOrderCondition
 	/// Trailing stop-loss.
 	/// </summary>
 	bool IsTrailing { get; set; }
+}
+
+/// <summary>
+/// Optional mixin for stop-order conditions that allow expressing
+/// activation/limit/trailing values as percentages instead of absolutes.
+/// Server resolves percents to absolute prices at register/trigger time
+/// using the last known market price.
+/// </summary>
+public interface IPercentStopOrderCondition
+{
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="IStopLossOrderCondition.ActivationPrice"/>
+	/// (or <see cref="ITakeProfitOrderCondition.ActivationPrice"/>) is a percent of the
+	/// market price at registration time. The server snapshots the price and stores
+	/// the resulting absolute trigger.
+	/// </summary>
+	bool IsActivationPricePercent { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="IStopLossOrderCondition.ClosePositionPrice"/>
+	/// (or <see cref="ITakeProfitOrderCondition.ClosePositionPrice"/>) is a percent of
+	/// the activation price; the limit price is computed at trigger time.
+	/// </summary>
+	bool IsClosePositionPricePercent { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, the trailing offset is a percent of the high/low
+	/// watermark; the stop price is recomputed on each tick.
+	/// </summary>
+	bool IsTrailingOffsetPercent { get; set; }
 }
 
 /// <summary>

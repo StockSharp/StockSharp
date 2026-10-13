@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Indicators;
 /// <summary>
 /// The shifted value of the indicator.
 /// </summary>
-public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>
+public class ShiftedIndicatorValue : SingleIndicatorValue<decimal>, IShiftedIndicatorValue
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.

@@ -8,9 +8,15 @@ public class MarketRuleTests : BaseTestClass
 		private readonly Lock _rulesSuspendLock = new();
 		private int _rulesSuspendCount;
 
-		public MarketRuleContainer()
+		public MarketRuleContainer(bool refuseRules = false)
 		{
-			_rules = new MarketRuleList(this);
+			_rules = refuseRules ? new RefusingRuleList(this) : new MarketRuleList(this);
+		}
+
+		// A strategy takes no new rules once it is stopping; this is that container.
+		private sealed class RefusingRuleList(IMarketRuleContainer container) : MarketRuleList(container)
+		{
+			protected override bool OnAdding(IMarketRule item) => false;
 		}
 
 		ProcessStates IMarketRuleContainer.ProcessState => ProcessStates.Started;
@@ -244,6 +250,114 @@ public class MarketRuleTests : BaseTestClass
 		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
 		firedAt.Count.AssertEqual(2);
 		firedAt[1].AssertEqual(times[1]);
+	}
+
+	private static Mock<ITimeProvider> CreateTimeProvider()
+	{
+		var mock = new Mock<ITimeProvider>(MockBehavior.Loose);
+		mock.SetupGet(p => p.CurrentTime).Returns(new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+		return mock;
+	}
+
+	[TestMethod]
+	public void MarketTimerCarriesOvershootIntoTheNextInterval()
+	{
+		var mock = CreateTimeProvider();
+
+		var fired = 0;
+		using var timer = new MarketTimer(mock.Object, () => fired++).Interval(TimeSpan.FromSeconds(5)).Start();
+
+		// CurrentTimeChanged passes the difference since the previous call, so the diffs sum to the market
+		// time that has passed: 7 + 3 = 10 seconds, which a 5 second timer owes 10 / 5 = 2 activations.
+		// Neither step spans two whole intervals, so the count is the same whether a timer that fell
+		// behind coalesces the missed activations or replays them one by one.
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(7));
+		fired.AssertEqual(1);
+
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(3));
+		fired.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void MarketTimerDoesNotDriftOverSmallSteps()
+	{
+		var mock = CreateTimeProvider();
+
+		var fired = 0;
+		using var timer = new MarketTimer(mock.Object, () => fired++).Interval(TimeSpan.FromSeconds(5)).Start();
+
+		// 20 steps of 2 seconds is 40 seconds of market time, so a 5 second timer owes 40 / 5 = 8
+		// activations. Discarding the part of a step that overshot the interval would stretch the
+		// effective period to 6 seconds and lose two of them.
+		for (var i = 0; i < 20; i++)
+			mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(2));
+
+		fired.AssertEqual(8);
+	}
+
+	[TestMethod]
+	public void MarketTimerRefusesToStartWithoutInterval()
+	{
+		var mock = CreateTimeProvider();
+
+		using var timer = new MarketTimer(mock.Object, () => { });
+
+		// Without an interval there is nothing to wait for, so starting is a programming error rather
+		// than a timer that silently never fires.
+		ThrowsExactly<InvalidOperationException>(() => { timer.Start(); });
+	}
+
+	[TestMethod]
+	public void MarketTimerCountsNoTimeWhileStoppedAndNoneAfterDispose()
+	{
+		var mock = CreateTimeProvider();
+
+		var fired = 0;
+		var timer = new MarketTimer(mock.Object, () => fired++).Interval(TimeSpan.FromSeconds(5)).Start();
+
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
+		fired.AssertEqual(1);
+
+		// Time passing while the timer is stopped is not owed to anyone, and a restarted timer counts
+		// only from the restart: 5 more seconds of running time is exactly one more activation.
+		timer.Stop();
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(10));
+		fired.AssertEqual(1);
+
+		timer.Start();
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
+		fired.AssertEqual(2);
+
+		timer.Dispose();
+		mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(10));
+		fired.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void MarketTimerStopFromInsideCallbackTakesEffect()
+	{
+		var mock = CreateTimeProvider();
+
+		var fired = 0;
+		MarketTimer timer = null;
+		timer = new MarketTimer(mock.Object, () =>
+		{
+			fired++;
+			timer.Stop();
+		});
+
+		using (timer)
+		{
+			timer.Interval(TimeSpan.FromSeconds(5)).Start();
+
+			// A one-shot use stops itself from its own callback; the stop has to hold even though the
+			// callback runs while the timer is in the middle of servicing a tick.
+			mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
+			fired.AssertEqual(1);
+
+			mock.Raise(m => m.CurrentTimeChanged += null, TimeSpan.FromSeconds(5));
+			fired.AssertEqual(1);
+		}
 	}
 
 	[TestMethod]
@@ -597,18 +711,21 @@ public class MarketRuleTests : BaseTestClass
 
 		ICandleMessage changed = null;
 		provider.Object.WhenCandlesChanged<ICandleMessage>(sub).Apply(container).Do(c => changed = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
-		(changed is not null).AssertTrue();
+		var changedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, changedMsg);
+		changed.AssertSame(changedMsg);
 
 		ICandleMessage finished = null;
 		provider.Object.WhenCandlesFinished<ICandleMessage>(sub).Apply(container).Do(c => finished = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
-		(finished is not null).AssertTrue();
+		var seriesFinishedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		provider.Raise(p => p.CandleReceived += null, sub, seriesFinishedMsg);
+		finished.AssertSame(seriesFinishedMsg);
 
 		ICandleMessage anyCandle = null;
 		provider.Object.WhenCandles<ICandleMessage>(sub).Apply(container).Do(c => anyCandle = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
-		(anyCandle is not null).AssertTrue();
+		var anyMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, anyMsg);
+		anyCandle.AssertSame(anyMsg);
 
 		// Single candle rules
 		var sc = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 105m };
@@ -623,7 +740,7 @@ public class MarketRuleTests : BaseTestClass
 		var finishedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
 		provider.Object.WhenFinished(finishedMsg).Apply(container).Do(c => finCandle = c);
 		provider.Raise(p => p.CandleReceived += null, sub, finishedMsg);
-		(finCandle is not null).AssertTrue();
+		finCandle.AssertSame(finishedMsg);
 
 		// Price-based rules
 		TimeFrameCandleMessage more = null;
@@ -650,10 +767,11 @@ public class MarketRuleTests : BaseTestClass
 		(partSingle is not null).AssertTrue();
 
 		// Total volume more
-		var sc3 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 10m };
+		var sc3 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 4m };
 		TimeFrameCandleMessage volMore = null;
 		provider.Object.WhenTotalVolumeMore(sc3, 5m).Apply(container).Do(c => volMore = c);
-		// simulate update with higher total volume
+		provider.Raise(p => p.CandleReceived += null, sub, sc3);
+		volMore.AssertNull();
 		sc3.TotalVolume = 20m;
 		provider.Raise(p => p.CandleReceived += null, sub, sc3);
 		(volMore == sc3).AssertTrue();
@@ -665,7 +783,7 @@ public class MarketRuleTests : BaseTestClass
 		provider.Raise(p => p.CandleReceived += null, sub, sc4);
 		(eq is null).AssertTrue();
 
-		// Relative price: +5 and -5 from current
+		// Absolute close-price thresholds.
 		var sc5 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
 		TimeFrameCandleMessage relMore = null;
 		provider.Object.WhenClosePriceMore(sc5, 205).Apply(container).Do(c => relMore = c);
@@ -1100,7 +1218,7 @@ public class MarketRuleTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TryRemoveNullRuleReturnsFalse()
+	public void TryRemoveNullRuleThrows()
 	{
 		var container = CreateContainer();
 		ThrowsExactly<ArgumentNullException>(() => container.TryRemoveRule(null));
@@ -1162,7 +1280,7 @@ public class MarketRuleTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SubscriptionStartedNotDuplicated()
+	public void SubscriptionStartedOnceRuleRemovesAfterFirstEvent()
 	{
 		var container = CreateContainer();
 		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
@@ -1218,8 +1336,12 @@ public class MarketRuleTests : BaseTestClass
 
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinishedCandles<VolumeCandleMessage>(sub, 50m).Apply(container).Do(c => fired = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m });
-		(fired is not null).AssertTrue();
+		var below = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 49m };
+		provider.Raise(p => p.CandleReceived += null, sub, below);
+		fired.AssertNull();
+		var above = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 51m };
+		provider.Raise(p => p.CandleReceived += null, sub, above);
+		fired.AssertSame(above);
 	}
 
 	[TestMethod]
@@ -1228,10 +1350,13 @@ public class MarketRuleTests : BaseTestClass
 		var container = CreateContainer();
 		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
 		var sec = Helper.CreateSecurity();
-		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m };
+		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 49m };
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinished(msg, 50m).Apply(container).Do(c => fired = c);
 		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		provider.Raise(p => p.CandleReceived += null, sub, msg);
+		fired.AssertNull();
+		msg.TotalVolume = 51m;
 		provider.Raise(p => p.CandleReceived += null, sub, msg);
 		(fired == msg).AssertTrue();
 	}
@@ -1505,5 +1630,23 @@ public class MarketRuleTests : BaseTestClass
 		r.Dispose();
 		r.IsReady.AssertFalse();
 		ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
+	}
+
+	[TestMethod]
+	public void RefusedRuleStaysQuiet()
+	{
+		// A strategy stops taking rules the moment it starts stopping, while the order it was asked to
+		// register still fails afterwards. The rule wired to that failure then fires belonging to no one,
+		// and that is an ordinary end of a session, not a fault of whoever built the rule.
+		IMarketRuleContainer container = new MarketRuleContainer(refuseRules: true);
+		var fired = false;
+		var rule = new TestRule().Apply(container).Do(_ => fired = true);
+
+		container.Rules.Count.AssertEqual(0);
+		rule.Container.AssertNull();
+
+		((TestRule)rule).Trigger();
+
+		fired.AssertFalse();
 	}
 }

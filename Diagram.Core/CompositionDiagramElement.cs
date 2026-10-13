@@ -11,7 +11,7 @@
 )]
 public class CompositionDiagramElement : DiagramElement
 {
-	private class InnerElementParam : Disposable, IDiagramElementParam
+	private class InnerElementParam : Disposable, IDiagramElementParam, IHandledDiagramElementParam
 	{
 		private readonly DiagramElement _element;
 		private readonly IDiagramElementParam _param;
@@ -99,11 +99,23 @@ public class CompositionDiagramElement : DiagramElement
 		void IDiagramElementParam.SetValueWithIgnoreOnSave(object value)
 			=> _param.SetValueWithIgnoreOnSave(value);
 
-		public void Load(SettingsStorage storage)
-			=> _param.Load(storage);
+		public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> _param.LoadAsync(storage, cancellationToken);
 
-		public void Save(SettingsStorage storage)
-			=> _param.Save(storage);
+		bool IHandledDiagramElementParam.HasPersistenceHandlers
+			=> _param is IHandledDiagramElementParam { HasPersistenceHandlers: true };
+
+		bool IHandledDiagramElementParam.HasSyncHandlers
+			=> _param is IHandledDiagramElementParam { HasSyncHandlers: true };
+
+		SettingsStorage IHandledDiagramElementParam.SaveByHandler()
+			=> ((IHandledDiagramElementParam)_param).SaveByHandler();
+
+		void IHandledDiagramElementParam.LoadByHandler(SettingsStorage storage)
+			=> ((IHandledDiagramElementParam)_param).LoadByHandler(storage);
+
+		public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> _param.SaveAsync(storage, cancellationToken);
 
 		public override string ToString()
 			=> _param.ToString();
@@ -333,9 +345,9 @@ public class CompositionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void LoadState(SettingsStorage storage)
 	{
-		base.Load(storage);
+		base.LoadState(storage);
 
 		_typeId = storage.GetValue<string>(nameof(TypeId)).To<Guid>();
 
@@ -343,9 +355,9 @@ public class CompositionDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	protected override void SaveState(SettingsStorage storage)
 	{
-		base.Save(storage);
+		base.SaveState(storage);
 
 		storage
 			.Set(nameof(TypeId), _typeId)
@@ -371,9 +383,16 @@ public class CompositionDiagramElement : DiagramElement
 	{
 		ThrowIfHasErrors();
 
-		Elements.ForEach(e => e.Prepare());
-
 		base.OnPrepare();
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		foreach (var element in Elements)
+			await element.PrepareAsync(cancellationToken);
+
+		await base.OnPrepareAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -798,16 +817,17 @@ public class CompositionDiagramElement : DiagramElement
 	/// Create a copy of <see cref="CompositionDiagramElement"/>.
 	/// </summary>
 	/// <param name="cloneSockets">To create copies of connections.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override DiagramElement Clone(bool cloneSockets = true)
+	public override async ValueTask<DiagramElement> CloneAsync(bool cloneSockets, CancellationToken cancellationToken)
 	{
-		var clone = new CompositionDiagramElement(Model.Clone())
+		var clone = new CompositionDiagramElement(await Model.CloneAsync(cancellationToken))
 		{
 			Category = Category,
 			DocUrl = DocUrl,
 		};
 
-		var settings = this.Save();
+		var settings = await this.SaveAsync(cancellationToken);
 
 		if (!cloneSockets)
 		{
@@ -815,7 +835,7 @@ public class CompositionDiagramElement : DiagramElement
 			settings.Remove(nameof(OutputSockets));
 		}
 
-		clone.Load(settings);
+		await clone.LoadAsync(settings, cancellationToken);
 
 		return clone;
 	}

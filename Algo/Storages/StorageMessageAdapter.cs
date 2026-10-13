@@ -68,12 +68,20 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 		return RaiseNewOutMessageAsync(message, cancellationToken);
 	}
 
+	/// <inheritdoc />
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		_storageProcessor.ProcessSubscriptionResult(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+	}
+
 	/// <summary>
 	/// Create a copy of <see cref="StorageMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new StorageMessageAdapter(InnerAdapter.TypedClone(), _storageProcessor);
+		return new StorageMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _storageProcessor);
 	}
 }

@@ -300,11 +300,13 @@ public abstract class MarketRule<TToken, TArg> : BaseLogReceiver, IMarketRule
 	{
 		CheckOnReady();
 
-		if (Container is null)
-			throw new InvalidOperationException($"Rule '{Name}' no container.");
-
+		// Asked before the container: a rule a stopping container turned away is suspended and simply
+		// does not act, while a rule nobody ever applied is a mistake worth reporting.
 		if (IsSuspended)
 			return;
+
+		if (Container is null)
+			throw new InvalidOperationException($"Rule '{Name}' no container.");
 
 		_arg = arg;
 		_container.ActivateRule(this, _process);

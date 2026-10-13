@@ -141,13 +141,13 @@ class SmaServerStopStrategy : Strategy
 			DrawIndicator(area, longSma);
 			DrawOwnTrades(area);
 		}
-
-		// Track stop order state changes
-		OrderReceived += (_, order) => OnOrderChanged(order);
 	}
 
-	private void OnOrderChanged(Order order)
+	// Track stop order state changes.
+	protected override void OnOrderChanged(Order order)
 	{
+		base.OnOrderChanged(order);
+
 		if (_activeStopOrder != null && order.TransactionId == _activeStopOrder.TransactionId)
 		{
 			if (order.State == OrderStates.Done)

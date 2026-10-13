@@ -124,14 +124,23 @@ public class MathDiagramElement : DiagramElement
 					return;
 				}
 
-				_formula = value.Compile(Paths.FileSystem, _formulaCtx);
+				// The inputs are named by the text itself. The formula is compiled when the element is
+				// prepared, and a text that cannot be read is reported there; until then it leaves the
+				// inputs as they are.
+				string[] variables;
 
-				if (!_formula.Error.IsEmpty())
+				try
+				{
+					variables = ExpressionHelper.GetVariables(value);
+				}
+				catch (Exception ex) when (ex is InvalidOperationException or ArgumentException)
+				{
 					return;
+				}
 
 				var actualSocketIds = new List<string>();
 
-				foreach (var v in _formula.Variables)
+				foreach (var v in variables)
 				{
 					var socketId = GenerateSocketId(v);
 					actualSocketIds.Add(socketId);
@@ -148,23 +157,14 @@ public class MathDiagramElement : DiagramElement
 					socket.Connected += OnInputConnected;
 				}
 
-				InputSockets.Where(s => !actualSocketIds.Contains(s.Id)).ToArray().ForEach(RemoveSocket);
+				// A wired input stays until the text is known to compile: an unfinished formula names fewer
+				// inputs than the finished one, and removing an input removes its link with it.
+				InputSockets.Where(s => !actualSocketIds.Contains(s.Id) && !s.IsConnected).ToArray().ForEach(RemoveSocket);
 			});
 
 		_validation = AddParam<string>(nameof(Validation))
 			.SetDisplay(LocalizedStrings.Formula, LocalizedStrings.Validation, LocalizedStrings.ValidationInputValues, 11)
-			.SetOnValueChangedHandler(value =>
-			{
-				_validator = null;
-
-				if (value.IsEmpty())
-					return;
-
-				_validator = value.Compile<bool>(Paths.FileSystem, _validatorCtx);
-
-				if (!_validator.Error.IsEmpty())
-					return;
-			});
+			.SetOnValueChangedHandler(_ => _validator = null);
 	}
 
 	private void OnInputConnected(DiagramSocket socket, DiagramSocket source)
@@ -188,17 +188,54 @@ public class MathDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnPrepare()
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
 	{
-		if (_formula is null)
+		if (Expression.IsEmpty())
 			throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Formula));
-		else if (!_formula.Error.IsEmpty())
-			throw new InvalidOperationException(_formula.Error);
 
-		if (_validator?.Error.IsEmpty() == false)
-			throw new InvalidOperationException(_validator.Error);
+		// The text can be replaced while it is being compiled; what is kept is the formula of the text
+		// that is there once the compiler is done.
+		while (_formula is null)
+		{
+			var expression = Expression;
+			var formula = await expression.CompileAsync(Paths.FileSystem, _formulaCtx, cancellationToken);
 
-		base.OnPrepare();
+			if (!formula.Error.IsEmpty())
+				throw new InvalidOperationException(formula.Error);
+
+			if (expression == Expression)
+				_formula = formula;
+		}
+
+		var variables = _formula.Variables.Select(GenerateSocketId).ToHashSet();
+		InputSockets.Where(s => !variables.Contains(s.Id)).ToArray().ForEach(RemoveSocket);
+
+		while (_validator is null && !Validation.IsEmpty())
+		{
+			var validation = Validation;
+			var validator = await validation.CompileAsync<bool>(Paths.FileSystem, _validatorCtx, cancellationToken);
+
+			if (!validator.Error.IsEmpty())
+				throw new InvalidOperationException(validator.Error);
+
+			if (validation == Validation)
+				_validator = validator;
+		}
+
+		await base.OnPrepareAsync(cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_formula = null;
+		_validator = null;
+
+		// The compiled formulas live in assemblies of their own, which stay loaded until unloaded.
+		_formulaCtx.Dispose();
+		_validatorCtx.Dispose();
+
+		base.DisposeManaged();
 	}
 
 	/// <inheritdoc />
@@ -225,11 +262,18 @@ public class MathDiagramElement : DiagramElement
 	/// <inheritdoc />
 	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
+		// A text replaced since the element was prepared has no compiled form until it is prepared again.
+		var formula = _formula ?? throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Formula));
+		var validator = _validator;
+
+		if (validator is null && !Validation.IsEmpty())
+			throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Validation));
+
 		var valuesByName = values.ToDictionary(p => p.Key.Name, p => p.Value.GetValue<decimal>());
 
-		if (_validator is not null)
+		if (validator is not null)
 		{
-			var validatorValues = _validator
+			var validatorValues = validator
 				.Variables
 				.Select(v =>
 				{
@@ -240,11 +284,11 @@ public class MathDiagramElement : DiagramElement
 				})
 				.ToArray();
 
-			if (!_validator.Calculate(validatorValues))
+			if (!validator.Calculate(validatorValues))
 				return;
 		}
 
-		var inputValues = _formula
+		var inputValues = formula
 			.Variables
 			.Select(v =>
 			{
@@ -255,7 +299,7 @@ public class MathDiagramElement : DiagramElement
 			})
 			.ToArray();
 
-		var result = _formula.Calculate(inputValues);
+		var result = formula.Calculate(inputValues);
 
 		if (_outputSocket.Type == DiagramSocketType.Date)
 			RaiseProcessOutput(_outputSocket, time, new DateTime(result.To<long>()).UtcKind(), source);

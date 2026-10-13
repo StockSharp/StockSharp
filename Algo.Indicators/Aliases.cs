@@ -289,6 +289,30 @@ public class MACD : MovingAverageConvergenceDivergence
 }
 
 /// <summary>
+/// <see cref="MovingAverageConvergenceDivergenceSignal"/> alias.
+/// </summary>
+[Browsable(false)]
+public class MACDS : MovingAverageConvergenceDivergenceSignal
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MACDS"/>.
+	/// </summary>
+	public MACDS() { }
+}
+
+/// <summary>
+/// <see cref="MovingAverageConvergenceDivergenceHistogram"/> alias.
+/// </summary>
+[Browsable(false)]
+public class MACDH : MovingAverageConvergenceDivergenceHistogram
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MACDH"/>.
+	/// </summary>
+	public MACDH() { }
+}
+
+/// <summary>
 /// <see cref="ParabolicSar"/> alias.
 /// </summary>
 [Browsable(false)]

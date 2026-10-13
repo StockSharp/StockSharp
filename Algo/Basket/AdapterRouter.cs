@@ -8,7 +8,10 @@ using StockSharp.Algo.Candles.Compression;
 /// </summary>
 public class AdapterRouter : IAdapterRouter
 {
-	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
+	// Synchronized because it is written as adapters connect and disconnect, under the basket's
+	// connect lock, and read while routing, under the routing lock - two different locks, so a plain
+	// dictionary can be read mid-insert.
+	private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
 	private readonly SynchronizedDictionary<(SecurityId secId, DataType dt), IMessageAdapter> _securityAdapters = [];
 	private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
@@ -154,16 +157,8 @@ public class AdapterRouter : IAdapterRouter
 						if (mdMsg.BuildFrom == DataType.Level1 || mdMsg.BuildFrom == DataType.OrderLog)
 							return await a.IsMarketDataTypeSupportedAsync(mdMsg.BuildFrom, cancellationToken);
 						else if (mdMsg.BuildFrom == null)
-						{
-							if (await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken))
-								mdMsg.BuildFrom = DataType.OrderLog;
-							else if (await a.IsMarketDataTypeSupportedAsync(DataType.Level1, cancellationToken))
-								mdMsg.BuildFrom = DataType.Level1;
-							else
-								return false;
-
-							return true;
-						}
+							return await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken)
+								|| await a.IsMarketDataTypeSupportedAsync(DataType.Level1, cancellationToken);
 
 						return false;
 					}

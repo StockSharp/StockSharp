@@ -6,9 +6,9 @@ This documentation section explains how to handle and visualize real-time candle
 
 ## Key Components
 
-1. **Candle Series Setup**: Configuration of [candle data](https://doc.stocksharp.com/topics/api/candles.html) types and subscription settings.
-2. **Real-Time Data Subscription**: [Subscribing](https://doc.stocksharp.com/topics/api/market_data/subscriptions.html) to candle data and handling incoming data updates.
-3. **Data Visualization**: Integrating with [charting components](https://doc.stocksharp.com/topics/api/graphical_user_interface/charts.html) to visualize the data.
+1. **Candle Series Setup**: Configuration of [candle data](https://doc.stocksharp.com/en/topics/api/candles.html) types and subscription settings.
+2. **Real-Time Data Subscription**: [Subscribing](https://doc.stocksharp.com/en/topics/api/market_data/subscriptions.html) to candle data and handling incoming data updates.
+3. **Data Visualization**: Integrating with [charting components](https://doc.stocksharp.com/en/topics/api/graphical_user_interface/charts.html) to visualize the data.
 
 ## Code Explanation and Usage
 
@@ -16,7 +16,7 @@ This documentation section explains how to handle and visualize real-time candle
 
 1. Clone the repository.
 2. Open the solution in Visual Studio.
-3. Find and add required connector via [NuGet package](https://doc.stocksharp.com/topics/api/setup.html#private-nuget-server)
+3. Find and add required connector via [NuGet package](https://doc.stocksharp.com/en/topics/api/setup.html#private-nuget-server)
 4. Build and run the application.
 
 ### Initialization and Configuration
@@ -70,7 +70,7 @@ private void SecurityPicker_SecuritySelected(Security security)
 
 ### Handling Candle Data
 
-Implementing an event handler for processing received candle data and [updating the chart](https://doc.stocksharp.com/topics/api/candles/chart.html):
+Implementing an event handler for processing received candle data and [updating the chart](https://doc.stocksharp.com/en/topics/api/candles/chart.html):
 
 ```csharp
 private void Connector_CandleSeriesProcessing(Subscription subscription, Candle candle)

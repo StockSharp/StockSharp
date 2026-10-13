@@ -12,7 +12,52 @@ using StockSharp.Algo.Candles.Compression;
 /// <param name="candleBuilderProvider">Candle builders provider.</param>
 public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider) : IStorageProcessor
 {
-	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = [];
+	private const int MaxTrackedItems = 1_000;
+
+	private sealed class RecentIdSet(int capacity)
+	{
+		private readonly Dictionary<long, LinkedListNode<long>> _nodes = [];
+		private readonly LinkedList<long> _order = [];
+
+		public void Add(long id)
+		{
+			if (_nodes.TryGetValue(id, out var existing))
+			{
+				_order.Remove(existing);
+				_order.AddLast(existing);
+				return;
+			}
+
+			var node = _order.AddLast(id);
+			_nodes.Add(id, node);
+
+			if (_nodes.Count <= capacity)
+				return;
+
+			var oldest = _order.First;
+			_order.RemoveFirst();
+			_nodes.Remove(oldest.Value);
+		}
+
+		public bool Remove(long id)
+		{
+			if (!_nodes.Remove(id, out var node))
+				return false;
+
+			_order.Remove(node);
+			return true;
+		}
+
+		public void Clear()
+		{
+			_nodes.Clear();
+			_order.Clear();
+		}
+	}
+
+	private readonly Lock _sync = new();
+	private readonly RecentIdSet _fullyProcessedSubscriptions = new(MaxTrackedItems);
+	private readonly HashSet<long> _servedSubscriptions = [];
 
 	/// <inheritdoc/>
 	public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -22,7 +67,33 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 
 	void IStorageProcessor.Reset()
 	{
-		_fullyProcessedSubscriptions.Clear();
+		using (_sync.EnterScope())
+		{
+			_fullyProcessedSubscriptions.Clear();
+			_servedSubscriptions.Clear();
+		}
+	}
+
+	void IStorageProcessor.ProcessSubscriptionResult(Message message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
+		var subscriptionId = message switch
+		{
+			SubscriptionFinishedMessage finished => finished.OriginalTransactionId,
+			SubscriptionResponseMessage response when !response.IsOk() => response.OriginalTransactionId,
+			_ => 0,
+		};
+
+		if (subscriptionId == 0)
+			return;
+
+		using (_sync.EnterScope())
+		{
+			_servedSubscriptions.Remove(subscriptionId);
+			_fullyProcessedSubscriptions.Remove(subscriptionId);
+		}
 	}
 
 	async IAsyncEnumerable<Message> IStorageProcessor.ProcessMarketData(MarketDataMessage message, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -30,7 +101,11 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (message.From == null /*&& Settings.DaysLoad == TimeSpan.Zero*/)
+		// No start date and no count — forward upstream, nothing to serve from storage.
+		// A count request without From is a "last Count records" query and is served
+		// from the tail of the storage (resolved in StorageHelper.GetRangeAsync).
+		// An unsubscribe carries no range of its own and is answered below by the subscription it ends.
+		if (message.IsSubscribe && message.From == null && !(message.Count > 0) /*&& Settings.DaysLoad == TimeSpan.Zero*/)
 		{
 			yield return message;
 			yield break;
@@ -40,7 +115,17 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 
 		if (message.IsSubscribe)
 		{
+			// One processor can sit in more than one wrapper of the same pipeline, and history a
+			// subscriber asked for once has to arrive once: the second pass only passes the request on.
+			var shouldLoad = false;
+
 			if (message.SecurityId != default)
+			{
+				using (_sync.EnterScope())
+					shouldLoad = _servedSubscriptions.Add(message.TransactionId);
+			}
+
+			if (shouldLoad)
 			{
 				var transactionId = message.TransactionId;
 				var context = new StorageLoadContext();
@@ -48,9 +133,16 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 				await foreach (var outMsg in Settings.LoadMessagesAsync(CandleBuilderProvider, message, context, cancellationToken))
 					yield return outMsg;
 
-				if (message.To != null && context.HasData && (message.To <= context.LastDate || context.Left == 0))
+				// The request is complete when storage reached the end of the range, and equally when
+				// the asked-for Count ran out - a remainder of an exhausted Count is a request for nothing.
+				if (context.HasData && (context.Left == 0 || (message.To != null && message.To <= context.LastDate)))
 				{
-					_fullyProcessedSubscriptions.Add(transactionId);
+					using (_sync.EnterScope())
+					{
+						if (_servedSubscriptions.Remove(transactionId))
+							_fullyProcessedSubscriptions.Add(transactionId);
+					}
+
 					yield return new SubscriptionFinishedMessage { OriginalTransactionId = transactionId };
 					forwardMessage = null;
 				}
@@ -69,7 +161,15 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		}
 		else
 		{
-			if (_fullyProcessedSubscriptions.Remove(message.OriginalTransactionId))
+			bool fullyProcessed;
+
+			using (_sync.EnterScope())
+			{
+				_servedSubscriptions.Remove(message.OriginalTransactionId);
+				fullyProcessed = _fullyProcessedSubscriptions.Remove(message.OriginalTransactionId);
+			}
+
+			if (fullyProcessed)
 			{
 				yield return new SubscriptionResponseMessage
 				{

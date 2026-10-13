@@ -66,12 +66,14 @@ public interface IBasketRoutingManager
 	/// <param name="wrapper">The wrapper for the adapter.</param>
 	/// <param name="supportedMessages">Supported message types.</param>
 	/// <param name="error">Connection error if any.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Extra messages to send out and pending messages to loop back.</returns>
-	(IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs) ProcessConnect(
+	ValueTask<(IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs)> ProcessConnectAsync(
 		IMessageAdapter adapter,
 		IMessageAdapter wrapper,
 		IEnumerable<MessageTypes> supportedMessages,
-		Exception error);
+		Exception error,
+		CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Begin disconnection process.

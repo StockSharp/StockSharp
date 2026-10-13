@@ -60,9 +60,13 @@ public class SecurityTrie : ICollection<Security>
 			throw new ArgumentNullException(nameof(security));
 
 		var externalId = security.ExternalId;
+		var securityId = security.ToSecurityId();
 
 		using (_sync.EnterScope())
 		{
+			if (_allSecurities.ContainsKey(securityId))
+				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(securityId), nameof(security));
+
 			AddSuffix(security.Id, security);
 			AddSuffix(security.Code, security);
 			//AddSuffix(security.Name, security);
@@ -73,7 +77,7 @@ public class SecurityTrie : ICollection<Security>
 			AddSuffix(externalId.Ric, security);
 			AddSuffix(externalId.Sedol, security);
 
-			_allSecurities.Add(security.ToSecurityId(), security);
+			_allSecurities.Add(securityId, security);
 		}
 	}
 

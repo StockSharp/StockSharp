@@ -42,9 +42,14 @@ public class Black : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	protected override decimal CalcPremium(decimal deviation, decimal assetPrice, double timeToExp)
 	{
-		return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
+		// The option is written on a forward, so both legs of the payoff are discounted once and by the
+		// same rate: C = e^(-rT) * (F * N(d1) - K * N(d2)). Pricing the legs at a zero rate and applying
+		// e^(-rT) to their difference is that formula, and it leaves the strike discounted exactly once.
+		var premium = DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice, 0, 0, deviation, timeToExp, D1(deviation, assetPrice, timeToExp));
+
+		return (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp) * premium;
 	}
 
 	/// <inheritdoc />
@@ -68,13 +73,32 @@ public class Black : BlackScholes
 	/// <inheritdoc />
 	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return GetExpRate(currentTime) * base.Theta(currentTime, deviation, assetPrice);
+		deviation ??= DefaultDeviation;
+		assetPrice = GetAssetPrice(assetPrice);
+		var timeToExp = GetExpirationTimeLine(currentTime);
+
+		if (assetPrice is null || timeToExp is null)
+			return null;
+
+		var expRate = (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp.Value);
+		var diffusion = expRate * DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, 0, deviation.Value,
+			timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value));
+		var carry = RiskFree * CalcPremium(deviation.Value, assetPrice.Value, timeToExp.Value) / 365m;
+
+		return TryRound(diffusion + carry);
 	}
 
 	/// <inheritdoc />
 	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
 	{
-		return GetExpRate(currentTime) * base.Rho(currentTime, deviation, assetPrice);
+		deviation ??= DefaultDeviation;
+		assetPrice = GetAssetPrice(assetPrice);
+		var timeToExp = GetExpirationTimeLine(currentTime);
+
+		if (assetPrice is null || timeToExp is null)
+			return null;
+
+		return TryRound(-0.01m * (decimal)timeToExp.Value * CalcPremium(deviation.Value, assetPrice.Value, timeToExp.Value));
 	}
 
 	/// <inheritdoc />

@@ -101,19 +101,19 @@ public class BollingerPercentB : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.Set(nameof(BollingerBands), _bollingerBands.Save());
+		storage.Set(nameof(BollingerBands), await _bollingerBands.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		_bollingerBands.LoadIfNotNull(storage, nameof(BollingerBands));
+		await _bollingerBands.LoadIfNotNullAsync(storage, nameof(BollingerBands), cancellationToken);
 	}
 
 	/// <inheritdoc />

@@ -252,7 +252,7 @@ public class IndicatorDiagramElement : DiagramElement
 				const string Pattern = nameof(Pattern);
 
 				var param = ((DiagramElementParam<ICandlePattern>)createParam(typeof(ICandlePattern)))
-					.SetSaveLoadHandlers(pattern =>
+					.SetSaveLoadHandlers(async (pattern, cancellationToken) =>
 					{
 						var ss = new SettingsStorage();
 
@@ -260,13 +260,13 @@ public class IndicatorDiagramElement : DiagramElement
 						{
 							ss
 								.Set(PatternName, pattern.Name)
-								.Set(Pattern, pattern.SaveEntire(false))
+								.Set(Pattern, await pattern.SaveEntireAsync(false, cancellationToken))
 							;
 						}
 
 						return ss;
 					},
-					storage =>
+					async (storage, cancellationToken) =>
 					{
 						var patternName = storage.GetValue<string>(PatternName);
 						if (patternName.IsEmptyOrWhiteSpace())
@@ -282,8 +282,8 @@ public class IndicatorDiagramElement : DiagramElement
 							}
 							else
 							{
-								pattern = storage.GetValue<SettingsStorage>(Pattern).LoadEntire<ICandlePattern>();
-								provider.Save(pattern);
+								pattern = await storage.GetValue<SettingsStorage>(Pattern).LoadEntireAsync<ICandlePattern>(cancellationToken);
+								await provider.SaveAsync(pattern, cancellationToken);
 							}
 						}
 
@@ -325,6 +325,15 @@ public class IndicatorDiagramElement : DiagramElement
 		base.OnReseted();
 
 		Indicator?.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		if (Indicator is { } indicator)
+			await indicator.PrepareAsync(cancellationToken);
+
+		await base.OnPrepareAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />

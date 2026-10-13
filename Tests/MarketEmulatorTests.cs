@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
+using StockSharp.MatchingEngine;
 
 [TestClass]
 public class MarketEmulatorTests : BaseTestClass
@@ -11,9 +12,9 @@ public class MarketEmulatorTests : BaseTestClass
 	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<SecurityId> secIds, out List<Message> result)
 	{
 		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
-		emu.RandomProvider = new MockRandomProvider();
+		emu.RandomProvider = new MockEmulationRandomizer();
 		var result2 = new List<Message>();
-		emu.NewOutMessageAsync += (m, ct) => { result2.Add(m); return default; };
+		emu.NewOutMessageAsync += (m, ct) => { Helper.CheckPortfolioRowContract(m); result2.Add(m); return default; };
 		result = result2;
 		return emu;
 	}
@@ -31,6 +32,47 @@ public class MarketEmulatorTests : BaseTestClass
 			Bids = [new(bid, 10)],
 			Asks = [new(ask, 10)]
 		}, CancellationToken);
+	}
+
+	/// <summary>
+	/// A fill is reported before the order state that fill produced. A reader releasing per-order
+	/// state on a final state - the slippage manager releases the price the order was planned at -
+	/// must still hold it when the trade arrives, so the order of these messages is a contract.
+	/// </summary>
+	[TestMethod]
+	public async Task AFillIsReportedBeforeTheOrderStateItProduced()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await AddBookAsync(emu, id, now);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+			LocalTime = now,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var mine = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId)
+			.ToArray();
+
+		var fillAt = mine.IndexOf(mine.FirstOrDefault(m => m.HasTradeInfo()));
+		var doneAt = mine.IndexOf(mine.FirstOrDefault(m => !m.HasTradeInfo() && m.HasOrderInfo() && m.OrderState?.IsFinal() == true));
+
+		var seq = mine.Select((m, i) => $"{i}:{(m.HasTradeInfo() ? "trade" : "order")}/{m.OrderState}/bal={m.Balance}").JoinComma();
+
+		IsTrue(fillAt >= 0, $"the market order did not fill: {seq}");
+		IsTrue(doneAt >= 0, $"the order never reported a final state: {seq}");
+		IsTrue(fillAt < doneAt, $"the order was reported final at {doneAt} before its fill at {fillAt}: {seq}");
 	}
 
 	[TestMethod]
@@ -78,6 +120,12 @@ public class MarketEmulatorTests : BaseTestClass
 		}, CancellationToken);
 
 		res.Count.AssertEqual(6);
+		var firstTrade = res.OfType<ExecutionMessage>().Single(m => m.HasTradeInfo());
+		firstTrade.TradePrice.AssertEqual(96m);
+		firstTrade.TradeVolume.AssertEqual(1m);
+		var firstOrder = res.OfType<ExecutionMessage>().Last(m => m.HasOrderInfo && !m.HasTradeInfo());
+		firstOrder.Balance.AssertEqual(1m);
+		firstOrder.OrderState.AssertEqual(OrderStates.Active);
 
 		await emu.SendInMessageAsync(new PositionChangeMessage
 		{
@@ -102,6 +150,203 @@ public class MarketEmulatorTests : BaseTestClass
 		}, CancellationToken);
 
 		res.Count.AssertEqual(9);
+	}
+
+	/// <summary>
+	/// When the emulator only gets tick (trade) data it synthesizes the order book from ticks.
+	/// A market order must fill near the current price, not at a stale early-tick level. Reproduces
+	/// the bug where the synthesized book accumulates levels and never clears them, so the best
+	/// bid/ask drift to historical extremes and fills happen far from the market.
+	/// </summary>
+	[TestMethod]
+	public async Task TickMarketOrderFillsAtCurrentPriceNotStaleExtreme()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		// fund the simulated portfolio
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		// feed a rising tick sequence; with no order book data the emulator builds the book from ticks
+		decimal[] prices = [1000, 1100, 1200, 1300, 1400, 1500];
+
+		foreach (var p in prices)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = p,
+				TradeVolume = 10,
+			}, CancellationToken);
+		}
+
+		now = now.AddSeconds(1);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		fill.AssertNotNull("market order did not fill");
+
+		Console.WriteLine($"last tick={prices[^1]} fillPrice={fill.TradePrice}");
+
+		// fill must be near the current price (~1500), not the stale first-tick level (~1000)
+		IsTrue(fill.TradePrice >= 1400m, $"market buy filled at stale price {fill.TradePrice}, expected near {prices[^1]}");
+	}
+
+	/// <summary>
+	/// Same problem for the Level1-synthesized order book: a rising best bid/ask must move the
+	/// book, not accumulate stale levels, so a market order fills near the current price instead
+	/// of an early-quote extreme.
+	/// </summary>
+	[TestMethod]
+	public async Task Level1MarketOrderFillsAtCurrentPriceNotStaleExtreme()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		// feed a rising best bid/ask via Level1
+		decimal[] mids = [1000, 1100, 1200, 1300, 1400, 1500];
+
+		foreach (var m in mids)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new Level1ChangeMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+			}
+			.Add(Level1Fields.BestBidPrice, m - 1)
+			.Add(Level1Fields.BestAskPrice, m + 1)
+			.Add(Level1Fields.BestBidVolume, 10m)
+			.Add(Level1Fields.BestAskVolume, 10m), CancellationToken);
+		}
+
+		now = now.AddSeconds(1);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		fill.AssertNotNull("market order did not fill");
+
+		Console.WriteLine($"last mid={mids[^1]} fillPrice={fill.TradePrice}");
+
+		// fill must be near the current ask (~1501), not the stale first-quote ask (~1001)
+		IsTrue(fill.TradePrice >= 1400m, $"market buy filled at stale price {fill.TradePrice}, expected near {mids[^1]}");
+	}
+
+	/// <summary>
+	/// A resting limit order must be swept by ticks that trade through its price. Reproduces the
+	/// residual bug where a buy limit left below the market is not executed as the price falls
+	/// through it, so it lingers in the book and later fills at a price the market has left behind.
+	/// </summary>
+	[TestMethod]
+	public async Task FallingTickSweepsRestingBuyLimit()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		async Task Tick(decimal price)
+		{
+			now = now.AddSeconds(1);
+			await emu.SendInMessageAsync(new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = price,
+				TradeVolume = 10,
+			}, CancellationToken);
+		}
+
+		// establish the market around 1100
+		await Tick(1100);
+
+		// rest a buy limit well below the market
+		now = now.AddSeconds(1);
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 1050,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		// price falls and trades through 1050
+		foreach (var p in new[] { 1090m, 1070m, 1050m, 1030m, 1000m })
+			await Tick(p);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+
+		fill.AssertNotNull("resting buy limit was not swept by ticks trading through its price");
+
+		Console.WriteLine($"buy limit fill={fill.TradePrice}");
+
+		// it should fill at or below its limit, in the range that actually traded
+		IsTrue(fill.TradePrice <= 1050m && fill.TradePrice >= 1000m, $"buy limit filled at off-market price {fill.TradePrice}");
 	}
 
 	[TestMethod]
@@ -159,7 +404,7 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task LimitBuyFOKFull()
+	public async Task LimitBuyFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -184,11 +429,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public async Task LimitBuyFOKNone()
+	public async Task LimitBuyFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -217,10 +462,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
+		m.TradePrice.AssertEqual(101m);
 	}
 
 	[TestMethod]
-	public async Task LimitSellFOKFull()
+	public async Task LimitSellFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -245,11 +491,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public async Task LimitSellFOKNone()
+	public async Task LimitSellFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -273,6 +519,7 @@ public class MarketEmulatorTests : BaseTestClass
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
+		m.TradePrice.AssertEqual(100m);
 	}
 
 	[TestMethod]
@@ -647,25 +894,25 @@ public class MarketEmulatorTests : BaseTestClass
 		};
 		await emu.SendInMessageAsync(reg, CancellationToken);
 
+		var portfolio = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName);
+		portfolio.BlockedMoney.AssertEqual(100m, "the live balance holds its limit-price reservation");
+
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Active);
 
 		res.Clear();
-		await emu.SendInMessageAsync(new ExecutionMessage
+		await emu.SendInMessageAsync(new TimeMessage
 		{
-			SecurityId = id,
 			LocalTime = expiry.AddSeconds(1),
 			ServerTime = expiry.AddSeconds(1),
-			DataTypeEx = DataType.Ticks,
-			TradePrice = 105,
-			TradeVolume = 2
 		}, CancellationToken);
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+		portfolio.BlockedMoney.AssertEqual(0m, "expiry removes the balance and gives its reservation back");
 	}
 
 	[TestMethod]
@@ -695,6 +942,8 @@ public class MarketEmulatorTests : BaseTestClass
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+		((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).BlockedMoney.AssertEqual(0m,
+			"an order whose lifetime already ended never reserves funds");
 	}
 
 	[TestMethod]
@@ -852,6 +1101,711 @@ public class MarketEmulatorTests : BaseTestClass
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+	}
+
+	/// <summary>
+	/// A backtest built from candles synthesizes the book from each bar's prices, so a position opened there has a
+	/// price it could be closed at like any other. Its floating profit is reported with the fill and again once the
+	/// next bar moves that price.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionOpenedOnCandlesReportsItsFloatingProfit()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		Task SendBar(DateTime open, decimal price)
+			=> emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OriginalTransactionId = subscriptionId,
+				TypedArg = TimeSpan.FromMinutes(1),
+				LocalTime = open,
+				OpenTime = open,
+				CloseTime = open.AddMinutes(1),
+				OpenPrice = price,
+				HighPrice = price,
+				LowPrice = price,
+				ClosePrice = price,
+				TotalVolume = 10,
+				State = CandleStates.Finished,
+			}, CancellationToken).AsTask();
+
+		string Trace() => string.Join(" | ", res.Select(m => m is PositionChangeMessage p
+			? $"Position {p.SecurityId.SecurityCode} {string.Join(",", p.Changes.Select(c => $"{c.Key}={c.Value}"))}"
+			: m.Type.ToString()));
+
+		await SendBar(start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+
+		res.Clear();
+
+		await emu.SendInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = start.AddMinutes(1),
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Market,
+			Volume = 1,
+			PortfolioName = _pfName,
+		}, CancellationToken);
+
+		var opened = res.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == id)?.TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		IsNotNull(opened, $"a position the book can price has a floating profit from the moment it opens: {Trace()}");
+
+		res.Clear();
+
+		await SendBar(start.AddMinutes(1), 110m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		var moved = res.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == id)?.TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		IsNotNull(moved, $"the next bar moves the price the position would close at, so it is reported again: {Trace()}");
+		AreEqual(opened + 10m, moved, "the market rose ten, so the long position gained ten");
+	}
+
+	/// <summary>
+	/// A subscriber acts on a bar as soon as it is handed over, and an order it sends then runs before the rest of
+	/// the batch is delivered. What the bar's prices did to a position therefore has to be reported before the bar:
+	/// the subscriber reads the position the bar produced, and nothing reported afterwards undoes what its order did.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionIsRevaluedBeforeTheBarThatMovedIt()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+		decimal? profitAtTheBar = null;
+		var closed = false;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await SendFlatBar(emu, id, subscriptionId, start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+		await emu.SendInMessageAsync(MarketOrder(id, Sides.Buy, start.AddMinutes(1)), CancellationToken);
+
+		// On the second finished bar the subscriber reads the position and closes it, as a strategy does.
+		emu.NewOutMessageAsync += async (message, ct) =>
+		{
+			if (closed || message is not CandleMessage { State: CandleStates.Finished, OpenTime: var open } || open != start.AddMinutes(1))
+				return;
+
+			closed = true;
+			profitAtTheBar = res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+			await emu.SendInMessageAsync(MarketOrder(id, Sides.Sell, start.AddMinutes(2)), ct);
+		};
+
+		var opened = res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		await SendFlatBar(emu, id, subscriptionId, start.AddMinutes(1), 110m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		IsTrue(closed, "the second bar must be handed over");
+		AreEqual(opened + 10m, profitAtTheBar, "when the bar is handed over its rise of ten is already in the position");
+		AreEqual(0m, res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"the last report on the position is the one the closing order made");
+	}
+
+	/// <summary>
+	/// An order a subscriber sends when it is told of a fill runs before the rest of that fill's batch is delivered.
+	/// The account reports left in the batch describe the account before that order, and the order has already
+	/// reported the account after it, so they must not follow and put the older account back.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderSentOnAFillIsNotUndoneByTheRestOfItsBatch()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+		var reversed = false;
+
+		await AddBookAsync(emu, id, now, 99m, 101m);
+
+		// Told of the buy, the subscriber sells two, as a strategy reversing its position does.
+		emu.NewOutMessageAsync += async (message, ct) =>
+		{
+			if (reversed || message is not ExecutionMessage { TradeVolume: not null, Side: Sides.Buy })
+				return;
+
+			reversed = true;
+			await emu.SendInMessageAsync(MarketOrder(id, Sides.Sell, now, 2m), ct);
+		};
+
+		await emu.SendInMessageAsync(MarketOrder(id, Sides.Buy, now), CancellationToken);
+
+		IsTrue(reversed, "the buy must be filled");
+		AreEqual(-1m, res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"bought one and sold two: the last report on the position is the short the reversal left");
+	}
+
+	private Task SendFlatBar(IMarketEmulator emu, SecurityId id, long subscriptionId, DateTime open, decimal price)
+		=> emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = TimeSpan.FromMinutes(1),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(1),
+			OpenPrice = price,
+			HighPrice = price,
+			LowPrice = price,
+			ClosePrice = price,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken).AsTask();
+
+	private static OrderRegisterMessage MarketOrder(SecurityId id, Sides side, DateTime time, decimal volume = 1m)
+		=> new()
+		{
+			SecurityId = id,
+			LocalTime = time,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = side,
+			OrderType = OrderTypes.Market,
+			Volume = volume,
+			PortfolioName = _pfName,
+		};
+
+	[TestMethod]
+	public async Task CandleUpdates_MultipleTimeFrames_DoNotMoveTimeBackwards()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var dayStart = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var dailySubscriptionId = _idGenerator.GetNextId();
+		var fiveMinuteSubscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = dailySubscriptionId,
+			DataType2 = TimeSpan.FromDays(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = fiveMinuteSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = dailySubscriptionId,
+			TypedArg = TimeSpan.FromDays(1),
+			LocalTime = dayStart,
+			OpenTime = dayStart,
+			HighTime = dayStart.AddHours(10),
+			LowTime = dayStart.AddHours(20),
+			CloseTime = dayStart.AddDays(1),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = fiveMinuteSubscriptionId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = dayStart,
+			OpenTime = dayStart,
+			HighTime = dayStart.AddMinutes(2),
+			LowTime = dayStart.AddMinutes(4),
+			CloseTime = dayStart.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 102,
+			LowPrice = 99,
+			ClosePrice = 101,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		res.Clear();
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = dayStart.AddMinutes(5) }, CancellationToken);
+
+		var intradayUpdates = res
+			.OfType<TimeFrameCandleMessage>()
+			.Where(c => c.State == CandleStates.Active)
+			.ToArray();
+
+		AreEqual(4, intradayUpdates.Length);
+		IsTrue(intradayUpdates.All(c => c.LocalTime <= dayStart.AddMinutes(5)));
+		IsFalse(res
+			.OfType<TimeFrameCandleMessage>()
+			.Any(c => c.TypedArg == TimeSpan.FromDays(1) && c.State == CandleStates.Finished),
+			"The daily candle must remain pending while only five minutes of its interval have elapsed.");
+
+		res.Clear();
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = dayStart.AddDays(1) }, CancellationToken);
+
+		var updates = intradayUpdates
+			.Concat(res
+				.OfType<TimeFrameCandleMessage>()
+				.Where(c => c.State == CandleStates.Active))
+			.ToArray();
+
+		AreEqual(6, updates.Length);
+		IsTrue(res
+			.OfType<TimeFrameCandleMessage>()
+			.Any(c => c.TypedArg == TimeSpan.FromDays(1) && c.State == CandleStates.Finished),
+			"The daily candle must finish when its own interval closes.");
+
+		for (var i = 1; i < updates.Length; i++)
+		{
+			var previous = updates[i - 1];
+			var current = updates[i];
+
+			IsTrue(previous.LocalTime <= current.LocalTime,
+				$"Candle updates moved backwards from {previous.TypedArg} at {previous.LocalTime:O} " +
+				$"to {current.TypedArg} at {current.LocalTime:O}.");
+		}
+	}
+
+	/// <summary>
+	/// The active state emitted at a candle's low time must carry that low, and must not carry a high
+	/// that only prints later. A strategy watching an unfinished candle otherwise never sees the dip,
+	/// and sees a spike before it happened.
+	/// </summary>
+	[TestMethod]
+	public async Task ActiveCandleStates_LowStateCarriesTheLow()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var openTime = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var lowTime = openTime.AddMinutes(2);
+		var highTime = openTime.AddMinutes(4);
+		var closeTime = openTime.AddMinutes(5);
+
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = openTime,
+			OpenTime = openTime,
+			HighTime = highTime,
+			LowTime = lowTime,
+			CloseTime = closeTime,
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = closeTime }, CancellationToken);
+
+		var states = res
+			.OfType<TimeFrameCandleMessage>()
+			.Where(c => c.State == CandleStates.Active)
+			.ToArray();
+
+		AreEqual(3, states.Length, $"the open, the low and the high are three active states, got {states.Select(c => $"{c.LocalTime:HH:mm}").JoinComma()}");
+
+		var lowState = states.FirstOrDefault(c => c.LocalTime == lowTime);
+		IsNotNull(lowState, $"no active state at the low time {lowTime:O}");
+		AreEqual(90m, lowState.LowPrice, "the state emitted at the low time must report the low the candle reached");
+		AreEqual(100m, lowState.HighPrice, "at the low time the candle has not printed its high yet - that comes two minutes later");
+
+		var highState = states.FirstOrDefault(c => c.LocalTime == highTime);
+		IsNotNull(highState, $"no active state at the high time {highTime:O}");
+		AreEqual(110m, highState.HighPrice, "the state emitted at the high time must report the high the candle reached");
+	}
+
+	/// <summary>
+	/// A finished bar belongs to the moment it closed, but the states that stood for it while it was
+	/// still forming belong to the moments they describe - the open, the low, the high - and moving
+	/// the finished bar to the close must not drag them along. Each active state is the bar as it was
+	/// at its own time, so a state stamped with the close would report a price the bar had not yet
+	/// printed when the strategy is told it did.
+	/// </summary>
+	[TestMethod]
+	public async Task AnActiveCandleStateKeepsTheTimeOfWhatItStandsFor()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var openTime = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var lowTime = openTime.AddMinutes(1);
+		var highTime = openTime.AddMinutes(3);
+		var closeTime = openTime.AddMinutes(5);
+
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = openTime,
+			OpenTime = openTime,
+			HighTime = highTime,
+			LowTime = lowTime,
+			CloseTime = closeTime,
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = closeTime }, CancellationToken);
+
+		var candles = res.OfType<TimeFrameCandleMessage>().ToArray();
+
+		var activeTimes = candles
+			.Where(c => c.State == CandleStates.Active)
+			.Select(c => c.LocalTime)
+			.ToArray();
+
+		AreEqual(3, activeTimes.Length,
+			$"the open, the low and the high are the three states of a bar in flight, got {activeTimes.Select(t => $"{t:HH:mm}").JoinComma()}");
+
+		IsTrue(activeTimes.Contains(openTime), $"no state at the open time {openTime:HH:mm}");
+		IsTrue(activeTimes.Contains(lowTime), $"no state at the low time {lowTime:HH:mm}");
+		IsTrue(activeTimes.Contains(highTime), $"no state at the high time {highTime:HH:mm}");
+
+		IsFalse(activeTimes.Contains(closeTime),
+			$"a state of a bar in flight was stamped with the bar's close {closeTime:HH:mm}, which is after every price it stands for");
+
+		var finished = candles.Where(c => c.State == CandleStates.Finished).ToArray();
+
+		AreEqual(1, finished.Length, "the bar closes once");
+		AreEqual(closeTime, finished[0].LocalTime, "the finished bar belongs to the moment it closed");
+	}
+
+	/// <summary>
+	/// Moving a finished bar to its close lets a strategy trade the bar it has just been shown, and
+	/// must not let it reach any further: the next bar is still unknown at that moment, and its prices
+	/// have to stay out of the book until it closes in its turn.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderCannotTradeAgainstABarThatHasNotBeenShownYet()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var firstOpen = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var secondOpen = firstOpen.AddMinutes(5);
+		var secondClose = secondOpen.AddMinutes(5);
+
+		async Task SendBarAsync(DateTime openTime, decimal open, decimal high, decimal low, decimal close)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				TypedArg = TimeSpan.FromMinutes(5),
+				LocalTime = openTime,
+				OpenTime = openTime,
+				// High first, so the sell below is reached as soon as this bar is replayed at all.
+				HighTime = openTime.AddMinutes(1),
+				LowTime = openTime.AddMinutes(3),
+				CloseTime = openTime.AddMinutes(5),
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			}, CancellationToken);
+		}
+
+		// The first bar trades around 100 and the second one far above it, so 215 is a price only the
+		// second bar ever reaches.
+		await SendBarAsync(firstOpen, 100, 110, 90, 105);
+		await SendBarAsync(secondOpen, 200, 220, 195, 210);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = secondOpen,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 215,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		ExecutionMessage[] TradesOfTheOrder() => [.. res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId && m.HasTradeInfo())];
+
+		var tooEarly = TradesOfTheOrder();
+
+		IsTrue(tooEarly.Length == 0,
+			$"the order was filled at {tooEarly.FirstOrDefault()?.TradePrice} against a bar that closes at " +
+			$"{secondClose:HH:mm} and has not been shown yet");
+
+		// The second bar has closed now, so it is replayed and its high reaches the order.
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = secondClose }, CancellationToken);
+
+		var trades = TradesOfTheOrder();
+
+		AreEqual(1, trades.Length, "the bar traded up to 220, which is through the sell standing at 215");
+		AreEqual(215m, trades[0].TradePrice,
+			"at its own price: the bar reached past it, which it could only do having taken this order first");
+	}
+
+	/// <summary>
+	/// An order carries the connector's clock, and the connector's clock runs behind the emulator's
+	/// input clock whenever the emulator is holding data it has taken. A bar is held until its close,
+	/// so between taking one and releasing it the emulator has moved on and the connector has not -
+	/// and an order placed in that window arrives stamped behind the feed. An order is not a reading
+	/// of the market and must not be judged against the data clock.
+	/// </summary>
+	/// <remarks>
+	/// The strategy does not stamp the order itself, and the bar it reacted to is not what the order
+	/// carries: a compressed bar takes the local time of the source bar that completed it, so the
+	/// strategy's view and the feed agree. The gap is the emulator's own buffering, and nothing else.
+	/// </remarks>
+	[TestMethod]
+	public async Task AnOrderPlacedWhileTheEmulatorIsHoldingDataIsStillTaken()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var firstOpen = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var secondOpen = firstOpen.AddMinutes(5);
+
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		// A stored bar carries the time it opened, exactly as the history feed hands it over.
+		async Task SendBarAsync(DateTime openTime, decimal open, decimal high, decimal low, decimal close)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OriginalTransactionId = subscriptionId,
+				TypedArg = TimeSpan.FromMinutes(5),
+				LocalTime = openTime,
+				OpenTime = openTime,
+				HighTime = openTime.AddMinutes(1),
+				LowTime = openTime.AddMinutes(3),
+				CloseTime = openTime.AddMinutes(5),
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			}, CancellationToken);
+		}
+
+		await SendBarAsync(firstOpen, 100, 110, 90, 105);
+		await SendBarAsync(secondOpen, 106, 112, 104, 108);
+
+		// The connector has not been handed the second bar yet - the emulator is holding it until its
+		// close - so this is the time it stamps an order with while the feed has moved on. The price
+		// is out of reach of both bars: the order has to be taken, not filled.
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = firstOpen,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 50,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+
+		var clockBeforeOrder = emu.CurrentTime;
+
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var replies = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId && m.HasOrderInfo())
+			.ToArray();
+
+		IsTrue(replies.Length > 0, "the order was never answered");
+
+		var failed = replies.FirstOrDefault(m => m.OrderState == OrderStates.Failed);
+
+		IsNull(failed, $"the order was refused: {failed?.Error?.Message}");
+
+		IsTrue(emu.CurrentTime >= clockBeforeOrder,
+			$"taking an order stamped behind the feed dragged the clock back from {clockBeforeOrder:HH:mm} to {emu.CurrentTime:HH:mm}");
+	}
+
+	/// <summary>
+	/// A bar is a reading of the market, so it is held to the data clock like any other: one arriving
+	/// behind what the emulator has already taken is refused rather than matched against a book that
+	/// has moved past it. The shipped history feed never produces this - it merges on server time and
+	/// restamps local time to match - but nothing between the emulator and an inner adapter of
+	/// somebody else's making enforces that, which is what this guards.
+	/// </summary>
+	[TestMethod]
+	public async Task ABarArrivingBehindTheFeedIsRefused()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out _);
+
+		var open = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			DataTypeEx = DataType.Ticks,
+			LocalTime = open.AddMinutes(4),
+			ServerTime = open.AddMinutes(4),
+			TradePrice = 100,
+			TradeVolume = 1,
+		}, CancellationToken);
+
+		var bar = new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		};
+
+		await ThrowsAsync<InvalidOperationException>(
+			async () => await emu.SendInMessageAsync(bar, CancellationToken));
+	}
+
+	/// <summary>
+	/// A subscription is not a reading of the market and is not judged against the data clock. It
+	/// carries the connector's clock, which only follows what the emulator has handed back, so while
+	/// the emulator is holding a bar until its close the two are apart - and a strategy subscribing to
+	/// another instrument in that window would otherwise be refused for being behind the feed.
+	/// </summary>
+	[TestMethod]
+	public async Task ASubscriptionStampedBehindTheFeedIsStillTaken()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var open = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		// The feed hands over a bar, which moves the emulator's input clock to the bar's open.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		var subscribe = new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = DataType.Ticks,
+			SecurityId = id,
+			IsSubscribe = true,
+			LocalTime = open.AddMinutes(-1),
+		};
+
+		await emu.SendInMessageAsync(subscribe, CancellationToken);
+
+		// The emulator answers no subscription of its own - it records it - so what says it was taken
+		// is that a print made after it now reaches the client, which without the subscription it
+		// would not.
+		res.Clear();
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			DataTypeEx = DataType.Ticks,
+			LocalTime = open.AddMinutes(6),
+			ServerTime = open.AddMinutes(6),
+			TradePrice = 101,
+			TradeVolume = 1,
+		}, CancellationToken);
+
+		IsTrue(res.OfType<ExecutionMessage>().Any(m => m.DataType == DataType.Ticks && m.TradePrice == 101),
+			"the subscription was taken but the print it asked for never reached the client");
+
+		// And an unsubscribe, whose time is blanked on purpose upstream and restamped with the
+		// connector's clock, travels the same way.
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = subscribe.TransactionId,
+			DataType2 = DataType.Ticks,
+			SecurityId = id,
+			IsSubscribe = false,
+			LocalTime = open.AddMinutes(-1),
+		}, CancellationToken);
 	}
 
 	[TestMethod]
@@ -1088,12 +2042,21 @@ public class MarketEmulatorTests : BaseTestClass
 		};
 		await emu.SendInMessageAsync(reg, CancellationToken);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
-		m.AssertNotNull();
-		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertEqual(2);
+		// The log entry quoted an offer, so the book holds asks and no bids at all. A market sell
+		// names no price and takes from the bids, so this one has no market to sell into, and the
+		// emulator has to say so: a Done row with the whole volume still outstanding and no reason
+		// attached reads exactly like an order that finished its work.
+		var rows = res
+			.OfType<ExecutionMessage>()
+			.Where(x => x.OriginalTransactionId == reg.TransactionId && x.HasOrderInfo())
+			.ToArray();
 
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		IsTrue(rows.Length > 0, "the emulator has to answer the registration at all");
+
+		IsTrue(rows.Any(x => x.OrderState == OrderStates.Failed || x.Error is not null),
+			$"nothing was bid for, so there was nothing to sell into; the emulator answered {rows.Select(x => $"{x.OrderState}/balance {x.Balance}/error {x.Error?.Message ?? "none"}").JoinComma()}");
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNull();
 
 		res.Clear();
@@ -1746,5 +2709,1055 @@ public class MarketEmulatorTests : BaseTestClass
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active && x.Side == Sides.Sell)
 			.AssertEqual(1);
+	}
+
+	/// <summary>
+	/// A book built from a long stream of prices follows the market: it stays bounded, and its touch
+	/// is the last thing quoted rather than the first. A book that only grows one way ends up quoting
+	/// the extremes of the session against each other.
+	/// </summary>
+	[TestMethod]
+	public async Task ABookBuiltFromTicksFollowsTheMarket()
+	{
+		var secId = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(secId, out _);
+		var book = ((MarketEmulator)emu).GetSecurityState(secId).OrderBook;
+		var now = DateTime.UtcNow;
+
+		for (var i = 0; i < 2000; i++)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new ExecutionMessage
+			{
+				SecurityId = secId,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 1000 + i,
+				TradeVolume = 10,
+			}, CancellationToken);
+		}
+
+		IsTrue(book.BidLevels <= emu.Settings.MaxDepth, $"bid depth {book.BidLevels} is unbounded");
+		IsTrue(book.AskLevels <= emu.Settings.MaxDepth, $"ask depth {book.AskLevels} is unbounded");
+
+		IsTrue(book.BestBid?.price >= 2900m,
+			$"the market walked up to 2999, so the bid must be near it, not at {book.BestBid?.price}");
+		IsTrue(book.BestBid?.price < book.BestAsk?.price,
+			$"a book cannot cross itself: bid {book.BestBid?.price}, ask {book.BestAsk?.price}");
+	}
+
+	/// <summary>
+	/// The same of a book built from a stream of quotes: the touch a venue states is where the market
+	/// is, not one more level to keep beside the ones it stated before.
+	/// </summary>
+	[TestMethod]
+	public async Task ABookBuiltFromLevel1FollowsTheMarket()
+	{
+		var secId = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(secId, out _);
+		var book = ((MarketEmulator)emu).GetSecurityState(secId).OrderBook;
+		var now = DateTime.UtcNow;
+
+		for (var i = 0; i < 2000; i++)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new Level1ChangeMessage
+			{
+				SecurityId = secId,
+				LocalTime = now,
+				ServerTime = now,
+			}
+			.Add(Level1Fields.BestBidPrice, 1000m + i)
+			.Add(Level1Fields.BestAskPrice, 1001m + i)
+			.Add(Level1Fields.BestBidVolume, 10m)
+			.Add(Level1Fields.BestAskVolume, 10m), CancellationToken);
+		}
+
+		IsTrue(book.BidLevels <= emu.Settings.MaxDepth, $"bid depth {book.BidLevels} is unbounded");
+		IsTrue(book.AskLevels <= emu.Settings.MaxDepth, $"ask depth {book.AskLevels} is unbounded");
+
+		AreEqual(2999m, book.BestBid?.price, "the last quote stated a bid of 2999");
+		AreEqual(3000m, book.BestAsk?.price, "and an ask of 3000");
+	}
+
+	/// <summary>
+	/// A fill emits two portfolio rows: the instrument position (volume + average price) and the
+	/// account's cash. The position row must name the instrument that was traded. Emitting it under
+	/// <see cref="SecurityId.Money"/> makes a lot quantity indistinguishable from a cash balance, so
+	/// anyone persisting or displaying these rows reads a position as money — and the portfolio
+	/// lookup, which does name the instrument, then disagrees with the live stream about the same
+	/// account.
+	/// </summary>
+	[TestMethod]
+	public async Task FillEmitsPositionRowUnderTheTradedSecurity()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		await AddBookAsync(emu, id, now);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		await emu.SendInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		}, CancellationToken);
+
+		// The two rows are told apart by what they carry: only the cash row reports realized PnL.
+		var rows = res.OfType<PositionChangeMessage>().ToArray();
+
+		var positionRow = rows.FirstOrDefault(m => !m.Changes.ContainsKey(PositionChangeTypes.RealizedPnL));
+		positionRow.AssertNotNull("the fill must emit a position row");
+		positionRow.SecurityId.AssertEqual(id, "the position row must name the traded instrument");
+		positionRow.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(1m);
+
+		var cashRow = rows.FirstOrDefault(m => m.Changes.ContainsKey(PositionChangeTypes.RealizedPnL));
+		cashRow.AssertNotNull("the fill must emit a cash row");
+		cashRow.SecurityId.AssertEqual(SecurityId.Money, "the cash row stays money");
+	}
+
+	/// <summary>
+	/// A position fed in as an opening state must keep the average price it was given. Dropping it
+	/// leaves the position at average price 0, and the first close then realizes a profit equal to
+	/// the entire notional instead of the actual difference.
+	/// </summary>
+	[TestMethod]
+	public async Task SeededPositionKeepsItsAveragePrice()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m), CancellationToken);
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 2m)
+		.Add(PositionChangeTypes.AveragePrice, 100m), CancellationToken);
+
+		res.Clear();
+
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			LocalTime = now,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var reported = res.OfType<PositionChangeMessage>().FirstOrDefault(m => m.SecurityId == id);
+		reported.AssertNotNull("the seeded position must be reported back");
+		reported.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(2m);
+		reported.Changes[PositionChangeTypes.AveragePrice].To<decimal>().AssertEqual(100m, "the seeded average price must survive");
+	}
+
+	/// <summary>
+	/// An order that is already live somewhere else must be able to enter the engine as state, not
+	/// as a request. The matcher is an internal venue: it is told what is outstanding when it comes
+	/// up, and the messages that carry that are the ordinary execution reports the rest of the
+	/// system already speaks. Feeding such a report through registration instead re-charges the
+	/// account for an order it already owns, gives it a new identity, and can cross it against the
+	/// book on the way in - so the order the engine ends up holding is not the order that exists.
+	/// </summary>
+	[TestMethod]
+	public void ActiveOrderArrivesAsStateNotAsARequest()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+		var results = new List<Message>();
+
+		engine.ProcessMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}.Add(PositionChangeTypes.BeginValue, 1000000m), results);
+
+		results.Clear();
+
+		// What the router hands over: a buy for 10 that has already been half filled elsewhere,
+		// carrying the identity it is known by and the balance it actually has left.
+		engine.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+			TransactionId = 42,
+			OrderId = 555,
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Limit,
+			Side = Sides.Buy,
+			OrderPrice = 100,
+			OrderVolume = 10,
+			Balance = 5,
+		}, results);
+
+		// Taking it on is not an event anyone asked for: the order was not registered here, so no
+		// registration report may go out for it.
+		results.OfType<ExecutionMessage>().Any(m => m.HasOrderInfo && m.OriginalTransactionId == 42)
+			.AssertFalse("adopting an order is not the same as accepting one");
+
+		var book = engine.GetSecurityState(id).OrderBook;
+		var resting = book.GetLevels(Sides.Buy).SelectMany(l => l.Orders).FirstOrDefault(o => o.TransactionId == 42);
+
+		resting.AssertNotNull("the order must be standing in the book");
+		resting.OrderId.AssertEqual(555L, "under the identity it is already known by");
+		resting.Balance.AssertEqual(5m, "with what is left of it, not what it started as");
+		resting.Volume.AssertEqual(10m);
+
+		// And it must behave as a real resting order: an aggressor crosses it.
+		results.Clear();
+		now = now.AddSeconds(1);
+
+		engine.ProcessMessage(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			TransactionId = 77,
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+		}, results);
+
+		var trade = results.OfType<ExecutionMessage>().FirstOrDefault(m => m.HasTradeInfo);
+
+		trade.AssertNotNull("an adopted order takes part in matching like any other");
+		trade.TradePrice.AssertEqual(100m);
+		engine.PortfolioManager.GetPortfolio(_pfName).BlockedMoney.AssertEqual(0m,
+			"once both sides have filled, an adopted order leaves no reservation behind");
+	}
+
+	/// <summary>
+	/// The same order can be described either way round. The report that registered it carries the
+	/// registration as its own transaction; a later state report carries it as the transaction it
+	/// answers. Reading only one of the two would let the other through as a fresh request - and a
+	/// fresh request charges the account again and can cross the book on the way in.
+	/// </summary>
+	[TestMethod]
+	public void AnAdoptedOrderIsRecognisedWhicheverFieldCarriesItsId()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+		var results = new List<Message>();
+
+		engine.ProcessMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}.Add(PositionChangeTypes.BeginValue, 1000000m), results);
+
+		ExecutionMessage state(long transactionId, long originalTransactionId, long orderId) => new()
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+			TransactionId = transactionId,
+			OriginalTransactionId = originalTransactionId,
+			OrderId = orderId,
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Limit,
+			Side = Sides.Buy,
+			OrderPrice = 100,
+			OrderVolume = 10,
+			Balance = 10,
+		};
+
+		results.Clear();
+
+		engine.ProcessMessage(state(transactionId: 42, originalTransactionId: 0, orderId: 555), results);
+		engine.ProcessMessage(state(transactionId: 0, originalTransactionId: 43, orderId: 556), results);
+
+		results.OfType<ExecutionMessage>().Any(m => m.HasOrderInfo)
+			.AssertFalse("neither shape is a request, so neither is answered");
+
+		var book = engine.GetSecurityState(id).OrderBook;
+		var resting = book.GetLevels(Sides.Buy).SelectMany(l => l.Orders).Select(o => o.TransactionId).ToArray();
+
+		resting.Contains(42L).AssertTrue("the registration shape must be taken on");
+		resting.Contains(43L).AssertTrue("and so must the state-report shape");
+	}
+
+	/// <summary>
+	/// A control message is not data and must not be held to the data clock.
+	/// </summary>
+	/// <remarks>
+	/// The emulator refuses data that moves time backwards, which is right: replaying an earlier
+	/// bar after a later one would matter. But the stop signal is deliberately pushed through the
+	/// same queue as a marker, so that it comes back only once everything ahead of it has been
+	/// processed - and it carries the time the run was told to stop at, which by then is behind
+	/// where the emulator has got to. Judging it as data turns an ordinary shutdown into an
+	/// exception, and the run ends by throwing instead of by finishing.
+	/// </remarks>
+	[TestMethod]
+	public async Task AStopSignalIsNotHeldToTheDataClock()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out _);
+
+		var start = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var later = start.AddDays(1).AddMinutes(30);
+
+		await AddBookAsync(emu, id, later);
+
+		// The stop was scheduled for the start of the run; the emulator is already a day past it.
+		await emu.SendInMessageAsync(new EmulationStateMessage
+		{
+			LocalTime = start,
+			State = ChannelStates.Stopping,
+		}, CancellationToken);
+	}
+
+	/// <summary>
+	/// A market order names no price, so nothing of it can rest in the order book. Candle matching
+	/// caps a fill at the candle's traded volume; queuing the balance left over puts a level at the
+	/// order's own zero price into the book, and once the candle subscription ends and the book
+	/// takes matching back, a later opposite order trades against that level at a price of zero.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrderRemainderIsNotQueued()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		// Off, so the candle's traded volume is what the order can fill and there is a remainder
+		// at all. With it on - the default - the order fills in full and leaves nothing to queue.
+		emu.Settings.IncreaseDepthVolume = false;
+
+		var candleSubscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = candleSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = DataType.MarketDepth,
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// The candle traded 0.32, far less than the order below asks for.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-5),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 0.32m,
+		}, CancellationToken);
+
+		var buy = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(buy, CancellationToken);
+
+		var buyTrades = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == buy.TransactionId && m.HasTradeInfo())
+			.ToArray();
+
+		AreEqual(1, buyTrades.Length, "the candle fills the order once, for what it traded");
+		AreEqual(0.32m, buyTrades[0].TradeVolume);
+
+		var buyState = res
+			.OfType<ExecutionMessage>()
+			.Last(m => m.OriginalTransactionId == buy.TransactionId && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, buyState.OrderState, "a market order that cannot be filled further is done, not active");
+		AreEqual(0.68m, buyState.Balance);
+
+		foreach (var book in res.OfType<QuoteChangeMessage>())
+		{
+			IsFalse(book.Bids.Any(q => q.Price <= 0), "a market order must leave no bid at its own zero price");
+			IsFalse(book.Asks.Any(q => q.Price <= 0), "a market order must leave no ask at its own zero price");
+		}
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(0m, position.TotalBidsVolume, "the cancelled balance must hold nothing blocked against the account");
+
+		// The candle subscription ends, so the book matches again and whatever the buy left in it is
+		// reachable by the opposite order.
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = candleSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = false,
+		}, CancellationToken);
+
+		var sell = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(sell, CancellationToken);
+
+		var trades = res.OfType<ExecutionMessage>().Where(m => m.HasTradeInfo()).ToArray();
+
+		IsFalse(trades.Any(m => m.TradePrice is not decimal price || price <= 0), "every trade carries a positive price");
+		AreEqual(1, trades.Count(m => m.OriginalTransactionId == buy.TransactionId), "the first order trades only against the candle");
+
+		var buyTradeIds = trades.Where(m => m.OriginalTransactionId == buy.TransactionId).Select(m => m.TradeId);
+		var sellTradeIds = trades.Where(m => m.OriginalTransactionId == sell.TransactionId).Select(m => m.TradeId);
+
+		IsFalse(buyTradeIds.Intersect(sellTradeIds).Any(), "the two orders must not be the two sides of one trade");
+	}
+	/// <summary>
+	/// A candle says how much the market traded over that minute; it does not say how much an order
+	/// is allowed to fill. That is what <see cref="MarketEmulatorSettings.IncreaseDepthVolume"/>
+	/// decides, and it is on by default — the order book path tops the book up past its worst level
+	/// so an order asking for more than the market holds still fills in full. Candle matching has to
+	/// answer the same setting the same way. While it did not, one strategy filled completely on
+	/// ticks and partially on candles, and was left holding the fraction the candle could not cover.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrderFillsInFullWhenDepthVolumeIncreases()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		IsTrue(emu.Settings.IncreaseDepthVolume, "the setting under test is the default one");
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// The candle traded 0.32, less than a third of what the order below asks for.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-5),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 0.32m,
+		}, CancellationToken);
+
+		var buy = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(buy, CancellationToken);
+
+		var trades = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == buy.TransactionId && m.HasTradeInfo())
+			.ToArray();
+
+		AreEqual(1, trades.Length, "the order fills in one trade");
+		AreEqual(1m, trades[0].TradeVolume, "the whole order fills, not the candle's own volume");
+
+		var state = res
+			.OfType<ExecutionMessage>()
+			.Last(m => m.OriginalTransactionId == buy.TransactionId && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, state.OrderState);
+		AreEqual(0m, state.Balance, "nothing is left to cancel");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(1m, position.BeginValue + position.CurrentValue, "the strategy holds exactly what it ordered");
+	}
+	/// <summary>
+	/// A candle does not say which side traded at its prices. With the spread centred, the book built
+	/// around them puts half of it on each side: a market buy pays half the spread above the last price
+	/// and a market sell half below it, rather than buys trading free and sells paying all of it.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrdersPayHalfTheSpreadEachWay()
+	{
+		var (buy, sell) = await FillBothWaysOnACandleAsync(spreadSize: 4, isSpreadCentered: true);
+
+		AreEqual(106m, buy, "a buy pays half of a four-step spread above the last price of 104");
+		AreEqual(102m, sell, "a sell pays half of a four-step spread below the last price of 104");
+	}
+
+	/// <summary>
+	/// A spread of no steps quotes both sides at the last price, so a buy and a sell both trade there:
+	/// a run that charges the spread some other way can switch the book's spread off instead of paying
+	/// it twice.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrdersWithNoSpreadTradeAtTheLastPrice()
+	{
+		var (buy, sell) = await FillBothWaysOnACandleAsync(spreadSize: 0, isSpreadCentered: false);
+
+		AreEqual(104m, buy);
+		AreEqual(104m, sell);
+	}
+
+	private async Task<(decimal Buy, decimal Sell)> FillBothWaysOnACandleAsync(int spreadSize, bool isSpreadCentered)
+	{
+		var id = Helper.CreateSecurityId();
+		var emulator = new MarketEmulator(
+			new CollectionSecurityProvider([new Security { Id = id.ToStringId(), PriceStep = 1m }]),
+			new CollectionPortfolioProvider([Portfolio.CreateSimulator()]),
+			new InMemoryExchangeInfoProvider(),
+			new IncrementalIdGenerator())
+		{
+			VerifyMode = true,
+			RandomProvider = new MockEmulationRandomizer(),
+		};
+
+		emulator.Settings.SpreadSize = spreadSize;
+		emulator.Settings.IsSpreadCentered = isSpreadCentered;
+
+		IMarketEmulator emu = emulator;
+
+		var res = new List<Message>();
+		emu.NewOutMessageAsync += (m, ct) => { res.Add(m); return default; };
+
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-1),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 10,
+		}, CancellationToken);
+
+		async Task<decimal> FillAsync(Sides side)
+		{
+			var order = new OrderRegisterMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				TransactionId = _idGenerator.GetNextId(),
+				Side = side,
+				Volume = 1,
+				OrderType = OrderTypes.Market,
+				PortfolioName = _pfName,
+			};
+
+			await emu.SendInMessageAsync(order, CancellationToken);
+
+			return res
+				.OfType<ExecutionMessage>()
+				.Single(m => m.OriginalTransactionId == order.TransactionId && m.HasTradeInfo())
+				.TradePrice.Value;
+		}
+
+		return (await FillAsync(Sides.Buy), await FillAsync(Sides.Sell));
+	}
+
+	/// <summary>
+	/// The reason the fill matters. A strategy that opens only from a flat position sends the same
+	/// volume out and back; if each leg fills for whatever its own candle traded, the two fractions
+	/// do not cancel and the position never returns to zero, so the strategy never opens again. It
+	/// took two trades in a month of history to find that, which is why it is asserted here.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleRoundTripReturnsToFlat()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// Two candles, each thinner than the order that trades against it, and thin by a different
+		// amount - the fractions left over would not even cancel each other out.
+		async Task TradeAsync(Sides side, decimal candleVolume, DateTime time)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OpenTime = time.AddMinutes(-1),
+				CloseTime = time,
+				OpenPrice = 100,
+				HighPrice = 105,
+				LowPrice = 95,
+				ClosePrice = 104,
+				TotalVolume = candleVolume,
+			}, CancellationToken);
+
+			await emu.SendInMessageAsync(new OrderRegisterMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				TransactionId = _idGenerator.GetNextId(),
+				Side = side,
+				Volume = 1,
+				OrderType = OrderTypes.Market,
+				PortfolioName = _pfName,
+			}, CancellationToken);
+		}
+
+		await TradeAsync(Sides.Buy, 0.414m, now);
+		await TradeAsync(Sides.Sell, 0.446m, now.AddMinutes(1));
+
+		var traded = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.HasTradeInfo())
+			.Sum(m => (m.OriginSide ?? m.Side) == Sides.Sell ? -m.TradeVolume : m.TradeVolume);
+
+		AreEqual(0m, traded, "buying one and selling one leaves nothing behind");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(0m, position.BeginValue + position.CurrentValue, "a strategy that opens from flat can open again");
+	}
+
+	/// <summary>
+	/// <see cref="RealTimeEmulationTrader{T}"/> promises a real market data connection but no real
+	/// order registration, and its portfolio argument is documented as the account orders are
+	/// registered through - not as a switch between emulated and live. So a full order lifecycle
+	/// through a custom portfolio must leave the underlying adapter untouched by every transactional
+	/// message: register, replace, cancel and group cancel - four sent, zero expected there.
+	/// </summary>
+	private async Task AssertNoRealOrdersReachUnderlyingAsync(bool ownAdapter)
+	{
+		var secId = Helper.CreateSecurityId();
+		var portfolio = new Portfolio { Name = "LiveAccount", BeginValue = 1000000 };
+
+		var underlying = new RecordingMessageAdapter();
+
+		using var trader = new RealTimeEmulationTrader<RecordingMessageAdapter>(
+			underlying,
+			new CollectionSecurityProvider([new Security { Id = secId.ToStringId() }]),
+			portfolio,
+			ownAdapter);
+
+		var adapter = trader.EmulationAdapter;
+
+		// Market data is the one thing that must reach the real connection. It is asserted below so
+		// that the absence of order messages is a routing fact and not a disconnected recorder.
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var regId = _idGenerator.GetNextId();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = regId,
+			PortfolioName = portfolio.Name,
+			Side = Sides.Buy,
+			Volume = 1,
+			Price = 100,
+			OrderType = OrderTypes.Limit,
+		}, CancellationToken);
+
+		await adapter.SendInMessageAsync(new OrderReplaceMessage
+		{
+			SecurityId = secId,
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = regId,
+			PortfolioName = portfolio.Name,
+			Side = Sides.Buy,
+			Volume = 1,
+			Price = 99,
+			OrderType = OrderTypes.Limit,
+		}, CancellationToken);
+
+		await adapter.SendInMessageAsync(new OrderCancelMessage
+		{
+			SecurityId = secId,
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = regId,
+			PortfolioName = portfolio.Name,
+		}, CancellationToken);
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = portfolio.Name,
+		}, CancellationToken);
+
+		var recorded = underlying.InMessages.ToArray();
+
+		IsNotEmpty(recorded.OfType<MarketDataMessage>().ToArray(), "market data must still travel to the real connection");
+
+		var leaked = recorded.OfType<OrderMessage>().Select(m => $"{m.Type}").ToArray();
+
+		IsEmpty(leaked, $"orders sent to the real connection by an emulator: {leaked.JoinComma()}");
+	}
+
+	/// <summary>
+	/// The default construction: the emulator owns the underlying adapter. Naming the portfolio
+	/// something other than the simulator account must not turn emulation into live trading.
+	/// </summary>
+	[TestMethod]
+	public Task RealTimeEmulationRegistersNoRealOrderWhenItOwnsTheAdapter()
+		=> AssertNoRealOrdersReachUnderlyingAsync(true);
+
+	/// <summary>
+	/// The same promise when the underlying adapter is borrowed from a live connector, which is how
+	/// the shipped samples build it.
+	/// </summary>
+	[TestMethod]
+	public Task RealTimeEmulationRegistersNoRealOrderWhenTheAdapterIsBorrowed()
+		=> AssertNoRealOrdersReachUnderlyingAsync(false);
+
+	/// <summary>
+	/// History is a handful of prints standing for what was really thousands of them, so the size of
+	/// the print that trades through a resting limit says nothing about how much of that order could
+	/// have been done there. The market reaching the order's price takes the whole of it, once, at the
+	/// price that traded. Capping the fill at the print's own size would leave a strategy holding a
+	/// remainder of a backtested order it never planned for, and split one order into a stream of
+	/// micro-fills whenever the recorded prints are fractional.
+	/// </summary>
+	[TestMethod]
+	public async Task ATickThroughARestingLimitFillsItWhole()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await AddBookAsync(emu, id, now);
+
+		// A buy of 10 at 95 rests: the market is 100/101, so nothing in the book crosses it.
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 95,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		ExecutionMessage[] FillsOfTheOrder() => [.. res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId && m.HasTradeInfo())];
+
+		AreEqual(0, FillsOfTheOrder().Length, "the order rests to begin with, or there is nothing to trade through");
+
+		// One print of a single lot at 94 - below where the order stands.
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			LocalTime = now.AddSeconds(1),
+			ServerTime = now.AddSeconds(1),
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 94,
+			TradeVolume = 1,
+		}, CancellationToken);
+
+		var fills = FillsOfTheOrder();
+
+		AreEqual(1, fills.Length, $"the market traded through the order once, so it is filled once; volumes were {fills.Select(m => m.TradeVolume.ToString()).JoinComma()}");
+		AreEqual(10m, fills[0].TradeVolume, "for the whole order, not for the single lot the print happened to carry");
+		AreEqual(95m, fills[0].TradePrice,
+			"at its own price: a resting order is the passive side, and for the market to print through it " +
+			"this order has been taken first");
+		AreEqual(_pfName, fills[0].PortfolioName, "the fill stays attributable to the account that owned the order");
+
+		var state = res
+			.OfType<ExecutionMessage>()
+			.Last(m => m.OriginalTransactionId == reg.TransactionId && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, state.OrderState, "an order filled in full is finished, not still working");
+		AreEqual(0m, state.Balance, "with nothing left of it for the strategy to carry");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+		AreEqual(0m, position.TotalBidsVolume, "no live buy balance remains after the full fill");
+		AreEqual(0m, position.TotalBidsValue,
+			"and the reservation made at that same price is released whole");
+	}
+
+	/// <summary>
+	/// A bar records when its high and its low happened, and replaying it has to walk them in that
+	/// order. The path a bar took decides which of two resting orders is reached first, and a strategy
+	/// that acts on the first fill - a stop, a bracket, a reversal - is backtested against the wrong
+	/// bar entirely when the replay guesses the path the other way round.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleReplay_FollowsHighTimeAndLowTime()
+	{
+		var start = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		// Replays one bar whose extremes are recorded at the stated times, against a buy the bar's low
+		// reaches and a sell its high reaches, and answers where each of the two fills landed.
+		async Task<(int buyAt, int sellAt)> ReplayAsync(DateTime highTime, DateTime lowTime)
+		{
+			var id = Helper.CreateSecurityId();
+			var emu = CreateEmuWithEvents(id, out var res);
+
+			await AddBookAsync(emu, id, start);
+
+			async Task<long> RestAsync(Sides side, decimal price)
+			{
+				var reg = new OrderRegisterMessage
+				{
+					SecurityId = id,
+					LocalTime = start,
+					TransactionId = _idGenerator.GetNextId(),
+					Side = side,
+					Price = price,
+					Volume = 1,
+					OrderType = OrderTypes.Limit,
+					PortfolioName = _pfName,
+				};
+
+				await emu.SendInMessageAsync(reg, CancellationToken);
+				return reg.TransactionId;
+			}
+
+			// A buy under the market and a sell above it: the bar's low reaches one, its high the other.
+			var buyTx = await RestAsync(Sides.Buy, 95);
+			var sellTx = await RestAsync(Sides.Sell, 105);
+
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OpenTime = start,
+				CloseTime = start.AddMinutes(1),
+				LocalTime = start.AddMinutes(1),
+				HighTime = highTime,
+				LowTime = lowTime,
+				OpenPrice = 100,
+				HighPrice = 110,
+				LowPrice = 90,
+				ClosePrice = 100,
+				TotalVolume = 100,
+			}, CancellationToken);
+
+			// The bar has closed, so it is replayed as the prints it stands for.
+			await emu.SendInMessageAsync(new TimeMessage
+			{
+				LocalTime = start.AddMinutes(2),
+				ServerTime = start.AddMinutes(2),
+			}, CancellationToken);
+
+			var trades = res.OfType<ExecutionMessage>().Where(m => m.HasTradeInfo()).ToArray();
+
+			var buy = trades.FirstOrDefault(m => m.OriginalTransactionId == buyTx);
+			var sell = trades.FirstOrDefault(m => m.OriginalTransactionId == sellTx);
+
+			IsNotNull(buy, "the bar traded down to 90, which is through the buy standing at 95");
+			IsNotNull(sell, "and up to 110, which is through the sell standing at 105");
+
+			AreEqual(95m, buy.TradePrice,
+				"each fills at its own price: the bar reached past both, which it could only do having taken them first");
+			AreEqual(105m, sell.TradePrice, "and the sell at its own, for the same reason");
+
+			return (trades.IndexOf(buy), trades.IndexOf(sell));
+		}
+
+		var lowCameFirst = await ReplayAsync(highTime: start.AddSeconds(50), lowTime: start.AddSeconds(10));
+
+		IsLess(lowCameFirst.buyAt, lowCameFirst.sellAt,
+			"the bar recorded its low before its high, so the order the low reaches has to be filled first");
+
+		var highCameFirst = await ReplayAsync(highTime: start.AddSeconds(10), lowTime: start.AddSeconds(50));
+
+		IsLess(highCameFirst.sellAt, highCameFirst.buyAt,
+			"and recorded the other way round, the order the high reaches has to be filled first");
+	}
+
+	// Sends one print, which is what the emulator builds a session's price band from.
+	private async Task PrintAsync(IMarketEmulator emu, SecurityId secId, DateTime time, decimal price)
+	{
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = secId,
+			LocalTime = time,
+			ServerTime = time,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = price,
+			TradeVolume = 10,
+		}, CancellationToken);
+	}
+
+	/// <summary>
+	/// An exchange names the floor and the ceiling a price may not leave for the session, and a
+	/// strategy reads them to place a protective order inside the band or to refuse one it knows
+	/// would be turned away. History replayed as bare prints carries no such quote, so the emulator
+	/// owes the strategy one built around the session's first print - without it the same strategy
+	/// reads the band as absent in the backtest that was meant to predict how it behaves live.
+	/// </summary>
+	[TestMethod]
+	public async Task TheFirstPrintOfASessionPublishesThePriceBandForThatSession()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		emu.Settings.PriceLimitOffset = new Unit(10);
+
+		var session = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		await PrintAsync(emu, id, session, 100);
+
+		var bands = res.OfType<Level1ChangeMessage>().ToArray();
+
+		HasCount(1, bands, "the session's first print settles the band, so exactly one has to be published");
+
+		var band = bands[0];
+
+		AreEqual(90m, band.TryGetDecimal(Level1Fields.MinPrice), "the floor stands the offset below the first print");
+		AreEqual(110m, band.TryGetDecimal(Level1Fields.MaxPrice), "and the ceiling the same offset above it");
+		AreEqual(id, band.SecurityId, "the band belongs to the security that printed");
+		AreEqual(session, band.ServerTime, "and is stamped with the moment that print happened");
+	}
+
+	/// <summary>
+	/// The band is the session's, not the latest print's. Recomputing it on every print would make it
+	/// trail the price, so nothing could ever sit outside it and a strategy reading it would learn
+	/// nothing about how far the market may still move; it would also bury the run under one quote per
+	/// print. A strategy is entitled to a band that stands still for as long as the session does.
+	/// </summary>
+	[TestMethod]
+	public async Task ThePriceBandIsSetOnceASessionAndDoesNotChaseLaterPrints()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		emu.Settings.PriceLimitOffset = new Unit(10);
+
+		var open = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		await PrintAsync(emu, id, open, 100);
+		await PrintAsync(emu, id, open.AddHours(4), 104);
+
+		var bands = res.OfType<Level1ChangeMessage>().ToArray();
+
+		HasCount(1, bands, $"the band is the session's, so the later print publishes none of its own; got {bands.Length}");
+
+		AreEqual(90m, bands[0].TryGetDecimal(Level1Fields.MinPrice), "and the floor still stands where the session opened");
+		AreEqual(110m, bands[0].TryGetDecimal(Level1Fields.MaxPrice), "as does the ceiling");
+	}
+
+	/// <summary>
+	/// The band belongs to one session, and the next one opens its own around where it opened. A
+	/// backtest spanning days that kept the first day's band would judge every later day against a
+	/// floor and a ceiling the market had long since walked away from, and a strategy that declines
+	/// to trade outside the band would refuse to trade at all after the first big move.
+	/// </summary>
+	[TestMethod]
+	public async Task EachSessionGetsItsOwnPriceBandBuiltFromItsOwnFirstPrint()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		emu.Settings.PriceLimitOffset = new Unit(10);
+
+		var firstSession = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+		var nextSession = firstSession.AddDays(1);
+
+		await PrintAsync(emu, id, firstSession, 100);
+		await PrintAsync(emu, id, nextSession, 130);
+
+		var bands = res.OfType<Level1ChangeMessage>().ToArray();
+
+		HasCount(2, bands, $"each session opens a band of its own; got {bands.Length}");
+
+		AreEqual(120m, bands[1].TryGetDecimal(Level1Fields.MinPrice), "the new session's floor is measured from its own first print, not yesterday's");
+		AreEqual(140m, bands[1].TryGetDecimal(Level1Fields.MaxPrice), "and so is its ceiling");
+		AreEqual(nextSession, bands[1].ServerTime, "and the band is stamped with the session it belongs to");
 	}
 }

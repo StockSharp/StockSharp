@@ -116,6 +116,10 @@ public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValu
 			if (_d.IsFormed)
 			{
 				var dValue = d.ToDecimal(Source);
+
+				if (dValue == 0)
+					return result;
+
 				var ci = (capo - esa) / (0.015m * dValue);
 				var wt1 = ci;
 				var wt2 = _sma.Process(input, ci).ToDecimal(Source);
@@ -143,9 +147,9 @@ public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValu
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(EsaPeriod), EsaPeriod);
 		storage.SetValue(nameof(DPeriod), DPeriod);
@@ -153,9 +157,9 @@ public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValu
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		EsaPeriod = storage.GetValue<int>(nameof(EsaPeriod));
 		DPeriod = storage.GetValue<int>(nameof(DPeriod));

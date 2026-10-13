@@ -44,7 +44,11 @@ public record ReportOrder(
 	decimal? Balance,
 	decimal? Volume,
 	OrderTypes? Type
-);
+)
+{
+	// Needed to preserve an unweighted average when an already aggregated row is aggregated again.
+	internal int AggregatedItemsCount { get; init; } = 1;
+}
 
 /// <summary>
 /// Trade data for reports.
@@ -74,7 +78,13 @@ public record ReportTrade(
 	decimal? Slippage,
 	decimal? PnL,
 	decimal? Position
-);
+)
+{
+	// Aggregation can run repeatedly, so the resulting row retains the weight and chronology of the
+	// source rows it represents rather than becoming one ordinary row at the bucket start.
+	internal int AggregatedItemsCount { get; init; } = 1;
+	internal DateTime? LatestPositionTime { get; init; } = Position is null ? null : Time;
+}
 
 /// <summary>
 /// The interface for providing data to report generators.

@@ -108,7 +108,7 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 		}
 
 		if (_allSecSubscriptions.Count > 0)
-			subscriptionIds = subscriptionIds.Concat(_allSecSubscriptions.Cache);
+			subscriptionIds = [.. subscriptionIds.Concat(_allSecSubscriptions.Cache).Distinct()];
 
 		return newQuoteMsg;
 	}
@@ -175,11 +175,12 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 			}
 
 			var secId = info.Builder.SecurityId;
-
-			if (info != _online.TryGetValue(secId))
-				return false;
+			var isOnline = ReferenceEquals(info, _online.TryGetValue(secId));
 
 			info.SubscriptionIds.Remove(id);
+
+			if (!isOnline)
+				return true;
 
 			var ids = info.SubscriptionIds.Cache;
 

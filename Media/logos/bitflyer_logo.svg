@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" role="img" aria-label="bitFlyer">
+  <rect width="150" height="150" fill="#1980e5"/>
+  <path fill="#f9fbff" d="M38 44h23v23H38zm27 0h23v23H65zm28 0h23v23H93zM38 71h23v23H38zm0 27h23v23H38z"/>
+  <circle cx="77" cy="82.5" r="12" fill="#fa8033"/>
+</svg>

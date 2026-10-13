@@ -164,18 +164,20 @@ public class GpuNickRypockTrailingReverseCalculator : GpuIndicatorCalculatorBase
 		var priceType = (Level1Fields)prm.PriceType;
 		var flatLength = flatCandles.Length;
 
+		// The trend flips on comparing a price against a reverse level a small fraction of it away, a gap
+		// finer than float32 resolves at price scale, so the running state is kept in double.
 		var isInitialized = false;
-		float k = 0f;
-		float reverse = 0f;
-		float highPrice = 0f;
-		float lowPrice = 0f;
+		double k = 0d;
+		double reverse = 0d;
+		double highPrice = 0d;
+		double lowPrice = 0d;
 		var trend = 0;
 
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
-			var price = ExtractPrice(candle, priceType);
+			var price = (double)ExtractPrice(candle, priceType);
 
 			if (!isInitialized)
 			{
@@ -234,7 +236,7 @@ public class GpuNickRypockTrailingReverseCalculator : GpuIndicatorCalculatorBase
 			flatResults[resIndex] = new GpuIndicatorResult
 			{
 				Time = candle.Time,
-				Value = reverse,
+				Value = (float)reverse,
 				IsFormed = (byte)((i + 1) >= length ? 1 : 0)
 			};
 		}

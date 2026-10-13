@@ -2,14 +2,45 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;
+	// Backing delegates for the transaction-provider event surface: the per-order NewOrder/OrderChanged stream
+	// and the mass / lookup notifications the pipeline does not raise on its own. The remaining
+	// ITransactionProvider members are satisfied by the strongly-typed events declared in Strategy.cs.
 
-	private Action<Order> _newOrder;
+	private Action<Order> _txNewOrder;
+	private Action<Order> _txOrderChanged;
 
+	private bool _txEventsHooked;
+
+	/// <summary>
+	/// Ensure the internal pipeline hooks that feed the transaction-provider NewOrder/OrderChanged streams
+	/// are installed exactly once. Wired lazily on first subscription so the cost is avoided for consumers
+	/// that never listen to the obsolete order events.
+	/// </summary>
+	private void EnsureTxEventsHooked()
+	{
+		if (_txEventsHooked)
+			return;
+
+		_txEventsHooked = true;
+
+		OrderProcessor.Registered += o => _txNewOrder?.Invoke(o);
+		OrderProcessor.Changed += o => _txOrderChanged?.Invoke(o);
+	}
+
+	IdGenerator ITransactionProvider.TransactionIdGenerator => _connector?.TransactionIdGenerator;
+
+	[Obsolete("Use ISubscriptionProvider.OrderReceived event.")]
 	event Action<Order> ITransactionProvider.NewOrder
 	{
-		add => _newOrder += value;
-		remove => _newOrder -= value;
+		add { EnsureTxEventsHooked(); _txNewOrder += value; }
+		remove => _txNewOrder -= value;
+	}
+
+	[Obsolete("Use ISubscriptionProvider.OrderReceived event.")]
+	event Action<Order> ITransactionProvider.OrderChanged
+	{
+		add { EnsureTxEventsHooked(); _txOrderChanged += value; }
+		remove => _txOrderChanged -= value;
 	}
 
 	event Action<long> ITransactionProvider.MassOrderCanceled
@@ -36,20 +67,188 @@ partial class Strategy
 		remove { }
 	}
 
+	[Obsolete("Use ISubscriptionProvider.PortfolioReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> ITransactionProvider.LookupPortfoliosResult
 	{
 		add { }
 		remove { }
 	}
 
+	[Obsolete("Use ISubscriptionProvider.PortfolioReceived and ISubscriptionProvider.SubscriptionStopped events.")]
 	event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> ITransactionProvider.LookupPortfoliosResult2
 	{
 		add { }
 		remove { }
 	}
 
-	void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
+	/// <summary>
+	/// Trades, matched during the strategy operation.
+	/// </summary>
+	[Browsable(false)]
+	public IEnumerable<MyTrade> MyTrades => Trades.MyTrades;
+
+	/// <summary>
+	/// Try add own trade.
+	/// </summary>
+	/// <param name="trade"><see cref="MyTrade"/></param>
+	/// <returns>Operation result.</returns>
+	public bool TryAddMyTrade(MyTrade trade)
 	{
-		CancelActiveOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
+		if (trade is null)
+			throw new ArgumentNullException(nameof(trade));
+
+		// Delegate deduplication, PnL/commission/slippage accounting and the TradeAdded fan-out to the trade
+		// pipeline; its events are wired to the strategy's notifications in the Strategy constructor.
+		return Trades.TryAdd(trade);
+	}
+
+	/// <summary>
+	/// Cancel active orders matching the specified filter.
+	/// </summary>
+	/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+	/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+	/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+	/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+	/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
+	/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+	/// <param name="transactionId">Order cancellation transaction id.</param>
+	public void CancelActiveOrders(bool? isStopOrder = default, Portfolio portfolio = default, Sides? direction = default, ExchangeBoard board = default, Security security = default, SecurityTypes? securityType = default, long? transactionId = default)
+	{
+		if (ProcessState != ProcessStates.Started)
+		{
+			LogInfo(LocalizedStrings.WaitingCancellingAllOrders);
+			return;
+		}
+
+		LogInfo(LocalizedStrings.CancelAll);
+
+		foreach (var order in Orders.Where(o => o.State == OrderStates.Active))
+		{
+			if (isStopOrder is not null && isStopOrder != (order.Type == OrderTypes.Conditional))
+				continue;
+
+			if (portfolio is not null && order.Portfolio != portfolio)
+				continue;
+
+			if (direction is not null && order.Side != direction)
+				continue;
+
+			if (board is not null && order.Security?.Board != board)
+				continue;
+
+			if (security is not null && order.Security != security)
+				continue;
+
+			if (securityType is not null && order.Security?.Type != securityType)
+				continue;
+
+			if (transactionId is not null && order.TransactionId != transactionId)
+				continue;
+
+			CancelOrder(order);
+		}
+	}
+
+	void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
+		=> CancelActiveOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
+
+	/// <summary>
+	/// Determines the specified order can be edited by <see cref="EditOrder"/>.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <returns><see langword="true"/> if the order is editable, <see langword="false"/> order cannot be changed, <see langword="null"/> means no information.</returns>
+	public bool? IsOrderEditable(Order order) => _connector?.IsOrderEditable(order);
+
+	/// <summary>
+	/// Determines the specified order can be replaced by <see cref="ReRegisterOrder"/>.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <returns><see langword="true"/> if the order is replaceable, <see langword="false"/> order cannot be replaced, <see langword="null"/> means no information.</returns>
+	public bool? IsOrderReplaceable(Order order) => _connector?.IsOrderReplaceable(order);
+
+	/// <summary>
+	/// Apply an incoming remote command to the strategy.
+	/// </summary>
+	/// <param name="cmdMsg"><see cref="CommandMessage"/>.</param>
+	[Obsolete("Use ApplyCommandAsync method instead.")]
+	public void ApplyCommand(CommandMessage cmdMsg)
+		=> AsyncHelper.Run(() => ApplyCommandAsync(cmdMsg, default));
+
+	/// <summary>
+	/// Apply an incoming remote command to the strategy.
+	/// </summary>
+	/// <param name="cmdMsg"><see cref="CommandMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public virtual async ValueTask ApplyCommandAsync(CommandMessage cmdMsg, CancellationToken cancellationToken)
+	{
+		if (cmdMsg == null)
+			throw new ArgumentNullException(nameof(cmdMsg));
+
+		var parameters = cmdMsg.Parameters;
+
+		switch (cmdMsg.Command)
+		{
+			case CommandTypes.Start:
+			{
+				await StartAsync(cancellationToken);
+				break;
+			}
+
+			case CommandTypes.Stop:
+			{
+				await StopAsync(cancellationToken);
+				break;
+			}
+
+			case CommandTypes.CancelOrders:
+			{
+				CancelActiveOrders();
+				break;
+			}
+
+			case CommandTypes.RegisterOrder:
+			{
+				var secId = parameters.TryGet(nameof(Order.Security));
+				var pfName = parameters.TryGet(nameof(Order.Portfolio));
+				var side = parameters[nameof(Order.Side)].To<Sides>();
+				var volume = parameters[nameof(Order.Volume)].To<decimal>();
+				var price = parameters.TryGet(nameof(Order.Price)).To<decimal?>() ?? 0;
+				var comment = parameters.TryGet(nameof(Order.Comment));
+				var clientCode = parameters.TryGet(nameof(Order.ClientCode));
+				var tif = parameters.TryGet(nameof(Order.TimeInForce)).To<TimeInForce?>();
+
+				var order = new Order
+				{
+					Security = secId.IsEmpty() ? Security : await this.LookupByIdAsync(secId.ToSecurityId(), cancellationToken),
+					Portfolio = pfName.IsEmpty() ? Portfolio : Connector.LookupByPortfolioName(pfName),
+					Side = side,
+					Volume = volume,
+					Price = price,
+					Comment = comment,
+					ClientCode = clientCode,
+					TimeInForce = tif,
+				};
+
+				RegisterOrder(order);
+
+				break;
+			}
+
+			case CommandTypes.CancelOrder:
+			{
+				var orderId = parameters[nameof(Order.Id)].To<long>();
+
+				CancelOrder(Orders.First(o => o.Id == orderId));
+
+				break;
+			}
+
+			case CommandTypes.ClosePosition:
+			{
+				ClosePosition();
+				break;
+			}
+		}
 	}
 }

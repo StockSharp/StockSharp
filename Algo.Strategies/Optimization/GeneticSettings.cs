@@ -7,7 +7,7 @@ using StockSharp.Algo.Statistics;
 /// <summary>
 /// Genetic settings.
 /// </summary>
-public class GeneticSettings : NotifiableObject, IPersistable
+public class GeneticSettings : NotifiableObject, IAsyncPersistable
 {
 	private class ReinsertionItemsSource : ItemsSourceBase<Type>
 	{
@@ -374,7 +374,7 @@ public class GeneticSettings : NotifiableObject, IPersistable
 		}
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Fitness = storage.GetValue(nameof(Fitness), Fitness);
 		Population = storage.GetValue(nameof(Population), Population);
@@ -387,9 +387,11 @@ public class GeneticSettings : NotifiableObject, IPersistable
 		Mutation = storage.GetValue(nameof(Mutation), Mutation);
 		Crossover = storage.GetValue(nameof(Crossover), Crossover);
 		Selection = storage.GetValue(nameof(Selection), Selection);
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Fitness), Fitness)
@@ -404,5 +406,7 @@ public class GeneticSettings : NotifiableObject, IPersistable
 			.Set(nameof(Crossover), Crossover)
 			.Set(nameof(Selection), Selection)
 		;
+
+		return Task.CompletedTask;
 	}
 }

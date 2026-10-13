@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\01_History\SmaStrategy.cs" Link="SmaStrategy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+    <PackageReference Include="StockSharp.Xaml.Charting.Avalonia" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>

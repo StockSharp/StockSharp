@@ -296,9 +296,9 @@ public class SyncDiagramElement : DiagramElement
 	private const string _inKey = "in";
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void LoadState(SettingsStorage storage)
 	{
-		base.Load(storage);
+		base.LoadState(storage);
 
 		foreach (var (input, output) in _map.CopyAndClear())
 		{
@@ -322,9 +322,9 @@ public class SyncDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	protected override void SaveState(SettingsStorage storage)
 	{
-		base.Save(storage);
+		base.SaveState(storage);
 
 		storage.Set(_inKey, _map
 			.Select(p => p.Key)

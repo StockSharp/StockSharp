@@ -288,11 +288,13 @@ public sealed class TransactionOrderingManager : ITransactionOrderingManager
 					}
 				}
 
+				// An order reaching the caller is what lets go of the trades that were held waiting to be
+				// named by it. Which subscriptions happen to be open on this connection does not bear on
+				// that, so every message that is passed on releases them.
+				processSuspended = true;
+
 				if (_transactionLogSubscriptions.Count == 0)
-				{
-					processSuspended = true;
 					break;
-				}
 
 				if (!_transactionLogSubscriptions.TryGetValue(execMsg.OriginalTransactionId, out var subscription))
 				{

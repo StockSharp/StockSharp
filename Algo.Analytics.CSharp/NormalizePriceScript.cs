@@ -7,6 +7,8 @@ public class NormalizePriceScript : IAnalyticsScript
 {
 	async Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken cancellationToken)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		if (securities.Length == 0)
 		{
 			logs.LogWarning("No instruments.");
@@ -18,11 +20,10 @@ public class NormalizePriceScript : IAnalyticsScript
 		var idx = 0;
 		foreach (var security in securities)
 		{
-			// stop calculation if user cancel script execution
-			if (cancellationToken.IsCancellationRequested)
-				break;
+			cancellationToken.ThrowIfCancellationRequested();
 
 			logs.LogInfo("Processing {0} of {1}: {2}...", ++idx, securities.Length, security);
+			cancellationToken.ThrowIfCancellationRequested();
 
 			var series = new Dictionary<DateTime, decimal>();
 
@@ -34,11 +35,14 @@ public class NormalizePriceScript : IAnalyticsScript
 
 			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
 				if (currDate != prevDate)
 				{
 					prevDate = currDate;
 					logs.LogInfo("  {0}...", currDate);
+					cancellationToken.ThrowIfCancellationRequested();
 				}
 
 				firstClose ??= candle.ClosePrice;

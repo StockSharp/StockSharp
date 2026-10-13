@@ -208,18 +208,32 @@ public static partial class TraderHelper
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="security">The instrument that should be checked.</param>
 	/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
+	[Obsolete("Use ContainsAsync method instead.")]
 	public static bool Contains(this BasketSecurity basketSecurity, ISecurityProvider securityProvider, Security security)
+		=> AsyncHelper.Run(() => basketSecurity.ContainsAsync(securityProvider, security, default));
+
+	/// <summary>
+	/// To check whether specified instrument is used now.
+	/// </summary>
+	/// <param name="basketSecurity">Instruments basket.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="security">The instrument that should be checked.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
+	public static async ValueTask<bool> ContainsAsync(this BasketSecurity basketSecurity, ISecurityProvider securityProvider, Security security, CancellationToken cancellationToken)
 	{
 		if (securityProvider is null)
 			return false;
 
-		return basketSecurity.GetInnerSecurities(securityProvider).Any(innerSecurity =>
+		foreach (var innerSecurity in await basketSecurity.GetInnerSecuritiesAsync(securityProvider, cancellationToken))
 		{
-			if (innerSecurity is BasketSecurity basket)
-				return basket.Contains(securityProvider, security);
+			if (innerSecurity is BasketSecurity basket
+				? await basket.ContainsAsync(securityProvider, security, cancellationToken)
+				: innerSecurity == security)
+				return true;
+		}
 
-			return innerSecurity == security;
-		});
+		return false;
 	}
 
 	/// <summary>
@@ -228,7 +242,18 @@ public static partial class TraderHelper
 	/// <param name="security">Instruments basket.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <returns>Instruments, from which this basket is created.</returns>
+	[Obsolete("Use GetInnerSecuritiesAsync method instead.")]
 	public static IEnumerable<Security> GetInnerSecurities(this BasketSecurity security, ISecurityProvider securityProvider)
+		=> AsyncHelper.Run(() => security.GetInnerSecuritiesAsync(securityProvider, default));
+
+	/// <summary>
+	/// Find inner security instances.
+	/// </summary>
+	/// <param name="security">Instruments basket.</param>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Instruments, from which this basket is created.</returns>
+	public static async ValueTask<Security[]> GetInnerSecuritiesAsync(this BasketSecurity security, ISecurityProvider securityProvider, CancellationToken cancellationToken)
 	{
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
@@ -236,9 +261,15 @@ public static partial class TraderHelper
 		if (securityProvider == null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		return [.. security.InnerSecurityIds.Select(id =>
-			securityProvider.LookupById(id) ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id))
-		)];
+		var inner = new List<Security>();
+
+		foreach (var id in security.InnerSecurityIds)
+		{
+			inner.Add(await securityProvider.LookupByIdAsync(id, cancellationToken)
+				?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id)));
+		}
+
+		return [.. inner];
 	}
 
 	/// <summary>
@@ -342,6 +373,24 @@ public static partial class TraderHelper
 		if (getSecurity == null)
 			throw new ArgumentNullException(nameof(getSecurity));
 
+		foreach (var code in FortsJumpCodes(baseCode, from, to))
+		{
+			var security = getSecurity(code);
+
+			if (security == null)
+			{
+				if (throwIfNotExists)
+					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(code));
+
+				continue;
+			}
+
+			yield return security;
+		}
+	}
+
+	private static IEnumerable<string> FortsJumpCodes(string baseCode, DateTime from, DateTime to)
+	{
 		for (var year = from.Year; year <= to.Year; year++)
 		{
 			var monthFrom = year == from.Year ? from.Month : 1;
@@ -370,19 +419,8 @@ public static partial class TraderHelper
 				}
 
 				var yearStr = year.To<string>();
-				var code = baseCode + monthCode + yearStr.Substring(yearStr.Length - 1, 1);
 
-				var security = getSecurity(code);
-
-				if (security == null)
-				{
-					if (throwIfNotExists)
-						throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(code));
-
-					continue;
-				}
-
-				yield return security;
+				yield return baseCode + monthCode + yearStr.Substring(yearStr.Length - 1, 1);
 			}
 		}
 	}
@@ -397,7 +435,22 @@ public static partial class TraderHelper
 	/// <param name="to">The end of the expiration range.</param>
 	/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
 	/// <returns>Expiration instruments.</returns>
+	[Obsolete("Use GetFortsJumpsAsync method instead.")]
 	public static IEnumerable<Security> GetFortsJumps(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
+		=> AsyncHelper.Run(() => continuousSecurity.GetFortsJumpsAsync(provider, baseCode, from, to, throwIfNotExists, default));
+
+	/// <summary>
+	/// To get real expiration instruments for the continuous instrument.
+	/// </summary>
+	/// <param name="continuousSecurity">Continuous security.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="baseCode">The base part of the instrument code.</param>
+	/// <param name="from">The start of the expiration range.</param>
+	/// <param name="to">The end of the expiration range.</param>
+	/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Expiration instruments.</returns>
+	public static async ValueTask<Security[]> GetFortsJumpsAsync(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists, CancellationToken cancellationToken)
 	{
 		if (continuousSecurity == null)
 			throw new ArgumentNullException(nameof(continuousSecurity));
@@ -405,7 +458,32 @@ public static partial class TraderHelper
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(s => s.Code.EqualsIgnoreCase(code)), throwIfNotExists);
+		if (baseCode.IsEmpty())
+			throw new ArgumentNullException(nameof(baseCode));
+
+		if (from > to)
+			throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
+
+		var securities = new List<Security>();
+
+		foreach (var code in FortsJumpCodes(baseCode, from, to))
+		{
+			var security = await provider
+				.LookupByCodeAsync(code)
+				.FirstOrDefaultAsync(s => s.Code.EqualsIgnoreCase(code), cancellationToken);
+
+			if (security == null)
+			{
+				if (throwIfNotExists)
+					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(code));
+
+				continue;
+			}
+
+			securities.Add(security);
+		}
+
+		return [.. securities];
 	}
 
 	/// <summary>
@@ -416,9 +494,23 @@ public static partial class TraderHelper
 	/// <param name="baseCode">The base part of the instrument code.</param>
 	/// <param name="from">The start of the expiration range.</param>
 	/// <param name="to">The end of the expiration range.</param>
+	[Obsolete("Use FillFortsJumpsAsync method instead.")]
 	public static void FillFortsJumps(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to)
+		=> AsyncHelper.Run(() => continuousSecurity.FillFortsJumpsAsync(provider, baseCode, from, to, default));
+
+	/// <summary>
+	/// To fill transitions <see cref="ExpirationContinuousSecurity.ExpirationJumps"/>.
+	/// </summary>
+	/// <param name="continuousSecurity">Continuous security.</param>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="baseCode">The base part of the instrument code.</param>
+	/// <param name="from">The start of the expiration range.</param>
+	/// <param name="to">The end of the expiration range.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public static async ValueTask FillFortsJumpsAsync(this ExpirationContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, CancellationToken cancellationToken)
 	{
-		var securities = continuousSecurity.GetFortsJumps(provider, baseCode, from, to);
+		var securities = await continuousSecurity.GetFortsJumpsAsync(provider, baseCode, from, to, true, cancellationToken);
 
 		foreach (var security in securities)
 		{
@@ -472,12 +564,27 @@ public static partial class TraderHelper
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 	/// <returns>Found instruments.</returns>
+	[Obsolete("Use LookupAsync method instead.")]
 	public static IEnumerable<Security> Lookup(this ISecurityProvider provider, Security criteria)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
 		return provider.Lookup(criteria.ToLookupMessage());
+	}
+
+	/// <summary>
+	/// Lookup securities by criteria <paramref name="criteria" />.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+	/// <returns>Found instruments.</returns>
+	public static IAsyncEnumerable<Security> LookupAsync(this ISecurityProvider provider, Security criteria)
+	{
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupAsync(criteria.ToLookupMessage());
 	}
 
 	/// <summary>
@@ -512,14 +619,25 @@ public static partial class TraderHelper
 	/// <param name="code">Security code.</param>
 	/// <param name="type">Security type.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByCodeAsync method instead.")]
 	public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code, SecurityTypes? type = null)
+		=> provider.LookupByCodeAsync(code, type).ToBlockingEnumerable();
+
+	/// <summary>
+	/// To get the instruments by the instrument code.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="code">Security code.</param>
+	/// <param name="type">Security type.</param>
+	/// <returns>Found instruments, or all of them when neither the code nor the type is given.</returns>
+	public static IAsyncEnumerable<Security> LookupByCodeAsync(this ISecurityProvider provider, string code, SecurityTypes? type = null)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
 		return code.IsEmpty() && type == null
-			? provider.LookupAll()
-			: provider.Lookup(new Security { Code = code, Type = type });
+			? provider.LookupAllAsync()
+			: provider.LookupAsync(new Security { Code = code, Type = type });
 	}
 
 	/// <summary>
@@ -527,6 +645,7 @@ public static partial class TraderHelper
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>All available instruments.</returns>
+	[Obsolete("Use LookupAllAsync method instead.")]
 	public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
 		=> LookupAllAsync(provider).ToBlockingEnumerable();
 
@@ -551,7 +670,23 @@ public static partial class TraderHelper
 	/// <param name="creator">Creator.</param>
 	/// <param name="isNew">Is newly created.</param>
 	/// <returns>Security.</returns>
+	[Obsolete("Use GetOrCreateAsync method instead.")]
 	public static Security GetOrCreate(this ISecurityStorage storage, SecurityId id, Func<string, Security> creator, out bool isNew)
+	{
+		var (security, created) = AsyncHelper.Run(() => storage.GetOrCreateAsync(id, creator, default));
+		isNew = created;
+		return security;
+	}
+
+	/// <summary>
+	/// Get or create (if not exist).
+	/// </summary>
+	/// <param name="storage">Securities meta info storage.</param>
+	/// <param name="id">Security ID.</param>
+	/// <param name="creator">Creator.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Security and the flag whether it was newly created.</returns>
+	public static async ValueTask<(Security security, bool isNew)> GetOrCreateAsync(this ISecurityStorage storage, SecurityId id, Func<string, Security> creator, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -562,21 +697,24 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		using (storage.EnterScope())
-		{
-			var security = storage.LookupById(id);
+		var security = await storage.LookupByIdAsync(id, cancellationToken);
 
-			if (security == null)
-			{
-				security = creator(id.ToStringId());
-				storage.Save(security, false);
-				isNew = true;
-			}
-			else
-				isNew = false;
+		if (security != null)
+			return (security, false);
 
-			return security;
-		}
+		security = creator(id.ToStringId());
+
+		// SaveAsync with forced: false performs an atomic add-if-absent, so a sync lock
+		// is not held across the await (Lock.Scope is monitor based and thread affine).
+		await storage.SaveAsync(security, false, cancellationToken);
+
+		// In case of a concurrent creation, return the canonical stored instance.
+		var stored = await storage.LookupByIdAsync(id, cancellationToken);
+
+		if (stored != null && !ReferenceEquals(stored, security))
+			return (stored, false);
+
+		return (security, true);
 	}
 
 	/// <summary>
@@ -716,9 +854,24 @@ public static partial class TraderHelper
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>Found instance.</returns>
+	[Obsolete("Use GetAllSecurityAsync method instead.")]
 	public static Security GetAllSecurity(this ISecurityProvider provider)
 	{
 		return provider.LookupById(default(SecurityId));
+	}
+
+	/// <summary>
+	/// Find <see cref="EntitiesExtensions.AllSecurity"/> instance in the specified provider.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Found instance.</returns>
+	public static ValueTask<Security> GetAllSecurityAsync(this ISecurityProvider provider, CancellationToken cancellationToken)
+	{
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupByIdAsync(default(SecurityId), cancellationToken);
 	}
 
 	/// <summary>
@@ -868,6 +1021,7 @@ public static partial class TraderHelper
 	/// <param name="security">Basket security.</param>
 	/// <param name="processorProvider">Basket security processors provider.</param>
 	/// <returns>Messages of basket securities.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use the IAsyncEnumerable overload instead.")]
 	public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, Security security, IBasketSecurityProcessorProvider processorProvider)
 		where TMessage : Message
 	{
@@ -890,12 +1044,18 @@ public static partial class TraderHelper
 		if (innerSecMessages is null)
 			throw new ArgumentNullException(nameof(innerSecMessages));
 
-		var processor = processorProvider.CreateProcessor(security);
+		if (processorProvider is null)
+			throw new ArgumentNullException(nameof(processorProvider));
 
-		return Impl(innerSecMessages, processor);
+		if (security is null)
+			throw new ArgumentNullException(nameof(security));
 
-		static async IAsyncEnumerable<TMessage> Impl(IAsyncEnumerable<TMessage> messages, IBasketSecurityProcessor processor, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		return Impl(innerSecMessages, security, processorProvider);
+
+		static async IAsyncEnumerable<TMessage> Impl(IAsyncEnumerable<TMessage> messages, Security security, IBasketSecurityProcessorProvider processorProvider, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
+			var processor = await processorProvider.CreateProcessorAsync(security, cancellationToken);
+
 			await foreach (var msg in messages.WithCancellation(cancellationToken))
 			{
 				foreach (var result in processor.Process(msg))
@@ -913,7 +1073,18 @@ public static partial class TraderHelper
 	/// <param name="processorProvider">Basket security processors provider.</param>
 	/// <param name="security">Basket security.</param>
 	/// <returns>Market data processor for basket securities.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CreateProcessorAsync instead.")]
 	public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, Security security)
+		=> AsyncHelper.Run(() => processorProvider.CreateProcessorAsync(security, default));
+
+	/// <summary>
+	/// Create market data processor for basket securities and prepare it for processing.
+	/// </summary>
+	/// <param name="processorProvider">Basket security processors provider.</param>
+	/// <param name="security">Basket security.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Market data processor for basket securities.</returns>
+	public static async ValueTask<IBasketSecurityProcessor> CreateProcessorAsync(this IBasketSecurityProcessorProvider processorProvider, Security security, CancellationToken cancellationToken)
 	{
 		if (processorProvider == null)
 			throw new ArgumentNullException(nameof(processorProvider));
@@ -921,7 +1092,9 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
+		var processor = processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
+		await processor.InitAsync(cancellationToken);
+		return processor;
 	}
 
 	/// <summary>
@@ -1020,6 +1193,7 @@ public static partial class TraderHelper
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
 	public static ExpressionFormula<decimal> Compile(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
 		=> AsyncContext.Run(() => CompileAsync(expression, fileSystem, tracker, default));
 
@@ -1034,11 +1208,6 @@ public static partial class TraderHelper
 	public static Task<ExpressionFormula<decimal>> CompileAsync(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
 		=> CompileAsync<decimal>(expression, fileSystem, tracker, cancellationToken);
 
-	private static class CacheHolder<TResult>
-	{
-		public static readonly SynchronizedDictionary<string, ExpressionFormula<TResult>> Cache = [];
-	}
-
 	/// <summary>
 	/// Compile mathematical formula.
 	/// </summary>
@@ -1047,6 +1216,7 @@ public static partial class TraderHelper
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
 	public static ExpressionFormula<TResult> Compile<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
 		=> AsyncContext.Run(() => CompileAsync<TResult>(expression, fileSystem, tracker, default));
 
@@ -1059,18 +1229,12 @@ public static partial class TraderHelper
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static async Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
-	{
-		var cache = CacheHolder<TResult>.Cache;
-
-		if (cache.TryGetValue(expression, out var formula))
-			return formula;
-
-		formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
-		cache[expression] = formula;
-
-		return formula;
-	}
+	/// <remarks>
+	/// The formula is loaded into <paramref name="tracker"/> and lives as long as it does, so it is not kept for the next
+	/// caller: what saves compiling the same text again is the registered <see cref="ICompilerCache"/>.
+	/// </remarks>
+	public static Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+		=> CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
 
 	/// <summary>
 	/// Create <see cref="IMessageAdapter"/>.
@@ -1173,8 +1337,8 @@ public static partial class TraderHelper
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 		};
 
-	private static FastCsvReader CreateReader(this byte[] archive, Encoding encoding)
-		=> archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding, false);
+	private static async Task<FastCsvReader> CreateReaderAsync(this byte[] archive, Encoding encoding, CancellationToken cancellationToken)
+		=> (await archive.UncompressAsync<GZipStream>(cancellationToken: cancellationToken)).To<Stream>().CreateCsvReader(encoding, false);
 
 	/// <summary>
 	/// Extract securities from the archive.
@@ -1192,7 +1356,7 @@ public static partial class TraderHelper
 		{
 			var encoding = Encoding.UTF8;
 
-			using var reader = archive.CreateReader(encoding);
+			using var reader = await archive.CreateReaderAsync(encoding, cancellationToken);
 
 			while (await reader.NextLineAsync(cancellationToken))
 			{
@@ -1221,10 +1385,10 @@ public static partial class TraderHelper
 		static async IAsyncEnumerable<BoardMessage> Impl(byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var encoding = Encoding.UTF8;
-			using var reader = archive.CreateReader(encoding);
+			using var reader = await archive.CreateReaderAsync(encoding, cancellationToken);
 
 			while (await reader.NextLineAsync(cancellationToken))
-				yield return reader.ReadBoard(encoding);
+				yield return await reader.ReadBoardAsync(encoding, cancellationToken);
 		}
 	}
 
@@ -1240,7 +1404,7 @@ public static partial class TraderHelper
 	}
 
 	internal static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding, bool leaveOpen = true)
-		=> new(new StreamReader(stream, encoding, leaveOpen: leaveOpen), StringHelper.RN);
+		=> new(stream, encoding, StringHelper.RN, leaveOpen);
 
 	internal static CsvFileWriter CreateCsvWriter(this Stream stream, Encoding encoding = null, bool leaveOpen = true)
 		=> new(new StreamWriter(stream, encoding, leaveOpen: leaveOpen)) { LineSeparator = StringHelper.RN };

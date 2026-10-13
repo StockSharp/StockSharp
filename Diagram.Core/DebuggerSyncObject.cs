@@ -118,9 +118,9 @@ public class DebuggerSyncObject : ViewModelBase
 			CurrentSocket = socket;
 			CurrentElement = socket.Parent;
 
-			_breakAction?.Invoke(this);
-
 			SetIsWaiting(isOnInput, true);
+
+			_breakAction?.Invoke(this);
 
 			_waitOnNext = false;
 			_inputSync.Wait();
@@ -161,9 +161,9 @@ public class DebuggerSyncObject : ViewModelBase
 		CurrentError = error;
 		CurrentElement = element;
 
-		_errorAction?.Invoke(this);
-
 		SetIsWaiting(true, true);
+
+		_errorAction?.Invoke(this);
 
 		_waitOnNext = false;
 		_inputSync.Wait();

@@ -3,12 +3,13 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionOnlineManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
+	/// <summary>
+	/// A subscriber joining a stream that is not itself online yet is acknowledged at once, but goes
+	/// online with the stream, not before it: until the venue has confirmed the shared subscription
+	/// it may still be refused, and "online" followed by an error is not a sequence a caller can act on.
+	/// </summary>
 	[TestMethod]
-	public async Task Subscribe_SecondSubscription_JoinsAndReturnsResponseAndOnline()
+	public async Task Subscribe_SecondSubscription_JoinsAndGoesOnlineWithTheStream()
 	{
 		var logReceiver = new TestReceiver();
 		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
@@ -39,10 +40,17 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var secondResult = await manager.ProcessInMessageAsync(second, token);
 		secondResult.toInner.Length.AssertEqual(0);
-		secondResult.toOut.Length.AssertEqual(2);
 
 		secondResult.toOut.OfType<SubscriptionResponseMessage>().Single().OriginalTransactionId.AssertEqual(2);
-		secondResult.toOut.OfType<SubscriptionOnlineMessage>().Single().OriginalTransactionId.AssertEqual(2);
+		secondResult.toOut.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 2)
+			.AssertEqual(0, "the stream it joined has not been confirmed yet, so neither is it online");
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+
+		var (_, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		extraOut.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 2)
+			.AssertEqual(1, "the joined subscriber goes online when the stream does");
 	}
 
 	[TestMethod]
@@ -79,6 +87,103 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(error, token);
 
 		extraOut.OfType<SubscriptionResponseMessage>().Count(msg => msg.OriginalTransactionId == 2 && msg.Error != null).AssertEqual(1);
+	}
+
+	[TestMethod]
+	public async Task DuplicateSubscriberId_IsRejectedWithoutReplacingOriginal()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var originalSecurity = Helper.CreateSecurityId();
+
+		var (firstInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = originalSecurity,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		firstInner.Length.AssertEqual(1);
+
+		var (duplicateInner, duplicateOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = new SecurityId { SecurityCode = "OTHER", BoardCode = BoardCodes.Test },
+			DataType2 = DataType.Level1,
+		}, token);
+
+		duplicateInner.Length.AssertEqual(0, "a duplicate transaction id must not open another upstream subscription");
+		var error = duplicateOut.OfType<SubscriptionResponseMessage>().Single();
+		error.OriginalTransactionId.AssertEqual(1);
+		error.Error.AssertNotNull();
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		var data = new ExecutionMessage
+		{
+			SecurityId = originalSecurity,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			OriginalTransactionId = 1,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(data, token);
+
+		forward.AssertNotNull("rejecting the duplicate must leave the original subscription registered");
+		((ISubscriptionIdMessage)forward).GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task HistLiveChildUnsubscribe_CancelsItsUpstreamHistoryRequest()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		var (historyInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = logReceiver.CurrentTime.AddDays(-1),
+		}, token);
+
+		historyInner.Length.AssertEqual(1, "the joined subscriber has its own upstream history request");
+
+		var (unsubscribeInner, unsubscribeOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 201,
+			OriginalTransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		unsubscribeOut.Length.AssertEqual(0, "the upstream request owns the unsubscribe response");
+		var unsubscribe = unsubscribeInner.OfType<MarketDataMessage>().Single();
+		unsubscribe.IsSubscribe.AssertFalse();
+		unsubscribe.TransactionId.AssertEqual(201);
+		unsubscribe.OriginalTransactionId.AssertEqual(200);
 	}
 
 	#region Subscription Joining — No Duplicate Inner Requests
@@ -438,6 +543,40 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Unsubscribe_PreservesCurrentRequestTime()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var subscribeTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var unsubscribeTime = subscribeTime.AddMinutes(1);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = subscribeTime,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		var (toInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = unsubscribeTime,
+		}, token);
+
+		toInner.Single().LocalTime.AssertEqual(unsubscribeTime,
+			"The upstream unsubscribe must carry the time of the current command, not the stored opener time");
+	}
+
+	[TestMethod]
 	public async Task MultipleSubscriptions_AllActiveNoneActiveSomeActive()
 	{
 		var logReceiver = new TestReceiver();
@@ -567,7 +706,185 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
 		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
-		((SubscriptionResponseMessage)toOut[0]).Error.AssertNotNull();
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.Error.AssertNotNull();
+		// The error must answer the unsubscribe request itself (TransactionId = 100),
+		// not the non-existent subscription id (999) — otherwise the Connector cannot match it.
+		response.OriginalTransactionId.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public async Task UnsubscribeAfterFinished_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner.Length.AssertEqual(0, "a finished upstream stream has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull();
+	}
+
+	/// <summary>
+	/// A subscription ends with the connection. An unsubscribe that was already on its way when the adapter
+	/// disconnected is answered here: there is nothing left upstream to give up, and it is not an error.
+	/// </summary>
+	[TestMethod]
+	public async Task UnsubscribeAfterDisconnect_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		// A second holder joins the same stream, as two Level1 subscriptions of one strategy do.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 3,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new DisconnectMessage(), token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+
+		toInner.Length.AssertEqual(0, "a stream that ended with the connection has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull("Giving up a subscription that ended with the connection is not an error.");
+	}
+
+	/// <summary>
+	/// After a reconnect subscriptions are opened again under new ids, so only the connection that ended last
+	/// has to be remembered, and the memory does not grow with every reconnect.
+	/// </summary>
+	[TestMethod]
+	public void EndWithConnection_RemembersOnlyTheLastConnection()
+	{
+		var state = new SubscriptionOnlineManagerState();
+		var key = (DataType.Level1, Helper.CreateSecurityId());
+
+		ISubscriptionMessage Request(long id) => new MarketDataMessage { IsSubscribe = true, TransactionId = id, DataType2 = DataType.Level1 };
+
+		state.AddSubscriber(key, 1, Request(1), () => Request(1), out _);
+		state.EndWithConnection();
+
+		state.AddSubscriber(key, 5, Request(5), () => Request(5), out _);
+		state.EndWithConnection();
+
+		state.RemoveEndedWithConnection(1).AssertFalse();
+		state.RemoveEndedWithConnection(5).AssertTrue();
+		state.RemoveEndedWithConnection(5).AssertFalse("an id is answered for once");
+	}
+
+	[TestMethod]
+	public async Task UnsubscribeAfterError_ReturnsNotFoundBecauseTheSubscriptionWasRemoved()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("refused"),
+		}, token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner.Length.AssertEqual(0);
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNotNull("the failed subscription was already removed and must not report a false unsubscribe success");
+	}
+
+	/// <summary>
+	/// The only holder of a stream gives it up before the venue has confirmed it. Answering the
+	/// caller here or passing the unsubscribe on are both defensible; doing neither leaves the
+	/// caller with an unanswered request and the venue still sending a stream nobody holds.
+	/// </summary>
+	[TestMethod]
+	public async Task UnsubscribeLastSubscriber_BeforeConfirmation_IsNotDropped()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		var (toInner1, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner1.Length.AssertEqual(1, "the stream was opened upstream");
+		// no response from the venue yet
+
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		IsTrue(toInner2.Length + toOut2.Length > 0, "an unsubscribe of the last holder must be passed on or answered, not swallowed");
 	}
 
 	#endregion
@@ -1022,6 +1339,77 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		AreEqual(100, info.Subscription.TransactionId, "Subscription TransactionId should match");
 	}
 
+	/// <summary>
+	/// Reproducer for the linkage break observed in MultiConnect/client1 logs:
+	///   Subscribe OrderStatus(Tx=N) → RegisterOrder(Tx=R) → broker sends Active
+	///   ExecutionMessage{ OrigTxId=R, TxId!=0, DataType=Transactions }.
+	///
+	/// On the outgoing OrderRegister, ProcessInMessageAsync calls
+	/// TryAddOrderSubscription → TryAddOrderTransaction(MAIN, R), which adds a
+	/// LINKED copy at <c>_subscriptionsById[R]</c>.
+	///
+	/// Then the incoming Active is looked up by OrigTxId=R and returns the
+	/// LINKED copy (not MAIN). Inside the existing TryAddOrderTransaction call
+	/// at ProcessOutMessageAsync (line 223), <c>statusInfo.Linked.Add</c> is
+	/// called — and SubscriptionInfo.CheckOnLinked() throws because info has
+	/// _main != null.
+	///
+	/// Symptom in MultiConnect log: Order stays Pending despite broker
+	/// confirming Active. After cancel, Order shows as new Done — the user
+	/// reads it as "filled".
+	/// </summary>
+	[TestMethod]
+	public async Task OrderRegister_FollowedByActive_OrigTxIdEqualsRegisterTxId_DoesNotThrow()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		// 1. Subscribe to OrderStatus.
+		await manager.ProcessInMessageAsync(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// 2. Send OrderRegister with TxId=R. ProcessInMessageAsync's switch on
+		// MessageTypes.OrderRegister calls TryAddOrderSubscription → adds a
+		// LINKED entry at _subscriptionsById[R].
+		const long R = 27738195;
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = R,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Volume = 200m,
+			Price = 0.4m,
+			OrderType = OrderTypes.Limit,
+		}, token);
+
+		// 3. Broker responds Active. With OrigTxId=R the lookup at line 216 in
+		// ProcessOutMessageAsync returns the LINKED copy. With TxId!=0, the
+		// branch at line 223 calls TryAddOrderTransaction(LINKED, X), which
+		// then hits statusInfo.Linked.Add → CheckOnLinked → throws.
+		var active = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			OrderId = 4991775493L,
+			OriginalTransactionId = R,
+			TransactionId = R + 1, // upstream-translated id, anything non-zero
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+		};
+
+		// Currently throws InvalidOperationException via CheckOnLinked.
+		// After the fix it must pass through and forward the message.
+		var (forward, _) = await manager.ProcessOutMessageAsync(active, token);
+		forward.AssertNotNull("Active execution must pass through, not be dropped or throw.");
+	}
+
 	#endregion
 
 	#region History+Live Subscription Tests
@@ -1086,6 +1474,10 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var (histForward, _) = await manager.ProcessOutMessageAsync(histData, token);
 		histForward.AssertNotNull("Historical data for second subscription should be forwarded");
+		// History-phase data of the hist+live child (origId = 200) is this subscriber's
+		// private backfill and must carry its own id, not the already-online subscriber's.
+		var histIds = ((ISubscriptionIdMessage)histForward).GetSubscriptionIds();
+		histIds.Count(id => id == 200).AssertEqual(1, "Historical data must be routed to the hist+live subscriber (200), not the online subscriber (100)");
 
 		// Inner adapter finishes history
 		var (finishForward, finishExtra) = await manager.ProcessOutMessageAsync(
@@ -1341,6 +1733,356 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		IsTrue(allMessages.Count > 0,
 			"SubscriptionFinished for hist+live subscription should not be silently swallowed — " +
 			"subscriber needs notification to transition to live");
+	}
+
+	/// <summary>
+	/// The mirror of the hist+live child case: here the shared subscription is the one replaying
+	/// history and a live-only subscriber joins it. Online means the stream has caught up, so a
+	/// subscriber cannot be told it while the stream it joined is still in its history phase; it is
+	/// told when the stream is, by the same promotion that serves every other joiner.
+	/// </summary>
+	[TestMethod]
+	public async Task JoinedLiveSubscriber_GoesOnlineOnlyWhenMainHistoryIsDone()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// Main subscription — hist+live (From set, To null): it replays history, then goes live
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		// no SubscriptionOnline yet — the venue is still replaying history
+
+		// Live-only subscriber joins the same key
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner2.Length.AssertEqual(0, "the joiner reuses the stream that is already open");
+		toOut2.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 101)
+			.AssertEqual(1, "its request is acknowledged at once");
+		toOut2.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 101)
+			.AssertEqual(0, "but the stream it joined is still replaying history, so it is not online");
+
+		var (_, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		extraOut.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 101)
+			.AssertEqual(1, "history is done and the stream is live, so the joiner is online too");
+	}
+
+	/// <summary>
+	/// History belongs to whoever asked for it. A subscriber that asked for live data only must not
+	/// be handed trades from before it subscribed just because the stream it joined happens to be
+	/// replaying them.
+	/// </summary>
+	[TestMethod]
+	public async Task JoinedLiveSubscriber_DoesNotReceiveMainHistory()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// A trade from the main subscription's history phase — years before the joiner asked for anything
+		var histTick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = new DateTime(2023, 1, 2, 12, 0, 0, DateTimeKind.Utc),
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			OriginalTransactionId = 100,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(histTick, token);
+
+		forward.AssertNotNull("the subscriber that asked for the history still gets it");
+
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Count(id => id == 100).AssertEqual(1, "history goes to the subscriber that requested it");
+		ids.Count(id => id == 101).AssertEqual(0, "a live-only subscriber must not be handed another subscription's backfill");
+	}
+
+	/// <summary>
+	/// Orders are a shared stream like any other. One that was asked for from a point in time - the way a
+	/// connection that opens again asks for everything it had before it closed - replays what is newer to
+	/// whoever asked for it. Once that is done the stream is live, and an order goes to everybody on it: to a
+	/// subscriber that joined it as well.
+	/// </summary>
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task JoinedSubscriberOfOrders_ReceivesLiveOrders_OnceTheStreamIsLive(bool isMainHistLive)
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		await manager.ProcessInMessageAsync(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			From = isMainHistLive ? new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc) : null,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		// somebody else asks for orders too, and is joined to the stream that is already open
+		var (toInner, _) = await manager.ProcessInMessageAsync(new OrderStatusMessage { IsSubscribe = true, TransactionId = 101 }, token);
+
+		toInner.Length.AssertEqual(0, "the joiner reuses the stream that is already open");
+
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// an order registered now, which the venue reports under the identifier of its registration
+		var (forward, _) = await manager.ProcessOutMessageAsync(new ExecutionMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 200,
+			OrderId = 1,
+			OrderState = OrderStates.Active,
+			HasOrderInfo = true,
+		}, token);
+
+		forward.AssertNotNull("an order passes through");
+
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+
+		ids.Count(id => id == 100).AssertEqual(1, "the subscriber that opened the stream gets the order");
+		ids.Count(id => id == 101).AssertEqual(1, "a subscriber that joined the stream gets the order once the stream is live");
+	}
+
+	#endregion
+
+	#region Subscription Error Routing Tests
+
+	/// <summary>
+	/// When a hist+live child subscription (From set, To null) joined onto an already-online key
+	/// receives a SubscriptionResponse carrying an Error for its own id, that error must be
+	/// forwarded to the hist+live subscriber itself — it explicitly requested the data, so it
+	/// has to learn that its history failed.
+	///
+	/// In the error branch (SubscriptionOnlineManager.cs ~121-133) the child's id is in
+	/// info.HistLive, so ChangeState returns false and the method exits via the early
+	/// "return (null, [])" — discarding any collected notification. As a result the hist+live
+	/// subscriber (200) never receives a SubscriptionResponse with the error. This test asserts
+	/// the correct behavior and therefore goes RED on the current engine.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task HistLiveChildError_ShouldBeForwardedToHistLiveSubscriber()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pure live, goes online.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live (From set, To null) joined onto the same key.
+		// It lands in HistLive and Subscribers, registered by its own id (200).
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		// Inner adapter reports an error for the hist+live child's history request.
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 200,
+			Error = new InvalidOperationException("history boom"),
+		}, token);
+
+		// The error must reach the hist+live subscriber itself (id 200), not be swallowed.
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Count(m => m.OriginalTransactionId == 200 && m.Error != null)
+			.AssertEqual(1, "Hist+live subscriber (200) must be notified of its own subscription error");
+	}
+
+	/// <summary>
+	/// A hist+live subscription joined onto a key that is already served is still a subscription of
+	/// its own to whoever sent it, and its confirmation is theirs to see: above this manager a
+	/// subscription counts as started from its confirmation and from nothing else, and one that never
+	/// gets it has every row of its history dropped there. The confirmation says nothing of the shared
+	/// stream, which stays as it was.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task HistLiveChildConfirmation_ShouldBeForwardedToHistLiveSubscriber()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Count(m => m.OriginalTransactionId == 200 && m.IsOk())
+			.AssertEqual(1, "Hist+live subscriber (200) must be told its own subscription started");
+
+		// The stream it joined is untouched by that: live data still reaches its first subscriber.
+		var (liveForward, _) = await manager.ProcessOutMessageAsync(new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 200m,
+			TradeVolume = 2m,
+		}, token);
+
+		liveForward.AssertNotNull("Live data should be forwarded");
+		((ISubscriptionIdMessage)liveForward).GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "The first subscriber should still receive live data");
+	}
+
+	/// <summary>
+	/// When a MAIN subscription that has joined subscribers fails, the joined subscribers' ids
+	/// must no longer be routable: the whole key dies and each joined subscriber is notified of
+	/// the error, so a later data message must not be stamped with a stale joined id.
+	///
+	/// In the error branch (SubscriptionOnlineManager.cs ~121) only the main's originTransId is
+	/// removed from _subscriptionsById; the joined subscribers' ids stay there pointing at the
+	/// info that was already removed by key. A subsequent data message carrying the joined id
+	/// (200) still resolves via _subscriptionsById and gets forwarded with that id. This test
+	/// asserts the correct behavior (no forward / no stale id) and therefore goes RED on the
+	/// current engine.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task MainSubscriptionError_JoinedSubscriberIds_NoLongerRoutable()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// Main subscription — pure live, goes online.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription (same key, pure live) joins the main one and is registered by id 200.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// The MAIN subscription (100) fails. The key dies; the joined subscriber (200) is notified.
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 100,
+			Error = new InvalidOperationException("main boom"),
+		}, token);
+
+		// After the failure, a data message carrying the joined subscriber's stale id (200)
+		// must NOT be forwarded — the subscription is gone, so its id must not route anything.
+		var data = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+			OriginalTransactionId = 200,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(data, token);
+
+		// Engine leaks _subscriptionsById[200] -> the message is still forwarded and stamped
+		// with the stale id. Correct behavior: nothing is routed for the dead joined id.
+		forward.AssertNull("Data for a stale joined id of a failed main subscription must not be routed");
 	}
 
 	#endregion

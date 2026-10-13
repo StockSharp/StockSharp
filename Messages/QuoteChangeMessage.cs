@@ -132,14 +132,26 @@ public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMe
 	{
 	}
 
+	// A copy of the book owns its levels, and the quotes a grouped level was built from are part of
+	// those levels: sharing them hands two consumers one set of quotes to write into.
+	private static QuoteChange[] Copy(QuoteChange[] quotes)
+	{
+		var copy = new QuoteChange[quotes.Length];
+
+		for (var i = 0; i < copy.Length; i++)
+			copy[i] = quotes[i].Clone();
+
+		return copy;
+	}
+
 	/// <inheritdoc />
 	public override void CopyTo(QuoteChangeMessage destination)
 	{
 		base.CopyTo(destination);
 
 		destination.SecurityId = SecurityId;
-		destination.Bids = [.. Bids];
-		destination.Asks = [.. Asks];
+		destination.Bids = Copy(Bids);
+		destination.Asks = Copy(Asks);
 		destination.ServerTime = ServerTime;
 		destination.Currency = Currency;
 		destination.BuildFrom = BuildFrom;

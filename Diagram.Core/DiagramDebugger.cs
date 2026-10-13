@@ -381,7 +381,9 @@ public class DiagramDebugger : Disposable, IDebugger
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		var breakPoints = storage.GetValue<SettingsStorage[]>(nameof(Breakpoints));
 
@@ -417,7 +419,7 @@ public class DiagramDebugger : Disposable, IDebugger
 				continue;
 
 			var obj = CreateSocketBreakpoint(socket);
-			obj.Load(breakPoint);
+			await obj.LoadAsync(breakPoint, cancellationToken);
 
 			AddBreak(obj);
 		}
@@ -427,7 +429,9 @@ public class DiagramDebugger : Disposable, IDebugger
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		static Guid[] getElementIds(DiagramElement element)
 		{
@@ -442,15 +446,19 @@ public class DiagramDebugger : Disposable, IDebugger
 			return [.. names];
 		}
 
-		storage.SetValue(nameof(Breakpoints), Breakpoints.Select(breakpoint =>
+		var breakpoints = new List<SettingsStorage>();
+
+		foreach (var breakpoint in Breakpoints)
 		{
-			var storage = breakpoint.Save();
+			var breakpointStorage = await breakpoint.SaveAsync(cancellationToken);
 
-			storage.SetValue("SocketId", breakpoint.Socket.Id);
-			storage.SetValue("ElementIds", getElementIds(breakpoint.Socket.Parent));
+			breakpointStorage.SetValue("SocketId", breakpoint.Socket.Id);
+			breakpointStorage.SetValue("ElementIds", getElementIds(breakpoint.Socket.Parent));
 
-			return storage;
-		}).ToArray());
+			breakpoints.Add(breakpointStorage);
+		}
+
+		storage.SetValue(nameof(Breakpoints), breakpoints.ToArray());
 	}
 
 	private void AddBreak(DiagramSocketBreakpoint breakPoint)

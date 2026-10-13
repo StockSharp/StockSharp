@@ -227,21 +227,21 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 		if (avgPeriod <= 0)
 			avgPeriod = 1;
 
-		var esaMultiplier = 2f / (esaPeriod + 1f);
-		var dMultiplier = 2f / (dPeriod + 1f);
+		var esaMultiplier = 2d / (esaPeriod + 1d);
+		var dMultiplier = 2d / (dPeriod + 1d);
 
 		var baseResIndex = paramIdx * flatCandles.Length;
 
-		float esaSum = 0f;
-		float esaPrev = 0f;
+		double esaSum = 0d;
+		double esaPrev = 0d;
 		var esaFormed = false;
 
-		float dSum = 0f;
-		float dPrev = 0f;
+		double dSum = 0d;
+		double dPrev = 0d;
 		var dCount = 0;
 		var dFormed = false;
 
-		float wt2Sum = 0f;
+		double wt2Sum = 0d;
 		var validWtCount = 0;
 
 		byte prevFormed = 0;
@@ -260,7 +260,7 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 				IsFormed = 0,
 			};
 
-			var capo = (candle.High + candle.Low + candle.Close) / 3f;
+			var capo = ((double)candle.High + candle.Low + candle.Close) / 3d;
 
 			byte curFormed = 0;
 
@@ -280,7 +280,7 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 
 			if (esaFormed)
 			{
-				var absDiff = MathF.Abs(capo - esaPrev);
+				var absDiff = Math.Abs(capo - esaPrev);
 
 				if (!dFormed)
 				{
@@ -299,12 +299,12 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 
 				if (dFormed)
 				{
-					var denom = 0.015f * dPrev;
+					var denom = 0.015d * dPrev;
 					var diff = capo - esaPrev;
-					var wt1 = denom != 0f ? diff / denom : 0f;
-					result.Wt1 = wt1;
+					var wt1 = denom != 0d ? diff / denom : 0d;
+					result.Wt1 = (float)wt1;
 
-					wt2Sum += wt1;
+					wt2Sum += result.Wt1;
 					validWtCount++;
 
 					if (validWtCount > avgPeriod)
@@ -316,7 +316,7 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 						validWtCount--;
 					}
 
-					result.Wt2 = wt2Sum / avgPeriod;
+					result.Wt2 = (float)(wt2Sum / avgPeriod);
 					curFormed = 1;
 				}
 			}

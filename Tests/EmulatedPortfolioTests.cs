@@ -11,7 +11,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_SetsName()
 	{
-		var portfolio = new EmulatedPortfolio("TestPortfolio");
+		var portfolio = new EmulatedPortfolio("TestPortfolio", NoMarkPrices.Instance);
 
 		AreEqual("TestPortfolio", portfolio.Name);
 	}
@@ -19,13 +19,13 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_NullName_ThrowsArgumentNullException()
 	{
-		Throws<ArgumentNullException>(() => new EmulatedPortfolio(null));
+		Throws<ArgumentNullException>(() => new EmulatedPortfolio(null, NoMarkPrices.Instance));
 	}
 
 	[TestMethod]
 	public void SetMoney_SetsBeginMoney()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 
 		portfolio.SetMoney(10000m);
 
@@ -37,7 +37,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void InitialState_AllZero()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 
 		AreEqual(0m, portfolio.BeginMoney);
 		AreEqual(0m, portfolio.CurrentMoney);
@@ -55,7 +55,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void SetPosition_CreatesNewPosition()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -71,7 +71,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void SetPosition_UpdatesExistingPosition()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -85,7 +85,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetPosition_NonExisting_ReturnsNull()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		var pos = portfolio.GetPosition(secId);
@@ -96,7 +96,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetPositions_ReturnsAllPositions()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId1 = CreateSecId();
 		var secId2 = CreateSecId();
 
@@ -111,7 +111,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetAllPositions_ReturnsPositionInfos()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -129,7 +129,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_OpenLongPosition_UpdatesPositionAndAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -144,7 +144,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_OpenShortPosition_UpdatesPositionAndAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -159,7 +159,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_IncreaseLongPosition_RecalculatesAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -177,7 +177,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_IncreaseShortPosition_RecalculatesAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -199,7 +199,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseLongPosition_CalculatesRealizedPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -217,7 +217,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseLongPosition_WithLoss()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -235,7 +235,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseShortPosition_CalculatesRealizedPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -252,7 +252,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseShortPosition_WithLoss()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -269,7 +269,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_PartialCloseLongPosition_CalculatesPartialPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -292,7 +292,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_FlipLongToShort_ClosesAndOpensNew()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -311,7 +311,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_FlipShortToLong_ClosesAndOpensNew()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -334,7 +334,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_WithCommission_UpdatesCommission()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -347,7 +347,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleCommissions_Accumulates()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -363,7 +363,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void CurrentMoney_IncludesPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -381,7 +381,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderRegistration_BlocksFunds()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -394,7 +394,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderRegistration_MultipleBuyOrders_BlocksSum()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -409,7 +409,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderCancellation_UnblocksFunds()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -423,7 +423,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderCancellation_PartialCancel_UnblocksPartially()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -437,7 +437,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_AfterRegistration_UpdatesBlockedCorrectly()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -452,6 +452,169 @@ public class EmulatedPortfolioTests : BaseTestClass
 		var pos = portfolio.GetPosition(secId);
 		IsNotNull(pos);
 		AreEqual(0m, pos.TotalBidsVolume);
+		AreEqual(1000m, portfolio.BlockedMoney);
+		AreEqual(9000m, portfolio.AvailableMoney);
+	}
+
+	// Two buys at different prices: the filled one releases what it blocked and so does the cancelled one,
+	// so the block left over is the open position plus the order still outstanding, and nothing once flat.
+	[TestMethod]
+	public void ProcessTrade_FillOneOfTwoBuysThenCancelOther_ReleasesEachAtItsOwnPrice()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		// Buy 1 at 100
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 100m);
+		AreEqual(100m, portfolio.BlockedMoney);
+
+		// Buy 1 at 200
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 200m);
+		AreEqual(300m, portfolio.BlockedMoney);
+
+		// The 200 order fills: it blocked 200 and releases 200, leaving the 100 order blocked
+		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m, marginPrice: 200m);
+
+		// Position 1 at 200 = 200, plus the outstanding buy of 100
+		AreEqual(300m, portfolio.BlockedMoney);
+
+		// The 100 order is cancelled: only the position stays blocked
+		portfolio.ProcessOrderCancellation(secId, Sides.Buy, 1m, 100m);
+
+		AreEqual(200m, portfolio.BlockedMoney);
+
+		// Close the position out through a registered sell
+		portfolio.ProcessOrderRegistration(secId, Sides.Sell, 1m, 250m);
+		// Long position 200 against a sell order of 250 - the larger of the two
+		AreEqual(250m, portfolio.BlockedMoney);
+
+		portfolio.ProcessTrade(secId, Sides.Sell, 250m, 1m, marginPrice: 250m);
+
+		// No position and no orders
+		AreEqual(0m, portfolio.BlockedMoney);
+		// PnL = (250 - 200) * 1 = 50
+		AreEqual(10050m, portfolio.AvailableMoney);
+	}
+
+	// The same on the sell side: filling one ask and cancelling the other must leave the short position
+	// blocked and nothing more, and nothing at all once the position is bought back.
+	[TestMethod]
+	public void ProcessTrade_FillOneOfTwoSellsThenCancelOther_ReleasesEachAtItsOwnPrice()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		// Sell 1 at 100
+		portfolio.ProcessOrderRegistration(secId, Sides.Sell, 1m, 100m);
+		AreEqual(100m, portfolio.BlockedMoney);
+
+		// Sell 1 at 200
+		portfolio.ProcessOrderRegistration(secId, Sides.Sell, 1m, 200m);
+		AreEqual(300m, portfolio.BlockedMoney);
+
+		// The 100 order fills: it blocked 100 and releases 100, leaving the 200 order blocked
+		portfolio.ProcessTrade(secId, Sides.Sell, 100m, 1m, marginPrice: 100m);
+
+		// Position -1 at 100 = 100, plus the outstanding sell of 200
+		AreEqual(300m, portfolio.BlockedMoney);
+
+		// The 200 order is cancelled: only the position stays blocked
+		portfolio.ProcessOrderCancellation(secId, Sides.Sell, 1m, 200m);
+
+		AreEqual(100m, portfolio.BlockedMoney);
+
+		// Buy the short back through a registered order
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 80m);
+		// Short position 100 against a buy order of 80 - the larger of the two
+		AreEqual(100m, portfolio.BlockedMoney);
+
+		portfolio.ProcessTrade(secId, Sides.Buy, 80m, 1m, marginPrice: 80m);
+
+		// No position and no orders
+		AreEqual(0m, portfolio.BlockedMoney);
+		// PnL = (80 - 100) * 1 * -1 = 20
+		AreEqual(10020m, portfolio.AvailableMoney);
+	}
+
+	// A fill that covers part of one of two buys releases only the part that traded, at that order's price,
+	// so the untouched order and the remainder of the filled one stay blocked for what they are worth.
+	[TestMethod]
+	public void ProcessTrade_PartialFillOfOneOfTwoBuys_ReleasesOnlyFilledPart()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		// Buy 2 at 100
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 2m, 100m);
+		AreEqual(200m, portfolio.BlockedMoney);
+
+		// Buy 2 at 200
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 2m, 200m);
+		AreEqual(600m, portfolio.BlockedMoney);
+
+		// Half of the 200 order fills
+		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m, marginPrice: 200m);
+
+		// Position 1 at 200 = 200, plus 1 left at 200 and 2 at 100 still outstanding
+		AreEqual(600m, portfolio.BlockedMoney);
+
+		// The rest of the 200 order is cancelled
+		portfolio.ProcessOrderCancellation(secId, Sides.Buy, 1m, 200m);
+
+		// Position 200 plus the 2 at 100 still outstanding
+		AreEqual(400m, portfolio.BlockedMoney);
+
+		// And the 100 order too
+		portfolio.ProcessOrderCancellation(secId, Sides.Buy, 2m, 100m);
+
+		AreEqual(200m, portfolio.BlockedMoney);
+
+		// Close the position out through a registered sell
+		portfolio.ProcessOrderRegistration(secId, Sides.Sell, 1m, 210m);
+		AreEqual(210m, portfolio.BlockedMoney);
+
+		portfolio.ProcessTrade(secId, Sides.Sell, 210m, 1m, marginPrice: 210m);
+
+		// No position and no orders
+		AreEqual(0m, portfolio.BlockedMoney);
+		// PnL = (210 - 200) * 1 = 10
+		AreEqual(10010m, portfolio.AvailableMoney);
+	}
+
+	[TestMethod]
+	public void ProcessTrade_BetterExecution_ReleasesTheOrderReservation()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 2m, 100m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 90m, 1m, marginPrice: 100m);
+
+		var position = portfolio.GetPosition(secId);
+		AreEqual(1m, position.TotalBidsVolume);
+		AreEqual(100m, position.TotalBidsValue,
+			"the unfilled lot keeps one reservation at the order price");
+	}
+
+	[TestMethod]
+	public void ProcessTrade_WithoutMarginPrice_PreservesAggregateReservation()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 100m);
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 200m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 90m, 1m);
+
+		var position = portfolio.GetPosition(secId);
+		AreEqual(1m, position.TotalBidsVolume);
+		AreEqual(150m, position.TotalBidsValue,
+			"without an order identity the public API releases the aggregate average reservation");
 	}
 
 	#endregion
@@ -489,7 +652,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_ZeroVolume_NoChange()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -502,7 +665,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleTrades_AccumulatesPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -520,7 +683,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleSecurities_TrackedSeparately()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId1 = CreateSecId();
 		var secId2 = CreateSecId();
@@ -574,6 +737,22 @@ public class EmulatedPortfolioManagerTests : BaseTestClass
 		var portfolio2 = manager.GetPortfolio("Test2");
 
 		AreNotSame(portfolio1, portfolio2);
+	}
+
+	[TestMethod]
+	public void GetPortfolio_NameInAnotherCase_ReturnsSame()
+	{
+		var manager = new EmulatedPortfolioManager();
+
+		AreSame(manager.GetPortfolio("Test"), manager.GetPortfolio("TEST"));
+	}
+
+	[TestMethod]
+	public void GetPortfolio_NameWithAnInvisibleCharacter_ReturnsDifferent()
+	{
+		var manager = new EmulatedPortfolioManager();
+
+		AreNotSame(manager.GetPortfolio("Test"), manager.GetPortfolio("Te\u00ADst"));
 	}
 
 	[TestMethod]

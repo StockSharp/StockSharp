@@ -75,21 +75,21 @@ public class MovingAverageConvergenceDivergence : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		LongMa.LoadIfNotNull(storage, nameof(LongMa));
-		ShortMa.LoadIfNotNull(storage, nameof(ShortMa));
+		await LongMa.LoadIfNotNullAsync(storage, nameof(LongMa), cancellationToken);
+		await ShortMa.LoadIfNotNullAsync(storage, nameof(ShortMa), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(LongMa), LongMa.Save());
-		storage.SetValue(nameof(ShortMa), ShortMa.Save());
+		storage.SetValue(nameof(LongMa), await LongMa.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(ShortMa), await ShortMa.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />

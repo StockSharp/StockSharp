@@ -268,6 +268,8 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// <summary>
 	/// Create a copy of <see cref="Level1ExtendBuilderAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new Level1ExtendBuilderAdapter(InnerAdapter.TypedClone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new Level1ExtendBuilderAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 }

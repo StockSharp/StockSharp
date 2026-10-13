@@ -1,8 +1,9 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.PnL;
+using StockSharp.Algo.PositionManagement;
+using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
-using StockSharp.Algo.Strategies.Decomposed;
 
 [TestClass]
 public class StrategyDecomposedTests : BaseTestClass
@@ -14,6 +15,12 @@ public class StrategyDecomposedTests : BaseTestClass
 		private long _nextId = 1000;
 
 		public DateTime CurrentTime { get; set; } = DateTime.UtcNow;
+
+		public string StrategyId { get; set; } = "test";
+
+		public bool HasPositions { get; set; }
+
+		public bool CanRefreshPnL(DateTime time) => true;
 
 		public List<Message> SentMessages { get; } = [];
 
@@ -28,9 +35,271 @@ public class StrategyDecomposedTests : BaseTestClass
 		public long GetNextTransactionId() => Interlocked.Increment(ref _nextId);
 	}
 
+	private sealed class ThrowOnStartStrategy : Strategy
+	{
+		public Exception StartError { get; } = new InvalidOperationException("start failed");
+
+		protected override void OnStarted2(DateTime time)
+			=> throw StartError;
+	}
+
+	private sealed class AwaitableStateStrategy : Strategy
+	{
+		public TaskCompletionSource HookEntered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		public TaskCompletionSource HookRelease { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		protected override async ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
+		{
+			await base.OnStateChangedAsync(state, cancellationToken);
+
+			if (state != ProcessStates.Started)
+				return;
+
+			HookEntered.TrySetResult();
+			await HookRelease.Task.WaitAsync(cancellationToken);
+		}
+	}
+
+	private sealed class SelfStoppingStrategy : Strategy
+	{
+		public void AskToStop() => RequestStop();
+
+		public void AskToStop(Exception error) => RequestStop(error);
+
+		public string WhyItCannotTrade()
+		{
+			CanTrade(Security, Portfolio, Sides.Buy, 1, out var reason);
+			return reason;
+		}
+	}
+
+	private sealed class ExposedConnector : Connector
+	{
+		public ValueTask ProcessOutAsync(Message message, CancellationToken cancellationToken)
+			=> OnProcessMessage(message, cancellationToken);
+	}
+
 	#endregion
 
 	#region StrategyEngine tests
+
+	[TestMethod]
+	public void Strategy_StopWithError_UsesCanonicalErrorPipeline()
+	{
+		var strategy = new Strategy();
+		var error = new InvalidOperationException("stop failed");
+		var reportedErrors = new List<Exception>();
+
+		strategy.Error += (_, reportedError) => reportedErrors.Add(reportedError);
+
+#pragma warning disable CS0618 // The synchronous compatibility overload is the subject of this test.
+		strategy.Stop(error);
+#pragma warning restore CS0618
+
+		reportedErrors.Count.AreEqual(1);
+		reportedErrors[0].AssertSame(error);
+		strategy.LastError.AssertSame(error);
+	}
+
+	[TestMethod]
+	public async Task Strategy_StopAsyncWithNullError_ThrowsArgumentNullException()
+	{
+		var strategy = new Strategy();
+
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
+			await strategy.StopAsync(null));
+	}
+
+	[TestMethod]
+	public async Task Strategy_StartHookError_IsReportedOnce()
+	{
+		var strategy = new ThrowOnStartStrategy
+		{
+			Connector = CreateMockConnector().Object,
+		};
+		var reportedErrors = new List<Exception>();
+
+		strategy.Error += (_, reportedError) => reportedErrors.Add(reportedError);
+
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		reportedErrors.Count.AreEqual(1);
+		reportedErrors[0].AssertSame(strategy.StartError);
+		strategy.LastError.AssertSame(strategy.StartError);
+	}
+
+	[TestMethod]
+	public async Task Strategy_OnNewMessage_AwaitsAsyncStateHook()
+	{
+		var strategy = new AwaitableStateStrategy
+		{
+			Connector = CreateMockConnector().Object,
+		};
+		var engineStateChanged = 0;
+		var strategyStateChanged = 0;
+
+		strategy.Engine.StateChanged += _ => engineStateChanged++;
+		strategy.ProcessStateChanged += _ => strategyStateChanged++;
+
+		var transition = strategy
+			.OnNewMessage(
+				new StrategyEngine.StrategyStateMessage(strategy.Id.To<string>(), ProcessStates.Started),
+				CancellationToken)
+			.AsTask();
+
+		await strategy.HookEntered.Task.WaitAsync(CancellationToken);
+
+		IsFalse(transition.IsCompleted);
+		engineStateChanged.AreEqual(0);
+		strategyStateChanged.AreEqual(0);
+
+		strategy.HookRelease.TrySetResult();
+		await transition;
+
+		engineStateChanged.AreEqual(1);
+		strategyStateChanged.AreEqual(1);
+	}
+
+	/// <summary>
+	/// A strategy on a connector that hands every outgoing message straight back to it, the way the
+	/// message loop of a connector does.
+	/// </summary>
+	private static SelfStoppingStrategy CreateSelfStoppingStrategy()
+	{
+		var strategy = new SelfStoppingStrategy
+		{
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+		};
+
+		var connector = CreateMockConnector();
+		connector
+			.Setup(c => c.SendOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.Returns((Message message, CancellationToken token) => strategy.OnNewMessage(message, token));
+
+		strategy.Connector = connector.Object;
+
+		return strategy;
+	}
+
+	private static TimeMessage NextConnectorMessage() => new() { ServerTime = DateTime.UtcNow };
+
+	/// <summary>
+	/// A strategy is stopped by <see cref="Strategy.StopAsync(CancellationToken)"/>, which has to be awaited.
+	/// The handlers of market data and orders are synchronous and cannot await it, so they ask for the stop
+	/// instead: the request returns at once and the strategy carries it out when the connector hands it
+	/// the next message.
+	/// </summary>
+	[TestMethod]
+	public async Task Strategy_RequestStop_IsCarriedOutWithTheNextConnectorMessage()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.ProcessState.AssertEqual(ProcessStates.Started);
+
+		strategy.AskToStop();
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "the request does not wait, so it cannot have stopped the strategy yet");
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped, "the strategy has to stop when it handles the next message");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_RefusesNewOrdersAtOnce()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+
+		strategy.AskToStop();
+
+		strategy.WhyItCannotTrade().AssertEqual("Strategy is stopping.",
+			"orders have to be refused from the request on, not from the moment the stop is carried out");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_ReportsTheErrorThatCausedIt()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+		var reported = new List<Exception>();
+		strategy.Error += (_, error) => reported.Add(error);
+
+		await strategy.StartAsync(CancellationToken);
+
+		var cause = new InvalidOperationException("the handler cannot go on");
+		strategy.AskToStop(cause);
+
+		reported.Count.AssertEqual(1, "the error has to be reported when the stop is asked for");
+		reported[0].AssertSame(cause);
+		strategy.LastError.AssertSame(cause);
+		strategy.ProcessState.AssertEqual(ProcessStates.Started);
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+		reported.Count.AssertEqual(1, "carrying the stop out must not report the error again");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_IsCarriedOutOnce()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+		var states = new List<ProcessStates>();
+		strategy.ProcessStateChanged += _ => states.Add(strategy.ProcessState);
+
+		await strategy.StartAsync(CancellationToken);
+
+		strategy.AskToStop();
+		strategy.AskToStop();
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		states.Count(s => s == ProcessStates.Stopping).AssertEqual(1, "two requests are one stop");
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_LeftFromAPreviousRun_DoesNotStopTheNextOne()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.AskToStop();
+
+		// the engine is told to stop directly, so no message of the connector has carried the request out
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopped), CancellationToken);
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+
+		var states = new List<ProcessStates>();
+		strategy.ProcessStateChanged += _ => states.Add(strategy.ProcessState);
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "a request made in the previous run must not reach the next one");
+		strategy.WhyItCannotTrade().AssertNotEqual("Strategy is stopping.", "the new run is not stopping");
+		states.ToArray().AssertEqual(new[] { ProcessStates.Started }, "the new run must only have started");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_OnAStoppedStrategy_DoesNothing()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		strategy.AskToStop();
+
+		strategy.WhyItCannotTrade().AssertNotEqual("Strategy is stopping.", "a strategy that is not running has no stop to wait for");
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "there was nothing to stop when the request was made");
+	}
 
 	[TestMethod]
 	public async Task StrategyEngine_RequestStart_SendsStartedMessage()
@@ -44,7 +313,69 @@ public class StrategyDecomposedTests : BaseTestClass
 		host.SentMessages.Count.AreEqual(1);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
 		msg.RequestedState.AreEqual(ProcessStates.Started);
+	}
+
+	[TestMethod]
+	public async Task StrategyEngine_StateMessages_AreScopedToOriginatingStrategy()
+	{
+		var firstHost = new FakeHost { StrategyId = "first" };
+		var secondHost = new FakeHost { StrategyId = "second" };
+		var first = new StrategyEngine(firstHost, new PnLManager());
+		var second = new StrategyEngine(secondHost, new PnLManager());
+
+		await first.RequestStartAsync(default);
+
+		var message = firstHost.SentMessages.Single() as StrategyEngine.StrategyStateMessage;
+		IsNotNull(message);
+		message.StrategyId.AreEqual(firstHost.StrategyId);
+
+		await first.OnMessageAsync(message, CancellationToken);
+		await second.OnMessageAsync(message, CancellationToken);
+
+		first.ProcessState.AreEqual(ProcessStates.Started);
+		second.ProcessState.AreEqual(ProcessStates.Stopped);
+
+		message.LocalTime = DateTime.UtcNow;
+		var clone = message.Clone() as StrategyEngine.StrategyStateMessage;
+		IsNotNull(clone);
+		clone.StrategyId.AreEqual(message.StrategyId);
+		clone.RequestedState.AreEqual(message.RequestedState);
+		clone.LocalTime.AreEqual(message.LocalTime);
+	}
+
+	[TestMethod]
+	public async Task Connector_StateMessage_AwaitsEveryStrategyHandler()
+	{
+		using var connector = new ExposedConnector();
+		using var owner = new AwaitableStateStrategy { Connector = connector };
+		using var foreign = new Strategy { Connector = connector };
+
+		await connector.ProcessOutAsync(
+			new StrategyEngine.StrategyStateMessage(ProcessStates.Started),
+			CancellationToken);
+		owner.ProcessState.AreEqual(ProcessStates.Stopped);
+		foreign.ProcessState.AreEqual(ProcessStates.Stopped);
+
+		var message = new StrategyEngine.StrategyStateMessage(owner.Id.To<string>(), ProcessStates.Started);
+		var dispatch = connector.ProcessOutAsync(message, CancellationToken).AsTask();
+
+		await owner.HookEntered.Task.WaitAsync(CancellationToken);
+
+		try
+		{
+			dispatch.IsCompleted.AssertFalse("Connector completed before the owning strategy's async state hook.");
+			foreign.ProcessState.AreEqual(ProcessStates.Stopped);
+		}
+		finally
+		{
+			owner.HookRelease.TrySetResult();
+			await dispatch;
+		}
+
+		owner.ProcessState.AreEqual(ProcessStates.Started);
+		foreign.ProcessState.AreEqual(ProcessStates.Stopped);
 	}
 
 	[TestMethod]
@@ -55,20 +386,26 @@ public class StrategyDecomposedTests : BaseTestClass
 		var engine = new StrategyEngine(host, pnl);
 
 		await engine.RequestStartAsync(default);
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		engine.ProcessState.AreEqual(ProcessStates.Started);
 
 		host.SentMessages.Clear();
 		await engine.RequestStopAsync(default);
 
-		host.SentMessages.Count.AreEqual(1);
+		host.SentMessages.Count.AreEqual(2);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
 		msg.RequestedState.AreEqual(ProcessStates.Stopping);
+
+		msg = host.SentMessages[1] as StrategyEngine.StrategyStateMessage;
+		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
+		msg.RequestedState.AreEqual(ProcessStates.Stopped);
 	}
 
 	[TestMethod]
-	public void StrategyEngine_OnMessage_StateTransition_StoppedToStarted()
+	public async Task StrategyEngine_OnMessage_StateTransition_StoppedToStarted()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
@@ -77,33 +414,33 @@ public class StrategyDecomposedTests : BaseTestClass
 		ProcessStates? receivedState = null;
 		engine.StateChanged += s => receivedState = s;
 
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		engine.ProcessState.AreEqual(ProcessStates.Started);
 		receivedState.AreEqual(ProcessStates.Started);
 	}
 
 	[TestMethod]
-	public void StrategyEngine_OnMessage_StateTransition_StartedToStopping()
+	public async Task StrategyEngine_OnMessage_StateTransition_StartedToStopping()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
 		var engine = new StrategyEngine(host, pnl);
 
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		engine.ProcessState.AreEqual(ProcessStates.Started);
 
 		ProcessStates? receivedState = null;
 		engine.StateChanged += s => receivedState = s;
 
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 
 		engine.ProcessState.AreEqual(ProcessStates.Stopping);
 		receivedState.AreEqual(ProcessStates.Stopping);
 	}
 
 	[TestMethod]
-	public void StrategyEngine_OnMessage_Level1_UpdatesCurrentPrice()
+	public async Task StrategyEngine_OnMessage_Level1_UpdatesCurrentPrice()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
@@ -126,7 +463,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 		msg.Add(Level1Fields.LastTradePrice, 100m);
 
-		engine.OnMessage(msg);
+		await engine.OnMessageAsync(msg, CancellationToken);
 
 		IsTrue(updatedSecId.HasValue);
 		updatedSecId.Value.AreEqual(secId);
@@ -134,7 +471,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StrategyEngine_OnMessage_CandleUpdates_CurrentPrice()
+	public async Task StrategyEngine_OnMessage_CandleUpdates_CurrentPrice()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
@@ -160,7 +497,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			LowPrice = 45m,
 		};
 
-		engine.OnMessage(msg);
+		await engine.OnMessageAsync(msg, CancellationToken);
 
 		IsTrue(updatedSecId.HasValue);
 		updatedSecId.Value.AreEqual(secId);
@@ -180,13 +517,13 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StrategyEngine_ForceStop_ResetsState()
+	public async Task StrategyEngine_ForceStop_ResetsState()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
 		var engine = new StrategyEngine(host, pnl);
 
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		engine.ProcessState.AreEqual(ProcessStates.Started);
 
 		engine.ForceStop();
@@ -223,6 +560,19 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		pipeline.TryAttach(order).AssertTrue();
 		pipeline.TryAttach(order).AssertFalse();
+	}
+
+	[TestMethod]
+	public void OrderPipeline_TracksOrdersByReference()
+	{
+		using var stats = new StatisticManager();
+		var pipeline = new OrderPipeline(stats);
+		var tracked = new Order { TransactionId = 42 };
+		var duplicate = new Order { TransactionId = tracked.TransactionId };
+
+		pipeline.TryAttach(tracked).AssertTrue();
+		pipeline.IsTracked(tracked).AssertTrue();
+		pipeline.IsTracked(duplicate).AssertFalse();
 	}
 
 	[TestMethod]
@@ -290,24 +640,6 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderPipeline_CancelAll_MarksAllCanceled()
-	{
-		using var stats = new StatisticManager();
-		var pipeline = new OrderPipeline(stats);
-
-		var order1 = new Order { TransactionId = 1, State = OrderStates.Active };
-		var order2 = new Order { TransactionId = 2, State = OrderStates.Active };
-
-		pipeline.TryAttach(order1);
-		pipeline.TryAttach(order2);
-
-		pipeline.CancelAll();
-
-		pipeline.IsTracked(order1).AssertTrue();
-		pipeline.IsTracked(order2).AssertTrue();
-	}
-
-	[TestMethod]
 	public void OrderPipeline_Commission_AccumulatesFromOrders()
 	{
 		using var stats = new StatisticManager();
@@ -359,7 +691,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m);
 
@@ -377,7 +709,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m);
 
@@ -390,7 +722,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade1 = CreateMyTrade(1, 100m, 10m, commission: 2m);
 		var trade2 = CreateMyTrade(2, 101m, 5m, commission: 3m);
@@ -406,7 +738,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade1 = CreateMyTrade(1, 100m, 10m, slippage: 0.5m);
 		var trade2 = CreateMyTrade(2, 101m, 5m, slippage: 0.3m);
@@ -422,7 +754,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m, commission: 2m);
 		pipeline.TryAdd(trade);
@@ -432,6 +764,275 @@ public class StrategyDecomposedTests : BaseTestClass
 		IsNull(pipeline.Commission);
 		IsNull(pipeline.Slippage);
 		pipeline.MyTrades.Any().AssertFalse();
+	}
+
+	// Wraps a real PnL manager so one stage of the trade pipeline can be made to fail for a single
+	// delivery and the very same trade then redelivered.
+	private sealed class FailingPnLManager(IPnLManager inner) : IPnLManager
+	{
+		private readonly IPnLManager _inner = inner ?? throw new ArgumentNullException(nameof(inner));
+
+		public bool FailUpdateSecurity { get; set; }
+		public bool FailProcessTrade { get; set; }
+
+		// Fills the manager actually took in - a redelivery it recognises as already valued does not count.
+		public int FillsTaken { get; private set; }
+
+		public decimal RealizedPnL => _inner.RealizedPnL;
+
+		public decimal UnrealizedPnL => _inner.UnrealizedPnL;
+
+		public void Reset() => _inner.Reset();
+
+		public void UpdateSecurity(Level1ChangeMessage l1Msg)
+		{
+			if (FailUpdateSecurity)
+				throw new InvalidOperationException("security feed failed");
+
+			_inner.UpdateSecurity(l1Msg);
+		}
+
+		public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios = null)
+		{
+			var isFill = message is ExecutionMessage { TradeId: not null };
+
+			if (isFill && FailProcessTrade)
+				throw new InvalidOperationException("pnl failed");
+
+			var info = _inner.ProcessMessage(message, changedPortfolios);
+
+			if (isFill && info is not null)
+				FillsTaken++;
+
+			return info;
+		}
+
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
+
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
+
+		public ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken) => _inner.CloneAsync(cancellationToken);
+	}
+
+	// The same idea for the statistics stage, which runs last.
+	private sealed class FailingStatisticManager(IStatisticManager inner) : IStatisticManager
+	{
+		private readonly IStatisticManager _inner = inner ?? throw new ArgumentNullException(nameof(inner));
+
+		public bool FailAddMyTrade { get; set; }
+
+		public int MyTradesAdded { get; private set; }
+
+		public IStatisticParameter[] Parameters => _inner.Parameters;
+
+		public void AddPnL(DateTime time, decimal pnl, decimal? commission) => _inner.AddPnL(time, pnl, commission);
+
+		public void AddPosition(DateTime time, decimal position) => _inner.AddPosition(time, position);
+
+		public void AddMyTrade(PnLInfo info)
+		{
+			if (FailAddMyTrade)
+				throw new InvalidOperationException("statistics failed");
+
+			_inner.AddMyTrade(info);
+			MyTradesAdded++;
+		}
+
+		public void AddNewOrder(Order order) => _inner.AddNewOrder(order);
+
+		public void AddChangedOrder(Order order) => _inner.AddChangedOrder(order);
+
+		public void AddRegisterFailedOrder(OrderFail fail) => _inner.AddRegisterFailedOrder(fail);
+
+		public void AddFailedOrderCancel(OrderFail fail) => _inner.AddFailedOrderCancel(fail);
+
+		public void Reset() => _inner.Reset();
+
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
+
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
+
+		public void Dispose() => _inner.Dispose();
+	}
+
+	// The statistic manager setter is protected, and the statistics stage has to be made to fail.
+	private sealed class StatsSwapStrategy : Strategy
+	{
+		public void UseStatisticManager(IStatisticManager manager) => StatisticManager = manager;
+	}
+
+	private static Subscription StartTransactionSubscription(Strategy strategy)
+	{
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+		return sub;
+	}
+
+	// Registers one order the way the connector delivers it - Pending, then Active - and builds its fill
+	// without delivering it, so a caller can deliver, fail, and redeliver the same trade object.
+	private static MyTrade PrepareFill(Strategy strategy, Subscription sub, Security security, Portfolio portfolio,
+		Sides side, decimal price, decimal volume, long txId, long tradeId, decimal commission)
+	{
+		var order = CreateNewFeatureOrder(security, portfolio, side, price, volume, txId);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		var trade = CreateNewFeatureTrade(order, tradeId, price, volume);
+		trade.Commission = commission;
+
+		return trade;
+	}
+
+	// The opening leg the retry tests share: a clean buy of 10 at 100 carrying 2 of commission.
+	private static void DeliverOpeningLeg(Strategy strategy, Subscription sub, Security security, Portfolio portfolio)
+		=> strategy.OnTradeReceived(sub, PrepareFill(strategy, sub, security, portfolio,
+			Sides.Buy, 100m, 10m, txId: 1, tradeId: 1, commission: 2m));
+
+	// What every retry test is entitled to once the closing fill has been redelivered: long 10 at 100
+	// closed by 4 at 110 leaves position 10 - 4 = 6, realized PnL (110 - 100) * 4 = 40 (step price is
+	// unset, so the multiplier is 1) and commission 2 + 3 = 5. Each fill counts once, not zero times
+	// because the retry was refused and not twice because it was replayed.
+	private static void AssertBothFillsAppliedOnce(Strategy strategy, FailingPnLManager pnl, List<MyTrade> ownTrades)
+	{
+		AreEqual(6m, strategy.Position, "10 bought, 4 sold");
+		AreEqual(40m, pnl.RealizedPnL, "(110 - 100) * 4");
+		AreEqual<decimal?>(5m, strategy.Commission, "2 on the opening fill plus 3 on the closing one");
+		AreEqual(2, pnl.FillsTaken, "Each fill is valued exactly once");
+		AreEqual(2, strategy.MyTrades.Count(), "Each fill is tracked exactly once");
+		AreEqual(2, ownTrades.Count, "Each fill is reported to the strategy exactly once");
+	}
+
+	[TestMethod]
+	public void TradePipeline_SecurityFeedFailsThenTradeRedelivered_AppliesFillExactlyOnce()
+	{
+		// Position handling and commission accumulation precede the security snapshot, while publication
+		// waits for the whole pipeline. A redelivery must finish the remaining stages exactly once.
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+		var pnl = new FailingPnLManager(new PnLManager());
+
+		var strategy = new Strategy
+		{
+			Connector = CreateMockConnector().Object,
+			Security = security,
+			Portfolio = portfolio,
+			PnLManager = pnl,
+		};
+
+		var ownTrades = new List<MyTrade>();
+		strategy.OwnTradeReceived += (_, t) => ownTrades.Add(t);
+
+		var sub = StartTransactionSubscription(strategy);
+
+		DeliverOpeningLeg(strategy, sub, security, portfolio);
+
+		var closing = PrepareFill(strategy, sub, security, portfolio,
+			Sides.Sell, 110m, 4m, txId: 2, tradeId: 2, commission: 3m);
+
+		pnl.FailUpdateSecurity = true;
+		Throws<InvalidOperationException>(() => strategy.OnTradeReceived(sub, closing));
+
+		pnl.FailUpdateSecurity = false;
+		strategy.OnTradeReceived(sub, closing);
+
+		AssertBothFillsAppliedOnce(strategy, pnl, ownTrades);
+	}
+
+	[TestMethod]
+	public void TradePipeline_PnLStageFailsThenTradeRedelivered_AppliesFillExactlyOnce()
+	{
+		// The PnL stage runs after position handling and commission accumulation. Redelivering the fill
+		// must complete the remaining stages without applying the earlier ones twice.
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+		var pnl = new FailingPnLManager(new PnLManager());
+
+		var strategy = new Strategy
+		{
+			Connector = CreateMockConnector().Object,
+			Security = security,
+			Portfolio = portfolio,
+			PnLManager = pnl,
+		};
+
+		var ownTrades = new List<MyTrade>();
+		strategy.OwnTradeReceived += (_, t) => ownTrades.Add(t);
+
+		var sub = StartTransactionSubscription(strategy);
+
+		DeliverOpeningLeg(strategy, sub, security, portfolio);
+
+		var closing = PrepareFill(strategy, sub, security, portfolio,
+			Sides.Sell, 110m, 4m, txId: 2, tradeId: 2, commission: 3m);
+
+		pnl.FailProcessTrade = true;
+		Throws<InvalidOperationException>(() => strategy.OnTradeReceived(sub, closing));
+
+		pnl.FailProcessTrade = false;
+		strategy.OnTradeReceived(sub, closing);
+
+		AssertBothFillsAppliedOnce(strategy, pnl, ownTrades);
+	}
+
+	[TestMethod]
+	public void TradePipeline_StatisticsStageFailsThenTradeRedelivered_AppliesFillExactlyOnce()
+	{
+		// The statistics stage runs last, after position, commission and PnL have all moved. Redelivering
+		// the fill must finish it off rather than be turned away as a duplicate.
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+		var pnl = new FailingPnLManager(new PnLManager());
+
+		using var innerStats = new StatisticManager();
+		var stats = new FailingStatisticManager(innerStats);
+
+		var strategy = new StatsSwapStrategy
+		{
+			Connector = CreateMockConnector().Object,
+			Security = security,
+			Portfolio = portfolio,
+			PnLManager = pnl,
+		};
+
+		strategy.UseStatisticManager(stats);
+
+		var ownTrades = new List<MyTrade>();
+		strategy.OwnTradeReceived += (_, t) => ownTrades.Add(t);
+
+		var sub = StartTransactionSubscription(strategy);
+
+		DeliverOpeningLeg(strategy, sub, security, portfolio);
+
+		var closing = PrepareFill(strategy, sub, security, portfolio,
+			Sides.Sell, 110m, 4m, txId: 2, tradeId: 2, commission: 3m);
+
+		stats.FailAddMyTrade = true;
+		Throws<InvalidOperationException>(() => strategy.OnTradeReceived(sub, closing));
+
+		stats.FailAddMyTrade = false;
+		strategy.OnTradeReceived(sub, closing);
+
+		AssertBothFillsAppliedOnce(strategy, pnl, ownTrades);
+		AreEqual(2, stats.MyTradesAdded, "Each fill reaches the statistics exactly once");
 	}
 
 	#endregion
@@ -599,6 +1200,22 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void SubscriptionRegistry_DuplicateTransactionIdDoesNotLeaveHalfRegisteredSubscription()
+	{
+		var registry = new SubscriptionRegistry(new FakeHost());
+		var first = new Subscription(DataType.Level1) { TransactionId = 42 };
+		var duplicate = new Subscription(DataType.Ticks) { TransactionId = 42 };
+
+		registry.Subscribe(first);
+		Throws<ArgumentException>(() => registry.Subscribe(duplicate));
+
+		registry.CanProcess(first).AssertTrue();
+		registry.CanProcess(duplicate).AssertFalse();
+		registry.TryGetById(42).AssertSame(first);
+		registry.Subscriptions.Count().AssertEqual(1);
+	}
+
+	[TestMethod]
 	public void SubscriptionRegistry_Reset_ClearsAll()
 	{
 		var host = new FakeHost();
@@ -641,23 +1258,141 @@ public class StrategyDecomposedTests : BaseTestClass
 		requestedSubs.Count.AreEqual(1);
 	}
 
+	[TestMethod]
+	public void SubscriptionRegistry_UnSubscribeAllWhileSuspended_DoesNotSendCancelledSubscriptionOnResume()
+	{
+		// A subscription cancelled while the rules are suspended is no longer wanted, so resuming must
+		// not hand it to the connector after the fact.
+
+		var host = new FakeHost();
+		var registry = new SubscriptionRegistry(host);
+
+		var requested = new List<Subscription>();
+		registry.SubscriptionRequested += requested.Add;
+
+		registry.SuspendRules();
+
+		var sub = new Subscription(DataType.Level1);
+		registry.Subscribe(sub);
+
+		registry.UnSubscribeAll(globalAndLocal: true);
+
+		registry.CanProcess(sub).AssertFalse();
+
+		registry.ResumeRules();
+
+		AreEqual(0, requested.Count, "A cancelled subscription must not be sent when the rules resume");
+		IsNull(registry.TryGetById(sub.TransactionId), "A cancelled subscription is no longer addressable by id");
+	}
+
+	[TestMethod]
+	public void SubscriptionRegistry_UnSubscribeAllLocalWhileSuspended_ResumesOnlyGlobalSubscription()
+	{
+		// UnSubscribeAll(false) spares the global lookups and cancels the local ones; the resume owes the
+		// connector the survivor only.
+
+		var host = new FakeHost();
+		var registry = new SubscriptionRegistry(host);
+
+		var requested = new List<Subscription>();
+		registry.SubscriptionRequested += requested.Add;
+
+		registry.SuspendRules();
+
+		var local = new Subscription(DataType.Level1);
+		var globalLookup = new Subscription(DataType.Securities);
+
+		registry.Subscribe(local);
+		registry.Subscribe(globalLookup, isGlobal: true);
+
+		registry.UnSubscribeAll(globalAndLocal: false);
+
+		registry.CanProcess(local).AssertFalse();
+		registry.CanProcess(globalLookup).AssertTrue();
+
+		registry.ResumeRules();
+
+		AreEqual(1, requested.Count, "Only the global lookup outlives an unsubscribe of the local subscriptions");
+		AreSame(globalLookup, requested.FirstOrDefault());
+	}
+
+	[TestMethod]
+	public void SubscriptionRegistry_NestedSuspendUnSubscribeAll_DoesNotSendCancelledSubscriptionOnFinalResume()
+	{
+		// The queue is flushed by the resume that unwinds the last suspend, so the cancellation has to
+		// outlive the whole nesting, not just the innermost level.
+
+		var host = new FakeHost();
+		var registry = new SubscriptionRegistry(host);
+
+		var requested = new List<Subscription>();
+		registry.SubscriptionRequested += requested.Add;
+
+		registry.SuspendRules();
+		registry.SuspendRules();
+
+		var sub = new Subscription(DataType.Level1);
+		registry.Subscribe(sub);
+
+		registry.UnSubscribeAll(globalAndLocal: true);
+
+		registry.ResumeRules();
+
+		registry.IsRulesSuspended.AssertTrue();
+		AreEqual(0, requested.Count, "The inner resume flushes nothing");
+
+		registry.ResumeRules();
+
+		registry.IsRulesSuspended.AssertFalse();
+		AreEqual(0, requested.Count, "A cancelled subscription must not be sent when the last suspend unwinds");
+	}
+
+	[TestMethod]
+	public void SubscriptionRegistry_UnSubscribeAllWhileSuspended_UnsubscribesOnlyWhatWasSent()
+	{
+		// UnSubscribe drops a still-queued subscription without telling the connector, because the
+		// connector never heard of it. UnSubscribeAll cancels both kinds and owes the same answer.
+
+		var host = new FakeHost();
+		var registry = new SubscriptionRegistry(host);
+
+		var unsubscribed = new List<Subscription>();
+		registry.UnsubscriptionRequested += unsubscribed.Add;
+
+		var sent = new Subscription(DataType.Level1);
+		registry.Subscribe(sent);
+
+		registry.SuspendRules();
+
+		var queued = new Subscription(DataType.Ticks);
+		registry.Subscribe(queued);
+
+		registry.UnSubscribeAll(globalAndLocal: true);
+
+		AreEqual(1, unsubscribed.Count, "Only the subscription the connector actually received is unsubscribed");
+		AreSame(sent, unsubscribed.FirstOrDefault());
+
+		registry.CanProcess(sent).AssertFalse();
+		registry.CanProcess(queued).AssertFalse();
+	}
+
 	#endregion
 
 	#region Helpers
 
-	private static Security CreateSecurity()
+	private static Security CreateSecurity(string code = null)
 	{
 		return new Security
 		{
-			Id = Helper.CreateSecurityId().ToStringId(),
+			Id = code ?? Helper.CreateSecurityId().ToStringId(),
 			Board = ExchangeBoard.Nyse,
 			PriceStep = 0.01m,
 		};
 	}
 
-	private static Portfolio CreatePortfolio()
+	private static Portfolio CreatePortfolio(string name = "test_portfolio")
 	{
-		return new Portfolio { Name = "test_portfolio" };
+		return new Portfolio { Name = name };
 	}
 
 	private static MyTrade CreateMyTrade(long tradeId, decimal price, decimal volume, decimal? commission = null, decimal? slippage = null)
@@ -691,10 +1426,10 @@ public class StrategyDecomposedTests : BaseTestClass
 
 	#endregion
 
-	#region DecomposedStrategy composite tests
+	#region Strategy composite tests
 
-	// Test strategy that inherits DecomposedStrategy and records all hook calls.
-	private class BuyOnSignalStrategy : DecomposedStrategy
+	// Test strategy that inherits Strategy and records all hook calls.
+	private class BuyOnSignalStrategy : Strategy
 	{
 		public List<ProcessStates> StateChanges { get; } = [];
 		public List<(SecurityId SecId, decimal Price)> PriceUpdates { get; } = [];
@@ -708,9 +1443,10 @@ public class StrategyDecomposedTests : BaseTestClass
 		public Security TradeSecurity { get; set; }
 		public Portfolio TradePortfolio { get; set; }
 
-		protected override void OnStateChanged(ProcessStates state)
+		protected override ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
 		{
 			StateChanges.Add(state);
+			return default;
 		}
 
 		protected override void OnCurrentPriceUpdated(SecurityId secId, decimal price, DateTime serverTime, DateTime localTime)
@@ -743,7 +1479,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			ChangedOrders.Add(order);
 		}
 
-		protected override void OnNewMyTrade(MyTrade trade)
+		protected override void OnOwnTradeReceived(MyTrade trade)
 		{
 			ReceivedTrades.Add(trade);
 		}
@@ -766,6 +1502,9 @@ public class StrategyDecomposedTests : BaseTestClass
 		return mock;
 	}
 
+	private static ValueTask MarkStartedAsync(Strategy strategy, CancellationToken cancellationToken)
+		=> strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), cancellationToken);
+
 	[TestMethod]
 	public async Task Composite_StateTransitions_AllHooksCalled()
 	{
@@ -778,7 +1517,7 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// start
 		await strategy.StartAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
 		strategy.StateChanges.Count.AreEqual(1);
@@ -786,7 +1525,7 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// stop
 		await strategy.StopAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 
 		strategy.ProcessState.AreEqual(ProcessStates.Stopping);
 		strategy.StateChanges.Count.AreEqual(2);
@@ -794,10 +1533,11 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_RegisterOrder_DelegatesToConnector()
+	public async Task Composite_RegisterOrder_DelegatesToConnector()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
 
 		var order = new Order
 		{
@@ -814,12 +1554,15 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_CancelOrder_DelegatesToConnector()
+	public async Task Composite_CancelOrder_DelegatesToConnector()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
 
-		var order = new Order { TransactionId = 1 };
+		// The order must be a started, owned order for the public CancelOrder guards to let it through.
+		var order = RegisterOwnActiveOrder(strategy, connMock);
+		connMock.Invocations.Clear();
 
 		strategy.CancelOrder(order);
 		connMock.Verify(c => c.CancelOrder(order), Times.Once);
@@ -871,19 +1614,20 @@ public class StrategyDecomposedTests : BaseTestClass
 			Volume = 10,
 			Security = security,
 			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
 			Time = DateTime.UtcNow,
 		};
 
 		// untracked subscription — order NOT attached
-		strategy.OnOrderReceived(untrackedSub, order);
-		strategy.Orders.IsTracked(order).AssertFalse();
-		strategy.Orders.Orders.Any().AssertFalse();
+		strategy.OnConnectorOrderReceived(untrackedSub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertFalse();
+		strategy.OrderProcessor.Orders.Any().AssertFalse();
 
 		// tracked subscription — order attached
-		strategy.OnOrderReceived(trackedSub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
-		strategy.Orders.Orders.First().AreEqual(order);
+		strategy.OnConnectorOrderReceived(trackedSub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
+		strategy.OrderProcessor.Orders.First().AreEqual(order);
 	}
 
 	[TestMethod]
@@ -903,6 +1647,143 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.Trades.MyTrades.Any().AssertFalse();
 		strategy.ReceivedTrades.Count.AreEqual(0);
 		IsNull(strategy.Trades.Commission);
+	}
+
+	/// <summary>
+	/// A fill is booked from the subscription the strategy owns, like every other notification it
+	/// receives. The connector addresses a fill to each subscription that owns the order, so a
+	/// started strategy - which subscribes its own order lookup - is always among them; acting on a
+	/// foreign delivery instead would book the same fill from whichever one happened to arrive first.
+	/// </summary>
+	[TestMethod]
+	public void Composite_TradeIsTakenFromTheStrategysOwnSubscription()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+
+		var strategySub = strategy.OrderLookup;
+		strategy.Subscriptions.Subscribe(strategySub);
+		Subscription receivedSubscription = null;
+		MyTrade receivedByRule = null;
+		strategy.OwnTradeReceived += (subscription, _) => receivedSubscription = subscription;
+		strategy.WhenOwnTradeReceived().Do(trade => receivedByRule = trade).Apply(strategy);
+
+		var security = CreateSecurity();
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = security,
+			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
+			StrategyId = strategy.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnConnectorOrderReceived(strategySub, order);
+
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 10m);
+
+		strategy.OnTradeReceived(new Subscription(DataType.Transactions), trade);
+
+		strategy.ReceivedTrades.Count.AreEqual(0);
+		strategy.Trades.MyTrades.Any().AssertFalse();
+		IsNull(receivedSubscription);
+		IsNull(receivedByRule);
+
+		strategy.OnTradeReceived(strategySub, trade);
+
+		strategy.ReceivedTrades.Count.AreEqual(1);
+		strategy.Trades.MyTrades.Count().AreEqual(1);
+		receivedSubscription.AssertSame(strategySub);
+		receivedByRule.AssertSame(trade);
+	}
+
+	[TestMethod]
+	public void Composite_ConnectorOwnedTrade_IsolatedAndDeduplicated()
+	{
+		var connector = CreateMockConnector().Object;
+		using var owner = new BuyOnSignalStrategy { Connector = connector };
+		using var foreign = new BuyOnSignalStrategy { Connector = connector };
+		var ownerSubscription = owner.OrderLookup;
+		owner.Subscriptions.Subscribe(ownerSubscription);
+		foreign.Subscriptions.Subscribe(foreign.OrderLookup);
+
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+			UserOrderId = owner.Id.To<string>(),
+			StrategyId = owner.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+
+		owner.OnConnectorOrderReceived(ownerSubscription, order);
+
+		var connectorSubscription = new Subscription(DataType.Transactions);
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 4m);
+		var receivedCount = 0;
+		owner.OwnTradeReceived += (_, _) => receivedCount++;
+
+		foreign.OnTradeReceived(connectorSubscription, trade);
+		owner.OnTradeReceived(connectorSubscription, trade);
+		owner.OnTradeReceived(ownerSubscription, trade);
+
+		foreign.Trades.MyTrades.Any().AssertFalse();
+		owner.Trades.MyTrades.Count().AssertEqual(1);
+		order.Balance.AssertEqual(6m);
+		receivedCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void Composite_TradeReservation_IsNotPublishedDuringOrderCallbacks()
+	{
+		var connector = CreateMockConnector().Object;
+		using var strategy = new BuyOnSignalStrategy { Connector = connector };
+		var subscription = strategy.OrderLookup;
+		strategy.Subscriptions.Subscribe(subscription);
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
+			StrategyId = strategy.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+		strategy.OnConnectorOrderReceived(subscription, order);
+
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 4m);
+		bool? publishedDuringOrderCallback = null;
+
+#pragma warning disable CS0618 // The compatibility event exposes the order callback boundary under test.
+		strategy.OrderChanged += _ =>
+		{
+			publishedDuringOrderCallback = strategy.Trades.Contains(trade) || strategy.Trades.MyTrades.Any();
+			strategy.OnTradeReceived(subscription, trade);
+		};
+#pragma warning restore CS0618
+
+		strategy.OnTradeReceived(subscription, trade);
+
+		publishedDuringOrderCallback.AssertEqual(false);
+		strategy.Trades.MyTrades.Single().AssertSame(trade);
+		order.Balance.AssertEqual(6m);
 	}
 
 	[TestMethod]
@@ -931,14 +1812,14 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// 1. order received as Pending
-		strategy.OnOrderReceived(sub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
+		strategy.OnConnectorOrderReceived(sub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
 		strategy.RegisteredOrders.Count.AreEqual(0); // not registered yet
 
 		// 2. order becomes Active → fires OnOrderRegistered
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.RegisteredOrders.Count.AreEqual(1);
 		strategy.RegisteredOrders[0].AreEqual(order);
@@ -946,7 +1827,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.RegisteredOrders[0].Price.AreEqual(100m);
 		strategy.RegisteredOrders[0].Volume.AreEqual(10m);
 		strategy.RegisteredOrders[0].Side.AreEqual(Sides.Buy);
-		strategy.Orders.Commission.AreEqual(3m);
+		strategy.OrderProcessor.Commission.AreEqual(3m);
 
 		// 3. first trade arrives
 		var trade1 = new MyTrade
@@ -1045,15 +1926,15 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// receive both as pending
-		strategy.OnOrderReceived(sub, order1);
-		strategy.OnOrderReceived(sub, order2);
-		strategy.Orders.Orders.Count().AreEqual(2);
+		strategy.OnConnectorOrderReceived(sub, order1);
+		strategy.OnConnectorOrderReceived(sub, order2);
+		strategy.OrderProcessor.Orders.Count().AreEqual(2);
 
 		// activate both
 		order1.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order1);
+		strategy.OnConnectorOrderReceived(sub, order1);
 		order2.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order2);
+		strategy.OnConnectorOrderReceived(sub, order2);
 
 		strategy.RegisteredOrders.Count.AreEqual(2);
 		strategy.RegisteredOrders[0].TransactionId.AreEqual(1L);
@@ -1062,7 +1943,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.RegisteredOrders[1].TransactionId.AreEqual(2L);
 		strategy.RegisteredOrders[1].Side.AreEqual(Sides.Sell);
 		strategy.RegisteredOrders[1].Price.AreEqual(110m);
-		strategy.Orders.Commission.AreEqual(3m); // 2 + 1
+		strategy.OrderProcessor.Commission.AreEqual(3m); // 2 + 1
 
 		// trade for order1 only
 		var trade = new MyTrade
@@ -1088,7 +1969,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_Position_NewAndChanged()
+	public void Composite_Position_New()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
@@ -1134,7 +2015,7 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// start strategy
 		await strategy.StartAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
 		strategy.StateChanges.Count.AreEqual(1);
 
@@ -1171,33 +2052,25 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.PriceUpdates[1].Price.AreEqual(150m);
 		connMock.Verify(c => c.RegisterOrder(It.IsAny<Order>()), Times.Once);
 
-		// simulate order received from connector as pending
-		var order = new Order
-		{
-			TransactionId = 42,
-			State = OrderStates.Pending,
-			Side = Sides.Buy,
-			Price = 150m,
-			Volume = 5,
-			Security = security,
-			Portfolio = portfolio,
-			Time = DateTime.UtcNow,
-		};
+		// simulate the connector updating the same order instance as pending
+		var order = strategy.OrderProcessor.Orders.Single();
+		order.State = OrderStates.Pending;
+		connMock.Verify(c => c.RegisterOrder(order), Times.Once);
 
-		strategy.OnOrderReceived(sub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
+		strategy.OnConnectorOrderReceived(sub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
 
 		// order activated
 		order.State = OrderStates.Active;
 		order.Commission = 2m;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.RegisteredOrders.Count.AreEqual(1);
 		strategy.RegisteredOrders[0].Price.AreEqual(150m);
 		strategy.RegisteredOrders[0].Volume.AreEqual(5m);
 		strategy.RegisteredOrders[0].Side.AreEqual(Sides.Buy);
-		strategy.Orders.Commission.AreEqual(2m);
+		strategy.OrderProcessor.Commission.AreEqual(2m);
 
 		// trade fills the order
 		var trade = new MyTrade
@@ -1233,7 +2106,7 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// stop strategy
 		await strategy.StopAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		strategy.ProcessState.AreEqual(ProcessStates.Stopping);
 		strategy.StateChanges.Count.AreEqual(2);
 		strategy.StateChanges[0].AreEqual(ProcessStates.Started);
@@ -1241,7 +2114,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_ConnectorSwitch_UnsubscribesOld()
+	public async Task Composite_ConnectorSwitch_UnsubscribesOld()
 	{
 		var conn1 = CreateMockConnector();
 		var conn2 = CreateMockConnector();
@@ -1250,10 +2123,15 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.Connector = conn2.Object;
 
 		strategy.Connector.AreEqual(conn2.Object);
+		conn1.VerifyRemove(
+			c => c.OrderReceived -= It.IsAny<Action<Subscription, Order>>(),
+			Times.Once);
 
-		// verify that events on old connector fire nothing
-		// and new connector is used for operations
-		var order = new Order { TransactionId = 1 };
+		// Cancel of an order owned on conn2 must route to conn2, never the detached conn1.
+		await MarkStartedAsync(strategy, CancellationToken);
+		var order = RegisterOwnActiveOrder(strategy, conn2);
+		conn2.Invocations.Clear();
+
 		strategy.CancelOrder(order);
 		conn1.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
 		conn2.Verify(c => c.CancelOrder(order), Times.Once);
@@ -1293,9 +2171,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		// fill the order with a trade
 		var trade = new MyTrade
@@ -1321,8 +2199,8 @@ public class StrategyDecomposedTests : BaseTestClass
 	[TestMethod]
 	public void Composite_RoundTrip_TrackedFromTrades()
 	{
-		// When position goes from 0 → open → 0, a round-trip should be recorded.
-		// Currently DecomposedStrategy has no PositionLifecycleTracker.
+		// Pins the whole round-trip path, not just where it ends: buying 5 opens the position to +5
+		// and selling those 5 brings it back to 0, so the observed path must be 0 -> +5 -> 0.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1339,6 +2217,16 @@ public class StrategyDecomposedTests : BaseTestClass
 		var sub = new Subscription(DataType.Transactions);
 		strategy.Subscriptions.Subscribe(sub);
 
+		// The strategy keeps no round-trip history, so the path is collected from the position
+		// values reported while the fills are delivered, starting from the flat position.
+		var observed = new List<decimal> { strategy.Position };
+		var provider = (IPositionProvider)strategy;
+
+		void Track(Position pos) => observed.Add(pos.CurrentValue ?? 0);
+
+		provider.NewPosition += Track;
+		provider.PositionChanged += Track;
+
 		// buy order filled
 		var buyOrder = new Order
 		{
@@ -1346,9 +2234,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Buy, Price = 100, Volume = 5,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 		buyOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1361,6 +2249,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			},
 		});
 
+		// One buy of 5 lots and nothing against it: the position stands at +5 before the closing order.
+		strategy.Position.AreEqual(5m);
+
 		// sell order filled — closes the position
 		var sellOrder = new Order
 		{
@@ -1368,9 +2259,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Sell, Price = 110, Volume = 5,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 		sellOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1383,10 +2274,20 @@ public class StrategyDecomposedTests : BaseTestClass
 			},
 		});
 
-		// position should be back to 0
+		// 5 bought then 5 sold leaves nothing open.
 		strategy.Position.AreEqual(0m);
 
-		// TODO: verify round-trip history when PositionLifecycleTracker is added
+		provider.NewPosition -= Track;
+		provider.PositionChanged -= Track;
+
+		// The same value can be reported more than once (order activation, blocked-volume updates);
+		// what the round trip is about is the values the position took, in order.
+		var path = observed.Where((v, i) => i == 0 || observed[i - 1] != v).ToArray();
+
+		path.Length.AreEqual(3);
+		path[0].AreEqual(0m);
+		path[1].AreEqual(5m);
+		path[2].AreEqual(0m);
 	}
 
 	[TestMethod]
@@ -1433,7 +2334,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	public void Composite_OrderFiltering_OnlyOwnOrdersTracked()
 	{
 		// Strategy should only track its own orders (via CanAttach/UserOrderId).
-		// Currently DecomposedStrategy attaches any order from any subscription.
+		// Currently Strategy attaches any order from any subscription.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1467,10 +2368,10 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, foreignOrder);
+		strategy.OnConnectorOrderReceived(sub, foreignOrder);
 
 		// foreign order should NOT be tracked
-		strategy.Orders.IsTracked(foreignOrder).AssertFalse();
+		strategy.OrderProcessor.IsTracked(foreignOrder).AssertFalse();
 	}
 
 	[TestMethod]
@@ -1500,9 +2401,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Buy, Price = 100, Volume = 10,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 		buyOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1522,9 +2423,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Sell, Price = 110, Volume = 10,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 		sellOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1539,15 +2440,12 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// PnL should reflect realized profit from the round trip
 		var pnl = strategy.PnLManager.RealizedPnL;
-		IsTrue(pnl > 0, $"Expected positive realized PnL after buying at 100 and selling at 110, got {pnl}");
+		pnl.AssertEqual(100m);
 	}
 
 	[TestMethod]
 	public void Composite_RiskRule_StopsOnPositionLimit()
 	{
-		// Risk rules should be evaluated on position/order changes.
-		// Currently DecomposedStrategy has no risk management.
-
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -1559,15 +2457,77 @@ public class StrategyDecomposedTests : BaseTestClass
 			Portfolio = portfolio,
 		};
 
-		// this test documents that risk management is not yet implemented.
-		// when it is, setting a position limit rule should prevent
-		// the strategy from exceeding it.
-		IsNotNull(strategy.StatisticManager);
+		strategy.RiskManager.Rules.Add(new RiskPositionSizeRule
+		{
+			Position = 10m,
+			Action = RiskActions.StopTrading,
+		});
 
-		// DecomposedStrategy should have a RiskManager property
-		// that can be configured with rules, similar to Strategy.RiskManager
-		var hasRiskManager = strategy.GetType().GetProperty("RiskManager") != null;
-		IsTrue(hasRiskManager, "DecomposedStrategy should expose RiskManager for risk rule configuration");
+		var positionSub = new Subscription(DataType.PositionChanges);
+		strategy.Subscriptions.Subscribe(positionSub);
+		strategy.OnPositionReceived(positionSub, new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			CurrentValue = 10m,
+			LocalTime = DateTime.UtcNow,
+		});
+
+		var order = strategy.CreateOrder(Sides.Buy, 100m, 1m);
+		strategy.RegisterOrder(order);
+
+		connMock.Verify(c => c.RegisterOrder(It.IsAny<Order>()), Times.Never);
+		strategy.OrderProcessor.IsTracked(order).AssertFalse();
+	}
+
+	[TestMethod]
+	public void PositionReceived_WithoutRiskRules_DoesNotConsultTheRiskManager()
+	{
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var riskManager = new Mock<IRiskManager>();
+		riskManager.SetupGet(r => r.Rules).Returns(new CachedSynchronizedList<IRiskRule>());
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			RiskManager = riskManager.Object,
+		};
+
+		var positionSub = new Subscription(DataType.PositionChanges);
+		strategy.Subscriptions.Subscribe(positionSub);
+		strategy.OnPositionReceived(positionSub, new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			CurrentValue = 10m,
+			LocalTime = DateTime.UtcNow,
+		});
+
+		riskManager.Verify(r => r.ProcessRules(It.IsAny<PositionChangeMessage>()), Times.Never());
+	}
+
+	/// <summary>
+	/// A strategy without a connector still provides UTC time, preserving the time-provider contract
+	/// used by callers before a live or historical connector is assigned.
+	/// </summary>
+	[TestMethod]
+	public void CurrentTimeWithoutAConnector_FallsBackToUtcClock()
+	{
+		var before = DateTime.UtcNow;
+		var strategy = new Strategy();
+
+		strategy.Connector.AssertNull("the strategy under test is deliberately unconnected");
+
+		var currentTime = strategy.CurrentTime;
+		var after = DateTime.UtcNow;
+
+		(currentTime >= before && currentTime <= after).AssertTrue(
+			$"expected a UTC clock value between {before:O} and {after:O}, got {currentTime:O}");
 	}
 
 	#endregion
@@ -1575,7 +2535,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	#region StartProtection tests
 
 	[TestMethod]
-	public void StartProtection_LocalStop_ActivatesOnPriceChange()
+	public async Task StartProtection_LocalStop_ActivatesOnPriceChange()
 	{
 		var connMock = CreateMockConnector();
 		var registeredOrders = new List<Order>();
@@ -1592,6 +2552,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			Security = security,
 			Portfolio = portfolio,
 		};
+		await MarkStartedAsync(strategy, CancellationToken);
 
 		// Configure local stop protection: 5% stop loss
 		strategy.StartProtection(
@@ -1614,9 +2575,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		var trade = new MyTrade
 		{
@@ -1646,7 +2607,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			LocalTime = DateTime.UtcNow,
 		}.TryAdd(Level1Fields.LastTradePrice, 94m);
 
-		strategy.Engine.OnMessage(l1);
+		await strategy.Engine.OnMessageAsync(l1, CancellationToken);
 
 		// The stop should have activated — a sell protective order should be registered
 		IsTrue(registeredOrders.Count > 0,
@@ -1658,7 +2619,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StartProtection_NoEffect_WhenNotConfigured()
+	public async Task StartProtection_NoEffect_WhenNotConfigured()
 	{
 		var connMock = CreateMockConnector();
 		var registeredOrders = new List<Order>();
@@ -1692,9 +2653,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1719,7 +2680,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			LocalTime = DateTime.UtcNow,
 		}.TryAdd(Level1Fields.LastTradePrice, 50m);
 
-		strategy.Engine.OnMessage(l1);
+		await strategy.Engine.OnMessageAsync(l1, CancellationToken);
 
 		// No protective orders should have been registered
 		AreEqual(0, registeredOrders.Count,
@@ -1727,7 +2688,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StartProtection_Reset_ClearsProtection()
+	public async Task StartProtection_Reset_ClearsProtection()
 	{
 		var connMock = CreateMockConnector();
 		var registeredOrders = new List<Order>();
@@ -1769,9 +2730,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1795,14 +2756,14 @@ public class StrategyDecomposedTests : BaseTestClass
 			LocalTime = DateTime.UtcNow,
 		}.TryAdd(Level1Fields.LastTradePrice, 80m);
 
-		strategy.Engine.OnMessage(l1);
+		await strategy.Engine.OnMessageAsync(l1, CancellationToken);
 
 		AreEqual(0, registeredOrders.Count,
 			"After Reset(), protection should be cleared and no protective orders generated");
 	}
 
 	[TestMethod]
-	public void StartProtection_TrailingStop_AdjustsPrice()
+	public async Task StartProtection_TrailingStop_AdjustsPrice()
 	{
 		var connMock = CreateMockConnector();
 		var registeredOrders = new List<Order>();
@@ -1819,6 +2780,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			Security = security,
 			Portfolio = portfolio,
 		};
+		await MarkStartedAsync(strategy, CancellationToken);
 
 		// Configure trailing stop: 5% trailing stop loss
 		strategy.StartProtection(
@@ -1842,9 +2804,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1863,30 +2825,1115 @@ public class StrategyDecomposedTests : BaseTestClass
 		var secId = security.ToSecurityId();
 
 		// Price goes up to 110 — trailing stop should trail up
-		strategy.Engine.OnMessage(new Level1ChangeMessage
+		await strategy.Engine.OnMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = secId,
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.TryAdd(Level1Fields.LastTradePrice, 110m));
+		}.TryAdd(Level1Fields.LastTradePrice, 110m), CancellationToken);
 
 		// No stop triggered yet
 		AreEqual(0, registeredOrders.Count,
 			"Price moving up should not trigger stop");
 
 		// Price drops to 104 (5.5% from high of 110) — below 5% trailing
-		strategy.Engine.OnMessage(new Level1ChangeMessage
+		await strategy.Engine.OnMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = secId,
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.TryAdd(Level1Fields.LastTradePrice, 104m));
+		}.TryAdd(Level1Fields.LastTradePrice, 104m), CancellationToken);
 
 		IsTrue(registeredOrders.Count > 0,
 			"Trailing stop should activate when price drops 5% from high");
 
 		var protectiveOrder = registeredOrders.Last();
 		protectiveOrder.Side.AreEqual(Sides.Sell);
+	}
+
+	#endregion
+
+	#region CancelOrder guard tests
+
+	// Register a tracked, own, active order on a started strategy so it can be the subject of a CancelOrder.
+	private static Order RegisterOwnActiveOrder(Strategy strategy, Mock<IConnector> connMock, long transactionId = 1)
+	{
+		var order = new Order
+		{
+			TransactionId = transactionId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			State = OrderStates.Active,
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+		};
+
+		strategy.RegisterOrder(order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		return order;
+	}
+
+	[TestMethod]
+	public void CancelOrder_NotStarted_DoesNotReachConnector()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+
+		// ProcessState is Stopped (not Started): the state guard must turn the cancel into a no-op.
+		var order = new Order { TransactionId = 1, State = OrderStates.Active };
+
+		strategy.CancelOrder(order);
+
+		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task CancelOrder_Null_Throws()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		ThrowsExactly<ArgumentNullException>(() => strategy.CancelOrder(null));
+	}
+
+	[TestMethod]
+	public async Task CancelOrder_TradingDisabled_DoesNotReachConnector()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		var order = RegisterOwnActiveOrder(strategy, connMock);
+		connMock.Invocations.Clear();
+
+		// Disabled trading mode must block cancellation just like it blocks registration.
+		strategy.TradingMode = StrategyTradingModes.Disabled;
+		strategy.CancelOrder(order);
+
+		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task CancelOrder_UnregisteredOrder_Throws()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		// An order the strategy never registered is not owned: cancelling it must throw.
+		var foreign = new Order { TransactionId = 999, State = OrderStates.Active };
+
+		ThrowsExactly<ArgumentException>(() => strategy.CancelOrder(foreign));
+		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task CancelOrder_DifferentReferenceWithSameTransactionId_Throws()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.CancelOrder(duplicate));
+		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task CancelOrder_CalledTwice_ReachesConnectorOnce()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		var order = RegisterOwnActiveOrder(strategy, connMock);
+		connMock.Invocations.Clear();
+
+		// The second cancel of the same order is a duplicate and must be deduplicated (IsCanceled flag).
+		strategy.CancelOrder(order);
+		strategy.CancelOrder(order);
+
+		connMock.Verify(c => c.CancelOrder(order), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task EditOrder_DifferentReferenceWithSameTransactionId_ThrowsBeforeProcessingChanges()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+			Security = tracked.Security,
+			Portfolio = tracked.Portfolio,
+			Side = tracked.Side,
+			Price = tracked.Price,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		var changes = new Order
+		{
+			Side = Sides.Sell,
+			Price = tracked.Price + 1,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.EditOrder(duplicate, changes));
+
+		connMock.Verify(c => c.EditOrder(It.IsAny<Order>(), It.IsAny<Order>()), Times.Never);
+		strategy.OrderProcessor.IsTracked(changes).AssertFalse();
+		changes.TransactionId.AssertEqual(0);
+		changes.State.AssertEqual(OrderStates.None);
+		changes.Security.AssertNull();
+		changes.Portfolio.AssertNull();
+		changes.Comment.IsEmpty().AssertTrue();
+		changes.UserOrderId.IsEmpty().AssertTrue();
+		changes.StrategyId.IsEmpty().AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task ReRegisterOrder_DifferentReferenceWithSameTransactionId_ThrowsBeforePreparingReplacement()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		await MarkStartedAsync(strategy, CancellationToken);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		strategy.Security = tracked.Security;
+		strategy.Portfolio = tracked.Portfolio;
+
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+			Security = tracked.Security,
+			Portfolio = tracked.Portfolio,
+			Side = tracked.Side,
+			Price = tracked.Price,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		var replacement = new Order
+		{
+			Side = Sides.Sell,
+			Price = tracked.Price + 1,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.ReRegisterOrder(duplicate, replacement));
+
+		connMock.Verify(c => c.ReRegisterOrder(It.IsAny<Order>(), It.IsAny<Order>()), Times.Never);
+		strategy.OrderProcessor.IsTracked(replacement).AssertFalse();
+		replacement.TransactionId.AssertEqual(0);
+		replacement.State.AssertEqual(OrderStates.None);
+		replacement.Security.AssertNull();
+		replacement.Portfolio.AssertNull();
+		replacement.Comment.IsEmpty().AssertTrue();
+		replacement.UserOrderId.IsEmpty().AssertTrue();
+		replacement.StrategyId.IsEmpty().AssertTrue();
+	}
+
+	#endregion
+
+	#region IndicatorSource
+
+	// An indicator added with no Source of its own inherits the strategy's; one that names a Source keeps it.
+
+	[TestMethod]
+	public void IndicatorSource_NullSource_InheritsStrategyDefault()
+	{
+		var strategy = new Strategy { IndicatorSource = Level1Fields.BestBidPrice };
+
+		var indicator = new SimpleMovingAverage();
+		IsNull(indicator.Source);
+
+		strategy.Indicators.TryAdd(indicator);
+
+		indicator.Source.AreEqual(Level1Fields.BestBidPrice);
+	}
+
+	[TestMethod]
+	public void IndicatorSource_NonNullSource_IsLeftAlone()
+	{
+		var strategy = new Strategy { IndicatorSource = Level1Fields.BestBidPrice };
+
+		var indicator = new SimpleMovingAverage { Source = Level1Fields.BestAskPrice };
+
+		strategy.Indicators.TryAdd(indicator);
+
+		indicator.Source.AreEqual(Level1Fields.BestAskPrice);
+	}
+
+	#endregion
+
+	#region Decomposed-only new features (PositionsList, target-position API, sub-object event ordering, PnLReceived2)
+
+	// Features only the decomposed Strategy exposes (so not comparable in the equivalence suites), pinned
+	// directly: PositionsList (per-(securityId, portfolio) net view); the SetTargetPosition API; the
+	// sub-objects' internal events firing before/consistently with the public surface; and PnLReceived2.
+
+	private static readonly DateTime _newFeatureTradeTime = new(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+	private static Order CreateNewFeatureOrder(Security security, Portfolio portfolio, Sides side, decimal price, decimal volume, long txId)
+		=> new()
+		{
+			TransactionId = txId,
+			State = OrderStates.Pending,
+			Side = side,
+			Price = price,
+			Volume = volume,
+			Security = security,
+			Portfolio = portfolio,
+			Time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+	private static MyTrade CreateNewFeatureTrade(Order order, long tradeId, decimal price, decimal volume)
+		=> new()
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = tradeId,
+				TradePrice = price,
+				TradeVolume = volume,
+				SecurityId = order.Security.ToSecurityId(),
+				// LocalTime drives PnLReceived2's timestamp; set it (UTC) explicitly to pin that.
+				ServerTime = _newFeatureTradeTime,
+				LocalTime = _newFeatureTradeTime,
+			},
+		};
+
+	// Drive a Pending->Active->fill cycle for one order, stamped with the strategy id (UserOrderId) so
+	// CanAttach owns it on any security/portfolio (auto-attach only covers the primary Security+Portfolio).
+	private static void RegisterFillThroughStrategy(Strategy strategy, Subscription sub,
+		Security security, Portfolio portfolio, Sides side, decimal price, decimal volume, long txId, long tradeId)
+	{
+		var order = CreateNewFeatureOrder(security, portfolio, side, price, volume, txId);
+		order.UserOrderId = strategy.Id.To<string>();
+
+		strategy.OnConnectorOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId, price, volume));
+	}
+
+	[TestMethod]
+	public void PositionsList_KeyedBySecurityAndPortfolio_NetValuesPerKey()
+	{
+		var connMock = CreateMockConnector();
+
+		var sec1 = CreateSecurity("AAA@NYSE");
+		var sec2 = CreateSecurity("BBB@NYSE");
+		var pf1 = CreatePortfolio("PF1");
+		var pf2 = CreatePortfolio("PF2");
+
+		// Primary (Security/Portfolio) is sec1/pf1 so the Position aggregate tracks that key.
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = sec1,
+			Portfolio = pf1,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// sec1/pf1: buy 10 then sell 4 -> net +6.
+		RegisterFillThroughStrategy(strategy, sub, sec1, pf1, Sides.Buy, 100m, 10m, txId: 1, tradeId: 1);
+		RegisterFillThroughStrategy(strategy, sub, sec1, pf1, Sides.Sell, 101m, 4m, txId: 2, tradeId: 2);
+
+		// sec2/pf1: sell 5 -> net -5 (different security, same portfolio).
+		RegisterFillThroughStrategy(strategy, sub, sec2, pf1, Sides.Sell, 50m, 5m, txId: 3, tradeId: 3);
+
+		// sec1/pf2: buy 3 -> net +3 (same security, different portfolio -> distinct key, not folded into sec1/pf1).
+		RegisterFillThroughStrategy(strategy, sub, sec1, pf2, Sides.Buy, 100m, 3m, txId: 4, tradeId: 4);
+
+		var list = strategy.PositionsList;
+
+		// Three distinct (securityId, portfolioName) keys.
+		list.Count.AreEqual(3);
+
+		var k1 = (sec1.ToSecurityId(), pf1.Name);
+		var k2 = (sec2.ToSecurityId(), pf1.Name);
+		var k3 = (sec1.ToSecurityId(), pf2.Name);
+
+		IsTrue(list.ContainsKey(k1));
+		IsTrue(list.ContainsKey(k2));
+		IsTrue(list.ContainsKey(k3));
+
+		list[k1].AreEqual(6m);   // +10 - 4
+		list[k2].AreEqual(-5m);  // -5
+		list[k3].AreEqual(3m);   // +3
+
+		// The dictionary is keyed by securityId AND portfolio: sec1 under two portfolios stays split.
+		AreNotEqual(k1, k3);
+
+		// The Position aggregate (primary security/portfolio = sec1/pf1) stays consistent with the
+		// matching dictionary entry and is NOT polluted by the other keys.
+		strategy.Position.AreEqual(6m);
+		strategy.Position.AreEqual(list[k1]);
+
+		// Cross-check against the per-(security,portfolio) accessor that backs the aggregate.
+		strategy.GetPositionValue(sec1, pf1).AreEqual(6m);
+		strategy.GetPositionValue(sec2, pf1).AreEqual(-5m);
+		strategy.GetPositionValue(sec1, pf2).AreEqual(3m);
+	}
+
+	// Drive the strategy to IsOnline=true: mark every tracked subscription Online, start, then raise
+	// SubscriptionOnline so RefreshOnlineState (which needs ALL non-history-only subs Online) passes.
+	private static async Task DriveOnlineAsync(Strategy strategy, Mock<IConnector> connMock, CancellationToken cancellationToken)
+	{
+		await MarkStartedAsync(strategy, cancellationToken);
+
+		Subscription last = null;
+		foreach (var s in strategy.Subscriptions.Subscriptions)
+		{
+			s.State = SubscriptionStates.Online;
+			last = s;
+		}
+
+		connMock.Raise(c => c.SubscriptionOnline += null, last);
+		IsTrue(strategy.IsOnline, "Strategy must be online so the target-position canTrade gate passes");
+	}
+
+	[TestMethod]
+	public async Task SetTargetPosition_EmitsOrderTowardTarget_AndCancelClears()
+	{
+		var connMock = CreateMockConnector();
+		var registered = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// A non-history-only subscription that, once Online, makes the strategy Online.
+		var sub = new Subscription(DataType.MarketDepth, security);
+		strategy.Subscriptions.Subscribe(sub);
+		await DriveOnlineAsync(strategy, connMock, CancellationToken);
+
+		// No target set yet.
+		IsNull(strategy.GetTargetPosition());
+
+		// Current position is 0; target +7 must emit a Buy market order for the full delta toward target.
+		strategy.SetTargetPosition(7m);
+
+		strategy.GetTargetPosition().AreEqual(7m);
+
+		AreEqual(1, registered.Count, "SetTargetPosition must emit one order toward the target");
+		var order = registered[0];
+		order.Side.AreEqual(Sides.Buy);
+		order.Volume.AreEqual(7m);            // delta = target(7) - current(0)
+		order.Type.AreEqual(OrderTypes.Market);
+		order.Security.AreEqual(security);
+		order.Portfolio.AreEqual(portfolio);
+
+		// The target manager is the engaged object behind the high-level API.
+		IsTrue(strategy.TargetPositionManager.GetTarget(security, portfolio) == 7m);
+
+		// Cancelling the target clears it (GetTargetPosition -> null) and does not emit a new order.
+		strategy.CancelTargetPosition();
+		IsNull(strategy.GetTargetPosition());
+		AreEqual(1, registered.Count, "CancelTargetPosition must not emit a new order");
+	}
+
+	[TestMethod]
+	public async Task SetTargetPosition_WhenNotOnline_DoesNotEmitButRemembersTarget()
+	{
+		// Not online: the target is recorded but no order is emitted (target stored independently of execution).
+		var connMock = CreateMockConnector();
+		var registered = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		await MarkStartedAsync(strategy, CancellationToken);
+		IsFalse(strategy.IsOnline);
+
+		strategy.SetTargetPosition(5m);
+
+		strategy.GetTargetPosition().AreEqual(5m);
+		AreEqual(0, registered.Count, "No order may be emitted while canTrade (online) is false");
+
+		// Cancelling still clears the remembered target.
+		strategy.CancelTargetPosition();
+		IsNull(strategy.GetTargetPosition());
+	}
+
+	[TestMethod]
+	public async Task Engine_StateChanged_DrivesAndIsConsistentWith_PublicProcessStateChanged()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new Strategy { Connector = connMock.Object };
+
+		var engineStates = new List<ProcessStates>();
+		var publicStates = new List<ProcessStates>();
+
+		// Engine.StateChanged is the source that drives the public ProcessStateChanged (wired in the ctor):
+		// both must observe the same state sequence.
+		strategy.Engine.StateChanged += s => engineStates.Add(s);
+		strategy.ProcessStateChanged += s => publicStates.Add(s.ProcessState);
+
+		await MarkStartedAsync(strategy, CancellationToken);
+		strategy.ProcessState.AreEqual(ProcessStates.Started);
+
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
+		strategy.ProcessState.AreEqual(ProcessStates.Stopping);
+
+		// Each transition produced exactly one engine event and one public event, in the same order with
+		// the same state values (the public surface mirrors the engine sub-object 1:1).
+		engineStates.SequenceEqual([ProcessStates.Started, ProcessStates.Stopping]).AssertTrue();
+		publicStates.SequenceEqual([ProcessStates.Started, ProcessStates.Stopping]).AssertTrue();
+		engineStates.SequenceEqual(publicStates).AssertTrue();
+
+		// The engine's own ProcessState is the authoritative value the public ProcessState reflects.
+		strategy.Engine.ProcessState.AreEqual(strategy.ProcessState);
+	}
+
+	[TestMethod]
+	public void OrderProcessor_Registered_FiresBeforeAndConsistentWith_PublicOrderReceived()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new Strategy { Connector = connMock.Object };
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var sequence = new List<string>();
+		Order registeredOrder = null;
+		Order receivedOrder = null;
+
+		strategy.OrderProcessor.Registered += o => { registeredOrder = o; sequence.Add("registered"); };
+		strategy.OrderReceived += (_, o) => { receivedOrder = o; sequence.Add("received"); };
+
+		// Pending snapshot: only OrderReceived fires (not yet Registered).
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		sequence.SequenceEqual(["received"]).AssertTrue();
+		IsNull(registeredOrder);
+
+		// Active transition: OrderProcessor.Registered fires, THEN the public OrderReceived for the same update.
+		sequence.Clear();
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		sequence.SequenceEqual(["registered", "received"]).AssertTrue();
+		IsNotNull(registeredOrder);
+		IsNotNull(receivedOrder);
+		// Both events observed the SAME order instance.
+		AreEqual(order, registeredOrder);
+		AreEqual(order, receivedOrder);
+		registeredOrder.TransactionId.AreEqual(1L);
+		registeredOrder.State.AreEqual(OrderStates.Active);
+	}
+
+	[TestMethod]
+	public void Trades_TradeAdded_FiresBeforeAndConsistentWith_PublicOwnTradeReceived()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new Strategy { Connector = connMock.Object };
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var sequence = new List<string>();
+		MyTrade addedTrade = null;
+		MyTrade publicTrade = null;
+
+		strategy.Trades.TradeAdded += t => { addedTrade = t; sequence.Add("added"); };
+		strategy.OwnTradeReceived += (_, t) => { publicTrade = t; sequence.Add("public"); };
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		strategy.OnConnectorOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		var trade = CreateNewFeatureTrade(order, tradeId: 7, price: 100m, volume: 10m);
+		strategy.OnTradeReceived(sub, trade);
+
+		// Sub-object TradeAdded precedes the public OwnTradeReceived, both once, same instance.
+		sequence.SequenceEqual(["added", "public"]).AssertTrue();
+		IsNotNull(addedTrade);
+		IsNotNull(publicTrade);
+		AreEqual(trade, addedTrade);
+		AreEqual(trade, publicTrade);
+
+		// The trade is now part of the public trade surface, consistent with the sub-object.
+		strategy.Trades.MyTrades.Contains(trade).AssertTrue();
+		strategy.MyTrades.Contains(trade).AssertTrue();
+		strategy.Trades.MyTrades.Count().AreEqual(strategy.MyTrades.Count());
+	}
+
+	[TestMethod]
+	public void Engine_UnrealizedPnLInterval_BackedBy_StrategyProperty()
+	{
+		// Strategy.UnrealizedPnLInterval delegates to the engine sub-object; pin that they stay in lock-step.
+		var strategy = new Strategy();
+
+		// Default 1 minute on both.
+		strategy.UnrealizedPnLInterval.AreEqual(TimeSpan.FromMinutes(1));
+		strategy.Engine.UnrealizedPnLInterval.AreEqual(TimeSpan.FromMinutes(1));
+
+		strategy.UnrealizedPnLInterval = TimeSpan.FromSeconds(30);
+		strategy.Engine.UnrealizedPnLInterval.AreEqual(TimeSpan.FromSeconds(30));
+		strategy.UnrealizedPnLInterval.AreEqual(TimeSpan.FromSeconds(30));
+	}
+
+	[TestMethod]
+	public void PnLReceived2_FiresWithPnLReceived_CarryingConsistentPayload()
+	{
+		var connMock = CreateMockConnector();
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var sequence = new List<string>();
+		var pnl2Count = 0;
+
+		Portfolio capturedPf = null;
+		DateTime capturedTime = default;
+		decimal capturedRealized = 0;
+		decimal? capturedUnrealized = null;
+		decimal? capturedCommission = null;
+
+#pragma warning disable CS0618 // PnLReceived is obsolete but still raised alongside PnLReceived2.
+		strategy.PnLReceived += _ => sequence.Add("obsolete");
+#pragma warning restore CS0618
+		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
+		{
+			sequence.Add("pnl2");
+			pnl2Count++;
+			capturedPf = pf;
+			capturedTime = time;
+			capturedRealized = realized;
+			capturedUnrealized = unrealized;
+			capturedCommission = commission;
+		};
+
+		// Opening buy at 100 (PnL == 0 -> no PnL change -> PnLReceived* must NOT fire yet).
+		RegisterFillThroughStrategy(strategy, sub, security, portfolio, Sides.Buy, 100m, 10m, txId: 1, tradeId: 1);
+		AreEqual(0, pnl2Count, "Opening trade with zero realized PnL must not raise PnLReceived2");
+
+		// Closing sell at 110 realizes +100 of PnL -> PnL changes -> both events fire together.
+		RegisterFillThroughStrategy(strategy, sub, security, portfolio, Sides.Sell, 110m, 10m, txId: 2, tradeId: 2);
+
+		IsTrue(pnl2Count >= 1, "PnLReceived2 must fire when PnL recomputes on a realizing trade");
+
+		// Both events fire together (same count) and PnLReceived2 carries the consistent detailed payload.
+		var obsoleteCount = sequence.Count(x => x == "obsolete");
+		var pnl2Seq = sequence.Count(x => x == "pnl2");
+		obsoleteCount.AreEqual(pnl2Seq);
+		AreEqual(strategy.PnLManager.RealizedPnL, capturedRealized,
+			"PnLReceived2 realized must equal the live PnLManager.RealizedPnL");
+		capturedRealized.AreEqual(100m);
+		AreEqual(strategy.PnLManager.UnrealizedPnL, capturedUnrealized);
+		AreEqual(strategy.Commission, capturedCommission);
+		AreEqual(portfolio, capturedPf);
+		// Time stamp is the realizing trade's LocalTime (UTC), not default.
+		capturedTime.AreEqual(_newFeatureTradeTime);
+		capturedTime.Kind.AreEqual(DateTimeKind.Utc);
+	}
+
+	#endregion
+
+	#region Position seam: the order route and the trade route feeding the same order
+
+	// Orders arrive as cumulative snapshots and both routes hand the same Order to the position
+	// manager, so the same execution can reach it more than once. Applying it again must not move
+	// the strategy's position.
+
+	[TestMethod]
+	public void PositionSeam_TradeFillThenDoneOrderSnapshot_CountsFillOnce()
+	{
+		// A full fill delivered as a trade, then the same order redelivered on the order route already
+		// Done with zero balance: the strategy owns the fill once.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId: 1, price: 100m, volume: 10m));
+
+		strategy.Position.AreEqual(10m);
+		order.State.AreEqual(OrderStates.Done);
+		order.Balance.AreEqual(0m);
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		AreEqual(10m, strategy.Position, "The finished order snapshot repeats a fill that is already owned");
+	}
+
+	[TestMethod]
+	public void PositionSeam_DoneOrderSnapshotDeliveredTwice_CountsFillOnce()
+	{
+		// Two transaction subscriptions deliver the same finished order: the fill counts once.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub1 = new Subscription(DataType.Transactions);
+		var sub2 = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub1);
+		strategy.Subscriptions.Subscribe(sub2);
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub1, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub1, order);
+
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+
+		strategy.OnConnectorOrderReceived(sub1, order);
+		strategy.Position.AreEqual(10m);
+
+		strategy.OnConnectorOrderReceived(sub2, order);
+
+		AreEqual(10m, strategy.Position, "The second subscription carries the same fill, not another one");
+	}
+
+	[TestMethod]
+	public void PositionSeam_PartialTradeThenOrderSnapshotThenRest_CountsEachFillOnce()
+	{
+		// A partial fill through the trade route, then the matching order snapshot on the order route,
+		// then the rest of the fill: the position follows the executed volume, never doubles it.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId: 1, price: 100m, volume: 4m));
+		strategy.Position.AreEqual(4m);
+
+		// The connector delivers the partially filled order the trade already applied.
+		strategy.OnConnectorOrderReceived(sub, order);
+		AreEqual(4m, strategy.Position, "The order snapshot repeats the partial fill already owned");
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId: 2, price: 100m, volume: 6m));
+		strategy.Position.AreEqual(10m);
+
+		strategy.OnConnectorOrderReceived(sub, order);
+		AreEqual(10m, strategy.Position, "The finished order snapshot adds nothing beyond the two fills");
+	}
+
+	[TestMethod]
+	public void PositionSeam_DoneOrderSnapshotThenTrade_CountsFillOnce()
+	{
+		// The routes in the other order: the finished order snapshot arrives first and the trade for the
+		// same execution follows it.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Done;
+		order.Balance = 0m;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+		strategy.Position.AreEqual(10m);
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId: 1, price: 100m, volume: 10m));
+
+		AreEqual(10m, strategy.Position, "The trade reports the execution the order snapshot already carried");
+	}
+
+	[TestMethod]
+	public async Task PositionSeam_OrdinaryOrderAndTradeTraffic_KeepsErrorStateInfo()
+	{
+		// Ordinary traffic - a Pending snapshot, a fill, a repeated finished snapshot - says nothing is
+		// wrong, so the strategy must still report itself healthy.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		await MarkStartedAsync(strategy, CancellationToken);
+		AreEqual(LogLevels.Info, strategy.ErrorState, "A started strategy reports Info before any traffic");
+
+		var order = CreateNewFeatureOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 1);
+		order.Balance = order.Volume;
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, CreateNewFeatureTrade(order, tradeId: 1, price: 100m, volume: 10m));
+
+		strategy.OnConnectorOrderReceived(sub, order);
+
+		AreEqual(LogLevels.Info, strategy.ErrorState, "Nothing in this traffic is an error");
+	}
+
+	#endregion
+
+	#region Statistics clock
+
+	// Says what the PnL is at each step, so a test about when a report is made does not depend on how
+	// the value in it is computed. A non-zero TradePnL is what makes the trade pipeline report at all.
+	private sealed class ScriptedPnLManager : IPnLManager
+	{
+		public decimal RealizedPnL { get; set; }
+
+		public decimal UnrealizedPnL { get; set; }
+
+		public decimal TradePnL { get; set; }
+
+		public void Reset()
+		{
+			RealizedPnL = default;
+			UnrealizedPnL = default;
+		}
+
+		public void UpdateSecurity(Level1ChangeMessage l1Msg) { }
+
+		public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios = null)
+			=> message is ExecutionMessage { TradeId: not null } execMsg && execMsg.DataType == DataType.Transactions
+				? new PnLInfo(execMsg.ServerTime, 0m, TradePnL)
+				: null;
+
+		public ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken)
+			=> new(new ScriptedPnLManager { RealizedPnL = RealizedPnL, UnrealizedPnL = UnrealizedPnL, TradePnL = TradePnL });
+
+		public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
+
+		public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
+	}
+
+	// Keeps, next to every reported PnL, the market time in force when the strategy reported it, so a
+	// test can measure the same observations on the times the market gave them.
+	private sealed class ClockRecordingStatisticManager(IStatisticManager inner, Func<DateTime> marketTime) : IStatisticManager
+	{
+		private readonly IStatisticManager _inner = inner ?? throw new ArgumentNullException(nameof(inner));
+		private readonly Func<DateTime> _marketTime = marketTime ?? throw new ArgumentNullException(nameof(marketTime));
+
+		public List<(DateTime Stamped, DateTime Market, decimal PnL, decimal? Commission)> PnLReports { get; } = [];
+
+		public IStatisticParameter[] Parameters => _inner.Parameters;
+
+		public void AddPnL(DateTime time, decimal pnl, decimal? commission)
+		{
+			PnLReports.Add((time, _marketTime(), pnl, commission));
+			_inner.AddPnL(time, pnl, commission);
+		}
+
+		public void AddPosition(DateTime time, decimal position) => _inner.AddPosition(time, position);
+
+		public void AddMyTrade(PnLInfo info) => _inner.AddMyTrade(info);
+
+		public void AddNewOrder(Order order) => _inner.AddNewOrder(order);
+
+		public void AddChangedOrder(Order order) => _inner.AddChangedOrder(order);
+
+		public void AddRegisterFailedOrder(OrderFail fail) => _inner.AddRegisterFailedOrder(fail);
+
+		public void AddFailedOrderCancel(OrderFail fail) => _inner.AddFailedOrderCancel(fail);
+
+		public void Reset() => _inner.Reset();
+
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
+
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
+
+		public void Dispose() => _inner.Dispose();
+	}
+
+	private const decimal _statsBeginValue = 100000m;
+
+	private static readonly DateTime _statsStart = new(2024, 1, 3, 15, 0, 0, DateTimeKind.Utc);
+
+	private static ExecutionMessage CreateStatsTick(Security security, DateTime time, decimal price)
+		=> new()
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = security.ToSecurityId(),
+			TradeId = time.Ticks,
+			TradePrice = price,
+			TradeVolume = 1m,
+			ServerTime = time,
+			LocalTime = time,
+		};
+
+	private static MyTrade CreateStatsFill(Security security, Portfolio portfolio, long tradeId, DateTime time)
+	{
+		var order = new Order
+		{
+			TransactionId = tradeId * 100,
+			State = OrderStates.Active,
+			Side = Sides.Sell,
+			Price = 100m,
+			Volume = 1m,
+			Balance = 1m,
+			Security = security,
+			Portfolio = portfolio,
+			Time = time,
+			LocalTime = time,
+		};
+
+		return new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = tradeId,
+				TradePrice = 100m,
+				TradeVolume = 1m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = time,
+				LocalTime = time,
+			},
+		};
+	}
+
+	// Drives the two places a strategy reports its PnL from - a position re-mark and a realizing fill -
+	// over a week of market time, with the engine's unrealized-PnL refresh happening only on the very
+	// first message. The market time is the mock connector's clock, so the strategy has one available.
+	private async Task<ClockRecordingStatisticManager> ReportOnBothPathsAsync()
+	{
+		var marketTime = _statsStart;
+
+		var connMock = CreateMockConnector();
+		connMock.As<ITimeProvider>().SetupGet(p => p.CurrentTime).Returns(() => marketTime);
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+		var pnl = new ScriptedPnLManager();
+
+		using var strategy = new StatsSwapStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			PnLManager = pnl,
+			UnrealizedPnLInterval = TimeSpan.FromDays(30),
+		};
+
+		var recorder = new ClockRecordingStatisticManager(new StatisticManager(), () => marketTime);
+		strategy.UseStatisticManager(recorder);
+
+		var sharpe = recorder.Parameters.OfType<SharpeRatioParameter>().First();
+		sharpe.BeginValue = _statsBeginValue;
+		sharpe.RiskFreeRate = 0m;
+
+		strategy.SetPositionValue(security, portfolio, 10m, _statsStart);
+
+		// Day offset, the strategy's total PnL at that moment, and which of the two paths reports it.
+		(double Day, decimal PnL, bool IsFill)[] steps =
+		[
+			(0.0, 0m, false),
+			(0.5, 10000m, false),
+			(1.5, 20000m, true),
+			(2.5, 30000m, false),
+			(3.5, 25000m, false),
+			(4.5, 40000m, true),
+			(5.5, 38000m, false),
+			(6.5, 50000m, false),
+		];
+
+		var tradeId = 0L;
+
+		foreach (var (day, value, isFill) in steps)
+		{
+			marketTime = _statsStart.AddDays(day);
+
+			if (isFill)
+			{
+				pnl.TradePnL = value - (pnl.RealizedPnL + pnl.UnrealizedPnL);
+				pnl.RealizedPnL = value;
+				pnl.UnrealizedPnL = 0m;
+
+				strategy.Trades.TryAdd(CreateStatsFill(security, portfolio, ++tradeId, marketTime))
+					.AssertTrue("the fill has to be taken for its PnL to be reported");
+			}
+			else
+			{
+				pnl.UnrealizedPnL = value - pnl.RealizedPnL;
+
+				await strategy.OnNewMessage(CreateStatsTick(security, marketTime, 100m + (decimal)day), CancellationToken);
+			}
+		}
+
+		(recorder.PnLReports.Count > 0).AssertTrue("the strategy has to report something for the comparison to be about");
+
+		return recorder;
+	}
+
+	/// <summary>
+	/// A strategy reports its PnL from a position re-mark and from a realizing fill, and the
+	/// risk-adjusted ratios lay their period grid on the times those reports carry. Both paths report
+	/// the same equity curve, so both have to name the same moment - the strategy's own clock. A path
+	/// stamping from a clock of its own puts a report in a neighbouring period, and the ratio is then
+	/// measured on boundaries that never happened.
+	/// </summary>
+	[TestMethod]
+	public async Task Statistics_BothReportingPaths_MeasureTheRatioOnTheStrategyClock()
+	{
+		var recorder = await ReportOnBothPathsAsync();
+
+		var measured = recorder.Parameters.OfType<SharpeRatioParameter>().First();
+
+		var implied = new SharpeRatioParameter { BeginValue = _statsBeginValue, RiskFreeRate = 0m };
+
+		foreach (var report in recorder.PnLReports)
+			implied.Add(report.Market, report.PnL, report.Commission);
+
+		(implied.Value != 0).AssertTrue("the market times have to imply a ratio for the comparison to be about");
+
+		measured.Value.AssertEqual(implied.Value,
+			$"the strategy measured {measured.Value} where its own market times imply {implied.Value}");
+	}
+
+	/// <summary>
+	/// The grid a risk-adjusted ratio lays on the reports only holds while the reports advance: a report
+	/// stamped behind one already made closes no boundary, and it replaces the level the open period is
+	/// holding, so the boundary that does close, closes on a level from the wrong side of it.
+	/// </summary>
+	[TestMethod]
+	public async Task Statistics_Reports_NeverGoBackInTime()
+	{
+		var recorder = await ReportOnBothPathsAsync();
+
+		var stamps = recorder.PnLReports;
+
+		for (var i = 1; i < stamps.Count; i++)
+		{
+			(stamps[i].Stamped >= stamps[i - 1].Stamped).AssertTrue(
+				$"report {i} of {stamps[i].PnL} at {stamps[i].Market} was stamped {stamps[i].Stamped}, behind the {stamps[i - 1].Stamped} of the report before it");
+		}
 	}
 
 	#endregion

@@ -85,16 +85,16 @@ public class LogicalConditionDiagramElement : DiagramElement
 	protected override bool WaitAllInput => Operator != Condition.Or;
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	protected override void SaveState(SettingsStorage storage)
 	{
-		base.Save(storage);
+		base.SaveState(storage);
 		storage.SetValue(InputSocketIds, InputSockets.Select(s => s.Id).ToArray());
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void LoadState(SettingsStorage storage)
 	{
-		base.Load(storage);
+		base.LoadState(storage);
 
 		RemoveSockets(false);
 

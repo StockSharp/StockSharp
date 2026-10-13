@@ -523,11 +523,11 @@ public partial class MainWindow
 
 			connector.ProgressChanged += steps => this.GuiAsync(() => progressBar.Value = steps);
 
-			connector.StateChanged2 += state =>
+			connector.StateChanged2 += async state =>
 			{
 				if (state == ChannelStates.Stopped)
 				{
-					strategy.Stop();
+					await strategy.StopAsync();
 
 					SetIsChartEnabled(chart, false);
 
@@ -577,7 +577,7 @@ public partial class MainWindow
 			//}
 
 			// start strategy before emulation started
-			strategy.Start();
+			await strategy.StartAsync();
 
 			_connectors.Add(connector);
 

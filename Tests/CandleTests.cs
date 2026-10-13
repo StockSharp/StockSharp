@@ -410,7 +410,12 @@ public class CandleTests : BaseTestClass
 		var sub = new CandleBuilderSubscription(md);
 		var transform = new TickCandleBuilderValueTransform();
 
-		var now = DateTime.UtcNow;
+		// Anchored to the start of a minute rather than taken from the clock: the ticks below sit
+		// one second and one minute from it, and a start that happened to fall in the last second
+		// of a minute would put the second tick in the next candle - the builder then returns the
+		// finished one as well, and every assertion here expecting a single candle fails. Roughly
+		// one run in sixty.
+		var now = DateTime.UtcNow.Truncate(TimeSpan.FromMinutes(1));
 
 		var tick1 = new ExecutionMessage
 		{
@@ -620,7 +625,9 @@ public class CandleTests : BaseTestClass
 
 		builder.PoC.Price.AreEqual(100m);
 		builder.High.Price.AreEqual(101m);
-		builder.Low.Price.AreEqual(99m);
+		// Canonical Value Area lower bound is the PoC (100) itself: the below side (99) was
+		// never absorbed into the accumulated volume, so it must not become the VA boundary.
+		builder.Low.Price.AreEqual(100m);
 	}
 
 	[TestMethod]
@@ -681,8 +688,13 @@ public class CandleTests : BaseTestClass
 
 		builder.VolumePercent = 90;
 		builder.Calculate();
-		builder.High.AssertEqual(default);
-		builder.Low.AssertEqual(default);
+		// Total Buy+Sell volume = 24, threshold = round(24 * 0.9) = 22, currVolume starts at PoC(12)=11.
+		// Below side has one combined node (10, vol 7): 11+7=18 <= 22. After the below side is
+		// exhausted the accumulation must continue on the above side: (14, vol 4) -> 18+4=22 (<= 22,
+		// absorbed), then (15, vol 2) -> 22+2=24 > 22 triggers. The Value Area therefore exists with
+		// High at price 15 and Low at the lowest absorbed below node, price 10.
+		builder.High.Price.AreEqual(15m);
+		builder.Low.Price.AreEqual(10m);
 	}
 
 	[TestMethod]
@@ -709,8 +721,10 @@ public class CandleTests : BaseTestClass
 		builder.VolumePercent = 100m;
 		builder.Calculate();
 
-		builder.High.AssertEqual(default);
-		builder.Low.AssertEqual(default);
+		// A 100% Value Area covers the whole profile range: every level is absorbed, so the
+		// bounds must be the extreme prices (High = max level price 14, Low = min level price 10).
+		builder.High.Price.AreEqual(14m);
+		builder.Low.Price.AreEqual(10m);
 	}
 
 	[TestMethod]
@@ -2589,6 +2603,61 @@ public class CandleTests : BaseTestClass
 			builder.Update(transform);
 		});
 	}
+
+	#endregion
+
+	#region CandleSeries persistence
+
+#pragma warning disable CS0618 // Type or member is obsolete
+
+	private async Task<CandleSeries> RoundTripAsync(CandleSeries series)
+	{
+		var restored = new CandleSeries();
+		await restored.LoadAsync(await series.SaveAsync(CancellationToken), CancellationToken);
+		return restored;
+	}
+
+	[TestMethod]
+	public async Task CandleSeries_TimeFrameArg_SurvivesSaveLoad()
+	{
+		// The arg has to come back as the value it went in as, not as its text: consumers read it as
+		// a TimeSpan. Saved text is "00-05-00" (the ':' is not usable in a folder name), parsed back
+		// to 5 minutes.
+		var series = new CandleSeries { CandleType = typeof(TimeFrameCandleMessage), Arg = TimeSpan.FromMinutes(5) };
+
+		var restored = await RoundTripAsync(series);
+
+		restored.CandleType.AssertEqual(typeof(TimeFrameCandleMessage));
+		restored.Arg.AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
+	public async Task CandleSeries_LegacyTimeFrameArg_SurvivesSaveLoad()
+	{
+		var security = Helper.CreateSecurity();
+		var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
+
+		var restored = await RoundTripAsync(series);
+
+		restored.CandleType.AssertEqual(typeof(TimeFrameCandle));
+		restored.Arg.AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
+	public async Task CandleSeries_TickArg_SurvivesSaveLoad()
+	{
+		// A series the class itself accepted must be persistable. Tick candles are counted in trades,
+		// so the arg is the int 100 and it must return as the int 100 - the type of the arg is picked
+		// by the candle type of the series, not fixed to the time-frame one.
+		var series = new CandleSeries { CandleType = typeof(TickCandleMessage), Arg = 100 };
+
+		var restored = await RoundTripAsync(series);
+
+		restored.CandleType.AssertEqual(typeof(TickCandleMessage));
+		restored.Arg.AssertEqual(100);
+	}
+
+#pragma warning restore CS0618 // Type or member is obsolete
 
 	#endregion
 }

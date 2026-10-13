@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a persisted market data subscription configuration.
 /// </summary>
-public record SubscriptionConfig : IPersistable
+public record SubscriptionConfig : IAsyncPersistable
 {
 	/// <summary>
 	/// <see cref="SecurityId"/>
@@ -50,7 +50,7 @@ public record SubscriptionConfig : IPersistable
 	/// </summary>
 	public int? MaxDepth { get; set; }
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		DataType load(string name)
 		{
@@ -71,9 +71,11 @@ public record SubscriptionConfig : IPersistable
 		To = storage.GetValue<long?>(nameof(To))?.To<DateTime>().UtcKind();
 		Count = storage.GetValue<long?>(nameof(Count));
 		MaxDepth = storage.GetValue<int?>(nameof(MaxDepth));
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Security), Security?.ToStringId())
@@ -86,5 +88,7 @@ public record SubscriptionConfig : IPersistable
 			.Set(nameof(Count), Count)
 			.Set(nameof(MaxDepth), MaxDepth)
 		;
+
+		return Task.CompletedTask;
 	}
 }

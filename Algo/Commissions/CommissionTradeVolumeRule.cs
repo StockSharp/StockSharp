@@ -11,7 +11,10 @@ namespace StockSharp.Algo.Commissions;
 public class CommissionTradeVolumeRule : CommissionRule
 {
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+		=> new(Calculate(message));
+
+	private decimal? Calculate(ExecutionMessage message)
 	{
 		if (!message.HasTradeInfo())
 			return null;

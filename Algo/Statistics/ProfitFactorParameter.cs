@@ -51,20 +51,20 @@ public class ProfitFactorParameter : BaseStatisticParameter<decimal>, ITradeStat
 	}
 
 	/// <inheritdoc/>
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("GrossProfit", _grossProfit);
 		storage.Set("GrossLoss", _grossLoss);
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_grossProfit = storage.GetValue<decimal>("GrossProfit");
 		_grossLoss = storage.GetValue<decimal>("GrossLoss");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

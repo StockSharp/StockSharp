@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.IO.Compression;
-
 using Ecng.IO;
 using Ecng.IO.Compression;
 
@@ -31,7 +29,15 @@ public interface ICsvEntityList : IAsyncDisposable
 	/// Get archived copy body.
 	/// </summary>
 	/// <returns>File body.</returns>
+	[Obsolete("Use GetCopyAsync instead.")]
 	byte[] GetCopy();
+
+	/// <summary>
+	/// Get archived copy body.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>File body.</returns>
+	ValueTask<byte[]> GetCopyAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -119,8 +125,34 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		FileSystem.CreateDirectory(dir);
 
 		var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
-		_writer = stream.CreateCsvWriter(Registry.Encoding, false);
+		_writer = stream.CreateCsvWriter(AppendEncoding(), false);
 	}
+
+	/// <summary>
+	/// The encoding an append is written in.
+	/// </summary>
+	/// <returns>The registry's encoding, without its preamble when the file already carries one.</returns>
+	/// <remarks>
+	/// A writer emits the preamble unless the stream it is given says it is past its start, and
+	/// <see cref="TransactionFileStream"/> cannot seek, so it never does. A second preamble lands in the
+	/// middle of the file, where it becomes part of the first value of the row it opens - and that row,
+	/// and every entity it refers to, no longer reads back.
+	/// </remarks>
+	private Encoding AppendEncoding()
+	{
+		var encoding = Registry.Encoding;
+
+		return FileSystem.FileExists(FileName) ? WithoutPreamble(encoding) : encoding;
+	}
+
+	private static Encoding WithoutPreamble(Encoding encoding)
+		=> encoding switch
+		{
+			UTF8Encoding when !encoding.Preamble.IsEmpty => new UTF8Encoding(false),
+			UnicodeEncoding when !encoding.Preamble.IsEmpty => new UnicodeEncoding(encoding.CodePage == 1201, false),
+			UTF32Encoding when !encoding.Preamble.IsEmpty => new UTF32Encoding(encoding.CodePage == 12001, false),
+			_ => encoding,
+		};
 
 	private void ResetStream()
 	{
@@ -135,7 +167,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	public bool CreateArchivedCopy { get; set; }
 
 	/// <inheritdoc />
+	[Obsolete("Use GetCopyAsync instead.")]
 	public byte[] GetCopy()
+		=> AsyncHelper.Run(() => GetCopyAsync());
+
+	/// <inheritdoc />
+	public async ValueTask<byte[]> GetCopyAsync(CancellationToken cancellationToken = default)
 	{
 		if (!CreateArchivedCopy)
 			throw new NotSupportedException();
@@ -147,14 +184,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		if (body is null)
 		{
-			using (_copySync.EnterScope())
-			{
-				body = FileSystem.FileExists(FileName)
-					? FileSystem.ReadAllBytes(FileName)
-					: [];
-			}
+			body = FileSystem.FileExists(FileName)
+				? await FileSystem.ReadAllBytesAsync(FileName, cancellationToken).NoWait()
+				: [];
 
-			body = body.Compress<GZipStream>();
+			body = await body.GZipAsync(cancellationToken).NoWait();
 
 			using (_copySync.EnterScope())
 				_copy ??= body;
@@ -268,8 +302,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// Read data from CSV.
 	/// </summary>
 	/// <param name="reader">CSV reader.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Trade object.</returns>
-	protected abstract TEntity Read(FastCsvReader reader);
+	protected abstract ValueTask<TEntity> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken);
 
 	/// <inheritdoc />
 	public override bool Contains(TEntity item)
@@ -400,7 +435,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			{
 				try
 				{
-					var item = Read(reader);
+					var item = await ReadAsync(reader, cancellationToken);
 					var key = GetNormalizedKey(item);
 
 					using (EnterScope())

@@ -99,7 +99,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 			else if (msg is BoardMessage boardMsg)
 			{
 				count++;
-				_exchangeInfoProvider.GetOrCreateBoard(boardMsg.Code);
+				_exchangeInfoProvider.Save(boardMsg.ToBoard());
 			}
 			else
 			{

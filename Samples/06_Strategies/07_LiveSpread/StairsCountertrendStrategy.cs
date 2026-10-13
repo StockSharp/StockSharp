@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using Ecng.Logging;
 
+using Ecng.Common;
+
 using StockSharp.Algo.Strategies;
 using StockSharp.Messages;
 using StockSharp.BusinessEntities;

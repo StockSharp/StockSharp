@@ -151,7 +151,7 @@ public class GpuShiftCalculator : GpuIndicatorCalculatorBase<Shift, GpuShiftPara
 		var resIndex = paramIdx * flatCandles.Length + globalIdx;
 		var prm = parameters[paramIdx];
 
-		if (candleIdx < prm.Length)
+		if (prm.Length <= 0 || candleIdx < prm.Length - 1)
 		{
 			flatResults[resIndex] = new()
 			{

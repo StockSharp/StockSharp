@@ -109,7 +109,38 @@ public class PnLManager : IPnLManager
 				using (_managersByPf.EnterScope())
 				{
 					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, createManager);
-					_managersByTransId.Add(regMsg.TransactionId, manager);
+
+					if (_managersByTransId.TryGetValue(regMsg.TransactionId, out var existingManager))
+					{
+						if (!ReferenceEquals(existingManager, manager))
+							throw new InvalidOperationException("The transaction identifier is already associated with another portfolio.");
+					}
+					else
+						_managersByTransId.Add(regMsg.TransactionId, manager);
+				}
+
+				return null;
+			}
+
+			case MessageTypes.OrderReplace:
+			{
+				var replaceMsg = (OrderReplaceMessage)message;
+
+				using (_managersByPf.EnterScope())
+				{
+					if (!_managersByTransId.TryGetValue(replaceMsg.OriginalTransactionId, out var manager))
+						manager = _managersByPf.SafeAdd(replaceMsg.PortfolioName, createManager);
+					else if (!replaceMsg.PortfolioName.IsEmpty()
+						&& !string.Equals(manager.PortfolioName, replaceMsg.PortfolioName, StringComparison.InvariantCultureIgnoreCase))
+						throw new InvalidOperationException("The replacement order is associated with another portfolio.");
+
+					if (_managersByTransId.TryGetValue(replaceMsg.TransactionId, out var existingManager))
+					{
+						if (!ReferenceEquals(existingManager, manager))
+							throw new InvalidOperationException("The transaction identifier is already associated with another portfolio.");
+					}
+					else
+						_managersByTransId.Add(replaceMsg.TransactionId, manager);
 				}
 
 				return null;
@@ -229,35 +260,41 @@ public class PnLManager : IPnLManager
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		UseCandles = storage.GetValue(nameof(UseCandles), UseCandles);
 		UseLevel1 = storage.GetValue(nameof(UseLevel1), UseLevel1);
 		UseOrderBook = storage.GetValue(nameof(UseOrderBook), UseOrderBook);
 		UseOrderLog = storage.GetValue(nameof(UseOrderLog), UseOrderLog);
 		UseTick = storage.GetValue(nameof(UseTick), UseTick);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set(nameof(UseCandles), UseCandles);
 		storage.Set(nameof(UseLevel1), UseLevel1);
 		storage.Set(nameof(UseOrderBook), UseOrderBook);
 		storage.Set(nameof(UseOrderLog), UseOrderLog);
 		storage.Set(nameof(UseTick), UseTick);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
-	public IPnLManager Clone()
+	public async ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new PnLManager();
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

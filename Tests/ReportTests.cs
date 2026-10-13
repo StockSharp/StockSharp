@@ -1,7 +1,10 @@
 namespace StockSharp.Tests;
 
+using System.Text;
+
 using Ecng.Excel;
 
+using StockSharp.Localization;
 using StockSharp.Reporting;
 
 [TestClass]
@@ -160,6 +163,7 @@ public class ReportTests : BaseTestClass
 	[DataRow(FileExts.Csv)]
 	public async Task ReportGenerator_MatchesExpectedOutput(string format)
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateDeterministicSource();
 
 		IReportGenerator generator = format switch
@@ -189,6 +193,7 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task CsvReportGenerator_ContainsAllRequiredSections()
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateDeterministicSource();
 		var generator = new CsvReportGenerator { IncludeOrders = true, IncludeTrades = true };
 
@@ -198,47 +203,27 @@ public class ReportTests : BaseTestClass
 		stream.Position = 0;
 		var csv = new StreamReader(stream).ReadToEnd();
 
-		// Verify strategy info
-		csv.AssertContains("TestStrategy");
-		csv.AssertContains("5000"); // PnL
-		csv.AssertContains("100"); // Position
-		csv.AssertContains("25"); // Commission
+		csv.AssertContains("TestStrategy,08:00:00,100,5000,25,1.5,00:00:00.0500000");
 
 		// Verify parameters
 		csv.AssertContains("Symbol");
 		csv.AssertContains("BTCUSD");
 
 		// Verify statistics
-		csv.AssertContains("WinRate");
-		csv.AssertContains("0.65");
-		csv.AssertContains("MaxDrawdown");
-		csv.AssertContains("-500");
+		csv.AssertContains("WinRate,MaxDrawdown,TradesCount,AverageTradeTime,BestTradeDate,SharpeRatio");
+		csv.AssertContains("0.65,-500,42,00:15:00,2024-01-15T14:30:00Z,1.85");
 
 		// Verify orders
-		csv.AssertContains("50000"); // Order price
-		csv.AssertContains("50500"); // Order price
+		csv.AssertContains("1,100,BTCUSD@CRYPTO,Buy,2024-01-15T10:00:00Z,50000,Done,0,1,Limit");
+		csv.AssertContains("2,101,BTCUSD@CRYPTO,Sell,2024-01-15T11:00:00Z,50500,Done,0,1,Limit");
 
 		// Verify trades
-		csv.AssertContains("1001"); // Trade ID
-		csv.AssertContains("1002"); // Trade ID
-		csv.AssertContains("500"); // PnL
+		csv.AssertContains("1001,100,BTCUSD@CRYPTO,2024-01-15T10:00:00Z,50000,1,Buy,1,0,0");
+		csv.AssertContains("1002,101,BTCUSD@CRYPTO,2024-01-15T11:00:00Z,50500,1,Sell,2,500,0");
 
 		// Verify diverse parameter types
-		csv.AssertContains("TimeFrame");
-		csv.AssertContains("00:05:00"); // TimeSpan
-		csv.AssertContains("StartDate");
-		csv.AssertContains("IsLong");
-		csv.AssertContains("True");
-		csv.AssertContains("MaxPositions");
-		csv.AssertContains("5");
-
-		// Verify diverse statistic types
-		csv.AssertContains("TradesCount");
-		csv.AssertContains("42");
-		csv.AssertContains("AverageTradeTime");
-		csv.AssertContains("00:15:00");
-		csv.AssertContains("SharpeRatio");
-		csv.AssertContains("1.85");
+		csv.AssertContains("Symbol,TimeFrame,StartDate,Volume,IsLong,MaxPositions");
+		csv.AssertContains("BTCUSD,00:05:00,2024-01-01T00:00:00Z,100,True,5");
 	}
 
 	[TestMethod]
@@ -286,6 +271,163 @@ public class ReportTests : BaseTestClass
 
 		csv.AssertContains("CsvTestStrategy");
 		csv.AssertContains("2000");
+	}
+
+	// Minimal RFC 4180 reader used as an independent oracle: whatever the report writes must be
+	// splittable back into the exact cell values by any standard CSV consumer.
+	private static List<string[]> ParseCsv(string text, string separator)
+	{
+		var records = new List<string[]>();
+		var fields = new List<string>();
+		var field = new StringBuilder();
+		var inQuotes = false;
+		var i = 0;
+
+		while (i < text.Length)
+		{
+			var ch = text[i];
+
+			if (inQuotes)
+			{
+				if (ch == '"')
+				{
+					if ((i + 1) < text.Length && text[i + 1] == '"')
+					{
+						field.Append('"');
+						i += 2;
+					}
+					else
+					{
+						inQuotes = false;
+						i++;
+					}
+				}
+				else
+				{
+					field.Append(ch);
+					i++;
+				}
+
+				continue;
+			}
+
+			if (ch == '"' && field.Length == 0)
+			{
+				inQuotes = true;
+				i++;
+			}
+			else if (string.CompareOrdinal(text, i, separator, 0, separator.Length) == 0)
+			{
+				fields.Add(field.ToString());
+				field.Clear();
+				i += separator.Length;
+			}
+			else if (ch == '\r' || ch == '\n')
+			{
+				fields.Add(field.ToString());
+				field.Clear();
+				records.Add([.. fields]);
+				fields.Clear();
+				i += (ch == '\r' && (i + 1) < text.Length && text[i + 1] == '\n') ? 2 : 1;
+			}
+			else
+			{
+				field.Append(ch);
+				i++;
+			}
+		}
+
+		if (field.Length > 0 || fields.Count > 0)
+		{
+			fields.Add(field.ToString());
+			records.Add([.. fields]);
+		}
+
+		return records;
+	}
+
+	[TestMethod]
+	public async Task CsvReportGenerator_EscapesSeparatorQuoteAndNewLineInValues()
+	{
+		using var culture = Do.WithInvariantCulture();
+
+		// Names a strategy may legitimately carry: the list separator, a double quote, a line break.
+		const string strategyName = "Alpha, \"Beta\"";
+		const string paramName = "Entry\nExit";
+		const string paramValue = "a,b;c";
+		const string statName = "Win\"Rate\"";
+
+		var source = new ReportSource
+		{
+			Name = strategyName,
+			TotalWorkingTime = TimeSpan.FromHours(8),
+			Position = 100m,
+			PnL = 5000m,
+			Commission = 25m,
+			Slippage = 1.5m,
+			Latency = TimeSpan.FromMilliseconds(50),
+		};
+
+		source.AddParameter(paramName, paramValue);
+		source.AddStatisticParameter(statName, 0.65m);
+
+		var generator = new CsvReportGenerator { IncludeOrders = false, IncludeTrades = false, IncludePositions = false };
+
+		using var stream = new MemoryStream();
+		await generator.Generate(source, stream, CancellationToken);
+
+		stream.Position = 0;
+		var csv = new StreamReader(stream, generator.Encoding).ReadToEnd();
+
+		var records = ParseCsv(csv, CultureInfo.InvariantCulture.TextInfo.ListSeparator);
+
+		// header, strategy values, "Parameters", param names, param values, "Statistics", stat names, stat values
+		AreEqual(8, records.Count, "each report line must stay a single CSV record");
+		AreEqual(7, records[1].Length, "strategy line must stay 7 cells wide");
+		AreEqual(strategyName, records[1][0], "strategy name must survive the round trip");
+		AreEqual(paramName, records[3][0], "parameter name must survive the round trip");
+		AreEqual(paramValue, records[4][0], "parameter value must survive the round trip");
+		AreEqual(statName, records[6][0], "statistic name must survive the round trip");
+	}
+
+	[TestMethod]
+	public async Task CsvReportGenerator_KeepsCellsWhenDecimalSeparatorMatchesListSeparator()
+	{
+		// The separator is captured when the generator is built, numbers are formatted when it runs.
+		// Under a culture whose decimal separator equals that list separator the row must still
+		// split back into the same cells, whichever culture the generator decides to follow.
+		CsvReportGenerator generator;
+
+		using (Do.WithInvariantCulture())
+			generator = new() { IncludeOrders = false, IncludeTrades = false, IncludePositions = false };
+
+		var source = new ReportSource
+		{
+			Name = "CultureStrategy",
+			TotalWorkingTime = TimeSpan.FromHours(8),
+			Position = 100m,
+			PnL = 1234.5m,
+			Commission = 25m,
+			Slippage = 1.5m,
+			Latency = TimeSpan.FromMilliseconds(50),
+		};
+
+		// A culture whose decimal separator is the list separator the generator already captured.
+		var commaDecimal = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+		commaDecimal.NumberFormat.NumberDecimalSeparator = ",";
+
+		using var stream = new MemoryStream();
+
+		using (Do.WithCulture(commaDecimal))
+			await generator.Generate(source, stream, CancellationToken);
+
+		stream.Position = 0;
+		var csv = new StreamReader(stream, generator.Encoding).ReadToEnd();
+
+		var values = ParseCsv(csv, CultureInfo.InvariantCulture.TextInfo.ListSeparator)[1];
+
+		AreEqual(7, values.Length, "decimal values must not add cells to the strategy line");
+		AreEqual("CultureStrategy", values[0]);
 	}
 
 	[TestMethod]
@@ -774,6 +916,130 @@ public class ReportTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ReportSource_AggregateTrades_LatePeersDoNotOverrideLastPosition()
+	{
+		// Aggregation must be batch-invariant: aggregating everything at once and aggregating
+		// incrementally as trades arrive must report the same position for the bucket.
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
+
+		static ReportTrade Trade(long id, SecurityId secId, DateTime time, decimal price, decimal volume, decimal position)
+			=> new(TradeId: id, OrderTransactionId: id, SecurityId: secId, Time: time,
+				TradePrice: price, OrderPrice: price, Volume: volume, Side: Sides.Buy,
+				OrderId: id, Slippage: null, PnL: null, Position: position);
+
+		var bucket = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var early = Trade(1, securityId, bucket.AddMinutes(10), 100m, 1m, 1m);
+		var latest = Trade(2, securityId, bucket.AddMinutes(50), 200m, 1m, 2m);
+		var late = Trade(3, securityId, bucket.AddMinutes(20), 300m, 2m, 3m);
+
+		var interval = TimeSpan.FromHours(1);
+
+		// Volume 1 + 1 + 2 = 4; price (100 * 1 + 200 * 1 + 300 * 2) / 4 = 900 / 4 = 225.
+		// The chronologically last trade of the bucket is the 10:50 one, so the position is 2.
+		const decimal expectedVolume = 4m;
+		const decimal expectedPrice = 225m;
+		const decimal expectedPosition = 2m;
+
+		var atOnce = new ReportSource { Name = "Test", MaxTradesBeforeAggregation = 0 };
+		atOnce.AddTrades([early, latest, late]);
+		atOnce.AggregateTrades(interval);
+
+		atOnce.TradesCount.AssertEqual(1);
+		var single = atOnce.OwnTrades.First();
+		single.Volume.AssertEqual(expectedVolume);
+		single.TradePrice.AssertEqual(expectedPrice);
+		AreEqual(expectedPosition, single.Position, "single-shot aggregation must take the position of the latest trade");
+
+		var incremental = new ReportSource { Name = "Test", MaxTradesBeforeAggregation = 0 };
+		incremental.AddTrades([early, latest]);
+		incremental.AggregateTrades(interval);
+		incremental.AddTrade(late);
+		incremental.AggregateTrades(interval);
+
+		incremental.TradesCount.AssertEqual(1);
+		var repeated = incremental.OwnTrades.First();
+		repeated.Volume.AssertEqual(expectedVolume);
+		repeated.TradePrice.AssertEqual(expectedPrice);
+		AreEqual(expectedPosition, repeated.Position, "re-aggregating with a late trade must not move the position off the latest trade");
+	}
+
+	[TestMethod]
+	public void ReportSource_AggregateOrders_NullVolume_AveragePriceIsBatchInvariant()
+	{
+		// With no volumes the aggregate price is the plain average of the source prices,
+		// and that average must not depend on how the aggregation was split into batches.
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var interval = TimeSpan.FromHours(1);
+
+		// (100 + 200 + 300) / 3 = 200
+		const decimal expectedPrice = 200m;
+
+		var atOnce = new ReportSource { Name = "Test", MaxOrdersBeforeAggregation = 0 };
+		atOnce.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, null, null, OrderTypes.Limit);
+		atOnce.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, null, null, OrderTypes.Limit);
+		atOnce.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(10), 300m, OrderStates.Done, null, null, OrderTypes.Limit);
+		atOnce.AggregateOrders(interval);
+
+		atOnce.OrdersCount.AssertEqual(1);
+		AreEqual(expectedPrice, atOnce.Orders.First().Price, "single-shot average of 100/200/300");
+
+		var incremental = new ReportSource { Name = "Test", MaxOrdersBeforeAggregation = 0 };
+		incremental.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, null, null, OrderTypes.Limit);
+		incremental.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, null, null, OrderTypes.Limit);
+		incremental.AggregateOrders(interval);
+		incremental.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(10), 300m, OrderStates.Done, null, null, OrderTypes.Limit);
+		incremental.AggregateOrders(interval);
+
+		incremental.OrdersCount.AssertEqual(1);
+		AreEqual(expectedPrice, incremental.Orders.First().Price, "batched aggregation must give the same average as a single pass");
+	}
+
+	/// <summary>
+	/// A user is entitled to tell one line of a report from another. Aggregation throws the order id away and
+	/// gives the row a made-up transaction id instead, so that id is all the identity an aggregated row has
+	/// left. Aggregating a second time - which is exactly what auto-aggregation does on every further order
+	/// once it has started - must not hand two rows of the same report the same id: a reader then cannot see
+	/// that they are two different hours of trading, and anything keyed on that id silently merges them.
+	/// </summary>
+	[TestMethod]
+	public void ReportSource_RepeatedAggregation_GivesEachBucketItsOwnTransactionId()
+	{
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
+		var interval = TimeSpan.FromHours(1);
+		var hour1 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var hour2 = hour1.AddHours(1);
+
+		// Automatic aggregation is off so that the passes below are the only ones that run.
+		var source = new ReportSource { Name = "Test", MaxOrdersBeforeAggregation = 0 };
+
+		// The first hour has two orders and collapses; the second has one and is carried over untouched.
+		source.AddOrder(1, 1, securityId, Sides.Buy, hour1, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, hour1.AddMinutes(5), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, hour2, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AggregateOrders(interval);
+
+		source.OrdersCount.AssertEqual(2);
+
+		// A second order in the second hour makes that hour collapse on a pass that also re-reads the
+		// aggregate the first pass produced.
+		source.AddOrder(4, 4, securityId, Sides.Buy, hour2.AddMinutes(5), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AggregateOrders(interval);
+
+		var orders = source.Orders.OrderBy(o => o.Time).ToArray();
+
+		orders.Length.AssertEqual(2);
+
+		AreEqual(hour1, orders[0].Time, "the first bucket keeps its own hour");
+		AreEqual(hour2, orders[1].Time, "the second bucket keeps its own hour");
+		AreEqual((decimal?)2m, orders[0].Volume, "the first hour aggregates both of its orders");
+		AreEqual((decimal?)2m, orders[1].Volume, "the second hour aggregates both of its orders");
+
+		AreNotEqual(orders[0].TransactionId, orders[1].TransactionId, "two aggregated buckets must not share one transaction id");
+	}
+
+	[TestMethod]
 	public void ReportSource_AggregateOrders_BalanceIsNull()
 	{
 		var source = new ReportSource { Name = "Test" };
@@ -1185,6 +1451,7 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task ExcelReportGenerator_WithTemplate_ContainsTradeData()
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateMockSourceWithData();
 		var template = ExcelReportGenerator.GetTemplate();
 		template.AssertNotNull("Template must be available for this test");
@@ -1204,7 +1471,243 @@ public class ReportTests : BaseTestClass
 
 		worker.SwitchSheet("Trades");
 		var rowCount = worker.GetRowsCount();
-		IsTrue(rowCount > 0, "Trades sheet should have data");
+		rowCount.AssertEqual(3, "Trades sheet should contain one header and two data rows");
+	}
+
+	private static ReportSource CreateExcelParitySource()
+	{
+		var source = new ReportSource
+		{
+			Name = "ParityStrategy",
+			PnL = 100m,
+			Position = 0m,
+			Commission = 12.5m,
+			Slippage = 3.25m,
+			TotalWorkingTime = TimeSpan.FromHours(5),
+		};
+
+		source.AddParameter(LocalizedStrings.InitialCapital, 100000m);
+		source.AddStatisticParameter("Sharpe Ratio", 1.5m);
+
+		var securityId = new SecurityId { SecurityCode = "BTCUSD", BoardCode = "CRYPTO" };
+
+		// Two calendar days so the equity curve has two points; the second trade leaves the
+		// optional trade id, order id and slippage unset.
+		source.AddTrade(new ReportTrade(
+			TradeId: 5001, OrderTransactionId: 900, SecurityId: securityId,
+			Time: new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+			TradePrice: 50000m, OrderPrice: 50000m, Volume: 0.5m, Side: Sides.Buy,
+			OrderId: 11, Slippage: 1.5m, PnL: 120m, Position: 0.5m));
+		source.AddTrade(new ReportTrade(
+			TradeId: null, OrderTransactionId: 901, SecurityId: securityId,
+			Time: new DateTime(2024, 3, 2, 11, 30, 0, DateTimeKind.Utc),
+			TradePrice: 50500m, OrderPrice: 50500m, Volume: 0.5m, Side: Sides.Sell,
+			OrderId: null, Slippage: null, PnL: -20m, Position: 0m));
+
+		source.AddOrder(new ReportOrder(
+			Id: 11, TransactionId: 900, SecurityId: securityId, Side: Sides.Buy,
+			Time: new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+			Price: 50000m, State: OrderStates.Done, Balance: 0m, Volume: 0.5m, Type: OrderTypes.Limit));
+		source.AddOrder(new ReportOrder(
+			Id: null, TransactionId: 901, SecurityId: securityId, Side: Sides.Sell,
+			Time: new DateTime(2024, 3, 2, 11, 30, 0, DateTimeKind.Utc),
+			Price: 50500m, State: OrderStates.Active, Balance: null, Volume: 0.5m, Type: OrderTypes.Market));
+
+		source.AddPosition(new ReportPosition(
+			SecurityId: securityId, PortfolioName: "ParityPortfolio",
+			OpenTime: new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc), OpenPrice: 50000m,
+			CloseTime: new DateTime(2024, 3, 2, 11, 30, 0, DateTimeKind.Utc), ClosePrice: 50500m,
+			MaxPosition: 0.5m));
+
+		return source;
+	}
+
+	private static void AssertParitySheets(IExcelWorker worker, string path)
+	{
+		var day1 = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+		var day2 = new DateTime(2024, 3, 2, 11, 30, 0, DateTimeKind.Utc);
+
+		worker.SwitchSheet("Params");
+		AreEqual("ParityStrategy", worker.GetCell<string>(1, 1), $"{path}: strategy name");
+		AreEqual("Sharpe Ratio", worker.GetCell<string>(0, 15), $"{path}: statistic name");
+		AreEqual(1.5m, worker.GetCell<decimal>(1, 15), $"{path}: statistic value");
+		AreEqual(LocalizedStrings.InitialCapital, worker.GetCell<string>(3, 15), $"{path}: parameter name");
+		AreEqual(100000m, worker.GetCell<decimal>(4, 15), $"{path}: parameter value");
+
+		// Trades: TradeId, Time, Security, Side, Volume, Price, PnL, Slippage, TotalPnL.
+		// Running PnL is 120 then 120 - 20 = 100.
+		worker.SwitchSheet("Trades");
+		AreEqual(5001L, worker.GetCell<long?>(0, 1), $"{path}: trade 1 id");
+		AreEqual(day1, worker.GetCell<DateTime>(1, 1), $"{path}: trade 1 time");
+		AreEqual("BTCUSD@CRYPTO", worker.GetCell<string>(2, 1), $"{path}: trade 1 security");
+		AreEqual("Buy", worker.GetCell<string>(3, 1), $"{path}: trade 1 side");
+		AreEqual(0.5m, worker.GetCell<decimal>(4, 1), $"{path}: trade 1 volume");
+		AreEqual(50000m, worker.GetCell<decimal>(5, 1), $"{path}: trade 1 price");
+		AreEqual(120m, worker.GetCell<decimal>(6, 1), $"{path}: trade 1 pnl");
+		AreEqual(1.5m, worker.GetCell<decimal>(7, 1), $"{path}: trade 1 slippage");
+		AreEqual(120m, worker.GetCell<decimal>(8, 1), $"{path}: trade 1 total pnl");
+
+		IsNull(worker.GetCell<long?>(0, 2), $"{path}: missing trade id must stay empty");
+		AreEqual(day2, worker.GetCell<DateTime>(1, 2), $"{path}: trade 2 time");
+		AreEqual("Sell", worker.GetCell<string>(3, 2), $"{path}: trade 2 side");
+		AreEqual(50500m, worker.GetCell<decimal>(5, 2), $"{path}: trade 2 price");
+		AreEqual(-20m, worker.GetCell<decimal>(6, 2), $"{path}: trade 2 pnl");
+		AreEqual(0m, worker.GetCell<decimal>(7, 2), $"{path}: missing slippage counts as zero");
+		AreEqual(100m, worker.GetCell<decimal>(8, 2), $"{path}: trade 2 total pnl");
+
+		// Orders: OrderId, TransactionId, Security, Side, Time, Price, State, Balance, Volume, Type.
+		worker.SwitchSheet("Orders");
+		AreEqual(11L, worker.GetCell<long?>(0, 1), $"{path}: order 1 id");
+		AreEqual(900L, worker.GetCell<long>(1, 1), $"{path}: order 1 transaction");
+		AreEqual("BTCUSD@CRYPTO", worker.GetCell<string>(2, 1), $"{path}: order 1 security");
+		AreEqual("Buy", worker.GetCell<string>(3, 1), $"{path}: order 1 side");
+		AreEqual(day1, worker.GetCell<DateTime>(4, 1), $"{path}: order 1 time");
+		AreEqual(50000m, worker.GetCell<decimal>(5, 1), $"{path}: order 1 price");
+		AreEqual("Done", worker.GetCell<string>(6, 1), $"{path}: order 1 state");
+		AreEqual(0m, worker.GetCell<decimal>(7, 1), $"{path}: order 1 balance");
+		AreEqual(0.5m, worker.GetCell<decimal>(8, 1), $"{path}: order 1 volume");
+		AreEqual("Limit", worker.GetCell<string>(9, 1), $"{path}: order 1 type");
+
+		IsNull(worker.GetCell<long?>(0, 2), $"{path}: missing order id must stay empty");
+		AreEqual(901L, worker.GetCell<long>(1, 2), $"{path}: order 2 transaction");
+		AreEqual(day2, worker.GetCell<DateTime>(4, 2), $"{path}: order 2 time");
+		AreEqual("Active", worker.GetCell<string>(6, 2), $"{path}: order 2 state");
+		IsNull(worker.GetCell<decimal?>(7, 2), $"{path}: missing balance must stay empty");
+		AreEqual("Market", worker.GetCell<string>(9, 2), $"{path}: order 2 type");
+
+		// Positions: Security, Portfolio, OpenTime, OpenPrice, CloseTime, ClosePrice, MaxPosition.
+		worker.SwitchSheet("Positions");
+		AreEqual("BTCUSD@CRYPTO", worker.GetCell<string>(0, 1), $"{path}: position security");
+		AreEqual("ParityPortfolio", worker.GetCell<string>(1, 1), $"{path}: position portfolio");
+		AreEqual(day1, worker.GetCell<DateTime>(2, 1), $"{path}: position open time");
+		AreEqual(50000m, worker.GetCell<decimal>(3, 1), $"{path}: position open price");
+		AreEqual(day2, worker.GetCell<DateTime>(4, 1), $"{path}: position close time");
+		AreEqual(50500m, worker.GetCell<decimal>(5, 1), $"{path}: position close price");
+		AreEqual(0.5m, worker.GetCell<decimal>(6, 1), $"{path}: position max volume");
+
+		// Equity: initial capital 100000, cumulative PnL 120 then 100, so 100120 and 100100.
+		// The peak after day 1 is 100120, hence day 1 drawdown 0 and day 2 100100 / 100120 - 1.
+		worker.SwitchSheet("Equity");
+		AreEqual(day1.Date, worker.GetCell<DateTime>(0, 1), $"{path}: equity day 1");
+		AreEqual(100120m, worker.GetCell<decimal>(1, 1), $"{path}: equity value day 1");
+		AreEqual(0m, worker.GetCell<decimal>(2, 1), $"{path}: drawdown at a new peak is zero");
+		AreEqual(day2.Date, worker.GetCell<DateTime>(0, 2), $"{path}: equity day 2");
+		AreEqual(100100m, worker.GetCell<decimal>(1, 2), $"{path}: equity value day 2");
+		AreEqual((100100m / 100120m) - 1m, worker.GetCell<decimal>(2, 2), $"{path}: drawdown below the peak");
+	}
+
+	[TestMethod]
+	public async Task ExcelReportGenerator_BothPaths_WriteSameValues()
+	{
+		// The template and the from-scratch writer are separate code paths that promise the same
+		// report, so one fixed source must produce the same numbers, times and empty optionals in both.
+		using var culture = Do.WithInvariantCulture();
+
+		var provider = new OpenXmlExcelWorkerProvider();
+		var template = ExcelReportGenerator.GetTemplate();
+		IsTrue(template.Length > 0, "Template must be available for this test");
+
+		using var withoutTemplate = new MemoryStream();
+		await new ExcelReportGenerator(provider) { IncludeOrders = true, IncludeTrades = true, IncludePositions = true }
+			.Generate(CreateExcelParitySource(), withoutTemplate, CancellationToken);
+
+		using var withTemplate = new MemoryStream();
+		await new ExcelReportGenerator(provider, template) { IncludeOrders = true, IncludeTrades = true, IncludePositions = true }
+			.Generate(CreateExcelParitySource(), withTemplate, CancellationToken);
+
+		withoutTemplate.Position = 0;
+		using (var worker = provider.OpenExist(withoutTemplate))
+			AssertParitySheets(worker, "no template");
+
+		withTemplate.Position = 0;
+		using (var worker = provider.OpenExist(withTemplate))
+			AssertParitySheets(worker, "template");
+	}
+
+	[TestMethod]
+	public async Task ExcelReportGenerator_WithTemplate_ExcludesTrades_WhenDisabled()
+	{
+		// The template already carries a Trades sheet, so switching the section off must leave
+		// its placeholder row untouched while the sections still enabled are filled as usual.
+		using var culture = Do.WithInvariantCulture();
+
+		var provider = new OpenXmlExcelWorkerProvider();
+		var template = ExcelReportGenerator.GetTemplate();
+		IsTrue(template.Length > 0, "Template must be available for this test");
+
+		using var stream = new MemoryStream();
+		await new ExcelReportGenerator(provider, template) { IncludeOrders = true, IncludeTrades = false, IncludePositions = true }
+			.Generate(CreateExcelParitySource(), stream, CancellationToken);
+
+		stream.Position = 0;
+		using var worker = provider.OpenExist(stream);
+
+		worker.SwitchSheet("Trades");
+		IsNull(worker.GetCell<string>(2, 1), "no trade must be written when trades are excluded");
+		IsNull(worker.GetCell<long?>(0, 1), "no trade id must be written when trades are excluded");
+
+		worker.SwitchSheet("Orders");
+		AreEqual("BTCUSD@CRYPTO", worker.GetCell<string>(2, 1), "orders stay filled when only trades are excluded");
+
+		worker.SwitchSheet("Positions");
+		AreEqual("ParityPortfolio", worker.GetCell<string>(1, 1), "positions stay filled when only trades are excluded");
+	}
+
+	[TestMethod]
+	public async Task ExcelReportGenerator_WithoutTemplate_StampsOneUtcReportTime()
+	{
+		// The report stamp is a moment in time, so it is UTC like every other time the report carries,
+		// and one report has one stamp: Dashboard and Params cannot disagree because the clock moved between them.
+		var provider = new RecordingExcelWorkerProvider(new OpenXmlExcelWorkerProvider());
+
+		var before = DateTime.UtcNow;
+
+		using var stream = new MemoryStream();
+		await new ExcelReportGenerator(provider) { IncludeOrders = true, IncludeTrades = true, IncludePositions = true }
+			.Generate(CreateExcelParitySource(), stream, CancellationToken);
+
+		var after = DateTime.UtcNow;
+
+		var paramsStamp = provider.TryGetDate(1, 2, LocalizedStrings.Params, "Params");
+		var dashboardStamp = provider.TryGetDate(1, 4, LocalizedStrings.Dashboard, "Dashboard");
+
+		IsNotNull(paramsStamp, "the Params sheet must carry the report stamp");
+		IsNotNull(dashboardStamp, "the Dashboard sheet must carry the report stamp");
+
+		AreEqual(DateTimeKind.Utc, paramsStamp.Value.Kind, "the Params stamp must be UTC");
+		AreEqual(DateTimeKind.Utc, dashboardStamp.Value.Kind, "the Dashboard stamp must be UTC");
+
+		IsGreaterOrEqual(paramsStamp.Value, before, "the stamp must be the UTC moment of the run");
+		IsLessOrEqual(paramsStamp.Value, after, "the stamp must be the UTC moment of the run");
+
+		AreEqual(paramsStamp.Value, dashboardStamp.Value, "both sheets must show the same report stamp");
+	}
+
+	[TestMethod]
+	public async Task ExcelReportGenerator_WithTemplate_StampsUtcReportTime()
+	{
+		// The template path fills the same stamp cell as the from-scratch path, so it must date the
+		// report by the same UTC clock - one report format cannot be stamped by two different clocks.
+		var provider = new RecordingExcelWorkerProvider(new OpenXmlExcelWorkerProvider());
+		var template = ExcelReportGenerator.GetTemplate();
+		IsTrue(template.Length > 0, "Template must be available for this test");
+
+		var before = DateTime.UtcNow;
+
+		using var stream = new MemoryStream();
+		await new ExcelReportGenerator(provider, template) { IncludeOrders = true, IncludeTrades = true, IncludePositions = true }
+			.Generate(CreateExcelParitySource(), stream, CancellationToken);
+
+		var after = DateTime.UtcNow;
+
+		var stamp = provider.TryGetDate(1, 2, LocalizedStrings.Params, "Params");
+
+		IsNotNull(stamp, "the Params sheet must carry the report stamp");
+
+		AreEqual(DateTimeKind.Utc, stamp.Value.Kind, "the Params stamp must be UTC");
+
+		IsGreaterOrEqual(stamp.Value, before, "the stamp must be the UTC moment of the run");
+		IsLessOrEqual(stamp.Value, after, "the stamp must be the UTC moment of the run");
 	}
 
 	private static ReportSource CreateMockSourceWithData()

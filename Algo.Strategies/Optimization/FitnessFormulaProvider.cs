@@ -12,7 +12,7 @@ public class FitnessFormulaProvider(IFileSystem fileSystem) : IFitnessFormulaPro
 	private readonly AssemblyLoadContextTracker _context = new();
 
 	/// <inheritdoc />
-	public Func<Strategy, decimal> Compile(string formula)
+	public async ValueTask<Func<Strategy, decimal>> CompileAsync(string formula, CancellationToken cancellationToken)
 	{
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
@@ -20,7 +20,7 @@ public class FitnessFormulaProvider(IFileSystem fileSystem) : IFitnessFormulaPro
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
-		var expression = formula.Compile<decimal>(_fileSystem, _context);
+		var expression = await formula.CompileAsync<decimal>(_fileSystem, _context, cancellationToken);
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);

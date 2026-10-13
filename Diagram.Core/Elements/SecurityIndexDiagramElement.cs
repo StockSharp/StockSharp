@@ -77,9 +77,9 @@ public class SecurityIndexDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
-	protected override void OnStart(DateTime time)
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
 	{
-		_indexSecurity = new()
+		var indexSecurity = new ExpressionIndexSecurity
 		{
 			Expression = Index,
 			IgnoreErrors = IgnoreErrors,
@@ -87,25 +87,34 @@ public class SecurityIndexDiagramElement : DiagramElement
 			Board = ExchangeBoard.Associated
 		};
 
-		if (!_indexSecurity.Formula.Error.IsEmpty())
-			throw new InvalidOperationException(_indexSecurity.Formula.Error);
+		var formula = await indexSecurity.GetFormulaAsync(cancellationToken);
 
-		var set = _indexSecurity
-			.InnerSecurityIds
-			.Select(id => id)
-			.Distinct();
+		if (!formula.Error.IsEmpty())
+			throw new InvalidOperationException(formula.Error);
 
-		var notFoundSecurities = _indexSecurity.Formula.Variables.Where(v => !set.Contains(v.ToSecurityId())).ToArray();
+		var set = indexSecurity.InnerSecurityIds.ToHashSet();
+
+		var notFoundSecurities = formula.Variables.Where(v => !set.Contains(v.ToSecurityId())).ToArray();
 
 		if (notFoundSecurities.Length > 0)
 			throw new InvalidOperationException(LocalizedStrings.SecuritiesNotFound.Put(notFoundSecurities.JoinCommaSpace()));
 
-		foreach (var id in set)
+		_indexSecurity = indexSecurity;
+
+		await base.OnPrepareAsync(cancellationToken);
+	}
+
+	/// <inheritdoc />
+	protected override void OnStart(DateTime time)
+	{
+		var indexSecurity = _indexSecurity ?? throw new InvalidOperationException(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Index));
+
+		foreach (var id in indexSecurity.InnerSecurityIds.Distinct())
 		{
 			Strategy.Subscribe(new(new SecurityLookupMessage { SecurityId = id }));
 		}
 
-		RaiseProcessOutput(_outputSocket, time, _indexSecurity);
+		RaiseProcessOutput(_outputSocket, time, indexSecurity);
 
 		base.OnStart(time);
 	}

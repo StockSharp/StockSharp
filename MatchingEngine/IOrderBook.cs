@@ -217,12 +217,4 @@ public interface IOrderBook
 	/// </summary>
 	/// <param name="side">Side to get total volume for.</param>
 	decimal GetTotalVolume(Sides side);
-
-	/// <summary>
-	/// Remove worst levels that exceed max depth.
-	/// </summary>
-	/// <param name="side">Side to trim.</param>
-	/// <param name="maxDepth">Maximum allowed depth to keep.</param>
-	/// <returns>Removed orders from trimmed levels.</returns>
-	IEnumerable<EmulatorOrder> TrimToDepth(Sides side, int maxDepth);
 }

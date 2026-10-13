@@ -1,0 +1,12 @@
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <title>Tradovate</title>
+  <g fill="#2E82F2">
+    <polygon points="22 10 42 0 42 19" />
+    <polygon points="43 0 63 10 43 19" />
+    <polygon points="0 21 21 11 21 31" />
+    <polygon points="22 11 42 21 22 31" />
+    <polygon points="22 33 42 43 22 53" />
+    <polygon points="43 23 43 42 23 32" />
+    <polygon points="23 54 43 44 43 64" />
+  </g>
+</svg>

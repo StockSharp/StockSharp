@@ -77,6 +77,9 @@ public class RelativeStrengthIndex : DecimalLengthIndicator
 		// RSI = 100 * avgGain / (avgGain + avgLoss)
 		var sum = gainValue + lossValue;
 
+		if (delta == 0m && _prevResult is not null)
+			return _prevResult;
+
 		if (sum == 0m)
 			return _prevResult ?? 50m;
 

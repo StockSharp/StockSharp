@@ -1,0 +1,12 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>NinjaTrader</title>
+  <g clip-path="url(#clip0)">
+    <path d="M0 48C0 21.4904 21.4904 0 48 0H208C234.51 0 256 21.4904 256 48V208C256 234.51 234.51 256 208 256H48C21.4904 256 0 234.51 0 208V48Z" fill="#000"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M165.5 99.75C165.5 111.486 155.986 121 144.25 121C132.514 121 123 111.486 123 99.75C123 88.014 132.514 78.5 144.25 78.5C155.986 78.5 165.5 88.014 165.5 99.75ZM112.5 80H28V122.499H70V185.499H112.5V80ZM187 80H236L191.75 185.499H142.75L187 80Z" fill="#fff"/>
+  </g>
+  <defs>
+    <clipPath id="clip0">
+      <rect width="256" height="256" fill="#fff"/>
+    </clipPath>
+  </defs>
+</svg>

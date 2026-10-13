@@ -124,7 +124,7 @@ public class CsvNativeIdStorageProvider : AsyncDisposable, INativeIdStorageProvi
 
 			var evt = _added;
 			if (evt != null)
-				await evt.Invoke(securityId, nativeId, cancellationToken);
+				await evt.InvokeAsync(securityId, nativeId, cancellationToken);
 
 			return true;
 		}
@@ -506,7 +506,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 
 		var evt = _added;
 		if (evt != null)
-			await evt.Invoke(securityId, nativeId, cancellationToken);
+			await evt.InvokeAsync(securityId, nativeId, cancellationToken);
 
 		return true;
 	}

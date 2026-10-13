@@ -186,6 +186,11 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 			if (message.DataType != DataType.OrderLog)
 				throw new ArgumentOutOfRangeException(nameof(messages), message.DataType, LocalizedStrings.UnknownType.Put(message));
 
+			// An order reaching or leaving the book always has one, and the format carries it in a
+			// single bit that has no way to say otherwise.
+			if (message.Side is not Sides side)
+				throw new ArgumentOutOfRangeException(nameof(messages), message.TransactionId, LocalizedStrings.OrderSideNotSpecified);
+
 			// sell market orders has zero price (if security do not have min allowed price)
 			// execution ticks (like option execution) may be a zero cost
 			// ticks for spreads may be a zero cost or less than zero
@@ -266,7 +271,7 @@ class OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exch
 				writer.WriteVolume(volume, metaInfo, largeDecimal);
 			}
 			
-			writer.Write(message.Side == Sides.Buy);
+			writer.Write(side == Sides.Buy);
 
 			var lastOffset = metaInfo.LastServerOffset;
 			metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Orders, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);

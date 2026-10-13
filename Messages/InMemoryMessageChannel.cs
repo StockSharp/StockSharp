@@ -127,7 +127,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 
 				try
 				{
-					await (NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default);
+					await NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 				}
 				catch (Exception ex)
 				{

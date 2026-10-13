@@ -8,13 +8,68 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		private readonly Queue<(DateTime gapStart, DateTime gapEnd)> _gaps = new(gaps);
 
 		public ValueTask<(DateTime? gapStart, DateTime? gapEnd)> TryGetNextGapAsync(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps, CancellationToken cancellationToken)
-			=> new(_gaps.TryDequeue(out var gap) ? (gap.gapStart, gap.gapEnd) : default);
+			=> new(_gaps.TryDequeue(out var gap) ? ((DateTime?)gap.gapStart, (DateTime?)gap.gapEnd) : (null, null));
+	}
+
+	private sealed class DatesStorageDrive(IMarketDataDrive drive, DateTime[] dates) : IMarketDataStorageDrive
+	{
+		IMarketDataDrive IMarketDataStorageDrive.Drive => drive;
+
+		IAsyncEnumerable<DateTime> IMarketDataStorageDrive.GetDatesAsync() => dates.ToAsyncEnumerable();
+
+		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
+			=> throw new NotSupportedException();
+
+		ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
+			=> throw new NotSupportedException();
+
+		ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
+			=> throw new NotSupportedException();
+
+		ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
+			=> throw new NotSupportedException();
+	}
+
+	private sealed class DatesMarketDataDrive : BaseMarketDataDrive
+	{
+		private readonly IMarketDataStorageDrive _storageDrive;
+
+		public DatesMarketDataDrive(params DateTime[] dates)
+		{
+			_storageDrive = new DatesStorageDrive(this, dates);
+		}
+
+		public override string Path { get; set; } = string.Empty;
+
+		public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
+			=> AsyncEnumerable.Empty<SecurityId>();
+
+		public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
+			=> AsyncEnumerable.Empty<DataType>();
+
+		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
+			=> _storageDrive;
+
+		public override ValueTask VerifyAsync(CancellationToken cancellationToken)
+			=> default;
+
+		public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
+			=> AsyncEnumerable.Empty<SecurityMessage>();
+	}
+
+	private static async Task<(DateTime? gapStart, DateTime? gapEnd)> GetNextGapAsync(DateTime[] storageDates, DateTime from, DateTime to, FillGapsDays days, CancellationToken cancellationToken)
+	{
+		using var drive = new DatesMarketDataDrive(storageDates);
+
+		IFillGapsBehaviour behaviour = new StorageFillGapsBehaviour(drive, StorageFormats.Binary);
+
+		return await behaviour.TryGetNextGapAsync(Helper.CreateSecurityId(), DataType.Ticks, from, to, days, cancellationToken);
 	}
 
 	private static async Task DrainLoopbacksAsync(IMessageAdapter adapter, Queue<Message> loopbacks, CancellationToken cancellationToken)
 	{
 		// Wait for async gap detection to complete
-		await Task.Delay(50, cancellationToken);
+		await Helper.WaitUntilAsync(() => loopbacks.Count > 0, cancellationToken);
 
 		while (loopbacks.TryDequeue(out var loopback))
 			await adapter.SendInMessageAsync(loopback, cancellationToken);
@@ -167,8 +222,94 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		var online = (MarketDataMessage)inner.InMessages[2];
 		online.TransactionId.AssertEqual(1);
 		online.IsSubscribe.AssertTrue();
-		(online.From is null || online.From.Value == default).AssertTrue();
-		(online.To is null || online.To.Value == default).AssertTrue();
+		online.From.AssertNull();
+		online.To.AssertNull();
 		online.FillGaps.AssertNull();
+	}
+
+	// Storage holds data only outside the requested range, so the whole range is one gap.
+	// Dates outside [from, to] must not be counted as existing data for that range.
+	[TestMethod]
+	public async Task StorageBehaviour_NoDatesInRange_ReturnsWholeRange()
+	{
+		var from = new DateTime(2020, 1, 6, 10, 0, 0);
+		var to = new DateTime(2020, 1, 8, 15, 0, 0);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2019, 6, 3), new DateTime(2019, 6, 4)], from, to, FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(from, "gap must start exactly at the requested From when the range holds no data");
+		gapEnd.AssertEqual(to, "gap must end exactly at the requested To when the range holds no data");
+	}
+
+	// Same setup with weekday filling: the single gap must still span the whole range
+	// and must not be cut at the first Friday, since no day of the range has data.
+	[TestMethod]
+	public async Task StorageBehaviour_NoDatesInRange_NotCutAtFirstWeekend()
+	{
+		var from = new DateTime(2020, 1, 6);
+		var to = new DateTime(2020, 1, 17);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2019, 6, 3)], from, to, FillGapsDays.Weekdays, CancellationToken);
+
+		gapStart.AssertEqual(from);
+		gapEnd.AssertEqual(to, "the gap covers the whole range, so it must not stop at the Friday of its first week");
+	}
+
+	// A day present in the storage ends the gap: the window stops at the end of the day before it.
+	[TestMethod]
+	public async Task StorageBehaviour_StopsBeforeStoredDate()
+	{
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2019, 6, 3), new DateTime(2020, 1, 8)], new DateTime(2020, 1, 6), new DateTime(2020, 1, 12), FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(new DateTime(2020, 1, 6));
+		gapEnd.AssertEqual(new DateTime(2020, 1, 7).EndOfDay());
+	}
+
+	// A partial first day that is already present in storage must not be requested again.
+	[TestMethod]
+	public async Task StorageBehaviour_FromAtEndOfStoredDay_DoesNotRerequestThatDay()
+	{
+		var from = new DateTime(2020, 1, 6).EndOfDay().AddDays(1);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 7), new DateTime(2020, 1, 10)], from, new DateTime(2020, 1, 12), FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(new DateTime(2020, 1, 8), "07th has data, so the next gap starts at 08th");
+		gapEnd.AssertEqual(new DateTime(2020, 1, 9).EndOfDay(), "10th has data, so the gap ends at the end of 09th");
+	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_WeekdayGapStopsAtFridayWhenLaterDataExists()
+	{
+		var from = new DateTime(2020, 1, 6);
+		var to = new DateTime(2020, 1, 13).EndOfDay();
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 13)], from, to, FillGapsDays.Weekdays, CancellationToken);
+
+		gapStart.AssertEqual(from);
+		gapEnd.AssertEqual(new DateTime(2020, 1, 10).EndOfDay());
+	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_FirstMissingDayKeepsExactFromTime()
+	{
+		var from = new DateTime(2020, 1, 6, 10, 30, 0);
+		var to = new DateTime(2020, 1, 10);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 8)], from, to, FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(from);
+		gapEnd.AssertEqual(new DateTime(2020, 1, 7).EndOfDay());
+	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_TrailingGapKeepsExactToTime()
+	{
+		var from = new DateTime(2020, 1, 6, 10, 0, 0);
+		var to = new DateTime(2020, 1, 8, 15, 30, 0);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 6)], from, to, FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(new DateTime(2020, 1, 7));
+		gapEnd.AssertEqual(to);
 	}
 }

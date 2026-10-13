@@ -83,9 +83,10 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="ChannelMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.TypedClone(), OutputChannel.TypedClone());
+		return new ChannelMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), InputChannel.TypedClone(), OutputChannel.TypedClone());
 	}
 }

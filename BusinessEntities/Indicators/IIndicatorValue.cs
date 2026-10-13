@@ -1,6 +1,17 @@
 namespace StockSharp.Algo.Indicators;
 
 /// <summary>
+/// A value produced with a shift: the indicator answers about a bar that many bars back.
+/// </summary>
+public interface IShiftedIndicatorValue
+{
+	/// <summary>
+	/// How many bars back the value describes.
+	/// </summary>
+	int Shift { get; }
+}
+
+/// <summary>
 /// The indicator value, based on which it will renew its value, as well as value, containing result of indicator calculation.
 /// </summary>
 public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable

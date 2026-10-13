@@ -159,6 +159,9 @@ public class StorageUniquenessTests : BaseTestClass
 
 		var distinct = securities.Distinct().ToArray();
 		distinct.Length.AssertEqual(securities.Length, "Filesystem-only: no duplicate securities expected");
+		securities.Length.AssertEqual(2);
+		securities.Count(s => s == sec1).AssertEqual(1);
+		securities.Count(s => s == sec2).AssertEqual(1);
 	}
 
 	// ==========================================
@@ -186,6 +189,9 @@ public class StorageUniquenessTests : BaseTestClass
 
 		var distinct = dataTypes.Distinct().ToArray();
 		distinct.Length.AssertEqual(dataTypes.Length, "Data types for a specific security must be unique");
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.Level1).AssertTrue();
 	}
 
 	[TestMethod]
@@ -207,6 +213,9 @@ public class StorageUniquenessTests : BaseTestClass
 
 		var distinct = dataTypes.Distinct().ToArray();
 		distinct.Length.AssertEqual(dataTypes.Length, "Data types across all securities (default) must be unique");
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Contains(DataType.Level1).AssertTrue();
 	}
 
 	[TestMethod]
@@ -233,9 +242,15 @@ public class StorageUniquenessTests : BaseTestClass
 		// With index present
 		var dataTypesDefault = await drive2.GetAvailableDataTypesAsync(default, format).ToArrayAsync(CancellationToken);
 		dataTypesDefault.Distinct().Count().AssertEqual(dataTypesDefault.Length, "Data types (default secId, with index) must be unique");
+		dataTypesDefault.Length.AssertEqual(2);
+		dataTypesDefault.Contains(DataType.Ticks).AssertTrue();
+		dataTypesDefault.Contains(DataType.Level1).AssertTrue();
 
 		var dataTypesSec1 = await drive2.GetAvailableDataTypesAsync(sec1, format).ToArrayAsync(CancellationToken);
 		dataTypesSec1.Distinct().Count().AssertEqual(dataTypesSec1.Length, "Data types (specific secId, with index) must be unique");
+		dataTypesSec1.Length.AssertEqual(2);
+		dataTypesSec1.Contains(DataType.Ticks).AssertTrue();
+		dataTypesSec1.Contains(DataType.Level1).AssertTrue();
 	}
 
 	// ==========================================
@@ -311,5 +326,6 @@ public class StorageUniquenessTests : BaseTestClass
 		var distinct = resultDates.Distinct().ToArray();
 		distinct.Length.AssertEqual(resultDates.Length, "Dates with index must be unique");
 		distinct.Length.AssertEqual(dates.Length, "Should return all saved dates");
+		resultDates.OrderBy(d => d).SequenceEqual(dates.OrderBy(d => d)).AssertTrue("Indexed dates must round-trip without shifts");
 	}
 }

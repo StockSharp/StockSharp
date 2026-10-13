@@ -255,54 +255,49 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 				if (metaInfo == null)
 					continue;
 
-				var count = metaInfo.Count;
+				var loadedData = new Dictionary<TId, List<TMessage>>();
 
-				if (count != group.Count())
+				await foreach (var item in Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
 				{
-					var loadedData = new Dictionary<TId, List<TMessage>>();
+					var id = _getId(item);
 
-					await foreach (var item in Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
+					var loadedItems = loadedData.TryGetValue(id);
+
+					if (loadedItems == null)
 					{
-						var id = _getId(item);
-
-						var loadedItems = loadedData.TryGetValue(id);
-
-						if (loadedItems == null)
-						{
-							loadedItems = [item];
-							loadedData.Add(id, loadedItems);
-						}
-						else
-							loadedItems.Add(item);
+						loadedItems = [item];
+						loadedData.Add(id, loadedItems);
 					}
+					else
+						loadedItems.Add(item);
+				}
 
-					foreach (var item in group)
-						loadedData.Remove(_getId(item));
+				// A delete names records, so what is removed is what the day actually holds of them.
+				// Matching by how many were asked for would drop a whole day for records it never had.
+				var removed = false;
+
+				foreach (var item in group)
+					removed |= loadedData.Remove(_getId(item));
+
+				stream.Dispose();
+				stream = null;
+
+				if (!removed)
+					continue;
+
+				if (loadedData.Count > 0)
+				{
+					stream = await LoadStreamAsync(date, false, cancellationToken);
+
+					await SaveAsync(stream, Serializer.CreateMetaInfo(date),
+						[.. loadedData.Values.SelectMany(l => l)], true,
+						cancellationToken);
 
 					stream.Dispose();
 					stream = null;
-
-					if (loadedData.Count > 0)
-					{
-						stream = await LoadStreamAsync(date, false, cancellationToken);
-
-						await SaveAsync(stream, Serializer.CreateMetaInfo(date),
-							[.. loadedData.Values.SelectMany(l => l)], true,
-							cancellationToken);
-
-						stream.Dispose();
-						stream = null;
-					}
-					else
-					{
-						await DoDelete(date, cancellationToken);
-					}
 				}
 				else
 				{
-					stream.Dispose();
-					stream = null;
-
 					await DoDelete(date, cancellationToken);
 				}
 			}

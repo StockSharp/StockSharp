@@ -88,30 +88,6 @@ public class RoutingResultTests : BaseTestClass
 		result.IsPended.AssertFalse();
 	}
 
-	[TestMethod]
-	public void RoutingInResult_InitSyntax_AllFieldsSet()
-	{
-		var adapter = new Mock<IMessageAdapter>().Object;
-		var routedMsg = new SecurityMessage();
-		var outMsg = new ConnectMessage();
-		var loopbackMsg = new ResetMessage();
-
-		var result = new RoutingInResult
-		{
-			RoutingDecisions = [(adapter, routedMsg)],
-			OutMessages = [outMsg],
-			LoopbackMessages = [loopbackMsg],
-			Handled = true,
-			IsPended = false,
-		};
-
-		result.RoutingDecisions.Count.AssertEqual(1);
-		result.OutMessages.Count.AssertEqual(1);
-		result.LoopbackMessages.Count.AssertEqual(1);
-		result.Handled.AssertTrue();
-		result.IsPended.AssertFalse();
-	}
-
 	#endregion
 
 	#region RoutingOutResult
@@ -212,27 +188,6 @@ public class RoutingResultTests : BaseTestClass
 
 		result.TransformedMessage.AssertEqual(message);
 		result.ExtraMessages.Count.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void RoutingOutResult_InitSyntax_AllFieldsSet()
-	{
-		var transformedMsg = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
-		var extraMsg = new SubscriptionOnlineMessage { OriginalTransactionId = 1 };
-		var loopbackMsg = new MarketDataMessage { TransactionId = 2 };
-
-		var result = new RoutingOutResult
-		{
-			TransformedMessage = transformedMsg,
-			ExtraMessages = [extraMsg],
-			LoopbackMessages = [loopbackMsg],
-		};
-
-		result.TransformedMessage.AssertEqual(transformedMsg);
-		result.ExtraMessages.Count.AssertEqual(1);
-		result.ExtraMessages[0].AssertEqual(extraMsg);
-		result.LoopbackMessages.Count.AssertEqual(1);
-		result.LoopbackMessages[0].AssertEqual(loopbackMsg);
 	}
 
 	#endregion

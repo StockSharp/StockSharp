@@ -1,15 +1,71 @@
 namespace StockSharp.Tests;
 
+using System.Diagnostics;
+using System.Threading.Tasks.Sources;
+
 [TestClass]
 public class AsyncMessageChannelTests : BaseTestClass
 {
-	private static MarketDataMessage CreateUnsubscribe()
+	private sealed class SingleConsumerValueTaskSource : IValueTaskSource
+	{
+		private ManualResetValueTaskSourceCore<bool> _core;
+		private readonly TaskCompletionSource<bool> _registered = AsyncHelper.CreateTaskCompletionSource<bool>();
+		private readonly TaskCompletionSource<bool> _consumed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		private int _onCompletedCount;
+		private int _getResultCount;
+
+		public SingleConsumerValueTaskSource()
+		{
+			_core.RunContinuationsAsynchronously = true;
+		}
+
+		public int OnCompletedCount => Volatile.Read(ref _onCompletedCount);
+		public int GetResultCount => Volatile.Read(ref _getResultCount);
+		public Task Registered => _registered.Task;
+		public Task Consumed => _consumed.Task;
+
+		public ValueTask CreateValueTask() => new(this, _core.Version);
+		public void Complete() => _core.SetResult(true);
+
+		public ValueTaskSourceStatus GetStatus(short token) => _core.GetStatus(token);
+
+		public void OnCompleted(Action<object> continuation, object state, short token, ValueTaskSourceOnCompletedFlags flags)
+		{
+			// Record a duplicate without throwing so a regression fails this test instead of crashing testhost.
+			if (Interlocked.Increment(ref _onCompletedCount) != 1)
+				return;
+
+			_core.OnCompleted(continuation, state, token, flags);
+			_registered.TrySetResult(true);
+		}
+
+		public void GetResult(short token)
+		{
+			try
+			{
+				if (Interlocked.Increment(ref _getResultCount) == 1)
+					_core.GetResult(token);
+			}
+			finally
+			{
+				_consumed.TrySetResult(true);
+			}
+		}
+	}
+
+	private sealed class DisconnectTimeoutMessageAdapter(TimeSpan timeout)
+		: PassThroughMessageAdapter(new IncrementalIdGenerator())
+	{
+		public override TimeSpan DisconnectTimeout => timeout;
+	}
+
+	private static MarketDataMessage CreateUnsubscribe(long originalTransactionId = 1, long transactionId = 2)
 	{
 		return new MarketDataMessage
 		{
 			IsSubscribe = false,
-			OriginalTransactionId = 1,
-			TransactionId = 2,
+			OriginalTransactionId = originalTransactionId,
+			TransactionId = transactionId,
 			DataType2 = DataType.Level1,
 			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
 		};
@@ -21,12 +77,78 @@ public class AsyncMessageChannelTests : BaseTestClass
 		(completed == task).AssertFalse();
 	}
 
+	private static async Task AssertCompleted(Task task, TimeSpan timeout, string message, CancellationToken cancellationToken)
+	{
+		var completed = await Task.WhenAny(task, Task.Delay(timeout, cancellationToken));
+
+		IsTrue(completed == task, message);
+
+		await task;
+	}
+
+	private static async Task<TimeSpan> MeasureProcessCpuAsync(TimeSpan window, CancellationToken cancellationToken)
+	{
+		static TimeSpan cpu()
+		{
+			using var proc = Process.GetCurrentProcess();
+			return proc.TotalProcessorTime;
+		}
+
+		var start = cpu();
+		await Task.Delay(window, cancellationToken);
+		return cpu() - start;
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task HandlerValueTask_IsConsumedOnce()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 1
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+		var source = new SingleConsumerValueTaskSource();
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var markerProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var asyncMessage = new ExecutionMessage();
+		var markerMessage = new ExecutionMessage();
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			if (message is ConnectMessage)
+				connected.TrySetResult(true);
+			else if (ReferenceEquals(message, asyncMessage))
+				return source.CreateValueTask();
+			else if (ReferenceEquals(message, markerMessage))
+				markerProcessed.TrySetResult(true);
+
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithCancellation(CancellationToken);
+
+		await channel.SendInMessageAsync(asyncMessage, CancellationToken);
+		await source.Registered.WithCancellation(CancellationToken);
+		await channel.SendInMessageAsync(markerMessage, CancellationToken);
+
+		source.Complete();
+		await source.Consumed.WithCancellation(CancellationToken);
+
+		source.OnCompletedCount.AssertEqual(1);
+		source.GetResultCount.AssertEqual(1);
+		await markerProcessed.Task.WithCancellation(CancellationToken);
+	}
+
 	[TestMethod]
 	public async Task SendInMessageAsync_RequiresOpenChannel()
 	{
 		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 		{
-			MaxParallelMessages = 2
+			MaxParallelMessages = 1
 		};
 
 		using var channel = new AsyncMessageChannel(adapter);
@@ -443,18 +565,21 @@ public class AsyncMessageChannelTests : BaseTestClass
 	#region Close/Dispose/Reopen Tests
 
 	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task Close_StopsProcessing()
 	{
 		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 		{
-			MaxParallelMessages = 2
+			MaxParallelMessages = 1
 		};
 
 		using var channel = new AsyncMessageChannel(adapter);
 
 		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 		var messageStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var messageCompleted = AsyncHelper.CreateTaskCompletionSource<bool>();
 		var messageRelease = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var processedCount = 0;
 
 		channel.NewOutMessageAsync += async (message, token) =>
 		{
@@ -464,8 +589,10 @@ public class AsyncMessageChannelTests : BaseTestClass
 					connected.TrySetResult(true);
 					return;
 				case ExecutionMessage:
+					Interlocked.Increment(ref processedCount);
 					messageStarted.TrySetResult(true);
 					await messageRelease.Task;
+					messageCompleted.TrySetResult(true);
 					return;
 			}
 		};
@@ -477,10 +604,26 @@ public class AsyncMessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
 		await messageStarted.Task.WithCancellation(CancellationToken);
 
-		messageRelease.TrySetResult(true);
-		channel.Close();
+		// Keep one message queued behind the in-flight handler.
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+
+		try
+		{
+			channel.Close();
+		}
+		finally
+		{
+			messageRelease.TrySetResult(true);
+		}
+
+		await messageCompleted.Task.WithCancellation(CancellationToken);
 
 		channel.State.AssertEqual(ChannelStates.Stopped);
+		processedCount.AssertEqual(1, "Queued message must not start after Close");
+
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+		await Task.Delay(100, CancellationToken);
+		processedCount.AssertEqual(1, "Messages sent after Close must be dropped");
 	}
 
 	[TestMethod]
@@ -639,6 +782,7 @@ public class AsyncMessageChannelTests : BaseTestClass
 					return;
 				case MarketDataMessage { IsSubscribe: true }:
 					subscriptionStarted.TrySetResult(true);
+					using (token.Register(() => throw new InvalidOperationException("Cancellation callback failure.")))
 					try
 					{
 						await Task.Delay(Timeout.Infinite, token);
@@ -748,6 +892,459 @@ public class AsyncMessageChannelTests : BaseTestClass
 
 		await subscriptionCancelled.Task.WithCancellation(CancellationToken);
 		await disconnected.Task.WithCancellation(CancellationToken);
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Disconnect_WaitsForAllPriorUnsubscribes()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2,
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+		var connectStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseConnect = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var firstStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseFirst = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var firstCancelled = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var secondStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseSecond = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var secondCancelled = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var disconnectStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connectStarted.TrySetResult(true);
+					await releaseConnect.Task.WithCancellation(token);
+					return;
+
+				case MarketDataMessage { IsSubscribe: false, TransactionId: 2 }:
+					firstStarted.TrySetResult(true);
+
+					try
+					{
+						await releaseFirst.Task.WithCancellation(token);
+					}
+					catch (OperationCanceledException)
+					{
+						firstCancelled.TrySetResult(true);
+						throw;
+					}
+
+					return;
+
+				case MarketDataMessage { IsSubscribe: false, TransactionId: 3 }:
+					secondStarted.TrySetResult(true);
+
+					try
+					{
+						await releaseSecond.Task.WithCancellation(token);
+					}
+					catch (OperationCanceledException)
+					{
+						secondCancelled.TrySetResult(true);
+						throw;
+					}
+
+					return;
+
+				case DisconnectMessage:
+					disconnectStarted.TrySetResult(true);
+					return;
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connectStarted.Task.WithCancellation(CancellationToken);
+
+		try
+		{
+			await channel.SendInMessageAsync(CreateUnsubscribe(1, 2), CancellationToken);
+			await channel.SendInMessageAsync(CreateUnsubscribe(2, 3), CancellationToken);
+			await channel.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
+			releaseConnect.TrySetResult(true);
+
+			var first = await Task.WhenAny(firstStarted.Task, secondStarted.Task, disconnectStarted.Task)
+				.WithCancellation(CancellationToken);
+			(first == disconnectStarted.Task).AssertFalse("Disconnect overtook prior unsubscribe requests.");
+
+			await firstStarted.Task.WithCancellation(CancellationToken);
+			await secondStarted.Task.WithCancellation(CancellationToken);
+			await AssertNotCompleted(disconnectStarted.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+
+			releaseFirst.TrySetResult(true);
+			await AssertNotCompleted(disconnectStarted.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+
+			releaseSecond.TrySetResult(true);
+			await disconnectStarted.Task.WithCancellation(CancellationToken);
+
+			firstCancelled.Task.IsCompleted.AssertFalse();
+			secondCancelled.Task.IsCompleted.AssertFalse();
+		}
+		finally
+		{
+			releaseConnect.TrySetResult(true);
+			releaseFirst.TrySetResult(true);
+			releaseSecond.TrySetResult(true);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Disconnect_WaitsForActiveSubscriptionCleanup()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2,
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var subscriptionCancelled = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseSubscriptionCleanup = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var unsubscribeResponseStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseUnsubscribeResponse = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var unexpectedUnsubscribeForwarded = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var disconnectStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var responseSeenByDisconnect = false;
+		var unsubscribeResponseCompleted = 0;
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+
+				case MarketDataMessage { IsSubscribe: true }:
+					subscriptionStarted.TrySetResult(true);
+
+					try
+					{
+						await Task.Delay(Timeout.Infinite, token);
+					}
+					catch (OperationCanceledException)
+					{
+						subscriptionCancelled.TrySetResult(true);
+						await releaseSubscriptionCleanup.Task;
+						throw;
+					}
+
+					return;
+
+				case MarketDataMessage { IsSubscribe: false }:
+					unexpectedUnsubscribeForwarded.TrySetResult(true);
+					return;
+
+				case DisconnectMessage:
+					responseSeenByDisconnect = Volatile.Read(ref unsubscribeResponseCompleted) != 0;
+					disconnectStarted.TrySetResult(true);
+					return;
+			}
+		};
+
+		adapter.NewOutMessageAsync += async (message, token) =>
+		{
+			if (message is SubscriptionResponseMessage { OriginalTransactionId: 101 })
+			{
+				unsubscribeResponseStarted.TrySetResult(true);
+				await releaseUnsubscribeResponse.Task;
+				Volatile.Write(ref unsubscribeResponseCompleted, 1);
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithCancellation(CancellationToken);
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+		await subscriptionStarted.Task.WithCancellation(CancellationToken);
+
+		channel.Suspend();
+
+		try
+		{
+			await channel.SendInMessageAsync(CreateUnsubscribe(100, 101), CancellationToken);
+			await channel.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
+			channel.Resume();
+
+			await subscriptionCancelled.Task.WithCancellation(CancellationToken);
+			await AssertNotCompleted(disconnectStarted.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+
+			releaseSubscriptionCleanup.TrySetResult(true);
+			await unsubscribeResponseStarted.Task.WithCancellation(CancellationToken);
+			await AssertNotCompleted(disconnectStarted.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+
+			releaseUnsubscribeResponse.TrySetResult(true);
+			await disconnectStarted.Task.WithCancellation(CancellationToken);
+
+			responseSeenByDisconnect.AssertTrue("Disconnect started before subscription cleanup produced the unsubscribe response.");
+			unexpectedUnsubscribeForwarded.Task.IsCompleted.AssertFalse();
+		}
+		finally
+		{
+			releaseSubscriptionCleanup.TrySetResult(true);
+			releaseUnsubscribeResponse.TrySetResult(true);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Disconnect_PriorUnsubscribeTimeoutIsBounded()
+	{
+		var adapter = new DisconnectTimeoutMessageAdapter(TimeSpan.FromMilliseconds(200))
+		{
+			MaxParallelMessages = 2,
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var unsubscribeStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseUnsubscribe = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var unsubscribeCompleted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var disconnectStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var disconnectFailed = AsyncHelper.CreateTaskCompletionSource<Exception>();
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+				case ISubscriptionMessage { IsSubscribe: false }:
+					unsubscribeStarted.TrySetResult(true);
+					await releaseUnsubscribe.Task;
+					unsubscribeCompleted.TrySetResult(true);
+					return;
+				case DisconnectMessage:
+					disconnectStarted.TrySetResult(true);
+					return;
+			}
+		};
+
+		adapter.NewOutMessageAsync += (message, token) =>
+		{
+			token.ThrowIfCancellationRequested();
+
+			if (message is DisconnectMessage { Error: not null } disconnect)
+				disconnectFailed.TrySetResult(disconnect.Error);
+
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithCancellation(CancellationToken);
+		channel.Suspend();
+
+		try
+		{
+			await channel.SendInMessageAsync(CreateUnsubscribe(), CancellationToken);
+			await channel.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
+			channel.Resume();
+
+			var terminal = await Task.WhenAny(disconnectFailed.Task, disconnectStarted.Task)
+				.WithCancellation(CancellationToken);
+			terminal.AssertSame(disconnectFailed.Task);
+			(await disconnectFailed.Task).AssertOfType<TimeoutException>();
+			await unsubscribeStarted.Task.WithCancellation(CancellationToken);
+			disconnectStarted.Task.IsCompleted.AssertFalse();
+		}
+		finally
+		{
+			releaseUnsubscribe.TrySetResult(true);
+			await unsubscribeCompleted.Task.WithCancellation(CancellationToken);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Disconnect_AbortedByCloseDoesNotAffectReopenedChannel()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2,
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+		var firstConnected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var reopened = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var operationStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var operationCancelled = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseOperation = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var operationCompleted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var staleDisconnect = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var staleDisconnectResponse = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var markerProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var connectCount = 0;
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					if (Interlocked.Increment(ref connectCount) == 1)
+						firstConnected.TrySetResult(true);
+					else
+						reopened.TrySetResult(true);
+					return;
+
+				case ExecutionMessage { TransactionId: 1 }:
+					operationStarted.TrySetResult(true);
+					using (token.Register(() => operationCancelled.TrySetResult(true)))
+						await releaseOperation.Task;
+					operationCompleted.TrySetResult(true);
+					return;
+
+				case ExecutionMessage { TransactionId: 2 }:
+					markerProcessed.TrySetResult(true);
+					return;
+
+				case DisconnectMessage:
+					staleDisconnect.TrySetResult(true);
+					return;
+			}
+		};
+
+		adapter.NewOutMessageAsync += (message, token) =>
+		{
+			if (message is DisconnectMessage)
+				staleDisconnectResponse.TrySetResult(true);
+
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await firstConnected.Task.WithCancellation(CancellationToken);
+
+		try
+		{
+			await channel.SendInMessageAsync(new ExecutionMessage { TransactionId = 1 }, CancellationToken);
+			await operationStarted.Task.WithCancellation(CancellationToken);
+
+			await channel.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
+			await operationCancelled.Task.WithCancellation(CancellationToken);
+
+			channel.Close();
+			channel.Open();
+
+			await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+			await reopened.Task.WithCancellation(CancellationToken);
+
+			releaseOperation.TrySetResult(true);
+			await operationCompleted.Task.WithCancellation(CancellationToken);
+			await AssertNotCompleted(staleDisconnect.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+			await AssertNotCompleted(staleDisconnectResponse.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+
+			await channel.SendInMessageAsync(new ExecutionMessage { TransactionId = 2 }, CancellationToken);
+			await markerProcessed.Task.WithCancellation(CancellationToken);
+			await AssertNotCompleted(staleDisconnect.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+			await AssertNotCompleted(staleDisconnectResponse.Task, TimeSpan.FromMilliseconds(100), CancellationToken);
+		}
+		finally
+		{
+			releaseOperation.TrySetResult(true);
+		}
+	}
+
+	#endregion
+
+	#region Reset Tests
+
+	// A reset cancels every live subscription while each subscription's own cleanup disposes the
+	// same token source. The reset must survive that overlap: it has to reach the adapter and hand
+	// the channel back usable, not leave the disconnecting flag set and drop everything after it.
+	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Reset_WithLiveSubscriptions_LeavesChannelUsable()
+	{
+		const int subscriptionCount = 16;
+		const long firstTransactionId = 100;
+
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = subscriptionCount + 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var reconnected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var resetDone = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var pingDone = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		var started = new TaskCompletionSource<bool>[subscriptionCount];
+
+		for (var i = 0; i < started.Length; i++)
+			started[i] = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					if (!connected.TrySetResult(true))
+						reconnected.TrySetResult(true);
+
+					return;
+
+				case ResetMessage:
+					resetDone.TrySetResult(true);
+					return;
+
+				case TimeMessage:
+					pingDone.TrySetResult(true);
+					return;
+
+				case MarketDataMessage { IsSubscribe: true } subMsg:
+					started[subMsg.TransactionId - firstTransactionId].TrySetResult(true);
+					await Task.Delay(Timeout.Infinite, token);
+					return;
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithCancellation(CancellationToken);
+
+		for (var i = 0; i < started.Length; i++)
+		{
+			await channel.SendInMessageAsync(new MarketDataMessage
+			{
+				IsSubscribe = true,
+				TransactionId = firstTransactionId + i,
+				DataType2 = DataType.Level1,
+				SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			}, CancellationToken);
+		}
+
+		await Task.WhenAll(started.Select(t => t.Task)).WithCancellation(CancellationToken);
+
+		await channel.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		await AssertCompleted(resetDone.Task, TimeSpan.FromSeconds(5), "reset never reached the adapter: subscription cleanup threw out of it.", CancellationToken);
+
+		// A reset drops the connection, so restore it before checking that ordinary messages flow.
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await AssertCompleted(reconnected.Task, TimeSpan.FromSeconds(5), "channel refused to connect after a reset: it still counts itself connected.", CancellationToken);
+
+		await channel.SendInMessageAsync(new TimeMessage(), CancellationToken);
+		await AssertCompleted(pingDone.Task, TimeSpan.FromSeconds(5), "channel dropped a message after a reset: the disconnecting flag is still set.", CancellationToken);
 	}
 
 	#endregion
@@ -900,6 +1497,54 @@ public class AsyncMessageChannelTests : BaseTestClass
 
 		channel.Resume();
 		await messageProcessed.Task.WithCancellation(CancellationToken);
+	}
+
+	// A message posted to a suspended channel leaves the processing wait handle set. The processor
+	// loop must park on the handle again instead of spinning a core until the channel resumes.
+	[TestMethod]
+	[DoNotParallelize] // CPU time is measured for the whole process.
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Suspend_DoesNotBusySpin()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			if (message is ConnectMessage)
+				connected.TrySetResult(true);
+
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithCancellation(CancellationToken);
+
+		var window = TimeSpan.FromMilliseconds(500);
+
+		// The processor is parked here, so this window carries only whatever else the host does;
+		// it is the baseline the suspended window is measured against.
+		var idle = await MeasureProcessCpuAsync(window, CancellationToken);
+
+		channel.Suspend();
+		channel.State.AssertEqual(ChannelStates.Suspended);
+
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+
+		var suspended = await MeasureProcessCpuAsync(window, CancellationToken);
+
+		channel.Resume();
+
+		var burnt = suspended - idle;
+
+		IsLess(burnt, window / 2, $"suspended channel burns CPU: {burnt.TotalMilliseconds:0} ms on top of the idle baseline {idle.TotalMilliseconds:0} ms over a {window.TotalMilliseconds:0} ms window.");
 	}
 
 	#endregion

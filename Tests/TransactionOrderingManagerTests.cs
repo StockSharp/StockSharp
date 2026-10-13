@@ -3,11 +3,7 @@ namespace StockSharp.Tests;
 [TestClass]
 public class TransactionOrderingManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
-	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
+	private static int GetScale(decimal value) => (decimal.GetBits(value)[3] >> 16) & 0x7F;
 
 	[TestMethod]
 	public void ProcessInMessage_Reset_ClearsState()
@@ -19,7 +15,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var regMsg = new OrderRegisterMessage
 		{
 			TransactionId = 100,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			Price = 10.500m,
 			Volume = 5.000m,
 		};
@@ -32,6 +28,17 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].Type.AssertEqual(MessageTypes.Reset);
 		toOut.Length.AssertEqual(0);
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			SecurityId = default,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+		manager.ProcessOutMessage(execution);
+		execution.SecurityId.AssertEqual(default);
 	}
 
 	[TestMethod]
@@ -43,7 +50,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var regMsg = new OrderRegisterMessage
 		{
 			TransactionId = 100,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			Price = 10.500m,
 			Volume = 5.000m,
 			VisibleVolume = 3.000m,
@@ -56,6 +63,9 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		processed.Price.AssertEqual(10.5m);
 		processed.Volume.AssertEqual(5m);
 		processed.VisibleVolume.AssertEqual(3m);
+		GetScale(processed.Price).AssertEqual(1);
+		GetScale(processed.Volume).AssertEqual(0);
+		GetScale(processed.VisibleVolume.Value).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -64,7 +74,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// First register an order
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -90,6 +100,8 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var processed = (OrderReplaceMessage)toInner[0];
 		processed.Price.AssertEqual(11.5m);
 		processed.Volume.AssertEqual(6m);
+		GetScale(processed.Price).AssertEqual(1);
+		GetScale(processed.Volume).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -110,6 +122,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		var processed = (OrderCancelMessage)toInner[0];
 		processed.Volume.AssertEqual(3m);
+		GetScale(processed.Volume.Value).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -129,6 +142,18 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 1,
+			HasOrderInfo = true,
+			SecurityId = Helper.CreateSecurityId(),
+			OrderState = OrderStates.Active,
+		};
+		var (forward, _, _) = manager.ProcessOutMessage(execution);
+		forward.AssertNull("Transaction-log subscriptions must accumulate executions until Online or Finished.");
 	}
 
 	[TestMethod]
@@ -148,6 +173,19 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
+
+		var trade = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		var (forward, _, processSuspended) = manager.ProcessOutMessage(trade);
+		forward.AssertSame(trade);
+		trade.OriginalTransactionId.AssertEqual(0);
+		processSuspended.AssertTrue();
 	}
 
 	[TestMethod]
@@ -175,6 +213,20 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		forward.AssertSame(errorResponse);
 		extraOut.Length.AssertEqual(0);
 		processSuspended.AssertFalse();
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 1,
+			HasOrderInfo = true,
+			SecurityId = Helper.CreateSecurityId(),
+			OrderState = OrderStates.Active,
+		};
+		(forward, extraOut, processSuspended) = manager.ProcessOutMessage(execution);
+		forward.AssertSame(execution);
+		extraOut.Length.AssertEqual(0);
+		processSuspended.AssertTrue();
 	}
 
 	[TestMethod]
@@ -186,7 +238,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
@@ -206,7 +258,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			IsCancellation = true,
 			TransactionId = 100,
 		};
@@ -223,7 +275,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// First register an order
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -260,7 +312,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			TransactionId = 0,
 			OriginalTransactionId = 0,
 			HasOrderInfo = true,
@@ -282,7 +334,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			TransactionId = 0,
 			OriginalTransactionId = 0,
 			OrderId = 99999,
@@ -307,7 +359,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var suspendedTrade = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			TransactionId = 0,
 			OriginalTransactionId = 0,
 			OrderId = 12345,
@@ -321,7 +373,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var orderMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			HasOrderInfo = true,
 			OrderId = 12345,
 			TransactionId = 200,
@@ -347,7 +399,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var suspendedTrade = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			TransactionId = 0,
 			OriginalTransactionId = 0,
 			OrderStringId = "ORDER-123",
@@ -361,7 +413,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var orderMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = CreateSecurityId(),
+			SecurityId = Helper.CreateSecurityId(),
 			HasOrderInfo = true,
 			OrderStringId = "ORDER-123",
 			TransactionId = 200,
@@ -379,7 +431,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// First, register an order to establish the mapping
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -429,7 +481,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// First, register an order
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -479,7 +531,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// Register an order to establish secId mapping
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -513,7 +565,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// First register an order
 		manager.ProcessInMessage(new OrderRegisterMessage
@@ -558,7 +610,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => true);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// 1. Subscribe with transaction log
 		manager.ProcessInMessage(new OrderStatusMessage
@@ -623,7 +675,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		forward.AssertSame(onlineMsg);
 
 		// extraOut should contain: order snapshot + trade
-		(extraOut.Length >= 2).AssertTrue();
+		extraOut.Length.AssertEqual(2);
 
 		// first element is the order snapshot
 		var orderSnapshot = (ExecutionMessage)extraOut[0];
@@ -644,7 +696,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => true);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// 1. Subscribe with transaction log
 		manager.ProcessInMessage(new OrderStatusMessage
@@ -728,7 +780,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => true);
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// 1. Subscribe with transaction log
 		manager.ProcessInMessage(new OrderStatusMessage
@@ -776,5 +828,63 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var snapshot = (ExecutionMessage)extraOut[0];
 		snapshot.HasOrderInfo.AssertTrue();
 		snapshot.OrderId.AssertEqual(55555L);
+	}
+
+	/// <summary>
+	/// A trade that reaches the connection before the order it belongs to is held back until the
+	/// order names it, and the order's arrival is what lets it go. Whether some other subscription
+	/// on the same connection happens to be replaying a transaction log is nobody's business but
+	/// that subscription's: if it decides for the rest, a trade the account really made is held for
+	/// the life of the session and the order looks smaller than it was filled.
+	/// </summary>
+	[TestMethod]
+	public void ATradeHeldBackIsReleasedByItsOrderWhileATransactionLogIsBeingReplayed()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new TransactionOrderingManager(logReceiver, () => true);
+
+		var secId = Helper.CreateSecurityId();
+
+		// A transaction-log order-status subscription is open on this connection.
+		manager.ProcessInMessage(new OrderStatusMessage
+		{
+			TransactionId = 400,
+			IsSubscribe = true,
+		});
+
+		// A trade arrives naming an order nobody knows yet, so it is held back.
+		var (heldForward, _, heldSuspended) = manager.ProcessOutMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 0,
+			OriginalTransactionId = 0,
+			OrderId = 90001,
+			TradeId = 90002,
+			TradePrice = 25m,
+			TradeVolume = 1m,
+		});
+
+		heldForward.AssertNull("a trade whose order is unknown cannot be delivered yet");
+		heldSuspended.AssertFalse();
+
+		// The order itself arrives - on its own transaction, not under the log subscription.
+		var (orderForward, _, processSuspended) = manager.ProcessOutMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 0,
+			OriginalTransactionId = 777,
+			HasOrderInfo = true,
+			OrderId = 90001,
+			OrderState = OrderStates.Active,
+			Balance = 1m,
+		});
+
+		orderForward.AssertNotNull("the order itself is news the caller is waiting for");
+		processSuspended.AssertTrue("the order has arrived, so the trade waiting on it has to be let go");
+
+		manager.GetSuspendedTrades((ExecutionMessage)orderForward).Length
+			.AssertEqual(1, "and the trade it releases is the one that was held");
 	}
 }

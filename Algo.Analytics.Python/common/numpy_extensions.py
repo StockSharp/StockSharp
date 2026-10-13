@@ -404,11 +404,22 @@ class nx:
         Returns:
         2D Array
         """
-        if not input_data or not input_data[0]:
+        if input_data is None or len(input_data) == 0:
             return None
-            
+
         rows = len(input_data)
+
+        if input_data[0] is None:
+            raise ValueError("Every row must have the same length.")
+
         cols = len(input_data[0])
+
+        for row in input_data:
+            if row is None or len(row) != cols:
+                raise ValueError("Every row must have the same length.")
+
+        if cols == 0:
+            return None
         
         array2d = Array.CreateInstance(dtype, rows, cols)
         

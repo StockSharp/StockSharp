@@ -3,8 +3,15 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// The interface, describing risks control manager.
 /// </summary>
-public interface IRiskManager : ILogSource, IPersistable, ICloneable<IRiskManager>
+public interface IRiskManager : ILogSource, IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the manager.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IRiskManager> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Rule list.
 	/// </summary>

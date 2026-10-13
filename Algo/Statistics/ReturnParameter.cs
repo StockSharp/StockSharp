@@ -40,16 +40,16 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("MinEquity", _minEquity);
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_minEquity = storage.GetValue<decimal>("MinEquity");
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

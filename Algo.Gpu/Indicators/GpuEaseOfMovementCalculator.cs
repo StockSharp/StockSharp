@@ -30,7 +30,7 @@ public struct GpuEaseOfMovementParams(int length) : IGpuIndicatorParams
 /// </summary>
 public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMovement, GpuEaseOfMovementParams, GpuIndicatorResult>
 {
-	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuEaseOfMovementParams>> _kernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<double>, ArrayView<int>, ArrayView<int>, ArrayView<GpuEaseOfMovementParams>> _kernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuEaseOfMovementCalculator"/> class.
@@ -41,7 +41,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 		: base(context, accelerator)
 	{
 		_kernel = Accelerator.LoadAutoGroupedStreamKernel
-				<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuEaseOfMovementParams>>(EaseOfMovementParamsSeriesKernel);
+				<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<double>, ArrayView<int>, ArrayView<int>, ArrayView<GpuEaseOfMovementParams>>(EaseOfMovementParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -86,7 +86,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 		using var offsetsBuffer = Accelerator.Allocate1D(seriesOffsets);
 		using var lengthsBuffer = Accelerator.Allocate1D(seriesLengths);
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
-		using var rawEmvBuffer = Accelerator.Allocate1D<float>(totalSize * parameters.Length);
+		using var rawEmvBuffer = Accelerator.Allocate1D<double>(totalSize * parameters.Length);
 		using var outputBuffer = Accelerator.Allocate1D<GpuIndicatorResult>(totalSize * parameters.Length);
 
 		var extent = new Index2D(parameters.Length, seriesCount);
@@ -124,7 +124,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 		Index2D index,
 		ArrayView<GpuCandle> flatCandles,
 		ArrayView<GpuIndicatorResult> flatResults,
-		ArrayView<float> rawEmv,
+		ArrayView<double> rawEmv,
 		ArrayView<int> offsets,
 		ArrayView<int> lengths,
 		ArrayView<GpuEaseOfMovementParams> parameters)
@@ -142,8 +142,8 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 		if (L <= 0)
 			L = 1;
 
-		var prevHigh = 0f;
-		var prevLow = 0f;
+		var prevHigh = 0d;
+		var prevLow = 0d;
 		var hasPrev = false;
 		byte isFormed = 0;
 
@@ -153,7 +153,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 			var candle = flatCandles[candleIdx];
 			var resIndex = paramIdx * totalBars + candleIdx;
 
-			rawEmv[resIndex] = float.NaN;
+			rawEmv[resIndex] = double.NaN;
 			flatResults[resIndex] = new GpuIndicatorResult
 			{
 				Time = candle.Time,
@@ -169,28 +169,28 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 				continue;
 			}
 
-			var range = candle.High - candle.Low;
-			if (range == 0f)
+			var range = (double)candle.High - candle.Low;
+			if (range == 0d)
 			{
 				prevHigh = candle.High;
 				prevLow = candle.Low;
 				continue;
 			}
 
-			var midpointMove = ((candle.High + candle.Low) * 0.5f) - ((prevHigh + prevLow) * 0.5f);
+			var midpointMove = (((double)candle.High + candle.Low) * 0.5d) - ((prevHigh + prevLow) * 0.5d);
 			var boxRatio = candle.Volume / range;
 			var emv = midpointMove / boxRatio;
 
 			rawEmv[resIndex] = emv;
 
-			var sum = 0f;
+			var sum = 0d;
 			var count = 0;
 			var backIdx = candleIdx;
 			while (backIdx >= offset && count < L)
 			{
 				var rawIdx = paramIdx * totalBars + backIdx;
 				var val = rawEmv[rawIdx];
-				if (!float.IsNaN(val))
+				if (!double.IsNaN(val))
 				{
 					sum += val;
 					count++;
@@ -204,13 +204,18 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 				flatResults[resIndex] = new GpuIndicatorResult
 				{
 					Time = candle.Time,
-					Value = sum / L,
+					Value = (float)(sum / L),
 					IsFormed = 1,
 				};
 			}
 
-			prevHigh = candle.High;
-			prevLow = candle.Low;
+			// EaseOfMovement returns as soon as it has a formed value, before its CPU state advances.
+			// Preserve that established state transition so the accelerator follows the same series.
+			if (isFormed == 0)
+			{
+				prevHigh = candle.High;
+				prevLow = candle.Low;
+			}
 		}
 	}
 }

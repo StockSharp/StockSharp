@@ -8,7 +8,7 @@ using Ecng.Compilation.Expressions;
 /// <summary>
 /// Formula for a single candle inside pattern.
 /// </summary>
-public class CandleExpressionCondition : IPersistable
+public class CandleExpressionCondition : IAsyncPersistable
 {
 	/// <summary>
 	/// </summary>
@@ -40,27 +40,46 @@ public class CandleExpressionCondition : IPersistable
 
 	private readonly AssemblyLoadContextTracker _context = new();
 	private readonly Dictionary<string, ValueGetterDelegate> _varGetters = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly AsyncLock _prepareLock = new();
+	private volatile bool _isPrepared;
 	private string[] _variables;
 	private decimal[] _varValues;
 	private ExpressionFormula<bool> _formula;
+	private int _minIndex;
+	private int _maxIndex;
 
 	/// <summary>
 	/// Formula is not present.
 	/// </summary>
-	public bool IsEmpty => _formula == null;
+	public bool IsEmpty => Expression.IsEmptyOrWhiteSpace();
 
 	/// <summary>
 	/// Expression.
 	/// </summary>
 	public string Expression { get; private set; }
 
-	internal int MinIndex { get; private set; }
-	internal int MaxIndex { get; private set; }
+	internal int MinIndex
+	{
+		get
+		{
+			EnsurePrepared();
+			return _minIndex;
+		}
+	}
+
+	internal int MaxIndex
+	{
+		get
+		{
+			EnsurePrepared();
+			return _maxIndex;
+		}
+	}
 
 	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
-	/// Create instance.
+	/// Create instance. The expression is compiled by <see cref="PrepareAsync"/>.
 	/// </summary>
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="expression"><see cref="Expression"/></param>
@@ -68,18 +87,46 @@ public class CandleExpressionCondition : IPersistable
 	{
 		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 		Expression = expression;
-
-		Init();
 	}
 
 	private static readonly Regex _varNamePattern = new(@"^(p+)?([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
 
-	private void Init()
+	/// <summary>
+	/// Compile <see cref="Expression"/>, so that the condition can be evaluated. Repeated calls do nothing.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	/// <exception cref="InvalidOperationException">The expression does not compile or refers to an unknown variable.</exception>
+	public async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		if (_isPrepared)
+			return;
+
+		using (await _prepareLock.LockAsync(cancellationToken))
+		{
+			if (_isPrepared)
+				return;
+
+			// InitAsync resets its own state before compiling, so a failed attempt leaves the condition
+			// unprepared and the next one reports the very same error.
+			await InitAsync(cancellationToken);
+
+			_isPrepared = true;
+		}
+	}
+
+	private void EnsurePrepared()
+	{
+		if (!_isPrepared)
+			throw new InvalidOperationException($"candle expression is not prepared (expr='{Expression}')");
+	}
+
+	private async ValueTask InitAsync(CancellationToken cancellationToken)
 	{
 		_formula = null;
 		_varGetters.Clear();
 
-		MinIndex = MaxIndex = 0;
+		_minIndex = _maxIndex = 0;
 
 		if(Expression.IsEmptyOrWhiteSpace())
 			return;
@@ -87,7 +134,7 @@ public class CandleExpressionCondition : IPersistable
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
-		_formula = Expression.Compile<bool>(_fileSystem, _context);
+		_formula = await Expression.CompileAsync<bool>(_fileSystem, _context, cancellationToken);
 
 		if (!_formula.Error.IsEmpty())
 			throw new InvalidOperationException(_formula.Error);
@@ -120,8 +167,8 @@ public class CandleExpressionCondition : IPersistable
 					idx = -idx - 1;
 			}
 
-			MinIndex = MinIndex.Min(idx);
-			MaxIndex = MaxIndex.Max(idx);
+			_minIndex = _minIndex.Min(idx);
+			_maxIndex = _maxIndex.Max(idx);
 
 			var idxVar = Variables.IndexOf(v => v.VarName.EqualsIgnoreCase(name));
 			if(idxVar < 0)
@@ -140,13 +187,16 @@ public class CandleExpressionCondition : IPersistable
 	}
 
 	/// <summary>
-	/// Check if the condition is met for the given candles.
+	/// Check if the condition is met for the given candles. The condition has to be prepared by <see cref="PrepareAsync"/>.
 	/// </summary>
 	/// <param name="candles">The candles to check the condition against.</param>
 	/// <param name="candleIndex">The index of the candle in the candles array.</param>
 	/// <returns>Check result.</returns>
+	/// <exception cref="InvalidOperationException">The condition is not prepared.</exception>
 	public bool CheckCondition(ReadOnlySpan<ICandleMessage> candles, int candleIndex)
 	{
+		EnsurePrepared();
+
 		if(_formula == null)
 			return true;
 
@@ -180,16 +230,24 @@ public class CandleExpressionCondition : IPersistable
 	}
 
 	/// <inheritdoc />
-	public void Load(SettingsStorage storage)
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		EnsureEmpty();
 
 		Expression = storage.GetValue<string>(nameof(Expression));
-		Init();
+
+		// the loaded formula replaces the one this instance was created with
+		_isPrepared = false;
+
+		await PrepareAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public void Save(SettingsStorage storage) => storage.SetValue(nameof(Expression), Expression);
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		storage.SetValue(nameof(Expression), Expression);
+		return Task.CompletedTask;
+	}
 
 	/// <inheritdoc />
 	public override string ToString() => Expression.IsEmpty(LocalizedStrings.Empty);
@@ -201,6 +259,8 @@ public class CandleExpressionCondition : IPersistable
 /// </summary>
 public class ExpressionCandlePattern : ICandlePattern
 {
+	private volatile bool _isPrepared;
+
 	/// <summary>
 	/// Pattern formulas.
 	/// </summary>
@@ -241,35 +301,44 @@ public class ExpressionCandlePattern : ICandlePattern
 		Conditions = [.. conditions];
 	}
 
-	private bool _validated;
+	/// <inheritdoc />
+	/// <exception cref="ConditionError">A formula refers to a candle outside of the pattern.</exception>
+	/// <exception cref="InvalidOperationException">A formula does not compile, or the pattern has no formulas.</exception>
+	public async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		if (_isPrepared)
+			return;
+
+		var conditions = Conditions;
+
+		foreach (var condition in conditions)
+			await condition.PrepareAsync(cancellationToken);
+
+		var invalidRangeIds = new List<int>();
+
+		for (var i = 0; i < conditions.Length; ++i)
+		{
+			var cond = conditions[i];
+			if (i + cond.MinIndex < 0 || i + cond.MaxIndex >= conditions.Length)
+				invalidRangeIds.Add(i);
+		}
+
+		if (invalidRangeIds.Count > 0)
+			throw new ConditionError($"patterns ({invalidRangeIds.Select(i => (i + 1).ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range", invalidRangeIds);
+
+		if (conditions.Length == 0)
+			throw new InvalidOperationException("no conditions");
+
+		if (conditions.All(cf => cf.IsEmpty))
+			throw new InvalidOperationException("all candle formulas are empty");
+
+		_isPrepared = true;
+	}
 
 	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
 	{
-		if (!_validated)
-		{
-			_validated = true;
-
-			var invalidRangeIds = new List<int>();
-
-			for (var i = 0; i < Conditions.Length; ++i)
-			{
-				var cond = Conditions[i];
-				if (i + cond.MinIndex < 0 || i + cond.MaxIndex >= Conditions.Length)
-					invalidRangeIds.Add(i);
-			}
-
-			if (invalidRangeIds.Count > 0)
-				throw new ConditionError($"patterns ({invalidRangeIds.Select(i => (i + 1).ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range", invalidRangeIds);
-
-			if (Conditions.Length == 0)
-				throw new InvalidOperationException("no conditions");
-
-			if (Conditions.All(cf => cf.IsEmpty))
-				throw new InvalidOperationException("all candle formulas are empty");
-
-			if (CodeExtensions.TryGetCSharpCompiler() is null)
-				throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
-		}
+		if (!_isPrepared)
+			throw new InvalidOperationException($"pattern '{Name}' is not prepared");
 
 		if(candles.Length != CandlesCount)
 			throw new ArgumentException($"unexpected candles count. expected {CandlesCount}, got {candles.Length}");
@@ -281,23 +350,28 @@ public class ExpressionCandlePattern : ICandlePattern
 		return true;
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 
-		Conditions = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
+		var conditions = new List<CandleExpressionCondition>();
+
+		foreach (var ss in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)))
 		{
 			var cond = new CandleExpressionCondition(Paths.FileSystem, null);
-			cond.Load(ss);
-			return cond;
-		})];
+			await cond.LoadAsync(ss, cancellationToken);
+			conditions.Add(cond);
+		}
+
+		Conditions = [.. conditions];
+		_isPrepared = false;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Name), Name)
-			.Set(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray())
+			.Set(nameof(Conditions), await Conditions.SaveAllAsync(cancellationToken))
 		;
 	}
 

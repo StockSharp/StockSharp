@@ -70,9 +70,14 @@ public class Level1StorageBackwardCompatTests : BaseTestClass
 		// verify data was written to "level1" file, not "security"
 		var expectedFileName = "level1" + LocalMarketDataDrive.GetExtension(format);
 		var drive = (LocalMarketDataDrive)storage.Drive.Drive;
+		var secPath = drive.GetSecurityPath(securityId);
+		var dateDirs = fs.GetDirectories(secPath).ToArray();
+		dateDirs.Length.AssertGreater(0);
+		dateDirs.All(dir => fs.FileExists(IOPath.Combine(dir, expectedFileName))).AssertTrue();
 
 		var loaded = await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
 		loaded.Length.AssertEqual(testValues.Length);
+		loaded.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		await storage.DeleteWithCheckAsync(token);
 	}

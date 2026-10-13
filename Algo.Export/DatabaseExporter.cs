@@ -39,11 +39,18 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	/// </summary>
 	public decimal? VolumeStep { get; } = volumeStep;
 
-	private int _batchSize = 50;
+	private int _batchSize = 10000;
 
 	/// <summary>
-	/// The size of transmitted data package. The default is 50 elements.
+	/// The size of transmitted data package. The default is 10000 elements.
 	/// </summary>
+	/// <remarks>
+	/// Every package is written inside its own transaction, so a small size multiplies
+	/// durable commits and network round trips without any upside: the target table
+	/// already splits a package into statements that fit the provider's parameter limit.
+	/// Hence the large default; lower it only to trade throughput for finer-grained
+	/// commits or for less memory (a package is buffered in full before being sent).
+	/// </remarks>
 	public int BatchSize
 	{
 		get => _batchSize;

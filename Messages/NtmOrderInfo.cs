@@ -6,7 +6,7 @@ namespace StockSharp.Messages;
 [Serializable]
 [DataContract]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
+public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="NtmOrderInfo"/>.
@@ -73,7 +73,9 @@ public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		MatchRef = storage.GetValue<string>(nameof(MatchRef));
 		Partner = storage.GetValue<string>(nameof(Partner));
@@ -81,13 +83,17 @@ public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
 		SettleDate = storage.GetValue<DateTime?>(nameof(SettleDate));
 		ForAccount = storage.GetValue<string>(nameof(ForAccount));
 		CurrencyType = storage.GetValue<CurrencyTypes>(nameof(CurrencyType));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(MatchRef), MatchRef);
 		storage.SetValue(nameof(Partner), Partner);
@@ -95,5 +101,7 @@ public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
 		storage.SetValue(nameof(SettleDate), SettleDate);
 		storage.SetValue(nameof(ForAccount), ForAccount);
 		storage.SetValue(nameof(CurrencyType), CurrencyType);
+
+		return Task.CompletedTask;
 	}
 }

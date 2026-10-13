@@ -38,7 +38,7 @@ public class EmptyStrategy : Strategy
 
 	protected override void OnStarted2(DateTime time)
 	{
-		LogInfo(nameof(OnStarted));
+		LogInfo(nameof(OnStarted2));
 
 		base.OnStarted2(time);
 	}

@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Gpu.Indicators;
 /// <param name="length">ATR period length.</param>
 /// <param name="multiplier">ATR multiplier.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuSuperTrendParams(int length, float multiplier) : IGpuIndicatorParams
+public struct GpuSuperTrendParams(int length, double multiplier) : IGpuIndicatorParams
 {
 	/// <summary>
 	/// ATR window length.
@@ -19,7 +19,7 @@ public struct GpuSuperTrendParams(int length, float multiplier) : IGpuIndicatorP
 	/// <summary>
 	/// ATR multiplier for SuperTrend bands.
 	/// </summary>
-	public float Multiplier = multiplier;
+	public double Multiplier = multiplier;
 
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
@@ -27,7 +27,7 @@ public struct GpuSuperTrendParams(int length, float multiplier) : IGpuIndicatorP
 		if (indicator is SuperTrend st)
 		{
 			Unsafe.AsRef(in this).Length = st.Length;
-			Unsafe.AsRef(in this).Multiplier = (float)st.Multiplier;
+			Unsafe.AsRef(in this).Multiplier = (double)st.Multiplier;
 		}
 	}
 }
@@ -198,16 +198,18 @@ public class GpuSuperTrendCalculator : GpuIndicatorCalculatorBase<SuperTrend, Gp
 			length = 1;
 
 		var multiplier = param.Multiplier;
-		if (multiplier <= 0f)
-			multiplier = 1f;
+		if (multiplier <= 0d)
+			multiplier = 1d;
 
-		var prevClose = flatCandles[offset].Close;
-		var trSum = 0f;
-		var atr = 0f;
+		// Which band the line follows is decided by comparing a close against a band for equality, and at
+		// price scale float32 rounds coarser than the tick between them, so the state is kept in double.
+		var prevClose = (double)flatCandles[offset].Close;
+		var trSum = 0d;
+		var atr = 0d;
 		var atrInitialized = false;
 
-		var prevUpperBand = 0f;
-		var prevLowerBand = 0f;
+		var prevUpperBand = 0d;
+		var prevLowerBand = 0d;
 		var prevTrend = 1;
 		var hasPrevUpper = false;
 		var hasPrevLower = false;
@@ -218,14 +220,14 @@ public class GpuSuperTrendCalculator : GpuIndicatorCalculatorBase<SuperTrend, Gp
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
-			var high = candle.High;
-			var low = candle.Low;
-			var close = candle.Close;
+			var high = (double)candle.High;
+			var low = (double)candle.Low;
+			var close = (double)candle.Close;
 
 			var tr1 = high - low;
-			var tr2 = MathF.Abs(high - prevClose);
-			var tr3 = MathF.Abs(low - prevClose);
-			var tr = MathF.Max(tr1, MathF.Max(tr2, tr3));
+			var tr2 = Math.Abs(high - prevClose);
+			var tr3 = Math.Abs(low - prevClose);
+			var tr = Math.Max(tr1, Math.Max(tr2, tr3));
 
 			var resIndex = paramIdx * totalSize + globalIdx;
 			flatResults[resIndex] = new GpuSuperTrendResult
@@ -256,7 +258,7 @@ public class GpuSuperTrendCalculator : GpuIndicatorCalculatorBase<SuperTrend, Gp
 				continue;
 			}
 
-			var hl2 = (high + low) / 2f;
+			var hl2 = (high + low) / 2d;
 			var basicUpperBand = hl2 + multiplier * atr;
 			var basicLowerBand = hl2 - multiplier * atr;
 
@@ -268,7 +270,7 @@ public class GpuSuperTrendCalculator : GpuIndicatorCalculatorBase<SuperTrend, Gp
 				? basicLowerBand
 				: prevLowerBand;
 
-			float supertrend;
+			double supertrend;
 			int trend;
 
 			if (!hasPrevSupertrend)
@@ -290,7 +292,7 @@ public class GpuSuperTrendCalculator : GpuIndicatorCalculatorBase<SuperTrend, Gp
 			flatResults[resIndex] = new GpuSuperTrendResult
 			{
 				Time = candle.Time,
-				SuperTrend = supertrend,
+				SuperTrend = (float)supertrend,
 				IsUpTrend = (byte)(trend == 1 ? 1 : 0),
 				IsFormed = 1,
 			};

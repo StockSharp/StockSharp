@@ -110,7 +110,7 @@ public partial class MainWindow
 		_strategy.PnLChanged += Strategy_PnLChanged;
 		_strategy.SetChart(Chart);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 
 		StatisticParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
 

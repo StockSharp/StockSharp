@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class Level1DepthBuilderManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static Level1ChangeMessage CreateBestBidAsk(SecurityId securityId, DateTime time, long[] subscriptionIds, decimal? bidPrice, decimal? askPrice, decimal? bidVolume = null, decimal? askVolume = null)
 	{
 		var msg = new Level1ChangeMessage
@@ -310,8 +306,10 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 
 		// No book should be generated for duplicate values
 		extraOut2.Length.AssertEqual(0);
-		// Level1 should still be forwarded (duplicates don't affect forwarding)
-		forward.AssertSame(l1Second);
+		// The depth-subscription id (1) is managed and must be stripped from the forwarded Level1
+		// regardless of whether a book was built. Since id 1 is the only subscription id on l1Second
+		// and no non-managed id remains, the Level1 must be suppressed entirely.
+		forward.AssertNull("Managed depth-subscription id must be stripped; with no remaining ids the Level1 is suppressed");
 	}
 
 	[TestMethod]
@@ -348,6 +346,9 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 
 		// No book should be generated
 		extraOut.Length.AssertEqual(0);
+		// The depth-subscription id (1) is managed and must be stripped from the forwarded Level1
+		// even when no book is built (no best prices). With no remaining id, the Level1 is suppressed.
+		forward.AssertNull("Managed depth-subscription id must be stripped; with no remaining ids the Level1 is suppressed");
 	}
 
 	[TestMethod]

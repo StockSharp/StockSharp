@@ -23,13 +23,13 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override void AddRiskSample(decimal ret)
+	protected override void AddRiskSample(decimal ret, long count)
 	{
-		_sumSq += ret * ret;
+		_sumSq += ret * ret * count;
 	}
 
 	/// <inheritdoc />
-	protected override decimal GetRisk(int count, decimal sumReturn)
+	protected override decimal GetRisk(long count, decimal sumReturn)
 	{
 		if (count < 2)
 			return 0;
@@ -40,7 +40,7 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override bool HasEnoughRiskSamples(int count)
+	protected override bool HasEnoughRiskSamples(long count)
 		=> count >= 2;
 
 	/// <inheritdoc />
@@ -51,17 +51,17 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue("SumSq", _sumSq);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		_sumSq = storage.GetValue<decimal>("SumSq");
 	}

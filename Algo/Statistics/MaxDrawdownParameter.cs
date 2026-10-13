@@ -38,16 +38,16 @@ public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("MaxEquity", MaxEquity);
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		MaxEquity = storage.GetValue<decimal>("MaxEquity");
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

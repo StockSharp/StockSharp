@@ -92,23 +92,25 @@ public class Trix : LengthIndicator<IIndicatorValue, CircularBufferEx<IIndicator
 
 		var ema3Value = _ema3.Process(ema2Value);
 
-		return _ema3.IsFormed
-			? 10m * _roc.Process(ema3Value).ToDecimal(Source)
-			: null;
+		if (!_ema3.IsFormed)
+			return null;
+
+		var roc = _roc.Process(ema3Value).ToNullableDecimal(Source);
+		return roc is null ? null : 10m * roc.Value;
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		RocLength = storage.GetValue(nameof(RocLength), RocLength);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(RocLength), RocLength);
 	}

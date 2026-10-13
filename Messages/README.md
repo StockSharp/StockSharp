@@ -46,5 +46,5 @@ Such messages are passed to an adapter, which forwards them to the broker or dat
 
 ## Documentation
 
-Further details on messages and architecture can be found in the [StockSharp documentation](https://doc.stocksharp.com/topics/api/messages.html).
+Further details on messages and architecture can be found in the [StockSharp documentation](https://doc.stocksharp.com/en/topics/api/messages.html).
 

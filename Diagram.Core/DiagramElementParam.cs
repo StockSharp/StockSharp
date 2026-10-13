@@ -4,7 +4,7 @@ namespace StockSharp.Diagram;
 /// The diagram element parameter.
 /// </summary>
 /// <typeparam name="T">Value type.</typeparam>
-public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
+public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam, IHandledDiagramElementParam
 {
 	/// <summary>
 	/// The parameter value change start event.
@@ -115,12 +115,20 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
 	/// <summary>
 	/// The parameter value saving handler.
 	/// </summary>
-	public Func<T, SettingsStorage> SaveHandler { get; set; }
+	public Func<T, CancellationToken, ValueTask<SettingsStorage>> SaveHandler { get; set; }
 
 	/// <summary>
 	/// The parameter value loading handler.
 	/// </summary>
-	public Func<SettingsStorage, T> LoadHandler { get; set; }
+	public Func<SettingsStorage, CancellationToken, ValueTask<T>> LoadHandler { get; set; }
+
+	internal Func<T, SettingsStorage> SyncSaveHandler { get; set; }
+	internal Func<SettingsStorage, T> SyncLoadHandler { get; set; }
+
+	bool IHandledDiagramElementParam.HasPersistenceHandlers => SaveHandler != null;
+	bool IHandledDiagramElementParam.HasSyncHandlers => SyncSaveHandler != null && SyncLoadHandler != null;
+	SettingsStorage IHandledDiagramElementParam.SaveByHandler() => SyncSaveHandler(Value);
+	void IHandledDiagramElementParam.LoadByHandler(SettingsStorage storage) => Value = storage == null ? default : SyncLoadHandler(storage);
 
 	/// <summary>
 	/// To set the <see cref="ExpandableObjectConverter"/> attribute for the diagram element parameter.
@@ -201,15 +209,17 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (LoadHandler != null)
 		{
-			storage.SafeGetValue<SettingsStorage>(nameof(Value), s => Value = s == null ? default : LoadHandler(s), true);
+			await storage.SafeGetValueAsync<SettingsStorage>(nameof(Value), async s => Value = s == null ? default : await LoadHandler(s, cancellationToken), true);
 		}
 		else if (typeof(T).IsPersistable())
 		{
-			storage.SafeGetValue<SettingsStorage>(nameof(Value), s =>
+			await storage.SafeGetValueAsync<SettingsStorage>(nameof(Value), async s =>
 			{
 				if (s == null)
 					Value = default;
@@ -230,7 +240,7 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
 						s = copy;
 					}
 
-					var v = s.LoadEntire<IPersistable>();
+					var v = await s.LoadEntireAsync<object>(cancellationToken);
 
 #pragma warning disable CS0618 // Type or member is obsolete
 					if (v is CandleSeries cs && typeof(T) == typeof(DataType))
@@ -249,18 +259,17 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (SaveHandler != null)
 		{
-			storage.SetValue(nameof(Value), SaveHandler(Value));
+			storage.SetValue(nameof(Value), await SaveHandler(Value, cancellationToken));
 		}
-		else if (Value is IPersistable pers)
+		else if (Value?.GetType().IsPersistable() == true)
 		{
-			if (Value.IsNull())
-				return;
-
-			storage.SetValue(nameof(Value), pers.SaveEntire(false));
+			storage.SetValue(nameof(Value), await Value.SaveEntireAsync(false, cancellationToken));
 		}
 		else
 			storage.SetValue(nameof(Value), Value);

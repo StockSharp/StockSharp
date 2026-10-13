@@ -358,7 +358,8 @@ public class BasketMessageFlowTests : BaseTestClass
 			await SendOutWithLog(tick, ct);
 		}
 
-		public override IMessageAdapter Clone() => new LoggingInnerAdapter(TransactionIdGenerator, _logger, _name);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new LoggingInnerAdapter(TransactionIdGenerator, _logger, _name));
 	}
 
 	#endregion
@@ -504,11 +505,9 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		PrintFlowLog();
 
-		// Note: SubscriptionResponse is optional - adapters may skip it
-		// and go directly to Finished/Online. This is not an error, just a warning for developers.
-		// var responses = GetOutput<SubscriptionResponseMessage>();
-		// responses.Any(r => r.OriginalTransactionId == transId)
-		//     .AssertTrue($"SubscriptionResponse should have OriginalTransactionId={transId}");
+		var responses = GetOutput<SubscriptionResponseMessage>();
+		responses.Count(r => r.OriginalTransactionId == transId)
+			.AssertEqual(1, $"SubscriptionResponse should have OriginalTransactionId={transId}");
 
 		// Check SubscriptionFinished - this is required
 		var finished = GetOutput<SubscriptionFinishedMessage>();
@@ -939,8 +938,8 @@ public class BasketMessageFlowTests : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone()
-			=> new EmulatorLikeWrapper(InnerAdapter.Clone(), _logger, _name);
+		public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new EmulatorLikeWrapper(await InnerAdapter.CloneAsync(cancellationToken), _logger, _name);
 	}
 
 	private (BasketMessageAdapter basket, LoggingInnerAdapter innerAdapter, EmulatorLikeWrapper wrapper)
@@ -2033,8 +2032,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		_flowLogger.Clear();
 		_basketOutput.Clear();
 
-		// Try sending Level1 data using the child subscription ID
-		// Reuse SendTickManual but with Level1 — need to send manually
+		// Try sending Level1 data using the removed child subscription ID.
 		var l1Msg = new Level1ChangeMessage
 		{
 			SecurityId = SecId1,
@@ -2042,14 +2040,13 @@ public class BasketMessageFlowTests : BaseTestClass
 			OriginalTransactionId = childSubId,
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 999m);
-		// Send directly through adapter's outgoing channel
-		await adapter1.SendTickManual(childSubId, SecId1, CancellationToken);
+		await adapter1.SendOutMessageAsync(l1Msg, CancellationToken);
 
 		PrintFlowLog();
 
-		// Data after unsubscribe should NOT arrive
-		var postUnsubTicks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
-		postUnsubTicks.Length.AssertEqual(0, "Data after unsubscribe should not arrive");
+		// Level1 data after unsubscribe should NOT arrive.
+		var postUnsubLevel1 = GetOutput<Level1ChangeMessage>();
+		postUnsubLevel1.Length.AssertEqual(0, "Level1 data after unsubscribe should not arrive");
 	}
 
 	#endregion

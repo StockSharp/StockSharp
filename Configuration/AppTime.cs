@@ -19,10 +19,14 @@ public static class AppTime
 	private static TimeZoneInfo Tz => TimeZone;
 
 	/// <summary>
-	/// Convert a date-time (UTC/Local/Unspecified) to application time zone, mimicking TimeConverter logic.
+	/// Convert a date-time to application time zone. A value on the machine clock is converted from it,
+	/// and any other value names an instant in UTC - every moment in the application is UTC, so one that
+	/// lost its kind on the way through storage or a wire format still names the same instant.
 	/// </summary>
 	public static DateTime ToAppTime(this DateTime dt)
-		=> TimeZoneInfo.ConvertTime(dt, Tz);
+		=> dt.Kind == DateTimeKind.Local
+			? TimeZoneInfo.ConvertTime(dt, Tz)
+			: FromUtc(dt);
 
 	/// <summary>
 	/// Convert DateTimeOffset to application time zone, mimicking TimeConverter logic.

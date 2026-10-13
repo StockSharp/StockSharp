@@ -3,8 +3,15 @@ namespace StockSharp.Algo.Storages;
 /// <summary>
 /// The interface for storage buffer.
 /// </summary>
-public interface IStorageBuffer : IPersistable, ICloneable<IStorageBuffer>
+public interface IStorageBuffer : IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the buffer.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IStorageBuffer> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Save data only for subscriptions.
 	/// </summary>
@@ -110,4 +117,10 @@ public interface IStorageBuffer : IPersistable, ICloneable<IStorageBuffer>
 	/// </summary>
 	/// <param name="message">Message.</param>
 	void ProcessOutMessage(Message message);
+
+	/// <summary>
+	/// Puts back what could not be written, so the next round writes it rather than losing it.
+	/// </summary>
+	/// <param name="messages">What was taken and not written.</param>
+	void PutBack(IEnumerable<Message> messages);
 }

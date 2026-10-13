@@ -41,6 +41,24 @@ public interface ISubscriptionRoutingState
 	bool RemoveRequest(long transactionId);
 
 	/// <summary>
+	/// Keep an unsubscribe the basket was given, by the caller's ID, until its children answer.
+	/// </summary>
+	/// <remarks>
+	/// Kept apart from the requests the basket numbers itself: the caller's numbering and the basket's can meet.
+	/// </remarks>
+	void AddUnsubscribe(long transactionId, ISubscriptionMessage message);
+
+	/// <summary>
+	/// Try get an unsubscribe the basket was given, by the caller's ID.
+	/// </summary>
+	bool TryGetUnsubscribe(long transactionId, out ISubscriptionMessage message);
+
+	/// <summary>
+	/// Remove an unsubscribe the basket was given, by the caller's ID.
+	/// </summary>
+	bool RemoveUnsubscribe(long transactionId);
+
+	/// <summary>
 	/// Clear all state.
 	/// </summary>
 	void Clear();

@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Generation;
+﻿namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// The orders log generator using random method.
@@ -123,7 +123,7 @@ public class OrderLogGenerator : MarketDataGenerator
 
 		// TODO более реалистичную генерацию, так как сейчас объемы, цены и сделки c потолка
 
-		var action = RandomGen.GetInt(0, 5);
+		var action = RandomProvider.GetInt(0, 5);
 
 		var isNew = action < 3 || _activeOrders.IsEmpty();
 
@@ -133,7 +133,7 @@ public class OrderLogGenerator : MarketDataGenerator
 		{
 			var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
 
-			_lastOrderPrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
+			_lastOrderPrice += RandomProvider.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
 
 			if (_lastOrderPrice <= 0)
 				_lastOrderPrice = priceStep;
@@ -148,8 +148,8 @@ public class OrderLogGenerator : MarketDataGenerator
 				SecurityId = SecurityId,
 				ServerTime = time,
 				OrderState = OrderStates.Active,
-				OrderVolume = v * (SecurityDefinition.VolumeStep ?? 1m),
-				Side = RandomGen.GetEnum<Sides>(),
+				OrderVolume = v * (SecurityDefinition.VolumeStep is > 0 ? SecurityDefinition.VolumeStep.Value : 1m),
+				Side = RandomProvider.GetEnum<Sides>(),
 				OrderPrice = _lastOrderPrice,
 				DataTypeEx = DataType.OrderLog,
 			};
@@ -171,7 +171,17 @@ public class OrderLogGenerator : MarketDataGenerator
 				item = activeOrder.TypedClone();
 				item.ServerTime = time;
 
-				item.TradeVolume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
+				var volumeStep = SecurityDefinition.VolumeStep is > 0 ? SecurityDefinition.VolumeStep.Value : 1m;
+				var availableSteps = (int)decimal.Floor(activeOrder.SafeGetVolume() / volumeStep);
+
+				if (availableSteps <= 0)
+				{
+					_activeOrders.Dequeue();
+					LastGenerationTime = time;
+					return null;
+				}
+
+				item.TradeVolume = RandomProvider.GetInt(1, availableSteps) * volumeStep;
 
 				item.TradeId = trade.TradeId;
 				item.TradePrice = trade.TradePrice;

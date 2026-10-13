@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class StrategyParamHelperTests : BaseTestClass
@@ -208,13 +208,14 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 10, 100);
 			AreEqual(0, value % 10); // should be on step boundary
 		}
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void GetRandom_DecimalRange()
 	{
 		var param = new StrategyParam<decimal>("test");
@@ -222,8 +223,10 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 1.0m, 5.0m);
+			// The engine generates from + k*step, so the value must sit on a step boundary.
+			IsZero((value - 1.0m) % 0.5m, $"Value {value} is not aligned to step 0.5 from 1.0.");
 		}
 	}
 
@@ -238,7 +241,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			if (value) trueCount++;
 			else falseCount++;
 		}
@@ -249,11 +252,29 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void GetRandom_BoolSameValue_StaysInRange()
+	{
+		// Degenerate range from=to=true. GetIterationsCount reports 1 for this case, so the only
+		// admissible random value is 'true'. The engine, however, calls RandomGen.GetBool() and
+		// ignores the from/to bounds, so it returns false ~half the time. Sampling many times makes a
+		// false pass astronomically unlikely while keeping the assertion on the correct contract.
+		var param = new StrategyParam<bool>("test");
+		param.SetOptimize(true, true, default);
+
+		for (var i = 0; i < 100; i++)
+		{
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
+			IsTrue(value, "Random value for a true..true range must always be true.");
+		}
+	}
+
+	[TestMethod]
 	public void GetRandom_ThrowsWhenCanOptimizeFalse()
 	{
 		var param = new StrategyParam<int>("test") { Value = 42, CanOptimize = false };
 
-		Throws<InvalidOperationException>(() => param.GetRandom());
+		Throws<InvalidOperationException>(() => param.GetRandom(DefaultRandomProvider.Instance));
 	}
 
 	[TestMethod]
@@ -264,7 +285,7 @@ public class StrategyParamHelperTests : BaseTestClass
             CanOptimize = true
         };
 
-        Throws<InvalidOperationException>(() => param.GetRandom());
+        Throws<InvalidOperationException>(() => param.GetRandom(DefaultRandomProvider.Instance));
 	}
 
 	#endregion
@@ -272,28 +293,39 @@ public class StrategyParamHelperTests : BaseTestClass
 	#region GetRandomValues
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void GetRandomValues_ReturnsRequestedCount()
 	{
 		var param = new StrategyParam<int>("test");
-		param.SetOptimize(1, 1000, 1);
+		param.SetOptimize(10, 1000, 10);
 
-		var values = param.GetRandomValues(10);
+		var values = param.GetRandomValues(10, DefaultRandomProvider.Instance);
 
 		AreEqual(10, values.Count);
-		AllItemsAreUnique(values.ToArray());
+
+		// GetRandomValues returns a HashSet, so uniqueness is structural and proves nothing.
+		// Instead verify every produced value honors the requested range and step grid (from + k*step).
+		foreach (var v in values)
+		{
+			IsInRange(v, 10, 1000);
+			AreEqual(0, (v - 10) % 10, $"Value {v} is not aligned to step 10 from 10.");
+		}
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void GetRandomValues_AllInRange()
 	{
 		var param = new StrategyParam<int>("test");
 		param.SetOptimize(10, 100, 5);
 
-		var values = param.GetRandomValues(20);
+		var values = param.GetRandomValues(20, DefaultRandomProvider.Instance);
 
 		foreach (var v in values)
 		{
 			IsInRange(v, 10, 100);
+			// Random values must land on the step grid (10 + k*5), not just inside the range.
+			AreEqual(0, (v - 10) % 5, $"Value {v} is not aligned to step 5 from 10.");
 		}
 	}
 
@@ -303,7 +335,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		var param = new StrategyParam<int>("test");
 		param.SetOptimize(1, 100, 1);
 
-		Throws<ArgumentOutOfRangeException>(() => param.GetRandomValues(0));
+		Throws<ArgumentOutOfRangeException>(() => param.GetRandomValues(0, DefaultRandomProvider.Instance));
 	}
 
 	#endregion
@@ -379,6 +411,24 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void GetIterationsCount_UnalignedDecimalRange_MatchesValuesCount()
+	{
+		// Unaligned range: the last full step (2.5) overshoots 'to' (2.1), so the real values are
+		// 1.0, 1.5, 2.0 -> 3. GetIterationsCount uses Ceiling((to-from+step)/step) = ceil(3.2) = 4,
+		// over-reporting by one. ToBruteForce trusts GetIterationsCount for totalCount while iterating
+		// GetOptimizationValues, so the two MUST agree. Bounded decimal range -> safe to enumerate.
+		var param = new StrategyParam<decimal>("test");
+		param.SetOptimize(1.0m, 2.1m, 0.5m);
+
+		var count = param.GetIterationsCount();
+		var values = param.GetOptimizationValues().Cast<decimal>().ToArray();
+
+		AreEqual(values.Length, count,
+			$"Iterations count must match the produced values [{values.Select(v => v.ToString(CultureInfo.InvariantCulture)).JoinComma()}].");
+	}
+
+	[TestMethod]
 	public void GetOptimizationValues_LazyEvaluation()
 	{
 		var param = new StrategyParam<int>("test");
@@ -421,6 +471,7 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void GetRandom_FloatRange()
 	{
 		var param = new StrategyParam<float>("test");
@@ -428,12 +479,18 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 1.0f, 10.0f);
+
+			// The engine generates from + k*step. With from=1.0 and step=0.5 (both exact in binary),
+			// the value must land exactly on the step grid.
+			var k = (float)Math.Round((value - 1.0f) / 0.5f);
+			AreEqual(1.0f + k * 0.5f, value, 1e-4f, $"Value {value} is not aligned to step 0.5 from 1.0.");
 		}
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void GetRandom_DoubleRange()
 	{
 		var param = new StrategyParam<double>("test");
@@ -441,9 +498,53 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 0.0, 1.0);
+
+			// The engine generates from + k*step. 0.1 is not exactly representable, so allow a small
+			// tolerance, but the value must still sit on a 0.1 grid point (from=0.0).
+			var k = Math.Round(value / 0.1);
+			AreEqual(k * 0.1, value, 1e-9, $"Value {value} is not aligned to step 0.1 from 0.0.");
 		}
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void GetOptimizationValues_FloatRange()
+	{
+		var param = new StrategyParam<float>("test");
+		param.SetOptimize(1.0f, 2.0f, 0.5f);
+
+		// GetIterationsCount returns 3 for this range (decimal branch). GetOptimizationValues must
+		// agree and yield the fractional grid 1.0, 1.5, 2.0. The current engine routes float through
+		// the IsPrimitive() branch and truncates step (0.5f -> 0) producing a degenerate sequence,
+		// so this enumeration is bounded with Take to never hang the runner.
+		var values = param.GetOptimizationValues().Take(3).Cast<float>().ToArray();
+
+		IsTrue(values.SequenceEqual([1.0f, 1.5f, 2.0f]),
+			$"Expected [1.0, 1.5, 2.0] but got [{values.Select(v => v.ToString(CultureInfo.InvariantCulture)).JoinComma()}].");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void GetOptimizationValues_DoubleRange()
+	{
+		var param = new StrategyParam<double>("test");
+		param.SetOptimize(0.1, 0.5, 0.1);
+
+		// GetIterationsCount returns 5 for this range (decimal branch). GetOptimizationValues must
+		// agree and yield 0.1, 0.2, 0.3, 0.4, 0.5. The current engine routes double through the
+		// IsPrimitive() branch where 0.1 -> 0 and step -> 0, which would loop forever, so the
+		// enumeration is bounded with Take to never hang the runner.
+		var values = param.GetOptimizationValues().Take(5).Cast<double>().ToArray();
+
+		var expected = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
+
+		AreEqual(expected.Length, values.Length,
+			$"Got [{values.Select(v => v.ToString(CultureInfo.InvariantCulture)).JoinComma()}].");
+
+		for (var i = 0; i < expected.Length; i++)
+			AreEqual(expected[i], values[i], 1e-9, $"Value at index {i} mismatch.");
 	}
 
 	#endregion
@@ -489,7 +590,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 50; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(expected.Contains(value));
 		}
 	}
@@ -561,7 +662,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 50; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(expected.Contains(value));
 		}
 	}
@@ -662,7 +763,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 10; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			// With step > range, should return from value or handle gracefully
 			IsTrue(value >= 10 && value <= 15, $"Value {value} is outside expected range [10, 15]");
 		}
@@ -676,7 +777,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 10; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(value >= 1.0m && value <= 1.5m, $"Value {value} is outside expected range [1.0, 1.5]");
 		}
 	}
@@ -752,8 +853,141 @@ public class StrategyParamHelperTests : BaseTestClass
 		// Bool type should allow default step (step doesn't apply to bool)
 		param.SetOptimize(false, true, default);
 
-		// Should work without exception
-		IsNotNull(param.OptimizeFrom);
+		// Should work without exception and store the exact range bounds.
+		AreEqual(false, (bool)param.OptimizeFrom);
+		AreEqual(true, (bool)param.OptimizeTo);
+	}
+
+	#endregion
+
+	#region Shape-based overloads
+
+	// A UI edits a parameter shape long before there is a strategy parameter to put it on, and the number it
+	// shows has to be the number the run produces. These pin the shape-based overloads to the IStrategyParam
+	// ones so the two cannot drift apart.
+
+	private static void AssertSameCount<T>(T from, T to, T step)
+	{
+		var param = new StrategyParam<T>("test");
+		param.SetOptimize(from, to, step);
+
+		AreEqual(
+			param.GetIterationsCount(),
+			StrategyParamHelper.GetIterationsCount(typeof(T), from, to, step, null),
+			$"Shape count for {typeof(T).Name} disagrees with the parameter count.");
+	}
+
+	private static void AssertSameValues<T>(T from, T to, T step)
+	{
+		var param = new StrategyParam<T>("test");
+		param.SetOptimize(from, to, step);
+
+		IsTrue(
+			param.GetOptimizationValues().SequenceEqual(
+				StrategyParamHelper.GetOptimizationValues(typeof(T), from, to, step, null)),
+			$"Shape values for {typeof(T).Name} disagree with the parameter values.");
+	}
+
+	[TestMethod]
+	public void ShapeCount_MatchesParamCount()
+	{
+		AssertSameCount(10, 50, 10);
+		AssertSameCount(1.0m, 2.0m, 0.5m);
+		AssertSameCount(false, true, default);
+		AssertSameCount(false, false, default);
+		AssertSameCount(TimeSpan.FromMinutes(5), TimeSpan.FromHours(1), TimeSpan.FromMinutes(5));
+		AssertSameCount(new Unit(1), new Unit(10), new Unit(1));
+	}
+
+	[TestMethod]
+	public void ShapeValues_MatchParamValues()
+	{
+		AssertSameValues(10, 50, 10);
+		AssertSameValues(1.0m, 2.0m, 0.5m);
+		AssertSameValues(false, true, default);
+		AssertSameValues(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
+	public void ADescendingShapeWalksDownwards()
+	{
+		// SetOptimize refuses from > to, so a descending range only ever reaches the engine as a shape -
+		// which is exactly what an editor writes, and what the editor's own count has to agree with.
+		object[] expected = [.. Enumerable.Range(0, 10).Select(i => (object)(10m - i))];
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(decimal), 10m, 1m, -1m, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(decimal), 10m, 1m, -1m, null)
+			.SequenceEqual(expected));
+
+		// The direction is the one the bounds describe, so the sign of the step neither adds to it nor
+		// contradicts it - the count already reads the step by modulus.
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(decimal), 10m, 1m, 1m, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(decimal), 10m, 1m, 1m, null)
+			.SequenceEqual(expected));
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(int), 10, 1, -1, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(int), 10, 1, -1, null)
+			.SequenceEqual(Enumerable.Range(0, 10).Select(i => (object)(10 - i))));
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(TimeSpan),
+			TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(-1), null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(TimeSpan), TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(-1), null)
+			.SequenceEqual(Enumerable.Range(0, 10).Select(i => (object)TimeSpan.FromMinutes(10 - i))));
+	}
+
+	[TestMethod]
+	public void AZeroStepWalksNowhereAndCountsNothing()
+	{
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(decimal), 1m, 10m, 0m, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(decimal), 1m, 10m, 0m, null).Count());
+
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), 1, 10, 0, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(int), 1, 10, 0, null).Count());
+	}
+
+	[TestMethod]
+	public void ShapeExplicitValues_WinOverTheRange()
+	{
+		object[] values = [3, 7, 11];
+
+		AreEqual(3, StrategyParamHelper.GetIterationsCount(typeof(int), 10, 50, 10, values));
+		IsTrue(StrategyParamHelper.GetOptimizationValues(typeof(int), 10, 50, 10, values).SequenceEqual(values));
+	}
+
+	[TestMethod]
+	public void AShapeThatDefinesNothingHasNoValues()
+	{
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), null, null, null, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(int), null, null, null, null).Count());
+
+		// A step is what a range is walked by; without one there is no range - except for a bool, whose two
+		// bounds are its two values.
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), 1, 10, null, null));
+		AreEqual(2, StrategyParamHelper.GetIterationsCount(typeof(bool), false, true, null, null));
+	}
+
+	[TestMethod]
+	public void AParameterWithNothingToWalkStillRunsOnce()
+	{
+		// The shape defines nothing, but the parameter still has its own value, and a run needs one.
+		var param = new StrategyParam<int>("test") { Value = 42, CanOptimize = true };
+
+		AreEqual(1, param.GetIterationsCount());
+		IsTrue(param.GetOptimizationValues().SequenceEqual([(object)42]));
+	}
+
+	[TestMethod]
+	public void AnEnumShapeRunsOnItsExplicitValues()
+	{
+		// The optimizer offers no range for an enum, but a chosen set of members is just a value list.
+		object[] values = [DayOfWeek.Monday, DayOfWeek.Friday];
+
+		AreEqual(2, StrategyParamHelper.GetIterationsCount(typeof(DayOfWeek), null, null, null, values));
+		IsTrue(StrategyParamHelper.GetOptimizationValues(typeof(DayOfWeek), null, null, null, values).SequenceEqual(values));
 	}
 
 	#endregion

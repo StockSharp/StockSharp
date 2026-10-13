@@ -209,7 +209,7 @@ class TransactionSerializerMetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>(securityId, DataType.Transactions, 200, MarketDataVersions.Version71, exchangeInfoProvider)
+class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>(securityId, DataType.Transactions, 200, MarketDataVersions.Version72, exchangeInfoProvider)
 {
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TransactionSerializerMetaInfo metaInfo)
 	{
@@ -311,7 +311,13 @@ class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider e
 			else
 				writer.Write(false);
 
-			writer.Write(msg.Side == Sides.Buy);
+			// A transaction need not state a side - a rejection of a cancel names none. One bit
+			// cannot say that, so files up to Version71 keep the bit and everything after carries
+			// the absence.
+			if (metaInfo.Version < MarketDataVersions.Version72)
+				writer.Write(msg.Side == Sides.Buy);
+			else
+				writer.WriteNullableSide(msg.Side);
 
 			writer.Write(msg.OrderVolume != null);
 
@@ -503,7 +509,9 @@ class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider e
 		var orderPrice = reader.Read() ? reader.ReadPriceEx(metaInfo, useLong, largeDecimal) : (decimal?)null;
 		var tradePrice = reader.Read() ? reader.ReadPriceEx(metaInfo, useLong, largeDecimal) : (decimal?)null;
 
-		var side = reader.Read() ? Sides.Buy : Sides.Sell;
+		var side = metaInfo.Version < MarketDataVersions.Version72
+			? reader.Read() ? Sides.Buy : Sides.Sell
+			: reader.ReadNullableSide();
 
 		var orderVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
 		var tradeVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;

@@ -119,6 +119,111 @@ public class UnitTests : BaseTestClass
 		(10.Percents() == 10).AssertFalse();
 	}
 
+	// IComparable requires sign(a.CompareTo(b)) to be the opposite of sign(b.CompareTo(a)).
+	// A percent and an absolute value must not both report themselves as the greater one.
+	[TestMethod]
+	public void CompareToPercentAndAbsoluteIsAntisymmetric()
+	{
+		var per = 10.Percents();
+		var abs = new Unit(10m, UnitTypes.Absolute);
+
+		var forward = Math.Sign(per.CompareTo(abs));
+		var backward = Math.Sign(abs.CompareTo(per));
+
+		forward.AssertEqual(-backward, $"CompareTo must be antisymmetric: '{per}' vs '{abs}' gave {forward}, the reverse gave {backward}");
+	}
+
+	[TestMethod]
+	public void CompareToAgreesWithComparisonOperatorsForComparableUnits()
+	{
+		AssertAgrees(10.Percents(), 20.Percents());
+		AssertAgrees(new(20m, UnitTypes.Absolute), new(10m, UnitTypes.Absolute));
+		AssertAgrees(new(10m, UnitTypes.Absolute), new(10m, UnitTypes.Absolute));
+
+		static void AssertAgrees(Unit u1, Unit u2)
+		{
+			var cmp = u1.CompareTo(u2);
+
+			if (cmp > 0)
+				(u1 > u2).AssertTrue($"CompareTo reported '{u1}' greater than '{u2}', but operator > disagrees");
+			else if (cmp < 0)
+				(u1 < u2).AssertTrue($"CompareTo reported '{u1}' less than '{u2}', but operator < disagrees");
+			else
+				(u1 == u2).AssertTrue($"CompareTo reported '{u1}' equal to '{u2}', but operator == disagrees");
+		}
+	}
+
+	/// <summary>
+	/// Equality and ordering have to tell the same story. A pair the equality operator calls equal
+	/// cannot be ordered apart, and a pair CompareTo puts in the same place cannot be unequal: where
+	/// the two disagree, a collection keyed by one and sorted by the other holds the same value twice,
+	/// and neither answer is wrong on its own terms.
+	/// </summary>
+	[TestMethod]
+	public void EqualityAndCompareToAgreeOnEveryPair()
+	{
+#pragma warning disable CS0618
+		Unit[] values =
+		[
+			new(10m, UnitTypes.Absolute),
+			new(20m, UnitTypes.Absolute),
+			10.Percents(),
+			new(10m, UnitTypes.Point),
+			new(10m, UnitTypes.Step),
+			new(10m, UnitTypes.Limit),
+		];
+#pragma warning restore CS0618
+
+		foreach (var first in values)
+		foreach (var second in values)
+		{
+			var equal = first == second;
+			var compared = first.CompareTo(second);
+
+			equal.AssertEqual(compared == 0,
+				$"'{first}' vs '{second}': == says {equal}, CompareTo says {compared}");
+		}
+	}
+
+	[TestMethod]
+	public void CompareToProvidesATransitiveOrderForMixedUnits()
+	{
+#pragma warning disable CS0618
+		Unit[] values =
+		[
+			new(3m, UnitTypes.Limit),
+			5.Percents(),
+			new(-1m, UnitTypes.Absolute),
+			new(1m, UnitTypes.Limit),
+			1.Percents(),
+			new(2m, UnitTypes.Absolute),
+		];
+#pragma warning restore CS0618
+
+		foreach (var first in values)
+		foreach (var second in values)
+		foreach (var third in values)
+		{
+			if (first.CompareTo(second) <= 0 && second.CompareTo(third) <= 0)
+				(first.CompareTo(third) <= 0).AssertTrue($"CompareTo is not transitive for '{first}', '{second}', '{third}'");
+		}
+
+		var sorted = values.ToList();
+		sorted.Sort();
+
+		sorted.Select(v => (v.Type, v.Value)).AssertEqual(
+		[
+			(UnitTypes.Absolute, -1m),
+			(UnitTypes.Absolute, 2m),
+			(UnitTypes.Percent, 1m),
+			(UnitTypes.Percent, 5m),
+#pragma warning disable CS0618
+			(UnitTypes.Limit, 1m),
+			(UnitTypes.Limit, 3m),
+#pragma warning restore CS0618
+		]);
+	}
+
 	[TestMethod]
 	public void NullCast()
 	{
@@ -316,78 +421,71 @@ public class UnitTests : BaseTestClass
 		}
 	}
 
+	/// <summary>
+	/// A percent mixed with an absolute value is what <see cref="Unit"/> exists for - a stop set to
+	/// "10% away" has to become a price - so the answer must be the one a person works out on paper.
+	/// Two rules describe all of it: a percent is taken of the magnitude of the value it meets
+	/// (10% of 100 and of -100 are both 10), and multiplying by a percent yields that share itself,
+	/// so 100 * 10% is 10 and not 1000. Every expectation below is written out from those two rules;
+	/// none is recomputed here from the formula the operators use, because an oracle that repeats the
+	/// implementation agrees with it however wrong it has become.
+	/// </summary>
 	[TestMethod]
-	public void Arithmetic()
+	public void ArithmeticAgainstWorkedExamples()
 	{
-		var security = Helper.CreateSecurity();
+		var absolute = new Unit(100m, UnitTypes.Absolute);
+		var tenPercent = new Unit(10m, UnitTypes.Percent);
 
-		for (var i = 0; i < 100000; i++)
+		(absolute + tenPercent).AssertEqual(new Unit(110m, UnitTypes.Absolute));
+		(absolute - tenPercent).AssertEqual(new Unit(90m, UnitTypes.Absolute));
+		(absolute * tenPercent).AssertEqual(new Unit(10m, UnitTypes.Absolute));
+		(absolute / tenPercent).AssertEqual(new Unit(10m, UnitTypes.Absolute));
+
+		var negative = new Unit(-100m, UnitTypes.Absolute);
+		(negative + tenPercent).AssertEqual(new Unit(-90m, UnitTypes.Absolute));
+		(negative - tenPercent).AssertEqual(new Unit(-110m, UnitTypes.Absolute));
+
+		// Two values of one kind: the numbers are combined as they stand and the kind is kept.
+		Check(new Unit(100m) + new Unit(25m), 125m, UnitTypes.Absolute, "100 + 25");
+		Check(new Unit(100m) - new Unit(25m), 75m, UnitTypes.Absolute, "100 - 25");
+		Check(new Unit(100m) * new Unit(25m), 2500m, UnitTypes.Absolute, "100 * 25");
+		Check(new Unit(100m) / new Unit(25m), 4m, UnitTypes.Absolute, "100 / 25");
+
+		Check(new Unit(30m, UnitTypes.Percent) + new Unit(12m, UnitTypes.Percent), 42m, UnitTypes.Percent, "30% + 12%");
+		Check(new Unit(30m, UnitTypes.Percent) - new Unit(12m, UnitTypes.Percent), 18m, UnitTypes.Percent, "30% - 12%");
+		Check(new Unit(30m, UnitTypes.Percent) * new Unit(12m, UnitTypes.Percent), 360m, UnitTypes.Percent, "30% * 12%");
+		Check(new Unit(30m, UnitTypes.Percent) / new Unit(12m, UnitTypes.Percent), 2.5m, UnitTypes.Percent, "30% / 12%");
+
+		// 10% of 100 is 10. The answer is an absolute value whichever side the percent stands on,
+		// and the operands keep their order: 10% - 100 is 10 - 100, not 100 - 10.
+		Check(new Unit(100m) + new Unit(10m, UnitTypes.Percent), 110m, UnitTypes.Absolute, "100 + 10%");
+		Check(new Unit(100m) - new Unit(10m, UnitTypes.Percent), 90m, UnitTypes.Absolute, "100 - 10%");
+		Check(new Unit(100m) * new Unit(10m, UnitTypes.Percent), 10m, UnitTypes.Absolute, "100 * 10%");
+		Check(new Unit(100m) / new Unit(10m, UnitTypes.Percent), 10m, UnitTypes.Absolute, "100 / 10%");
+
+		Check(new Unit(10m, UnitTypes.Percent) + new Unit(100m), 110m, UnitTypes.Absolute, "10% + 100");
+		Check(new Unit(10m, UnitTypes.Percent) - new Unit(100m), -90m, UnitTypes.Absolute, "10% - 100");
+		Check(new Unit(10m, UnitTypes.Percent) * new Unit(100m), 10m, UnitTypes.Absolute, "10% * 100");
+		Check(new Unit(10m, UnitTypes.Percent) / new Unit(100m), 0.1m, UnitTypes.Absolute, "10% / 100");
+
+		// The share is taken of the magnitude, so 10% of -100 is 10 and it is that 10 which is then
+		// added, subtracted or reported: a loss of 100 grows to 110 by subtracting a tenth of itself.
+		Check(new Unit(-100m) + new Unit(10m, UnitTypes.Percent), -90m, UnitTypes.Absolute, "-100 + 10%");
+		Check(new Unit(-100m) - new Unit(10m, UnitTypes.Percent), -110m, UnitTypes.Absolute, "-100 - 10%");
+		Check(new Unit(-100m) * new Unit(10m, UnitTypes.Percent), 10m, UnitTypes.Absolute, "-100 * 10%");
+		Check(new Unit(-100m) / new Unit(10m, UnitTypes.Percent), -10m, UnitTypes.Absolute, "-100 / 10%");
+
+		// A negative percent is a share owed back, so it reverses each of the four answers above.
+		Check(new Unit(100m) + new Unit(-10m, UnitTypes.Percent), 90m, UnitTypes.Absolute, "100 + -10%");
+		Check(new Unit(100m) - new Unit(-10m, UnitTypes.Percent), 110m, UnitTypes.Absolute, "100 - -10%");
+		Check(new Unit(100m) * new Unit(-10m, UnitTypes.Percent), -10m, UnitTypes.Absolute, "100 * -10%");
+		Check(new Unit(100m) / new Unit(-10m, UnitTypes.Percent), -10m, UnitTypes.Absolute, "100 / -10%");
+
+		static void Check(Unit result, decimal expectedValue, UnitTypes expectedType, string expression)
 		{
-			var u1 = RandomUnit();
-			var u2 = RandomUnit();
-
-			ProcessArithmetic(u1, u2, u1 + u2, (v1, v2) => v1 + v2, true);
-			ProcessArithmetic(u1, u2, u1 - u2, (v1, v2) => v1 - v2, true);
-			ProcessArithmetic(u1, u2, u1 * u2, (v1, v2) => v1 * v2, false);
-
-			if (u2.Value == 0 || (u1.Value == 0 && u2.Type == UnitTypes.Percent))
-				continue;
-
-			ProcessArithmetic(u1, u2, u1 / u2, (v1, v2) => v1 / v2, false);
+			result.Value.AssertEqual(expectedValue, $"{expression} must be {expectedValue}, got {result.Value}");
+			result.Type.AssertEqual(expectedType, $"{expression} must be measured as {expectedType}, got {result.Type}");
 		}
-	}
-
-	private static void ProcessArithmetic(Unit u1, Unit u2, Unit result, Func<decimal, decimal, decimal> opr, bool transAbs)
-	{
-		//result.Security.AssertSame(security);
-
-		// Check if operation is multiplication
-		var isMultiply = !transAbs && opr(10, 2) == 20;
-
-		if (u1.Type == u2.Type)
-		{
-			var resultValue = opr(u1.Value, u2.Value);
-
-			result.Value.AssertEqual(resultValue);
-			result.Type.AssertEqual(u1.Type);
-		}
-		else
-		{
-			if (u1.Type != UnitTypes.Percent && u2.Type != UnitTypes.Percent)
-			{
-				result.Type.AssertEqual(u1.Type);
-
-				var resultValue = transAbs ? u2.Convert(u1.Type).Value : (decimal)u2;
-
-				resultValue = opr(u1.Value, resultValue);
-
-				result.Value.Round(5).AssertEqual(resultValue.Round(5));
-			}
-			else
-			{
-				result.Type.AssertEqual(u1.Type != UnitTypes.Percent ? u1.Type : u2.Type);
-
-				var abs = u1.Type != UnitTypes.Percent ? u1.Value : u2.Value;
-				var per = u1.Type != UnitTypes.Percent ? u2.Value : u1.Value;
-
-				per = (abs.Abs() * per) / 100;
-
-				// For multiplication, the result is just 'per' (already calculated percentage value)
-				// For other operations, apply the operation
-				var resultValue = isMultiply ? per : (u1.Type != UnitTypes.Percent ? opr(abs, per) : opr(per, abs));
-
-				result.Value.AssertEqual(resultValue);
-			}
-		}
-	}
-
-	private static Unit RandomUnit()
-	{
-		return new(RandomGen.GetInt(-100, 100), RandomGen.GetEnum(
-		[
-			UnitTypes.Absolute,
-			UnitTypes.Percent
-		]));
 	}
 
 	[TestMethod]
@@ -442,22 +540,24 @@ public class UnitTests : BaseTestClass
 		negativePercent.Type.AssertEqual(UnitTypes.Percent);
 		negativePercent.Value.AssertEqual(-50m);
 
-		var limit = new Unit(30m, UnitTypes.Absolute);
+#pragma warning disable CS0618 // Verify unary negation for the legacy enum alias.
+		var limit = new Unit(30m, UnitTypes.Limit);
 		var negativeLimit = -limit;
-		negativeLimit.Type.AssertEqual(UnitTypes.Absolute);
+		negativeLimit.Type.AssertEqual(UnitTypes.Limit);
+#pragma warning restore CS0618
 		negativeLimit.Value.AssertEqual(-30m);
 	}
 
 	[TestMethod]
-	public void LoadSaveTest()
+	public async Task LoadSaveTest()
 	{
 		var storage = new SettingsStorage();
 		var unit = new Unit(200m, UnitTypes.Percent);
 
-		unit.Save(storage);
+		await unit.SaveAsync(storage, CancellationToken);
 
 		var loadedUnit = new Unit();
-		loadedUnit.Load(storage);
+		await loadedUnit.LoadAsync(storage, CancellationToken);
 
 		loadedUnit.AssertEqual(unit);
 	}
@@ -501,7 +601,7 @@ public class UnitTests : BaseTestClass
 		var unit = new Unit(1234.5678m, UnitTypes.Percent);
 
 		// Стандартный вывод
-		unit.ToString().AssertEqual("1234.5678%");
+		unit.ToString(null, CultureInfo.InvariantCulture).AssertEqual("1234.5678%");
 
 		// Формат с двумя десятичными знаками
 		unit.ToString("F2", CultureInfo.InvariantCulture).AssertEqual("1234.57%");
@@ -605,5 +705,123 @@ public class UnitTests : BaseTestClass
 
 		clone.AssertEqual(original);
 		original.AssertNotSame(clone);
+	}
+
+	/// <summary>
+	/// The validators take an object, so the bare number a UI editor or a wire frame hands over reaches
+	/// them unchanged. A number is not a measured value - it carries no unit - and must be refused.
+	/// </summary>
+	[TestMethod]
+	public void UnitValidatorsRejectValuesThatAreNotUnits()
+	{
+		IsFalse(new UnitGreaterThanZeroAttribute().IsValid(5m));
+		IsFalse(new UnitNotNegativeAttribute().IsValid(5m));
+		IsFalse(new UnitNullOrMoreZeroAttribute().IsValid(5m));
+		IsFalse(new UnitNullOrNotNegativeAttribute().IsValid(5m));
+	}
+
+	/// <summary>
+	/// The four simple validators differ in exactly two places: whether zero passes, and whether a
+	/// missing value passes. Both are pinned here for all four, in both unit types.
+	/// </summary>
+	[TestMethod]
+	public void UnitValidatorsAgreeOnZeroAndNull()
+	{
+		var zero = new Unit(0m);
+		var positive = new Unit(0.5m, UnitTypes.Percent);
+		var negative = new Unit(-1m);
+
+		IsFalse(new UnitGreaterThanZeroAttribute().IsValid(zero));
+		IsTrue(new UnitGreaterThanZeroAttribute().IsValid(positive));
+		IsFalse(new UnitGreaterThanZeroAttribute().IsValid(negative));
+		IsFalse(new UnitGreaterThanZeroAttribute().IsValid(null));
+
+		IsTrue(new UnitNotNegativeAttribute().IsValid(zero));
+		IsTrue(new UnitNotNegativeAttribute().IsValid(positive));
+		IsFalse(new UnitNotNegativeAttribute().IsValid(negative));
+		IsFalse(new UnitNotNegativeAttribute().IsValid(null));
+
+		IsFalse(new UnitNullOrMoreZeroAttribute().IsValid(zero));
+		IsTrue(new UnitNullOrMoreZeroAttribute().IsValid(positive));
+		IsFalse(new UnitNullOrMoreZeroAttribute().IsValid(negative));
+		IsTrue(new UnitNullOrMoreZeroAttribute().IsValid(null));
+
+		IsTrue(new UnitNullOrNotNegativeAttribute().IsValid(zero));
+		IsTrue(new UnitNullOrNotNegativeAttribute().IsValid(positive));
+		IsFalse(new UnitNullOrNotNegativeAttribute().IsValid(negative));
+		IsTrue(new UnitNullOrNotNegativeAttribute().IsValid(null));
+	}
+
+	/// <summary>
+	/// Both bounds of the range are documented inclusive. A value in different units is not a point on
+	/// the same scale - 3% is neither inside nor outside an absolute 1..5 - so it is refused.
+	/// </summary>
+	[TestMethod]
+	public void UnitRangeIncludesBothBoundsAndItsUnitType()
+	{
+		var range = new UnitRangeAttribute(new Unit(1m), new Unit(5m));
+
+		IsTrue(range.IsValid(new Unit(1m)));
+		IsTrue(range.IsValid(new Unit(3m)));
+		IsTrue(range.IsValid(new Unit(5m)));
+		IsFalse(range.IsValid(new Unit(0.99m)));
+		IsFalse(range.IsValid(new Unit(5.01m)));
+		IsFalse(range.IsValid(new Unit(3m, UnitTypes.Percent)));
+		IsFalse(range.IsValid("3"));
+	}
+
+	/// <summary>
+	/// A range needs two bounds on one scale, the lower one first; neither pair below describes a range
+	/// at all, so building the attribute is where it has to be refused.
+	/// </summary>
+	[TestMethod]
+	public void UnitRangeRefusesBoundsItCannotUse()
+	{
+		Throws<ArgumentOutOfRangeException>(() => new UnitRangeAttribute(new Unit(1m), new Unit(5m, UnitTypes.Percent)));
+		Throws<ArgumentOutOfRangeException>(() => new UnitRangeAttribute(new Unit(5m), new Unit(1m)));
+	}
+
+	/// <summary>
+	/// The grid is Base + N*Step with N not negative. Base 0.1 and step 0.2 give 0.1, 0.3, 0.5, 0.7 and
+	/// so on: 0.4 falls between two points, and 0.05 is below the base, so the grid never reaches it.
+	/// </summary>
+	[TestMethod]
+	public void UnitStepAcceptsOnlyPointsOnItsGrid()
+	{
+		var step = new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m));
+
+		IsTrue(step.IsValid(new Unit(0.1m)));
+		IsTrue(step.IsValid(new Unit(0.3m)));
+		IsTrue(step.IsValid(new Unit(0.7m)));
+		IsFalse(step.IsValid(new Unit(0.4m)));
+		IsFalse(step.IsValid(new Unit(0.05m)));
+		IsFalse(step.IsValid(new Unit(0.3m, UnitTypes.Percent)));
+		IsFalse(step.IsValid("0.3"));
+	}
+
+	/// <summary>
+	/// A step of zero or less names no sequence of points, and a step measured differently from its base
+	/// cannot be added to it; both are refused when the attribute is built.
+	/// </summary>
+	[TestMethod]
+	public void UnitStepRefusesAGridItCannotDefine()
+	{
+		Throws<ArgumentOutOfRangeException>(() => new UnitStepAttribute(new Unit(0m), new Unit(0m)));
+		Throws<ArgumentOutOfRangeException>(() => new UnitStepAttribute(new Unit(-0.2m), new Unit(0m)));
+		Throws<ArgumentOutOfRangeException>(() => new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m, UnitTypes.Percent)));
+	}
+
+	/// <summary>
+	/// A missing value is a separate question from the restriction itself, and only the property that
+	/// declares it optional may pass it.
+	/// </summary>
+	[TestMethod]
+	public void UnitRangeAndStepAcceptNullOnlyWhenNullChecksAreDisabled()
+	{
+		IsFalse(new UnitRangeAttribute(new Unit(1m), new Unit(5m)).IsValid(null));
+		IsTrue(new UnitRangeAttribute(new Unit(1m), new Unit(5m)) { DisableNullCheck = true }.IsValid(null));
+
+		IsFalse(new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m)).IsValid(null));
+		IsTrue(new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m)) { DisableNullCheck = true }.IsValid(null));
 	}
 }

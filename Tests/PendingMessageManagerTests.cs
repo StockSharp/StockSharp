@@ -25,6 +25,8 @@ public class PendingMessageManagerTests
 
 		// Assert
 		messages.Length.AssertEqual(2);
+		messages[0].AssertSame(msg1);
+		messages[1].AssertSame(msg2);
 	}
 
 	[TestMethod]

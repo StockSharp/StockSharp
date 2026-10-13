@@ -7,7 +7,7 @@ using System.Globalization;
 /// </summary>
 [DataContract]
 [Serializable]
-public struct SecurityId : IEquatable<SecurityId>, IPersistable
+public struct SecurityId : IEquatable<SecurityId>, IAsyncPersistable
 {
 	static SecurityId()
 	{
@@ -231,7 +231,8 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		if (_native != null)
 			return _native.Equals(other._native);
 
-		return _securityCode.EqualsIgnoreCase(other._securityCode) && _boardCode.EqualsIgnoreCase(other._boardCode);
+		return string.Equals(_securityCode, other._securityCode, StringComparison.OrdinalIgnoreCase)
+			&& string.Equals(_boardCode, other._boardCode, StringComparison.OrdinalIgnoreCase);
 	}
 
 	/// <summary>
@@ -283,20 +284,28 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		SecurityCode = storage.GetValue<string>(nameof(SecurityCode));
 		BoardCode = storage.GetValue<string>(nameof(BoardCode));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public readonly void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(SecurityCode), SecurityCode);
 		storage.SetValue(nameof(BoardCode), BoardCode);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
@@ -377,7 +386,9 @@ public class StringToSecurityIdTypeConverter : TypeConverter
 		if (value is not string securityId)
 			return base.ConvertFrom(ctx, culture, value);
 
-		var isNullable = ctx.PropertyDescriptor?.PropertyType.IsNullable() == true;
+		// TypeDescriptor passes no context outside of a property grid, and converting an id from a
+		// config file or from code has to work all the same.
+		var isNullable = ctx?.PropertyDescriptor?.PropertyType.IsNullable() == true;
 
 		const string delimiter = "@";
 

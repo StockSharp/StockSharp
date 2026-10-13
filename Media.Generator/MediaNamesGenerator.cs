@@ -1,12 +1,15 @@
 ﻿namespace StockSharp.Media;
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.IO;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
 [Generator]
@@ -72,14 +75,17 @@ public class MediaNamesGenerator : IIncrementalGenerator
 		sb.AppendLine($"static partial class {_typeName}");
 		sb.AppendLine("{");
 
-		foreach (var iconFile in iconFiles.OrderBy(f => f))
+		var taken = new HashSet<string>(StringComparer.Ordinal);
+
+		// Ordinal, so the same files produce the same file whatever the build machine collates by.
+		foreach (var iconFile in iconFiles.OrderBy(f => f, StringComparer.Ordinal))
 		{
-			var propertyName = SanitizePropertyName(iconFile);
+			var constantName = GetConstantName(iconFile, taken);
 
 			sb.AppendLine("\t/// <summary>");
-			sb.AppendLine($"\t/// Gets the file name for the {propertyName} icon.");
+			sb.AppendLine($"\t/// Gets the file name for the {constantName} icon.");
 			sb.AppendLine("\t/// </summary>");
-			sb.AppendLine($"\tpublic const string {propertyName} = \"{iconFile}\";");
+			sb.AppendLine($"\tpublic const string {constantName} = \"{iconFile}\";");
 			sb.AppendLine();
 		}
 
@@ -88,13 +94,30 @@ public class MediaNamesGenerator : IIncrementalGenerator
 		return sb.ToString();
 	}
 
-	private string SanitizePropertyName(string iconFile)
+	// A file name is not a C# identifier: a space, a plus, a version dot or a leading digit all
+	// reach the member name, and stripping the suffix makes two files aim at the same one. The name
+	// is what C# can bind, and a name already spoken for is numbered so no image loses its constant.
+	private static string GetConstantName(string iconFile, HashSet<string> taken)
 	{
-		var name = Path.GetFileNameWithoutExtension(iconFile);
+		var fileName = Path.GetFileNameWithoutExtension(iconFile);
 
-		if (name.EndsWith("_logo", StringComparison.OrdinalIgnoreCase))
-			name = name.Substring(0, name.Length - "_logo".Length);
+		if (fileName.EndsWith("_logo", StringComparison.OrdinalIgnoreCase))
+			fileName = fileName.Substring(0, fileName.Length - "_logo".Length);
 
-		return name.ToLowerInvariant();
+		var name = new StringBuilder(fileName.Length);
+
+		foreach (var c in fileName.ToLowerInvariant())
+			name.Append(SyntaxFacts.IsIdentifierPartCharacter(c) ? c : '_');
+
+		if (name.Length == 0 || !SyntaxFacts.IsIdentifierStartCharacter(name[0]) || SyntaxFacts.GetKeywordKind(name.ToString()) != SyntaxKind.None)
+			name.Insert(0, '_');
+
+		var baseName = name.ToString();
+		var candidate = baseName;
+
+		for (var i = 2; !taken.Add(candidate); i++)
+			candidate = baseName + "_" + i.ToString(CultureInfo.InvariantCulture);
+
+		return candidate;
 	}
 }

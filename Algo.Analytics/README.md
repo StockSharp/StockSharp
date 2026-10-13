@@ -8,7 +8,7 @@ The library is a part of the main StockSharp repository and can be found in the 
 - `Algo.Analytics.FSharp` – F# examples
 - `Algo.Analytics.Python` – Python examples together with helper modules for .NET interoperability
 
-These example scripts showcase the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/topics/hydra/analytics.html) for details on executing analytics scripts inside the platform.
+These example scripts showcase the Hydra analytics feature. See the [Hydra documentation](https://doc.stocksharp.com/en/topics/hydra/analytics.html) for details on executing analytics scripts inside the platform.
 
 ## Interfaces
 

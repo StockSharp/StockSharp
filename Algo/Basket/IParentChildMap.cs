@@ -63,6 +63,13 @@ public interface IParentChildMap
 	bool RemoveMapping(long childId);
 
 	/// <summary>
+	/// Remove all child mappings for the specified parent.
+	/// </summary>
+	/// <param name="parentId">Parent subscription ID.</param>
+	/// <returns>Number of removed mappings.</returns>
+	int RemoveMappings(long parentId);
+
+	/// <summary>
 	/// Clear all mappings.
 	/// </summary>
 	void Clear();

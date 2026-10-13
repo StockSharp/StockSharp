@@ -69,9 +69,10 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="SubscriptionOnlineMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SubscriptionOnlineMessageAdapter(InnerAdapter.TypedClone());
+		return new SubscriptionOnlineMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

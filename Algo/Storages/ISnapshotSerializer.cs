@@ -28,16 +28,18 @@ public interface ISnapshotSerializer<TKey, TMessage>
 	/// </summary>
 	/// <param name="version">Version of data format.</param>
 	/// <param name="message">Message.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Byte array.</returns>
-	byte[] Serialize(Version version, TMessage message);
+	ValueTask<byte[]> SerializeAsync(Version version, TMessage message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Deserialize message from byte array.
 	/// </summary>
 	/// <param name="version">Version of data format.</param>
 	/// <param name="buffer">Byte array.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Message.</returns>
-	TMessage Deserialize(Version version, byte[] buffer);
+	ValueTask<TMessage> DeserializeAsync(Version version, byte[] buffer, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get key for the specified message.

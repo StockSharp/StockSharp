@@ -9,7 +9,10 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 
 	string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
 
-	byte[] ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Serialize(Version version, Level1ChangeMessage message)
+	ValueTask<byte[]> ISnapshotSerializer<SecurityId, Level1ChangeMessage>.SerializeAsync(Version version, Level1ChangeMessage message, CancellationToken cancellationToken)
+		=> new(Serialize(version, message));
+
+	private static byte[] Serialize(Version version, Level1ChangeMessage message)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
@@ -223,7 +226,10 @@ public class Level1BinarySnapshotSerializer : ISnapshotSerializer<SecurityId, Le
 		return writer.GetWrittenSpan().ToArray();
 	}
 
-	Level1ChangeMessage ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Deserialize(Version version, byte[] buffer)
+	ValueTask<Level1ChangeMessage> ISnapshotSerializer<SecurityId, Level1ChangeMessage>.DeserializeAsync(Version version, byte[] buffer, CancellationToken cancellationToken)
+		=> new(Deserialize(version, buffer));
+
+	private static Level1ChangeMessage Deserialize(Version version, byte[] buffer)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
