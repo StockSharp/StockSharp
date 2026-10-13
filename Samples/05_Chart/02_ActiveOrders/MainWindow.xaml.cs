@@ -302,7 +302,7 @@ public partial class MainWindow
 	private async void Save_Click(object sender, RoutedEventArgs e)
 	{
 		var settingsStorage = new SettingsStorage();
-		Chart.Save(settingsStorage);
+		await Chart.SaveAsync(settingsStorage, default);
 		await settingsStorage.SerializeAsync(_fileSystem, AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}", true, default);
 	}
 

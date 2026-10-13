@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
-    <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Wpf\Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Studio\Wpf\Studio.WebApi.UI\Studio.WebApi.UI.csproj" />
   </ItemGroup>
 </Project>

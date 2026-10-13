@@ -15,8 +15,8 @@
   <Grid RowDefinitions="Auto,*">
     <Grid Margin="4" ColumnDefinitions="210,170,170,90,90,180,*">
       <editors:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Margin="2" />
-      <DatePicker x:Name="DatePickerBegin" Grid.Column="1" Margin="2" />
-      <DatePicker x:Name="DatePickerEnd" Grid.Column="2" Margin="2" />
+      <CalendarDatePicker x:Name="DatePickerBegin" Grid.Column="1" Margin="2" SelectedDateFormat="Short" />
+      <CalendarDatePicker x:Name="DatePickerEnd" Grid.Column="2" Margin="2" SelectedDateFormat="Short" />
       <Button x:Name="StartButton" Grid.Column="3" Margin="2" Content="Start" Click="OnStartClick" />
       <Button x:Name="StopButton" Grid.Column="4" Margin="2" Content="Stop" Click="OnStopClick" IsEnabled="False" />
       <ProgressBar x:Name="Progress" Grid.Column="5" Margin="6,4,6,4" Minimum="0" Maximum="100" />

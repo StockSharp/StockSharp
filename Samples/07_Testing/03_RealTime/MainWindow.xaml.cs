@@ -217,7 +217,7 @@ public partial class MainWindow
 
 	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
-		if (!_realConnector.Configure(this))
+		if (!await _realConnector.ConfigureAsync(this, default))
 			return;
 
 		await (await _realConnector.SaveAsync(default)).SerializeAsync(_fileSystem, _settingsFile, true, default);

@@ -88,8 +88,7 @@ internal sealed class SampleConnectorContext : IDisposable, IAsyncDisposable
 	{
 		ObjectDisposedException.ThrowIf(_disposed, this);
 
-		await _settingsStore.LoadAsync(cancellationToken);
-		_configuration.Load();
+		await _configuration.LoadAsync(cancellationToken);
 	}
 
 	public bool IsAutoConnect => _configuration.IsAutoConnect;

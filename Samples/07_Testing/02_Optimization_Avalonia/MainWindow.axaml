@@ -33,9 +33,9 @@
 
     <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="Auto,150,Auto,150,*">
       <TextBlock VerticalAlignment="Center" Text="Begin:" />
-      <DatePicker x:Name="BeginDate" Grid.Column="1" Margin="6,0,12,0" />
+      <CalendarDatePicker x:Name="BeginDate" Grid.Column="1" Margin="6,0,12,0" SelectedDateFormat="Short" />
       <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="End:" />
-      <DatePicker x:Name="EndDate" Grid.Column="3" Margin="6,0,12,0" />
+      <CalendarDatePicker x:Name="EndDate" Grid.Column="3" Margin="6,0,12,0" SelectedDateFormat="Short" />
       <TextBlock x:Name="Status" Grid.Column="4" VerticalAlignment="Center" Text="Ready" />
     </Grid>
 

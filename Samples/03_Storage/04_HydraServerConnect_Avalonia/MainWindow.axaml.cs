@@ -34,8 +34,8 @@ public partial class MainWindow : Window
 	private readonly CancellationTokenSource _lifetimeCancellation = new();
 	private readonly SecurityPicker _securityPicker;
 	private readonly CandleDataTypeEdit _candleDataTypeEdit;
-	private readonly DatePicker _datePickerBegin;
-	private readonly DatePicker _datePickerEnd;
+	private readonly CalendarDatePicker _datePickerBegin;
+	private readonly CalendarDatePicker _datePickerEnd;
 	private readonly CheckBox _buildFromTicks;
 	private readonly Button _settingsButton;
 	private readonly IChart _chart;
@@ -50,8 +50,8 @@ public partial class MainWindow : Window
 		_context = new(CreateConnector());
 		_securityPicker = this.FindControl<SecurityPicker>(nameof(SecurityPicker));
 		_candleDataTypeEdit = this.FindControl<CandleDataTypeEdit>(nameof(CandleDataTypeEdit));
-		_datePickerBegin = this.FindControl<DatePicker>(nameof(DatePickerBegin));
-		_datePickerEnd = this.FindControl<DatePicker>(nameof(DatePickerEnd));
+		_datePickerBegin = this.FindControl<CalendarDatePicker>(nameof(DatePickerBegin));
+		_datePickerEnd = this.FindControl<CalendarDatePicker>(nameof(DatePickerEnd));
 		_buildFromTicks = this.FindControl<CheckBox>(nameof(BuildFromTicks));
 		_settingsButton = this.FindControl<Button>(nameof(SettingsButton));
 		_chart = this.FindControl<ChartControl>(nameof(Chart));

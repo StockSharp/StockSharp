@@ -46,7 +46,7 @@ public partial class MainWindow
 
 	private async void Setting_Click(object sender, RoutedEventArgs e)
 	{
-		if (_connector.Configure(this))
+		if (await _connector.ConfigureAsync(this, default))
 		{
 			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 		}

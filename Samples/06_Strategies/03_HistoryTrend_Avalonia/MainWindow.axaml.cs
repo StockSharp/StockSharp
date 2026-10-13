@@ -35,8 +35,8 @@ public partial class MainWindow : Window
 	private readonly GuiDispatcher _uiEvents = new();
 	private readonly LogManager _logManager;
 	private readonly CandleDataTypeEdit _candleType;
-	private readonly DatePicker _beginDate;
-	private readonly DatePicker _endDate;
+	private readonly CalendarDatePicker _beginDate;
+	private readonly CalendarDatePicker _endDate;
 	private readonly Button _startButton;
 	private readonly Button _stopButton;
 	private readonly ProgressBar _progress;
@@ -62,8 +62,8 @@ public partial class MainWindow : Window
 		InitializeComponent();
 
 		_candleType = this.FindControl<CandleDataTypeEdit>(nameof(CandleDataTypeEdit));
-		_beginDate = this.FindControl<DatePicker>(nameof(DatePickerBegin));
-		_endDate = this.FindControl<DatePicker>(nameof(DatePickerEnd));
+		_beginDate = this.FindControl<CalendarDatePicker>(nameof(DatePickerBegin));
+		_endDate = this.FindControl<CalendarDatePicker>(nameof(DatePickerEnd));
 		_startButton = this.FindControl<Button>(nameof(StartButton));
 		_stopButton = this.FindControl<Button>(nameof(StopButton));
 		_progress = this.FindControl<ProgressBar>(nameof(Progress));

@@ -538,7 +538,7 @@ public partial class MainWindow : Window
 		try
 		{
 			var settings = new SettingsStorage();
-			Chart.Save(settings);
+			await Chart.SaveAsync(settings, default);
 			await settings.SerializeAsync(_fileSystem, SettingsPath, true, default);
 			Log($"Chart settings saved to {SettingsPath}");
 		}
@@ -559,7 +559,7 @@ public partial class MainWindow : Window
 			}
 
 			var settings = await SettingsPath.DeserializeAsync<SettingsStorage>(_fileSystem, default);
-			Chart.Load(settings);
+			await Chart.LoadAsync(settings, default);
 			var chart = (IChart)Chart;
 			_area = chart.Areas.First();
 			_candleElement = chart.Areas.SelectMany(area => area.Elements).OfType<IChartCandleElement>().First();
