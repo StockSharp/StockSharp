@@ -15,6 +15,7 @@ using Ecng.Collections;
 using Ecng.Logging;
 using Ecng.ComponentModel;
 using Ecng.IO;
+using Ecng.Net;
 
 using Nito.AsyncEx;
 
@@ -126,6 +127,9 @@ public partial class MainPanel
 
 		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
 		ConfigManager.RegisterService(credProvider);
+
+		// A connector that signs in through OAuth takes its token from the site through this provider.
+		ConfigManager.RegisterService<IOAuthProvider>(new OAuthProvider());
 
 		var autoLogon = true;
 		var credentials = await credProvider.TryLoadAsync(default);
