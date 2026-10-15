@@ -1975,6 +1975,82 @@ public class MarketEmulatorTests : BaseTestClass
 		m.TradeVolume.AssertEqual(reg.Volume);
 	}
 
+	/// <summary>
+	/// A subscriber to the order log of a security gets its rows, the way a subscriber to the ticks gets the ticks: the
+	/// emulator builds its book from a row and hands the row on.
+	/// </summary>
+	[TestMethod]
+	public async Task TheOrderLogReachesItsSubscriber()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = DataType.OrderLog,
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			ServerTime = now,
+			DataTypeEx = DataType.OrderLog,
+			OrderId = 1,
+			OrderPrice = 106,
+			OrderVolume = 4,
+			Side = Sides.Buy,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			ServerTime = now,
+			DataTypeEx = DataType.OrderLog,
+			OrderId = 1,
+			OrderPrice = 106,
+			OrderVolume = 1,
+			Side = Sides.Buy,
+			TradeId = 7,
+			TradePrice = 106,
+		}, CancellationToken);
+
+		var rows = res.OfType<ExecutionMessage>().Where(m => m.DataType == DataType.OrderLog).ToArray();
+
+		AreEqual(2, rows.Length, "The rows of the order log did not reach the one who subscribed to them.");
+		IsNotNull(rows[1].TradeId, "A row of the order log that is a trade is a row of the log too.");
+	}
+
+	/// <summary>
+	/// Nobody subscribed to the order log: its rows build the book and go no further.
+	/// </summary>
+	[TestMethod]
+	public async Task TheOrderLogNobodySubscribedToGoesNoFurther()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			ServerTime = now,
+			DataTypeEx = DataType.OrderLog,
+			OrderId = 1,
+			OrderPrice = 106,
+			OrderVolume = 4,
+			Side = Sides.Buy,
+		}, CancellationToken);
+
+		IsFalse(res.OfType<ExecutionMessage>().Any(m => m.DataType == DataType.OrderLog), "A row of the order log went to nobody who asked for it.");
+	}
+
 	[TestMethod]
 	public async Task MarketOrderOnTickExecution()
 	{

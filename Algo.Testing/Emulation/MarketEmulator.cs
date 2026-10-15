@@ -733,6 +733,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	private SecurityMessage _securityDefinition;
 	private long? _depthSubscription;
 	private long? _ticksSubscription;
+	private long? _orderLogSubscription;
 	private long? _candlesSubscription;
 	private bool _candlesNonFinished;
 	private readonly SortedDictionary<DateTime, List<StoredCandle>> _storedCandles = [];
@@ -823,6 +824,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 				_depthSubscription = msg.TransactionId;
 			else if (msg.DataType2 == DataType.Ticks)
 				_ticksSubscription = msg.TransactionId;
+			else if (msg.DataType2 == DataType.OrderLog)
+				_orderLogSubscription = msg.TransactionId;
 			else if (msg.DataType2.IsCandles)
 			{
 				_candlesSubscription = msg.TransactionId;
@@ -835,6 +838,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 				_depthSubscription = null;
 			else if (_ticksSubscription == msg.OriginalTransactionId)
 				_ticksSubscription = null;
+			else if (_orderLogSubscription == msg.OriginalTransactionId)
+				_orderLogSubscription = null;
 			else if (_candlesSubscription == msg.OriginalTransactionId)
 			{
 				_candlesSubscription = null;
@@ -989,6 +994,10 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	public void ProcessOrderLog(ExecutionMessage ol, List<Message> results)
 	{
 		IsCandleMatchingMode = false;
+
+		// A subscriber to the order log gets every row of it, the trades among them.
+		if (_orderLogSubscription.HasValue)
+			results.Add(ol);
 
 		if (ol.TradeId is not null)
 			return;
