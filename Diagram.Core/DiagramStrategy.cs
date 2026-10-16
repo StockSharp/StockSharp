@@ -240,7 +240,8 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 				throw;
 			}
 
-			foreach (var param in GetOptimizedParams(composition))
+			// A value can reshape its element, and the composition then gathers the parameters it shows anew.
+			foreach (var param in GetOptimizedParams(composition).ToArray())
 			{
 				if (!Parameters.TryGetValue(param.Name, out var sParam) ||
 					sParam.Value is null)

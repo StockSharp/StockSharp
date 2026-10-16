@@ -325,6 +325,73 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// An element whose parameter reshapes it - an indicator given another type, a position counted in money - has
+	/// the composition gather the parameters it shows anew.
+	/// </summary>
+	private class ReshapingDiagramElement : DiagramElement
+	{
+		private readonly DiagramElementParam<int> _length;
+
+		public ReshapingDiagramElement()
+		{
+			_length = AddParam(nameof(Length), 10)
+				.SetCanOptimize()
+				.SetOnValueChangedHandler(_ => RaisePropertiesChanged());
+
+			ShowParameters = true;
+		}
+
+		public override Guid TypeId { get; } = "B7E4C2A1-5D93-4F68-9A0C-3E21D7F4B856".To<Guid>();
+
+		public override string IconName { get; } = "Pi";
+
+		public int Length => _length.Value;
+	}
+
+	/// <summary>
+	/// The start hands every parameter a composition shows the value the strategy holds for it, and a parameter that
+	/// reshapes its element has the composition gather them anew in the middle of that. The strategy still starts,
+	/// and every element gets its value.
+	/// </summary>
+	[TestMethod]
+	public async Task A_parameter_that_reshapes_its_element_lets_the_strategy_start()
+	{
+		var graph = new Graph();
+		var first = new ReshapingDiagramElement();
+		var second = new ReshapingDiagramElement();
+
+		graph.Add(first);
+		graph.Add(second);
+
+		var strategy = graph.Strategy;
+		var errors = new List<Exception>();
+
+		strategy.Error += (_, error) => errors.Add(error);
+
+		foreach (var (element, value) in new[] { (first, 20), (second, 30) })
+		{
+			strategy.Parameters.TryGetValue($"{element.Id}{nameof(ReshapingDiagramElement.Length)}", out var param)
+				.AssertTrue("the strategy holds a parameter for each one the composition shows");
+
+			param.Value = value;
+		}
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+
+		strategy.Connector = connector.Object;
+		strategy.Security = Helper.CreateSecurity();
+		strategy.Portfolio = Helper.CreatePortfolio();
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		errors.Count.AssertEqual(0, $"the start failed: {errors.FirstOrDefault()?.Message}");
+		first.Length.AssertEqual(20);
+		second.Length.AssertEqual(30);
+	}
+
+	/// <summary>
 	/// The point of a diagram: a value put into one element comes out of the last one, changed by
 	/// every element it passed. Two runs, because a graph that always answers the same thing has
 	/// carried nothing.
