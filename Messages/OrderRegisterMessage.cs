@@ -135,6 +135,12 @@ public class OrderRegisterMessage : OrderMessage
 	public int? Leverage { get; set; }
 
 	/// <summary>
+	/// The order's own id, when the side placing it has already given it one: the one name the order goes
+	/// by from then on, kept by a replace of it.
+	/// </summary>
+	public long? OrderId { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 	/// </summary>
 	public OrderRegisterMessage()
@@ -183,6 +189,7 @@ public class OrderRegisterMessage : OrderMessage
 		destination.PositionEffect = PositionEffect;
 		destination.PostOnly = PostOnly;
 		destination.Leverage = Leverage;
+		destination.OrderId = OrderId;
 	}
 
 	/// <inheritdoc />
@@ -198,6 +205,9 @@ public class OrderRegisterMessage : OrderMessage
 
 		if (Leverage != null)
 			str += $",Leverage={Leverage.Value}";
+
+		if (OrderId != null)
+			str += $",OrdId={OrderId.Value}";
 
 		return str;
 	}

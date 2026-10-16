@@ -74,4 +74,11 @@ public record struct FixNewOrderSingle(
 	/// the order's portfolio FK by id rather than the shared display name.
 	/// </summary>
 	public long PortfolioId { get; set; }
+
+	/// <summary>
+	/// The order's own id given by the side placing it (broker extension, not a standard FIX tag).
+	/// Carried over the SBE wire so whatever works the order knows it by that id, whichever connection
+	/// it arrived on.
+	/// </summary>
+	public long? OrderId { get; set; }
 }

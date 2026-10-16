@@ -148,6 +148,30 @@ partial class MessageConverterTests
 		Helper.CheckEqual(original, result);
 	}
 
+	// The order's own id travels with the registration, so whatever works the order knows it by the one
+	// name it goes by, whichever connection it arrived on.
+	[TestMethod]
+	public void OrderRegisterMessage_OrderId_RoundTrip()
+	{
+		var original = new OrderRegisterMessage
+		{
+			TransactionId = 12349,
+			OrderId = 90210,
+			PortfolioName = "TestPortfolio",
+			SecurityId = CreateTestSecurityId(),
+			Price = 50_000m,
+			Volume = 1,
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+		};
+
+		var fix = Converter.ToFixNewOrderSingle(original);
+
+		fix.OrderId.AssertEqual(90210L);
+
+		Helper.CheckEqual(original, Converter.ToMessage(fix));
+	}
+
 	[TestMethod]
 	public void FixNewOrderSingle_MissingSide_Throws()
 	{

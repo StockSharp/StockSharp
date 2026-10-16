@@ -1451,6 +1451,7 @@ static class Helper
 
 			// OrderRegisterMessage fields
 			a.TransactionId.AssertEqual(e.TransactionId);
+			a.OrderId.AssertEqual(e.OrderId);
 			a.SecurityId.AssertEqual(e.SecurityId);
 			a.PortfolioName.AssertEqual(e.PortfolioName);
 			a.Side.AssertEqual(e.Side);
@@ -1510,6 +1511,7 @@ static class Helper
 			a.OldOrderVolume.AssertEqual(e.OldOrderVolume);
 			// OrderRegisterMessage fields
 			a.TransactionId.AssertEqual(e.TransactionId);
+			a.OrderId.AssertEqual(e.OrderId);
 			a.SecurityId.AssertEqual(e.SecurityId);
 			a.PortfolioName.AssertEqual(e.PortfolioName);
 			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);

@@ -45,6 +45,7 @@ partial class MessageConverter
 			},
 			SecurityType = GetSecurityType(fix.SecurityType),
 			CfiCode = fix.CfiCode,
+			OrderId = fix.OrderId,
 		};
 
 		if (!fix.SecondaryOrderId.IsEmpty())
@@ -104,7 +105,10 @@ partial class MessageConverter
 			PostOnly: message.PostOnly,
 			SecondaryOrderId: message.UserOrderId,
 			StrategyId: message.StrategyId,
-			Leverage: message.Leverage);
+			Leverage: message.Leverage)
+		{
+			OrderId = message.OrderId,
+		};
 	}
 
 	/// <inheritdoc />

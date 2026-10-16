@@ -39,6 +39,20 @@ public class MessageCloneIndependenceTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The order's own id is the one name it goes by for as long as it lives: a copy of the registration
+	/// carries it, and so does a replace, which changes the order and not what it is called.
+	/// </summary>
+	[TestMethod]
+	public void ARegistrationAndAReplaceKeepTheOrdersIdWhenCopied()
+	{
+		var registration = new OrderRegisterMessage { TransactionId = 1, OrderId = 90210 };
+		var replace = new OrderReplaceMessage { TransactionId = 2, OrderId = 90210, OldOrderId = 90210 };
+
+		AreEqual(90210L, ((OrderRegisterMessage)registration.Clone()).OrderId);
+		AreEqual(90210L, ((OrderReplaceMessage)replace.Clone()).OrderId);
+	}
+
+	/// <summary>
 	/// The body is the payload of a remote file message, so a clone that shares it hands two consumers
 	/// one buffer: whichever writes first rewrites what the other is reading.
 	/// </summary>
