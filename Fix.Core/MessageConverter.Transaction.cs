@@ -211,6 +211,7 @@ partial class MessageConverter
 			TillDate = GetTillDate(fix.TimeInForce, fix.ExpiryDate),
 			VisibleVolume = fix.MaxFloor,
 			Comment = fix.Text,
+			OrderType = GetOrderType(fix.OrdType),
 			Condition = fix.Condition,
 			SecurityId = new SecurityId
 			{
@@ -286,7 +287,10 @@ partial class MessageConverter
 			ExpiryDate: message.TillDate,
 			MaxFloor: message.VisibleVolume,
 			Text: message.Comment,
-			Condition: message.Condition);
+			Condition: message.Condition)
+		{
+			OrdType = ToFixOrderType(message.OrderType, message.Condition),
+		};
 	}
 
 	/// <inheritdoc />

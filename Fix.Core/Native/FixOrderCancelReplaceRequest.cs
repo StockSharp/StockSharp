@@ -59,4 +59,11 @@ public record struct FixOrderCancelReplaceRequest(
 	DateTime? ExpiryDate,
 	decimal? MaxFloor,
 	string Text,
-	OrderCondition Condition);
+	OrderCondition Condition)
+{
+	/// <summary>
+	/// Order type (1=Market, 2=Limit, 3=Stop, etc.), when the replace states one. A stop's flavour is stated
+	/// here, as a registration states it, so a replaced stop stays the stop it was.
+	/// </summary>
+	public char? OrdType { get; init; }
+}

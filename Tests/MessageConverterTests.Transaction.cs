@@ -739,6 +739,74 @@ partial class MessageConverterTests
 		AreEqual<DateTime?>(till, round.TillDate, "OrderReplace lost TillDate");
 	}
 
+	// A replace of a stop states the stop's flavour in its order type, as a registration does, and reads back
+	// as the replace of a conditional order: a take-profit is not collapsed to a stop, nor a stop to a limit.
+	[TestMethod]
+	public void OrderReplace_RoundTrip_KeepsATakeProfitATakeProfit()
+	{
+		var msg = new OrderReplaceMessage
+		{
+			TransactionId = 102,
+			OldOrderId = 52,
+			SecurityId = new SecurityId { SecurityCode = "BTC", BoardCode = "TESTEX" },
+			PortfolioName = "PF",
+			Price = 101m,
+			Volume = 5m,
+			Side = Sides.Sell,
+			OrderType = OrderTypes.Conditional,
+			Condition = new FixOrderCondition { Type = FixStopOrderTypes.TakeProfit, TakeProfit = 99m },
+		};
+
+		var record = Converter.ToFixOrderCancelReplaceRequest(msg);
+
+		record.OrdType.AssertEqual(FixExtensions.TakeProfit, "a take-profit replace has to state the take-profit OrdType a registration states");
+
+		var round = Converter.ToMessage(record);
+
+		AreEqual(OrderTypes.Conditional, round.OrderType, "the replace of a take-profit has to read back as the replace of a conditional order");
+	}
+
+	[TestMethod]
+	public void OrderReplace_RoundTrip_KeepsALimitALimit()
+	{
+		var msg = new OrderReplaceMessage
+		{
+			TransactionId = 103,
+			OldOrderId = 53,
+			SecurityId = new SecurityId { SecurityCode = "BTC", BoardCode = "TESTEX" },
+			PortfolioName = "PF",
+			Price = 101m,
+			Volume = 5m,
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+		};
+
+		var record = Converter.ToFixOrderCancelReplaceRequest(msg);
+
+		record.OrdType.AssertEqual(OrdType.Limit, "a limit replace has to state the limit OrdType");
+		AreEqual(OrderTypes.Limit, Converter.ToMessage(record).OrderType, "and read back as the replace of a limit order");
+	}
+
+	// A replace that leaves the type unsaid is the type of the order it replaces, so none is made up for it.
+	[TestMethod]
+	public void OrderReplace_RoundTrip_LeavesAnUnsaidTypeUnsaid()
+	{
+		var msg = new OrderReplaceMessage
+		{
+			TransactionId = 104,
+			OldOrderId = 54,
+			SecurityId = new SecurityId { SecurityCode = "BTC", BoardCode = "TESTEX" },
+			PortfolioName = "PF",
+			Price = 101m,
+			Volume = 5m,
+		};
+
+		var record = Converter.ToFixOrderCancelReplaceRequest(msg);
+
+		IsNull(record.OrdType, "a replace stating no type has none on the wire");
+		IsNull(Converter.ToMessage(record).OrderType, "and reads back stating none");
+	}
+
 	// A rejected replace must be reported as a replace reject: the OrderCancelReject
 	// must carry CxlRejResponseTo = OrderCancelReplaceRequest, not always OrderCancelRequest.
 	[TestMethod]
