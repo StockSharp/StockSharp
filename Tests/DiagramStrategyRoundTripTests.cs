@@ -3114,26 +3114,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 		foreach (var fileName in _shippedCompositions)
 		{
-			var registry = new CompositionRegistry<InMemoryCompositionModelNode, InMemoryCompositionModelLink>(() => new InMemoryCompositionModelBehavior());
-			registry.FillDefault();
-
-			// The chart element a Designer offers comes with its user interface; away from one the dummy
-			// stands in for it under the same type id, which is what the templates name it by.
-			registry.DiagramElements.Add(new DummyChartDiagramElement());
-
-			// The Designer stamps a fresh identifier into the template before reading it.
-			var text = File.ReadAllText(Path.Combine(_templatesFolder, fileName)).Replace("%NEW_ID%", Guid.NewGuid().ToString());
-			var file = await text.UTF8().DeserializeInvariantAsync(CancellationToken);
-
-			file.AssertNotNull($"{fileName} must be readable");
-
-			// A shipped strategy keeps its diagram under Content/Value, and that is what the registry reads.
-			var scheme = file.GetValue<SettingsStorage>("Content").GetValue<SettingsStorage>("Value");
-
-			scheme.AssertNotNull($"{fileName} must carry a diagram to load");
-
-			var composition = (await registry.DeserializeAsync(scheme, ICompositionRegistryExtensions.NotSupported, CancellationToken)).element;
-			var model = (CompositionModel<InMemoryCompositionModelNode, InMemoryCompositionModelLink>)composition.Model;
+			var model = await LoadShippedAsync(fileName);
 
 			var nodes = model.Nodes.ToArray();
 
@@ -3160,6 +3141,52 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 					.AssertNotNull($"{fileName}: {link} ends at an input socket the element no longer has");
 			}
 		}
+	}
+
+	/// <summary>
+	/// A candles element of a shipped composition is named from its series, as one a user puts on a diagram is.
+	/// </summary>
+	/// <remarks>
+	/// The templates kept the name a candle series was given as "type_instrument_argument"; a template has no
+	/// instrument, so every candles element in them read "TimeFrameCandle__00-05-00".
+	/// </remarks>
+	[TestMethod]
+	public async Task ShippedCandleElementsAreNamedFromTheirSeries()
+	{
+		foreach (var fileName in _shippedCompositions)
+		{
+			var candles = (await LoadShippedAsync(fileName)).Nodes.Select(node => node.Element).OfType<CandlesDiagramElement>().ToArray();
+
+			candles.Length.AssertGreater(0, $"{fileName} has no candles element");
+
+			foreach (var element in candles)
+				element.Name.AssertEqual(element.DataType.To<string>(), $"{fileName}: a candles element of {element.DataType} is named {element.Name}");
+		}
+	}
+
+	private async Task<CompositionModel<InMemoryCompositionModelNode, InMemoryCompositionModelLink>> LoadShippedAsync(string fileName)
+	{
+		var registry = new CompositionRegistry<InMemoryCompositionModelNode, InMemoryCompositionModelLink>(() => new InMemoryCompositionModelBehavior());
+		registry.FillDefault();
+
+		// The chart element a Designer offers comes with its user interface; away from one the dummy
+		// stands in for it under the same type id, which is what the templates name it by.
+		registry.DiagramElements.Add(new DummyChartDiagramElement());
+
+		// The Designer stamps a fresh identifier into the template before reading it.
+		var text = File.ReadAllText(Path.Combine(_templatesFolder, fileName)).Replace("%NEW_ID%", Guid.NewGuid().ToString());
+		var file = await text.UTF8().DeserializeInvariantAsync(CancellationToken);
+
+		file.AssertNotNull($"{fileName} must be readable");
+
+		// A shipped strategy keeps its diagram under Content/Value, and that is what the registry reads.
+		var scheme = file.GetValue<SettingsStorage>("Content").GetValue<SettingsStorage>("Value");
+
+		scheme.AssertNotNull($"{fileName} must carry a diagram to load");
+
+		var composition = (await registry.DeserializeAsync(scheme, ICompositionRegistryExtensions.NotSupported, CancellationToken)).element;
+
+		return (CompositionModel<InMemoryCompositionModelNode, InMemoryCompositionModelLink>)composition.Model;
 	}
 
 	#endregion

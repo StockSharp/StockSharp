@@ -35,9 +35,6 @@
                 "Id": "78f8d89d-185a-4b00-b269-2f507cf25848",
                 "CanAutoName": true,
                 "Parameters": {
-                  "Name": {
-                    "Value": "TimeFrameCandle__00-05-00"
-                  },
                   "Series": {
                     "Value": {
                       "type": "StockSharp.Messages.DataType, StockSharp.Messages",

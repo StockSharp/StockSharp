@@ -65,9 +65,6 @@
                 "Id": "4df4b601-a7c8-4947-928e-8ba89ffea4c5",
                 "CanAutoName": true,
                 "Parameters": {
-                  "Name": {
-                    "Value": "TimeFrameCandle__00-05-00"
-                  },
                   "Series": {
                     "Value": {
                       "type": "StockSharp.Messages.DataType, StockSharp.Messages",
@@ -93,9 +90,6 @@
                 "Id": "d3a89f4e-f2ad-42b7-9385-69a51fe91c88",
                 "CanAutoName": true,
                 "Parameters": {
-                  "Name": {
-                    "Value": "TimeFrameCandle__00-05-00"
-                  },
                   "Series": {
                     "Value": {
                       "type": "StockSharp.Messages.DataType, StockSharp.Messages",
@@ -169,9 +163,6 @@
                 "Id": "a9c1c039-f396-46eb-bc97-5f4a581154bf",
                 "CanAutoName": true,
                 "Parameters": {
-                  "Name": {
-                    "Value": "TimeFrameCandle__00-05-00"
-                  },
                   "Series": {
                     "Value": {
                       "type": "StockSharp.Messages.DataType, StockSharp.Messages",
