@@ -186,6 +186,7 @@ public partial class Strategy
 
 		private readonly Strategy _strategy;
 		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = [];
+		private bool _isHandlerInitialized;
 
 		internal SubscriptionHandler(Strategy strategy, Subscription subscription)
 		{
@@ -207,6 +208,10 @@ public partial class Strategy
 
 		private void StartSubscription()
 		{
+			if (_isHandlerInitialized)
+				return;
+			_isHandlerInitialized = true;
+
 			var type = typeof(T);
 
 			// Protection is per (security, portfolio), so the incoming value's own security decides
@@ -347,6 +352,7 @@ public partial class Strategy
 
 		public ISubscriptionHandler<T> Start()
 		{
+			StartSubscription();
 			_strategy.Subscribe(Subscription);
 			return this;
 		}

@@ -1089,6 +1089,84 @@ public class ProtectionTests : BaseTestClass
 
 		public ISubscriptionHandler<ITickTradeMessage> BindTicks(Security security)
 			=> SubscribeTicks(security).Bind(_ => { }).Start();
+
+		public ISubscriptionHandler<Level1ChangeMessage> Quotes(Security security)
+		{
+			var subscription = new Subscription(DataType.Level1, security);
+			subscription.MarketData.BuildField = Level1Fields.BestBidPrice;
+			return SubscribeLevel1(subscription);
+		}
+	}
+
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	[Timeout(10_000)]
+	public async Task HighLevelStartedQuotesActivateProtection(bool isBound)
+	{
+		var security = CreateProtectionSecurity("QUOTE_OWN");
+		var other = CreateProtectionSecurity("QUOTE_OTHER");
+		var portfolio = new Portfolio { Name = "quote_protection" };
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var orders = new List<Order>();
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(orders.Add);
+		var strategy = new HighLevelBindStrategy { Connector = connector.Object, Security = security, Portfolio = portfolio };
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), useMarketOrders: true, isLocalStop: true);
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+		var callbacks = 0;
+		var ownQuotes = strategy.Quotes(security);
+		var otherQuotes = strategy.Quotes(other);
+		if (isBound)
+		{
+			ownQuotes.Bind(_ => callbacks++);
+			otherQuotes.Bind(_ => callbacks++);
+		}
+		ownQuotes.Start();
+		otherQuotes.Start();
+		var transactions = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(transactions);
+		EnterProtectedLong(strategy, transactions, security, portfolio, 1, 100m, time);
+		var afterEntry = orders.Count;
+		Level1ChangeMessage quote(Security instrument) => new()
+		{
+			SecurityId = instrument.ToSecurityId(), ServerTime = time.AddMinutes(1), LocalTime = time.AddMinutes(1),
+			Changes = { [Level1Fields.BestBidPrice] = 90m },
+		};
+		connector.Raise(c => c.Level1Received += null, otherQuotes.Subscription, quote(other));
+		AreEqual(afterEntry, orders.Count, "Another instrument must not activate the position's stop.");
+		connector.Raise(c => c.Level1Received += null, ownQuotes.Subscription, quote(security));
+		AreEqual(afterEntry + 1, orders.Count, "Starting a quote subscription must activate protection without requiring a callback.");
+		AreEqual(Sides.Sell, orders[^1].Side);
+		AreEqual(10m, orders[^1].Volume);
+		AreEqual(OrderTypes.Market, orders[^1].Type);
+		AreEqual(security, orders[^1].Security);
+		AreEqual(isBound ? 2 : 0, callbacks);
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task HighLevelMultipleBindingsDispatchEachValueOnce()
+	{
+		var security = CreateProtectionSecurity("QUOTE_BINDINGS");
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		var strategy = new HighLevelBindStrategy { Connector = connector.Object, Security = security, Portfolio = new Portfolio { Name = "bindings" } };
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+		var first = 0;
+		var second = 0;
+		var quotes = strategy.Quotes(security).Bind(_ => first++).Bind(_ => second++).Start();
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		connector.Raise(c => c.Level1Received += null, quotes.Subscription, new Level1ChangeMessage
+		{
+			SecurityId = security.ToSecurityId(), ServerTime = time, LocalTime = time,
+			Changes = { [Level1Fields.BestBidPrice] = 100m },
+		});
+		AreEqual(1, first);
+		AreEqual(1, second);
 	}
 
 	private static Security CreateProtectionSecurity(string code)
