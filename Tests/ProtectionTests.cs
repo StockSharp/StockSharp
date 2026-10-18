@@ -7,6 +7,370 @@ using StockSharp.Algo.Strategies.Protective;
 public class ProtectionTests : BaseTestClass
 {
 	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(Sides.Buy, false, false)]
+	[DataRow(Sides.Sell, false, false)]
+	[DataRow(Sides.Buy, true, false)]
+	[DataRow(Sides.Sell, true, false)]
+	[DataRow(Sides.Buy, false, true)]
+	[DataRow(Sides.Sell, false, true)]
+	[DataRow(Sides.Buy, true, true)]
+	[DataRow(Sides.Sell, true, true)]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void ControllerOwnsPositionLifecycle(Sides entrySide, bool isTakeProfit, bool isServer)
+	{
+		using var controller = new ProtectiveController();
+		var securityId = new SecurityId { SecurityCode = "LIFECYCLE", BoardCode = BoardCodes.Test };
+		IProtectiveBehaviourFactory factory = isServer
+			? new ServerProtectiveBehaviourFactory(CreateServerStopAdapter())
+			: new LocalProtectiveBehaviourFactory(0.01m, 2);
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var sign = entrySide == Sides.Buy ? 1m : -1m;
+		var direction = isTakeProfit ? sign : -sign;
+		var exitSide = entrySide == Sides.Buy ? Sides.Sell : Sides.Buy;
+		IProtectivePositionController Get(decimal percent)
+			=> controller.GetController(securityId, "lifecycle", factory,
+				isTakeProfit ? new Unit(percent, UnitTypes.Percent) : new Unit(),
+				isTakeProfit ? new Unit() : new Unit(percent, UnitTypes.Percent),
+				false, TimeSpan.Zero, TimeSpan.Zero, true);
+
+		var first = Get(5m);
+		var firstRegistration = first.Update(100m, sign * 10m, time);
+		AreEqual(sign * 10m, first.Position, "The controller must track filled quantity independently of the protection backend.");
+		if (isServer)
+		{
+			IsNotNull(firstRegistration);
+			AreEqual(isTakeProfit, firstRegistration.Value.isTake);
+			AreEqual(exitSide, firstRegistration.Value.side);
+			AreEqual(10m, firstRegistration.Value.volume);
+			AreEqual(100m + direction * 5m, ((ServerTestOrderCondition)firstRegistration.Value.condition).ActivationPrice);
+		}
+		else
+			IsNull(firstRegistration);
+
+		var remaining = Get(2m);
+		remaining.Update(100m, -sign * 4m, time.AddSeconds(1));
+		AreEqual(sign * 6m, remaining.Position);
+		if (!isServer)
+		{
+			AreEqual(0, controller.TryActivate(securityId, 100m + direction * 3m, time.AddSeconds(2)).Count(), "New settings must not replace the open position's five-percent level.");
+			var exits = controller.TryActivate(securityId, 100m + direction * 6m, time.AddSeconds(3)).ToArray();
+			AreEqual(1, exits.Length);
+			AreEqual(isTakeProfit, exits[0].isTake);
+			AreEqual(exitSide, exits[0].side);
+			AreEqual(6m, exits[0].volume);
+		}
+		IsNull(remaining.Update(100m, -sign * 6m, time.AddSeconds(4)), "A fully closed position must not create another protective order.");
+		AreEqual(0m, remaining.Position);
+		AreEqual(0, controller.TryActivate(securityId, 100m + direction * 10m, time.AddSeconds(5)).Count());
+
+		var next = Get(2m);
+		var nextRegistration = next.Update(200m, sign * 7m, time.AddSeconds(6));
+		AreEqual(sign * 7m, next.Position);
+		if (isServer)
+		{
+			IsNotNull(nextRegistration);
+			AreEqual(isTakeProfit, nextRegistration.Value.isTake);
+			AreEqual(exitSide, nextRegistration.Value.side);
+			AreEqual(7m, nextRegistration.Value.volume);
+			AreEqual(200m + direction * 4m, ((ServerTestOrderCondition)nextRegistration.Value.condition).ActivationPrice);
+		}
+		else
+		{
+			IsNull(nextRegistration);
+			AreEqual(0, controller.TryActivate(securityId, 200m + direction * 2m, time.AddSeconds(7)).Count());
+			var exits = controller.TryActivate(securityId, 200m + direction * 6m, time.AddSeconds(8)).ToArray();
+			AreEqual(1, exits.Length, "The next position must use its new two-percent protection without external cache cleanup.");
+			AreEqual(isTakeProfit, exits[0].isTake);
+			AreEqual(exitSide, exits[0].side);
+			AreEqual(7m, exits[0].volume);
+		}
+		IsNull(next.Update(200m, -sign * 7m, time.AddSeconds(9)));
+		AreEqual(0m, next.Position);
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void ControllerDetachedHandleCannotRemoveReplacement()
+	{
+		using var controller = new ProtectiveController();
+		var securityId = new SecurityId { SecurityCode = "REPLACEMENT", BoardCode = BoardCodes.Test };
+		var factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var previous = controller.GetController(securityId, "portfolio", factory,
+			new Unit(), new Unit(5m, UnitTypes.Percent), false, TimeSpan.Zero, TimeSpan.Zero, true);
+		previous.Update(100m, 4m, time);
+		controller.Clear();
+		var current = controller.GetController(securityId, "PORTFOLIO", factory,
+			new Unit(), new Unit(2m, UnitTypes.Percent), false, TimeSpan.Zero, TimeSpan.Zero, true);
+		current.Update(200m, 8m, time.AddSeconds(1));
+		previous.Update(100m, -4m, time.AddSeconds(2));
+		var exits = controller.TryActivate(securityId, 195m, time.AddSeconds(3)).ToArray();
+		AreEqual(1, exits.Length, "Closing a detached handle must not detach the current position with the same key.");
+		AreEqual(Sides.Sell, exits[0].side);
+		AreEqual(8m, exits[0].volume);
+	}
+
+	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(Sides.Buy, false, false)]
+	[DataRow(Sides.Buy, false, true)]
+	[DataRow(Sides.Sell, false, false)]
+	[DataRow(Sides.Sell, false, true)]
+	[DataRow(Sides.Buy, true, false)]
+	[DataRow(Sides.Buy, true, true)]
+	[DataRow(Sides.Sell, true, false)]
+	[DataRow(Sides.Sell, true, true)]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task StartProtection_RepeatedSetupProtectsReenteredPosition(Sides entrySide, bool isTakeProfit, bool isReconfigured)
+	{
+		var security = CreateProtectionSecurity("REENTERED");
+		var portfolio = new Portfolio { Name = "reentered_protection" };
+		var time = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+		var orders = new List<Order>();
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(order =>
+		{
+			if (order.TransactionId == 0)
+				order.TransactionId = connector.Object.TransactionIdGenerator.GetNextId();
+			orders.Add(order);
+		});
+		using var strategy = new HighLevelBindStrategy { Connector = connector.Object, Security = security, Portfolio = portfolio };
+		var sign = entrySide == Sides.Buy ? 1m : -1m;
+		var direction = isTakeProfit ? sign : -sign;
+		var exitSide = entrySide == Sides.Buy ? Sides.Sell : Sides.Buy;
+
+		void Configure(decimal percent)
+			=> strategy.StartProtection(
+				isTakeProfit ? new Unit(percent, UnitTypes.Percent) : new Unit(),
+				isTakeProfit ? new Unit() : new Unit(percent, UnitTypes.Percent),
+				useMarketOrders: true, isLocalStop: true);
+
+		Configure(5m);
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+		var quotes = strategy.Quotes(security).Start();
+		var transactions = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(transactions);
+		var quoteNumber = 0;
+		void Quote(decimal price)
+		{
+			var timestamp = time.AddMinutes(++quoteNumber);
+			connector.Raise(c => c.Level1Received += null, quotes.Subscription, new Level1ChangeMessage
+			{
+				SecurityId = security.ToSecurityId(), ServerTime = timestamp, LocalTime = timestamp,
+				Changes = { [Level1Fields.BestBidPrice] = price },
+			});
+		}
+
+		var firstEntry = strategy.CreateOrder(entrySide, 0m, 10m);
+		firstEntry.Type = OrderTypes.Market;
+		strategy.RegisterOrder(firstEntry);
+		FillProtectionOrder(strategy, transactions, firstEntry, 100m, 1, time);
+		AreEqual(sign * 10m, strategy.Position);
+		AreEqual(1, orders.Count);
+		Quote(100m + direction);
+		AreEqual(1, orders.Count, "The first five-percent protection must stay inactive inside its level.");
+		var firstExitPrice = 100m + direction * 6m;
+		Quote(firstExitPrice);
+		AreEqual(2, orders.Count, "The first filled position must generate its protective exit.");
+		var firstExit = orders[^1];
+		AreEqual(exitSide, firstExit.Side);
+		AreEqual(OrderTypes.Market, firstExit.Type);
+		AreEqual(security, firstExit.Security);
+		AreEqual(portfolio, firstExit.Portfolio);
+		AreEqual(10m, firstExit.Volume);
+		FillProtectionOrder(strategy, transactions, firstExit, firstExitPrice, 2, time.AddMinutes(3));
+		AreEqual(0m, strategy.Position, "The first protective order must actually flatten the filled position.");
+		Quote(firstExitPrice);
+		AreEqual(2, orders.Count, "A flat position must not generate another protective order.");
+
+		if (isReconfigured)
+			Configure(2m);
+
+		var secondEntry = strategy.CreateOrder(entrySide, 0m, 7m);
+		secondEntry.Type = OrderTypes.Market;
+		strategy.RegisterOrder(secondEntry);
+		FillProtectionOrder(strategy, transactions, secondEntry, 200m, 3, time.AddMinutes(4));
+		AreEqual(sign * 7m, strategy.Position);
+		AreEqual(3, orders.Count);
+		Quote(200m + direction * 2m);
+		AreEqual(3, orders.Count, "The second position must not exit inside the configured level.");
+		var secondExitPrice = 200m + direction * (isReconfigured ? 6m : 12m);
+		Quote(secondExitPrice);
+		AreEqual(4, orders.Count, "Repeating StartProtection must still protect the next filled entry and use its new two-percent level.");
+		var secondExit = orders[^1];
+		AreEqual(exitSide, secondExit.Side);
+		AreEqual(OrderTypes.Market, secondExit.Type);
+		AreEqual(security, secondExit.Security);
+		AreEqual(portfolio, secondExit.Portfolio);
+		AreEqual(7m, secondExit.Volume, "The later exit must close its own current quantity, not the previous ten units.");
+		FillProtectionOrder(strategy, transactions, secondExit, secondExitPrice, 4, time.AddMinutes(6));
+		AreEqual(0m, strategy.Position);
+	}
+
+	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(Sides.Buy, false)]
+	[DataRow(Sides.Sell, false)]
+	[DataRow(Sides.Buy, true)]
+	[DataRow(Sides.Sell, true)]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task StartProtection_RepeatedSetupKeepsOpenPosition(Sides entrySide, bool isTakeProfit)
+	{
+		var security = CreateProtectionSecurity("OPEN_RECONFIGURED");
+		var portfolio = new Portfolio { Name = "open_protection" };
+		var time = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+		var orders = new List<Order>();
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(order =>
+		{
+			if (order.TransactionId == 0)
+				order.TransactionId = connector.Object.TransactionIdGenerator.GetNextId();
+			orders.Add(order);
+		});
+		using var strategy = new HighLevelBindStrategy { Connector = connector.Object, Security = security, Portfolio = portfolio };
+		var sign = entrySide == Sides.Buy ? 1m : -1m;
+		var direction = isTakeProfit ? sign : -sign;
+		var exitSide = entrySide == Sides.Buy ? Sides.Sell : Sides.Buy;
+		void Configure()
+			=> strategy.StartProtection(
+				isTakeProfit ? new Unit(5m, UnitTypes.Percent) : new Unit(),
+				isTakeProfit ? new Unit() : new Unit(5m, UnitTypes.Percent),
+				useMarketOrders: true, isLocalStop: true);
+
+		Configure();
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+		var quotes = strategy.Quotes(security).Start();
+		var transactions = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(transactions);
+		var quoteNumber = 0;
+		void Quote(decimal price)
+		{
+			var timestamp = time.AddMinutes(++quoteNumber);
+			connector.Raise(c => c.Level1Received += null, quotes.Subscription, new Level1ChangeMessage
+			{
+				SecurityId = security.ToSecurityId(), ServerTime = timestamp, LocalTime = timestamp,
+				Changes = { [Level1Fields.BestBidPrice] = price },
+			});
+		}
+
+		var entry = strategy.CreateOrder(entrySide, 0m, 10m);
+		entry.Type = OrderTypes.Market;
+		strategy.RegisterOrder(entry);
+		FillProtectionOrder(strategy, transactions, entry, 100m, 1, time);
+		AreEqual(sign * 10m, strategy.Position);
+		Quote(100m + direction);
+		AreEqual(1, orders.Count);
+
+		// Reapply the same levels so the contract does not depend on how changed levels affect an open position.
+		Configure();
+		Quote(100m + direction);
+		AreEqual(1, orders.Count, "Reapplying protection must not close a position inside its level.");
+		var exitPrice = 100m + direction * 6m;
+		Quote(exitPrice);
+		AreEqual(2, orders.Count, "Repeating the same StartProtection configuration must not detach an already open position.");
+		var exit = orders[^1];
+		AreEqual(exitSide, exit.Side);
+		AreEqual(OrderTypes.Market, exit.Type);
+		AreEqual(security, exit.Security);
+		AreEqual(portfolio, exit.Portfolio);
+		AreEqual(10m, exit.Volume);
+		FillProtectionOrder(strategy, transactions, exit, exitPrice, 2, time.AddMinutes(4));
+		AreEqual(0m, strategy.Position);
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task StartProtection_ReconfigurationPreservesPartialAndOtherPositions()
+	{
+		var first = CreateProtectionSecurity("REARM_PARTIAL");
+		var second = CreateProtectionSecurity("REARM_OTHER");
+		var portfolio = new Portfolio { Name = "multiple_protection" };
+		var time = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+		var orders = new List<Order>();
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(order =>
+		{
+			if (order.TransactionId == 0)
+				order.TransactionId = connector.Object.TransactionIdGenerator.GetNextId();
+			orders.Add(order);
+		});
+		using var strategy = new HighLevelBindStrategy { Connector = connector.Object, Security = first, Portfolio = portfolio };
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), useMarketOrders: true, isLocalStop: true);
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+		var firstQuotes = strategy.Quotes(first).Start().Subscription;
+		var secondQuotes = strategy.Quotes(second).Start().Subscription;
+		var transactions = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(transactions);
+		var sequence = 0;
+		void Fill(Security security, Sides side, decimal price, decimal volume)
+		{
+			var order = strategy.CreateOrder(side, 0m, volume, security);
+			order.Type = OrderTypes.Market;
+			strategy.RegisterOrder(order);
+			FillProtectionOrder(strategy, transactions, order, price, ++sequence, time.AddSeconds(sequence));
+		}
+		void FillExit(Order order, decimal price)
+			=> FillProtectionOrder(strategy, transactions, order, price, ++sequence, time.AddSeconds(sequence));
+		void Quote(Security security, Subscription subscription, decimal price)
+		{
+			var timestamp = time.AddSeconds(++sequence);
+			connector.Raise(c => c.Level1Received += null, subscription, new Level1ChangeMessage
+			{
+				SecurityId = security.ToSecurityId(), ServerTime = timestamp, LocalTime = timestamp,
+				Changes = { [Level1Fields.BestBidPrice] = price },
+			});
+		}
+		void CheckExit(Security security, decimal volume)
+		{
+			var order = orders[^1];
+			AreEqual(security, order.Security);
+			AreEqual(portfolio, order.Portfolio);
+			AreEqual(Sides.Sell, order.Side);
+			AreEqual(OrderTypes.Market, order.Type);
+			AreEqual(volume, order.Volume);
+		}
+
+		Fill(first, Sides.Buy, 100m, 10m);
+		Fill(second, Sides.Buy, 200m, 20m);
+		Fill(first, Sides.Sell, 101m, 4m);
+		AreEqual(6m, strategy.GetPositionValue(first, portfolio));
+		AreEqual(20m, strategy.GetPositionValue(second, portfolio));
+		strategy.StartProtection(new Unit(), new Unit(2m, UnitTypes.Percent), useMarketOrders: true, isLocalStop: true);
+		Quote(first, firstQuotes, 97m);
+		AreEqual(3, orders.Count, "The partially closed position must retain its original five-percent stop.");
+		Quote(first, firstQuotes, 94m);
+		AreEqual(4, orders.Count, "Reconfiguration must keep the partial position's controller attached.");
+		CheckExit(first, 6m);
+		FillExit(orders[^1], 94m);
+		AreEqual(0m, strategy.GetPositionValue(first, portfolio));
+
+		// The configuration was set while the old position was open; closing must retire its cached levels.
+		Fill(first, Sides.Buy, 300m, 7m);
+		Quote(first, firstQuotes, 297m);
+		AreEqual(5, orders.Count);
+		Quote(first, firstQuotes, 293m);
+		AreEqual(6, orders.Count, "The next position must receive the two-percent configuration without another StartProtection call.");
+		CheckExit(first, 7m);
+		FillExit(orders[^1], 293m);
+		AreEqual(0m, strategy.GetPositionValue(first, portfolio));
+
+		Quote(second, secondQuotes, 195m);
+		AreEqual(6, orders.Count, "A different open security must retain its own original five-percent stop.");
+		Quote(second, secondQuotes, 189m);
+		AreEqual(7, orders.Count);
+		CheckExit(second, 20m);
+		FillExit(orders[^1], 189m);
+		AreEqual(0m, strategy.GetPositionValue(second, portfolio));
+	}
+
+	[TestMethod]
 	public void BasicPositionTracking()
 	{
 		// Arrange
@@ -1167,6 +1531,30 @@ public class ProtectionTests : BaseTestClass
 		});
 		AreEqual(1, first);
 		AreEqual(1, second);
+	}
+
+	private static void FillProtectionOrder(Strategy strategy, Subscription transactions, Order order, decimal price, long tradeId, DateTime time)
+	{
+		strategy.OnConnectorOrderReceived(transactions, order);
+		order.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(transactions, order);
+		order.AveragePrice = price;
+		strategy.OnTradeReceived(transactions, new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				SecurityId = order.Security.ToSecurityId(),
+				TradeId = tradeId,
+				TradePrice = price,
+				TradeVolume = order.Volume,
+				ServerTime = time,
+			},
+		});
+		order.Balance = 0m;
+		order.State = OrderStates.Done;
+		strategy.OnConnectorOrderReceived(transactions, order);
 	}
 
 	private static Security CreateProtectionSecurity(string code)

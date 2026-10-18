@@ -46,9 +46,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	private bool _protectiveUseMarketOrders;
 	private bool _isLocalStop;
 	private ProtectiveController _protectiveController;
-	// Protection is per security and portfolio: one controller for each pair the strategy has traded,
-	// and the security each of them is registered under, so a price reaches the controller watching it.
-	private readonly SynchronizedDictionary<(Security security, Portfolio portfolio), IProtectivePositionController> _posControllers = [];
+	// Resolve the protected security when a price update produces a closing order.
 	private readonly SynchronizedDictionary<SecurityId, Security> _protectedSecurities = [];
 
 	/// <summary>
@@ -152,21 +150,14 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			{
 				var security = trade.Order.Security;
 				var portfolio = trade.Order.Portfolio;
-				var key = (security, portfolio);
+				var securityId = security.ToSecurityId();
+				var posController = _protectiveController.GetController(
+					securityId,
+					portfolio.Name,
+					GetProtectiveBehaviourFactory(security, portfolio),
+					_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
-				if (!_posControllers.TryGetValue(key, out var posController))
-				{
-					var securityId = security.ToSecurityId();
-
-					posController = _protectiveController.GetController(
-						securityId,
-						portfolio.Name,
-						GetProtectiveBehaviourFactory(security, portfolio),
-						_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
-
-					_protectedSecurities[securityId] = security;
-					_posControllers[key] = posController;
-				}
+				_protectedSecurities[securityId] = security;
 
 				var info = posController.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
@@ -1288,7 +1279,6 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		StartedTime = default;
 
 		_protectiveController = default;
-		_posControllers.Clear();
 		_protectedSecurities.Clear();
 		_takeProfit = default;
 		_stopLoss = default;
@@ -1324,6 +1314,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Start position protection.
 	/// </summary>
+	/// <remarks>
+	/// Repeated calls preserve protection of open positions. Updated settings apply to subsequent positions after the previous position closes.
+	/// </remarks>
 	/// <param name="takeProfit">Take offset.</param>
 	/// <param name="stopLoss">Stop offset.</param>
 	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
@@ -1348,7 +1341,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (stopTimeout < TimeSpan.Zero)
 			throw new ArgumentOutOfRangeException(nameof(stopTimeout), stopTimeout, LocalizedStrings.InvalidValue);
 
-		_protectiveController = new() { Parent = this };
+		_protectiveController ??= new() { Parent = this };
 		_takeProfit = takeProfit;
 		_stopLoss = stopLoss;
 		_isStopTrailing = isStopTrailing;
