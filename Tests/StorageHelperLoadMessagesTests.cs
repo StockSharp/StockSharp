@@ -1062,7 +1062,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		// The end is the 10:10 candle of the second day: 300, 301 and 302 open no later.
 		var candles = await LoadCountBefore(3, 20, 10);
 
-		string.Join(",", candles.Select(c => c.OpenPrice)).AssertEqual("300,301,302");
+		candles.Select(c => c.OpenPrice).ToArray().AssertEqual([300m, 301m, 302m]);
 	}
 
 	[TestMethod]
@@ -1071,7 +1071,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		// Three of the second day open no later than 10:10; the other two come from the end of the first day.
 		var candles = await LoadCountBefore(5, 20, 10);
 
-		string.Join(",", candles.Select(c => c.OpenPrice)).AssertEqual("206,207,300,301,302");
+		candles.Select(c => c.OpenPrice).ToArray().AssertEqual([206m, 207m, 300m, 301m, 302m]);
 	}
 
 	[TestMethod]
@@ -1115,8 +1115,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 	private static DateTime WholeDay(int index) => new DateTime(2025, 2, 10, 0, 0, 0, DateTimeKind.Utc).AddDays(index);
 
 	// Three whole days of five-minute candles, 288 a day, read back through a drive that tells how much of each day was
-	// read: the last Count of them, before the given end or before none.
-	private async Task<(TimeFrameCandleMessage[] candles, ReadCountingDrive drive)> LoadLastOfWholeDays(int count, DateTime? to)
+	// read: the last Count of them, before the given end or before none. They are asked for as stored, or as built from
+	// smaller time frames where any are held, which is how a request asks for candles unless it says otherwise.
+	private async Task<(TimeFrameCandleMessage[] candles, ReadCountingDrive drive)> LoadLastOfWholeDays(int count, DateTime? to, bool buildFromSmaller)
 	{
 		var token = CancellationToken;
 		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
@@ -1152,6 +1153,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			SecurityId = secId,
 			DataType2 = tf.TimeFrame(),
 			BuildMode = MarketDataBuildModes.Load,
+			AllowBuildFromSmallerTimeFrame = buildFromSmaller,
 			From = null,
 			To = to,
 			Count = count,
@@ -1165,30 +1167,35 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		=> (drive.ReadOf(day) < 2 * drive.LengthOf(day)).AssertTrue($"{day:yyyy-MM-dd}: {drive.ReadOf(day)} bytes read of a {drive.LengthOf(day)}-byte file.");
 
 	[TestMethod]
-	public async Task Candles_Load_CountWithoutFrom_ReadsEachDayOfTheWindowOnce()
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task Candles_Load_CountWithoutFrom_ReadsEachDayOfTheWindowOnce(bool buildFromSmaller)
 	{
 		// The last day whole and the last 112 candles of the day before it, from 14:40 on.
-		var (candles, drive) = await LoadLastOfWholeDays(400, null);
+		var (candles, drive) = await LoadLastOfWholeDays(400, null, buildFromSmaller);
 
 		candles.Length.AssertEqual(400);
 		candles[0].OpenTime.AssertEqual(WholeDay(1).AddMinutes(5 * 176));
 		candles[^1].OpenTime.AssertEqual(WholeDay(2).AddMinutes(5 * 287));
 
-		// Finding where the window starts takes no more of a day than its header, so the load is all that reads a day.
+		// A day counted by its header is read by the load alone, and a day read to be counted is not read again.
 		AssertReadOnce(drive, WholeDay(1));
 		AssertReadOnce(drive, WholeDay(2));
 	}
 
 	[TestMethod]
-	public async Task Candles_Load_CountBeforeAMoment_ReadsTheDaysBeforeItsDayOnce()
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task Candles_Load_CountBeforeAMoment_ReadsEachDayOfTheWindowOnce(bool buildFromSmaller)
 	{
 		// 121 candles of the last day open no later than 10:00; the other 179 are the end of the day before, from 09:05 on.
-		var (candles, drive) = await LoadLastOfWholeDays(300, WholeDay(2).AddHours(10));
+		var (candles, drive) = await LoadLastOfWholeDays(300, WholeDay(2).AddHours(10), buildFromSmaller);
 
 		candles.Length.AssertEqual(300);
 		candles[0].OpenTime.AssertEqual(WholeDay(1).AddMinutes(5 * 109));
 		candles[^1].OpenTime.AssertEqual(WholeDay(2).AddHours(10));
 
 		AssertReadOnce(drive, WholeDay(1));
+		AssertReadOnce(drive, WholeDay(2));
 	}
 }
