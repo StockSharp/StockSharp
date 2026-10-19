@@ -1134,12 +1134,9 @@ public static partial class StorageHelper
 			from = first;
 			long covered = 0;
 
-			// Count each day's records by loading it (candle storages don't expose a
-			// reliable per-day Count in meta-info — the buildable wrapper throws — so we
-			// count what LoadAsync actually yields, which is correct for every storage).
 			foreach (var date in dates.Where(d => d <= to).OrderByDescending(d => d))
 			{
-				var dayCount = await storage.LoadAsync(date).CountAsync(cancellationToken);
+				var dayCount = await CountUpToAsync(storage, date, to, cancellationToken);
 
 				if (dayCount == 0)
 					continue;
@@ -1161,6 +1158,18 @@ public static partial class StorageHelper
 			return default;
 
 		return (from, to, skip);
+	}
+
+	// How many records of a day a load that ends at the given moment yields.
+	private static async ValueTask<long> CountUpToAsync(IMarketDataStorage storage, DateTime date, DateTime to, CancellationToken cancellationToken)
+	{
+		// A day the end does not cut is counted by its header, which holds how many records the day has. Candles built
+		// from smaller time frames have no such number until they are built.
+		if (to >= date.EndOfDay() && storage is not CandleMessageBuildableStorage)
+			return (await storage.GetMetaInfoAsync(date, cancellationToken))?.Count ?? 0;
+
+		// A load stops at the first record past its end, so the count stops there too and the rest of the day is not read.
+		return await storage.LoadAsync(date).TakeWhile(m => m.GetServerTime() <= to).CountAsync(cancellationToken);
 	}
 
 	private static async IAsyncEnumerable<Message> LoadMessagesAsyncCore<TMessage>(

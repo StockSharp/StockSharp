@@ -5,6 +5,113 @@ using StockSharp.Algo.Candles.Compression;
 [TestClass]
 public class StorageHelperLoadMessagesTests : BaseTestClass
 {
+	// The drive a test reads through: what it holds is the other drive's, and it tells how many bytes of each day's file
+	// were read and how long that file is.
+	private sealed class ReadCountingDrive(IMarketDataDrive inner) : BaseMarketDataDrive
+	{
+		private readonly Dictionary<IMarketDataStorageDrive, IMarketDataStorageDrive> _drives = [];
+		private readonly Dictionary<DateTime, long> _read = [];
+		private readonly Dictionary<DateTime, long> _lengths = [];
+
+		public long ReadOf(DateTime day) => _read.TryGetValue(day);
+
+		public long LengthOf(DateTime day) => _lengths[day];
+
+		public override string Path
+		{
+			get => inner.Path;
+			set => throw new NotSupportedException();
+		}
+
+		public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
+			=> inner.GetAvailableSecuritiesAsync();
+
+		public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
+			=> inner.GetAvailableDataTypesAsync(securityId, format);
+
+		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
+			=> _drives.SafeAdd(inner.GetStorageDrive(securityId, dataType, format), key => new StorageDrive(this, key));
+
+		public override ValueTask VerifyAsync(CancellationToken cancellationToken)
+			=> inner.VerifyAsync(cancellationToken);
+
+		public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
+			=> inner.LookupSecuritiesAsync(criteria, securityProvider);
+
+		private void OnRead(DateTime day, long length, int bytes)
+		{
+			_lengths[day] = length;
+			_read[day] = _read.TryGetValue(day) + bytes;
+		}
+
+		private sealed class StorageDrive(ReadCountingDrive drive, IMarketDataStorageDrive underlying) : IMarketDataStorageDrive
+		{
+			IMarketDataDrive IMarketDataStorageDrive.Drive => drive;
+
+			IAsyncEnumerable<DateTime> IMarketDataStorageDrive.GetDatesAsync() => underlying.GetDatesAsync();
+
+			ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
+				=> underlying.ClearDatesCacheAsync(cancellationToken);
+
+			ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
+				=> throw new NotSupportedException();
+
+			ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
+				=> throw new NotSupportedException();
+
+			async ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
+			{
+				if (!readOnly)
+					throw new NotSupportedException();
+
+				var stream = await underlying.LoadStreamAsync(date, readOnly, cancellationToken);
+
+				// The storage tells a missing day by this very instance.
+				if (stream == Stream.Null)
+					return stream;
+
+				return new CountingStream(stream, bytes => drive.OnRead(date, stream.Length, bytes));
+			}
+		}
+
+		private sealed class CountingStream(Stream underlying, Action<int> read) : Stream
+		{
+			public override bool CanRead => underlying.CanRead;
+			public override bool CanSeek => underlying.CanSeek;
+			public override bool CanWrite => false;
+			public override long Length => underlying.Length;
+
+			public override long Position
+			{
+				get => underlying.Position;
+				set => underlying.Position = value;
+			}
+
+			public override int Read(byte[] buffer, int offset, int count)
+			{
+				var bytes = underlying.Read(buffer, offset, count);
+				read(bytes);
+				return bytes;
+			}
+
+			public override long Seek(long offset, SeekOrigin origin) => underlying.Seek(offset, origin);
+
+			public override void Flush() => underlying.Flush();
+
+			public override void SetLength(long value) => throw new NotSupportedException();
+
+			public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing)
+					underlying.Dispose();
+
+				base.Dispose(disposing);
+			}
+		}
+	}
+
 	private static (StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, SecurityId secId) CreateEnv(StorageModes mode = StorageModes.Incremental)
 	{
 		var fs = Helper.MemorySystem;
@@ -914,6 +1021,59 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		candles[^1].OpenPrice.AssertEqual(102m);
 	}
 
+	// A chart that scrolls into its past asks for the candles before the first one it holds: a count and an end, with
+	// no start. The end falls inside a day, and the candles of that day after it are no part of the answer.
+	private async Task<TimeFrameCandleMessage[]> LoadCountBefore(int count, int dayOfEnd, int minuteOfEnd)
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
+
+		var tf = TimeSpan.FromMinutes(5);
+
+		CandleMessage[] Day(DateTime day, decimal basePrice) => [.. Enumerable.Range(0, 8)
+			.Select(i => CreateTfCandle(secId, day.AddMinutes(5 * i), tf, basePrice + i, basePrice + i + 1, basePrice + i - 1, basePrice + i, 10, totalTicks: 1))
+			.Cast<CandleMessage>()];
+
+		var storage = settings.GetStorage<CandleMessage>(secId, tf.TimeFrame());
+		await storage.SaveAsync(Day(new DateTime(2025, 1, 10, 10, 0, 0, DateTimeKind.Utc), 200), token); // 200..207
+		await storage.SaveAsync(Day(new DateTime(2025, 1, 20, 10, 0, 0, DateTimeKind.Utc), 300), token); // 300..307
+
+		var outMessages = new List<Message>();
+
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1303,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = tf.TimeFrame(),
+			BuildMode = MarketDataBuildModes.Load,
+			From = null,
+			To = new DateTime(2025, 1, dayOfEnd, 10, minuteOfEnd, 0, DateTimeKind.Utc),
+			Count = count,
+		}, new StorageLoadContext(), token))
+			outMessages.Add(msg);
+
+		return [.. outMessages.OfType<TimeFrameCandleMessage>()];
+	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountBeforeAMomentOfTheDay_ReturnsTheLastNBeforeIt()
+	{
+		// The end is the 10:10 candle of the second day: 300, 301 and 302 open no later.
+		var candles = await LoadCountBefore(3, 20, 10);
+
+		string.Join(",", candles.Select(c => c.OpenPrice)).AssertEqual("300,301,302");
+	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountBeforeAMomentOfTheDay_WalksBackIntoTheDaysBefore()
+	{
+		// Three of the second day open no later than 10:10; the other two come from the end of the first day.
+		var candles = await LoadCountBefore(5, 20, 10);
+
+		string.Join(",", candles.Select(c => c.OpenPrice)).AssertEqual("206,207,300,301,302");
+	}
+
 	[TestMethod]
 	public async Task Candles_Load_CountWithDefaultTo_Throws()
 	{
@@ -949,5 +1109,86 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			{
 			}
 		});
+	}
+
+	// The three days the read-counting tests fill with candles, from 10 February 2025.
+	private static DateTime WholeDay(int index) => new DateTime(2025, 2, 10, 0, 0, 0, DateTimeKind.Utc).AddDays(index);
+
+	// Three whole days of five-minute candles, 288 a day, read back through a drive that tells how much of each day was
+	// read: the last Count of them, before the given end or before none.
+	private async Task<(TimeFrameCandleMessage[] candles, ReadCountingDrive drive)> LoadLastOfWholeDays(int count, DateTime? to)
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
+
+		var tf = TimeSpan.FromMinutes(5);
+		var storage = settings.GetStorage<CandleMessage>(secId, tf.TimeFrame());
+
+		for (var day = 0; day < 3; day++)
+		{
+			var basePrice = 1000m * (day + 1);
+
+			await storage.SaveAsync([.. Enumerable.Range(0, 288)
+				.Select(i => CreateTfCandle(secId, WholeDay(day).AddMinutes(5 * i), tf, basePrice + i, basePrice + i + 1, basePrice + i - 1, basePrice + i, 10, totalTicks: 1))
+				.Cast<CandleMessage>()], token);
+		}
+
+		var drive = new ReadCountingDrive(settings.Drive);
+
+		var reading = new StorageCoreSettings
+		{
+			StorageRegistry = settings.StorageRegistry,
+			Drive = drive,
+			Format = settings.Format,
+			Mode = settings.Mode,
+		};
+
+		var outMessages = new List<Message>();
+
+		await foreach (var msg in reading.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1304,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = tf.TimeFrame(),
+			BuildMode = MarketDataBuildModes.Load,
+			From = null,
+			To = to,
+			Count = count,
+		}, new StorageLoadContext(), token))
+			outMessages.Add(msg);
+
+		return ([.. outMessages.OfType<TimeFrameCandleMessage>()], drive);
+	}
+
+	private static void AssertReadOnce(ReadCountingDrive drive, DateTime day)
+		=> (drive.ReadOf(day) < 2 * drive.LengthOf(day)).AssertTrue($"{day:yyyy-MM-dd}: {drive.ReadOf(day)} bytes read of a {drive.LengthOf(day)}-byte file.");
+
+	[TestMethod]
+	public async Task Candles_Load_CountWithoutFrom_ReadsEachDayOfTheWindowOnce()
+	{
+		// The last day whole and the last 112 candles of the day before it, from 14:40 on.
+		var (candles, drive) = await LoadLastOfWholeDays(400, null);
+
+		candles.Length.AssertEqual(400);
+		candles[0].OpenTime.AssertEqual(WholeDay(1).AddMinutes(5 * 176));
+		candles[^1].OpenTime.AssertEqual(WholeDay(2).AddMinutes(5 * 287));
+
+		// Finding where the window starts takes no more of a day than its header, so the load is all that reads a day.
+		AssertReadOnce(drive, WholeDay(1));
+		AssertReadOnce(drive, WholeDay(2));
+	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountBeforeAMoment_ReadsTheDaysBeforeItsDayOnce()
+	{
+		// 121 candles of the last day open no later than 10:00; the other 179 are the end of the day before, from 09:05 on.
+		var (candles, drive) = await LoadLastOfWholeDays(300, WholeDay(2).AddHours(10));
+
+		candles.Length.AssertEqual(300);
+		candles[0].OpenTime.AssertEqual(WholeDay(1).AddMinutes(5 * 109));
+		candles[^1].OpenTime.AssertEqual(WholeDay(2).AddHours(10));
+
+		AssertReadOnce(drive, WholeDay(1));
 	}
 }
