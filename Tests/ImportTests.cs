@@ -180,6 +180,16 @@ public class ImportTests : BaseTestClass
 		};
 		var depths = security.RandomDepths(100, ordersCount: true);
 
+		// A text file tells one book from the next by its time alone, kept to the microsecond, and the generator may put
+		// two books inside one microsecond: those would be read back as a single book.
+		for (var i = 1; i < depths.Length; i++)
+		{
+			var previous = depths[i - 1].ServerTime.Truncate(_1mcs);
+
+			if (depths[i].ServerTime.Truncate(_1mcs) <= previous)
+				depths[i].ServerTime = previous + _1mcs;
+		}
+
 		// Compute the expected exported row count independently of the engine's own
 		// ToTimeQuotes() (which TextExporter also uses) so the oracle does not become a
 		// tautology: one CSV row is written per quote, i.e. Bids.Length + Asks.Length.
