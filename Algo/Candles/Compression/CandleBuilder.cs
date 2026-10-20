@@ -42,9 +42,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		var board = subscription.Message.IsRegularTradingHours == true ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
-
-		return (board.TimeZone, board.WorkingTime);
+		return ExchangeInfoProvider.GetCandleTime(subscription.Message);
 	}
 
 	private bool IsTimeValid(MarketDataMessage message, DateTime time)
@@ -365,8 +363,6 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 		if (current is not null && transform.Time < current.OpenTime)
 			yield break;
 
-		var emptyFrom = current?.OpenTime + current?.TypedArg;
-
 		foreach (var candle in base.OnProcess(subscription, transform))
 		{
 			yield return candle;
@@ -375,17 +371,20 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 				continue;
 
 			var (zone, time) = GetTimeZone(subscription);
-			var nextOpen = current.TypedArg.GetCandleBounds(transform.Time, zone, time).Min;
+			var timeFrame = current.TypedArg;
+			var nextOpen = timeFrame.GetCandleBounds(transform.Time, zone, time).Min;
 
-			for (var openTime = emptyFrom.Value; openTime < nextOpen; openTime += current.TypedArg)
+			for (var openTime = timeFrame.ShiftCandleOpenTime(current.OpenTime, 1, zone, time); openTime < nextOpen;)
 			{
+				var closeTime = timeFrame.ShiftCandleOpenTime(openTime, 1, zone, time);
+
 				yield return new TimeFrameCandleMessage
 				{
 					SecurityId = current.SecurityId,
-					TypedArg = current.TypedArg,
+					TypedArg = timeFrame,
 					BuildFrom = current.BuildFrom,
 					OpenTime = openTime,
-					CloseTime = openTime + current.TypedArg,
+					CloseTime = closeTime,
 					HighTime = openTime,
 					LowTime = openTime,
 					OpenPrice = current.ClosePrice,
@@ -396,6 +395,8 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 					LocalTime = transform.Time,
 					State = CandleStates.None,
 				};
+
+				openTime = closeTime;
 			}
 		}
 	}
@@ -428,7 +429,9 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 	/// <inheritdoc />
 	protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, TimeFrameCandleMessage candle, ICandleBuilderValueTransform transform)
 	{
-		return (candle.OpenTime + candle.TypedArg) <= transform.Time;
+		var (zone, time) = GetTimeZone(subscription);
+
+		return candle.TypedArg.ShiftCandleOpenTime(candle.OpenTime, 1, zone, time) <= transform.Time;
 	}
 }
 

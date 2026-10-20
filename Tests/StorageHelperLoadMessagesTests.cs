@@ -780,8 +780,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		var bigCandles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		bigCandles.Length.AssertEqual(2);
 
-		AssertTimeFrameCandle(bigCandles[0], secId, bigTf, date, date.AddMinutes(4), 100, 105, 99, 104, totalVolume: 500, totalTicks: 20, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1100);
-		AssertTimeFrameCandle(bigCandles[1], secId, bigTf, date.AddMinutes(5), date.AddMinutes(9), 105, 110, 104, 109, totalVolume: 500, totalTicks: 20, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1100);
+		// the minutes carry no count of trades, so neither do the candles built of them
+		AssertTimeFrameCandle(bigCandles[0], secId, bigTf, date, date.AddMinutes(4), 100, 105, 99, 104, totalVolume: 500, totalTicks: null, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1100);
+		AssertTimeFrameCandle(bigCandles[1], secId, bigTf, date.AddMinutes(5), date.AddMinutes(9), 105, 110, 104, 109, totalVolume: 500, totalTicks: null, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1100);
 	}
 
 	[TestMethod]
@@ -835,7 +836,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		candles.Length.AssertEqual(2);
 
 		// 10:00 candle is loaded via buildable storage from 1m candles, 10:05 candle is built from ticks.
-		AssertTimeFrameCandle(candles[0], secId, bigTf, date, date.AddMinutes(4), 100, 115, 90, 108, totalVolume: 150, totalTicks: 20, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1200);
+		AssertTimeFrameCandle(candles[0], secId, bigTf, date, date.AddMinutes(4), 100, 115, 90, 108, totalVolume: 150, totalTicks: null, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1200);
 		AssertTimeFrameCandle(candles[1], secId, bigTf, date.AddMinutes(5), date.AddMinutes(9).AddSeconds(50), 200, 205, 198, 202, totalVolume: 10, totalTicks: 4, CandleStates.Active, DataType.Ticks, transactionId: 1200);
 	}
 

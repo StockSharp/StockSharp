@@ -315,7 +315,13 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				var originalTf = mdMsg.GetTimeFrame();
 				var timeFrames = await InnerAdapter.GetTimeFramesAsync(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArrayAsync(cancellationToken);
 
-				if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
+				// A series asked to be built from a smaller time frame is built from it even where the source offers the series itself.
+				var buildFrom = mdMsg.BuildMode == MarketDataBuildModes.Build ? mdMsg.BuildFrom : null;
+
+				if (buildFrom is not null && !CanBuildFrom(buildFrom.GetTimeFrame(), originalTf, timeFrames))
+					return ([], [transactionId.CreateNotSupported()]);
+
+				if (buildFrom is null && (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest))
 				{
 					if (!mdMsg.SecurityId.IsAllSecurity())
 					{
@@ -350,9 +356,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				if (isLoadOnly)
 					return ([], [transactionId.CreateNotSupported()]);
 
-				if (mdMsg.AllowBuildFromSmallerTimeFrame)
+				if (buildFrom is not null || mdMsg.AllowBuildFromSmallerTimeFrame)
 				{
-					var smaller = timeFrames
+					var smaller = buildFrom ?? timeFrames
 					    .FilterSmallerTimeFrames(originalTf)
 					    .OrderByDescending()
 					    .FirstOr()?
@@ -366,6 +372,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 						var current = original.TypedClone();
 						current.DataType2 = s;
+						AskForTheTimeOfCount(original, current);
 
 						using (await _sync.LockAsync(cancellationToken))
 						{
@@ -534,6 +541,10 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		return current;
 	}
 
+	// A series can be built from a time frame the source offers, smaller than the series' own and dividing it exactly.
+	private bool CanBuildFrom(TimeSpan source, TimeSpan target, TimeSpan[] offered)
+		=> new[] { source }.FilterSmallerTimeFrames(target).Any() && (offered.Contains(source) || InnerAdapter.CheckTimeFrameByRequest);
+
 	private async ValueTask<MarketDataMessage> TrySubscribeBuildAsync(MarketDataMessage original, CancellationToken cancellationToken)
 	{
 		var current = await TryCreateBuildSubscription(original, original.From, cancellationToken);
@@ -656,6 +667,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				break;
 
 			case SeriesStates.SmallTimeFrame:
+				if (series.Original.SecurityId == default)
+					series = await GetSecuritySeriesAsync(series, candleMsg.SecurityId, cancellationToken);
+
 				if (series.IsCountExhausted)
 				{
 					if (await TryRemoveSeries(series.Id, cancellationToken) is not null)
@@ -701,6 +715,52 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			default:
 				break;
 		}
+	}
+
+	// A series of every security builds each one's candles apart, from that security's own source candles.
+	private async ValueTask<SeriesInfo> GetSecuritySeriesAsync(SeriesInfo series, SecurityId securityId, CancellationToken cancellationToken)
+	{
+		using (await _sync.LockAsync(cancellationToken))
+		{
+			return series.Child.SafeAdd(securityId, key =>
+			{
+				var original = series.Original.TypedClone();
+				original.SecurityId = key;
+
+				return new SeriesInfo(original, series.Current)
+				{
+					State = SeriesStates.SmallTimeFrame,
+					BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), series.Current.DataType2),
+					LastTime = series.Original.From,
+					Count = series.Original.Count,
+				};
+			});
+		}
+	}
+
+	// A source asked for a count gives that many of its own candles, which make only part of the series' candles, so a
+	// series asked for by count asks the source for the time its candles cover.
+	private void AskForTheTimeOfCount(MarketDataMessage original, MarketDataMessage current)
+	{
+		if (original.Count is not long count)
+			return;
+
+		var timeFrame = original.GetTimeFrame();
+		var (zone, time) = _candleBuilderProvider.ExchangeInfoProvider.GetCandleTime(original);
+
+		if (original.From is DateTime from)
+		{
+			current.To ??= timeFrame.ShiftCandleOpenTime(timeFrame.GetCandleBounds(from, zone, time).Min, count, zone, time);
+		}
+		else
+		{
+			var end = original.To ?? _logReceiver.CurrentTime;
+
+			current.From = timeFrame.ShiftCandleOpenTime(timeFrame.GetCandleBounds(end, zone, time).Min, -count, zone, time);
+			current.To = end;
+		}
+
+		current.Count = null;
 	}
 
 	private async ValueTask UpgradeSubscriptionAsync(SeriesInfo series, SubscriptionResponseMessage response, SubscriptionFinishedMessage finish, List<Message> extraOut, CancellationToken cancellationToken)
@@ -770,6 +830,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 						var curr = series.Current = original.TypedClone();
 						curr.DataType2 = s;
 						curr.TransactionId = newTransId;
+						AskForTheTimeOfCount(original, curr);
 
 						series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), s);
 						series.State = SeriesStates.SmallTimeFrame;
@@ -799,23 +860,42 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			}
 			case SeriesStates.SmallTimeFrame:
 			{
-				var partial = series.BigTimeFrameCompressor?.CurrentCandle;
+				var isAll = original.SecurityId == default;
 
-				if (partial != null && partial.State != CandleStates.Finished)
+				SeriesInfo[] parts;
+
+				using (await _sync.LockAsync(cancellationToken))
+					parts = isAll ? [.. series.Child.Values] : [series];
+
+				foreach (var part in parts)
 				{
-					partial = partial.TypedClone();
-					partial.State = CandleStates.Finished;
-					partial.Adapter = finish?.Adapter;
-					partial.LocalTime = finish?.LocalTime ?? partial.LocalTime;
-					// Resume after the full big-timeframe slot, not after the last data point of the
-					// partial candle, so the build continuation does not re-cover the flushed slot.
-					series.LastTime = partial.OpenTime + original.GetTimeFrame();
+					var partial = part.BigTimeFrameCompressor?.CurrentCandle;
 
-					await RaiseNewOutCandleAsync(series, partial, extraOut, cancellationToken);
+					if (partial != null && partial.State != CandleStates.Finished)
+					{
+						partial = partial.TypedClone();
+						partial.State = CandleStates.Finished;
+						partial.Adapter = finish?.Adapter;
+						partial.LocalTime = finish?.LocalTime ?? partial.LocalTime;
 
-					if (await FinishIfCountExhaustedAsync(series, extraOut, cancellationToken))
-						return;
+						// Resume after the full big-timeframe slot, not after the last data point of the
+						// partial candle, so the build continuation does not re-cover the flushed slot.
+						var (zone, time) = _candleBuilderProvider.ExchangeInfoProvider.GetCandleTime(part.Original);
+						part.LastTime = original.GetTimeFrame().ShiftCandleOpenTime(partial.OpenTime, 1, zone, time);
+
+						await RaiseNewOutCandleAsync(part, partial, extraOut, cancellationToken);
+
+						if (await FinishIfCountExhaustedAsync(part, extraOut, cancellationToken))
+							return;
+					}
+
+					part.BigTimeFrameCompressor = null;
+					part.State = SeriesStates.Compress;
 				}
+
+				// the build goes on from where the earliest security stopped, each one skipping what it has already built
+				if (isAll && parts.Length > 0)
+					series.LastTime = parts.Min(c => c.LastTime);
 
 				series.BigTimeFrameCompressor = null;
 				series.State = SeriesStates.Compress;
@@ -853,6 +933,15 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 		series.Transform = CreateTransform(current);
 		series.Current = current;
+
+		using (await _sync.LockAsync(cancellationToken))
+		{
+			foreach (var child in series.Child.Values)
+			{
+				child.Transform = CreateTransform(current);
+				child.Current = current;
+			}
+		}
 
 		// loopback
 		current.LoopBack(_adapter);

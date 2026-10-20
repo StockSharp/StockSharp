@@ -200,6 +200,23 @@ public static partial class CandleHelper
 		return timeFrame.GetCandleBounds(currentTime, board.TimeZone, board.WorkingTime);
 	}
 
+	// The time zone and working time the candles of a subscription are counted in: the board's for regular trading hours only,
+	// and a subscription to every security has no board of its own.
+	internal static (TimeZoneInfo zone, WorkingTime time) GetCandleTime(this IExchangeInfoProvider exchangeInfoProvider, MarketDataMessage message)
+	{
+		if (exchangeInfoProvider is null)
+			throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		var board = message.IsRegularTradingHours == true && !message.SecurityId.BoardCode.IsEmpty()
+			? exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode)
+			: ExchangeBoard.Associated;
+
+		return (board.TimeZone, board.WorkingTime);
+	}
+
 	/// <summary>
 	/// To get the number of time frames within the specified time range.
 	/// </summary>

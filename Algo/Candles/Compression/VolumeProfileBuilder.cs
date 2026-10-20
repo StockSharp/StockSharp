@@ -3,7 +3,7 @@
 /// <summary>
 /// Volume profile.
 /// </summary>
-public class VolumeProfileBuilder
+public class VolumeProfileBuilder : ICloneable<VolumeProfileBuilder>
 {
 	private readonly Dictionary<decimal, int> _volumeProfileInfo = [];
 
@@ -198,6 +198,30 @@ public class VolumeProfileBuilder
 				belowPocNode = belowPocNode.Next;
 		}
 	}
+
+	/// <summary>
+	/// Create a copy of the profile that changes independently of this one.
+	/// </summary>
+	/// <returns>The copy.</returns>
+	public VolumeProfileBuilder Clone()
+	{
+		var clone = new VolumeProfileBuilder(_priceStep)
+		{
+			VolumePercent = VolumePercent,
+			High = High,
+			Low = Low,
+			PoC = PoC,
+		};
+
+		clone._levels.AddRange(_levels);
+
+		foreach (var (price, index) in _volumeProfileInfo)
+			clone._volumeProfileInfo.Add(price, index);
+
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 
 	private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices, bool isAbovePoC)
 	{

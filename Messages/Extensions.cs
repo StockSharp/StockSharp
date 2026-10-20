@@ -4382,6 +4382,27 @@ public static partial class Extensions
 			var lastDay = new DateTime(exchangeTime.Year, exchangeTime.Month, month.DaysInMonth());
 			bounds = new(month, lastDay.EndOfDay());
 		}
+		else if (timeFrame.Ticks > TimeSpan.TicksPerDay && timeFrame.Ticks % TimeSpan.TicksPerDay == 0)
+		{
+			var days = timeFrame.Days;
+
+			// Counted from one fixed day, so a candle is the same whichever day the data starts on.
+			var offset = (exchangeTime.Date - TimeHelper.GregorianStart).Days % days;
+
+			if (offset < 0)
+				offset += days;
+
+			var firstDay = exchangeTime.Date.AddDays(-offset);
+			var lastDay = firstDay.AddDays(days - 1);
+
+			var firstPeriod = time.GetPeriod(firstDay);
+			var lastPeriod = time.GetPeriod(lastDay);
+
+			var min = firstDay + (firstPeriod != null && firstPeriod.Times.Count > 0 ? firstPeriod.Times[0].Min : TimeSpan.Zero);
+			var max = lastPeriod != null && lastPeriod.Times.Count > 0 ? lastDay + lastPeriod.Times[^1].Max : firstDay.AddDays(days);
+
+			bounds = new(min, max);
+		}
 		else
 		{
 			var period = time.GetPeriod(exchangeTime);
@@ -4402,6 +4423,9 @@ public static partial class Extensions
 				var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
 				stopTime = last == null ? TimeSpan.MaxValue : last.Max;
 			}
+			// without a session the day ends the last candle at midnight, where the next day's first one opens
+			else if (timeFrame.Ticks < TimeSpan.TicksPerDay)
+				stopTime = TimeSpan.FromDays(1);
 			else
 				stopTime = TimeSpan.MaxValue;
 
@@ -4420,6 +4444,36 @@ public static partial class Extensions
 		}
 
 		return new(bounds.Min.ApplyTimeZone(timeZone).UtcDateTime, bounds.Max.ApplyTimeZone(timeZone).UtcDateTime);
+	}
+
+	/// <summary>
+	/// To get the open time of the candle that is the specified number of candles away from the candle that opens at the specified time.
+	/// </summary>
+	/// <param name="timeFrame">The time frame.</param>
+	/// <param name="openTime">The open time of a candle, as <see cref="GetCandleBounds(TimeSpan, DateTime, TimeZoneInfo, WorkingTime)"/> gives it.</param>
+	/// <param name="shift">How many candles away: later ones for a positive value, earlier ones for a negative one.</param>
+	/// <param name="timeZone">Information about the time zone where the exchange is located.</param>
+	/// <param name="time">The information about the exchange working pattern.</param>
+	/// <returns>The open time of that candle.</returns>
+	public static DateTime ShiftCandleOpenTime(this TimeSpan timeFrame, DateTime openTime, long shift, TimeZoneInfo timeZone, WorkingTime time)
+	{
+		if (timeFrame <= TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(timeFrame), timeFrame, LocalizedStrings.InvalidValue);
+
+		// candles of a time frame that divides a day, and weekly ones, lie end to end
+		if (timeFrame.Ticks == _weekTf || TimeSpan.TicksPerDay % timeFrame.Ticks == 0)
+			return openTime + TimeSpan.FromTicks(timeFrame.Ticks * shift);
+
+		// a month holds 28 to 31 days, so a month and a day after its start is in the next one, whichever it is
+		var step = timeFrame.Ticks == TimeHelper.TicksPerMonth ? timeFrame + TimeSpan.FromDays(1) : timeFrame;
+
+		for (; shift > 0; shift--)
+			openTime = timeFrame.GetCandleBounds(openTime + step, timeZone, time).Min;
+
+		for (; shift < 0; shift++)
+			openTime = timeFrame.GetCandleBounds(openTime.AddTicks(-1), timeZone, time).Min;
+
+		return openTime;
 	}
 
 	private static readonly WorkingTime _allRange = new();

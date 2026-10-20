@@ -532,6 +532,295 @@ public class CandleTests : BaseTestClass
 		big.PriceLevels.Count().AssertEqual(4);
 	}
 
+	private static BiggerTimeFrameCandleCompressor CreateMinuteCompressor(int bigMinutes, bool isCalcVolumeProfile = false)
+		=> CreateCompressor(TimeSpan.FromMinutes(bigMinutes), TimeSpan.FromMinutes(1), isCalcVolumeProfile);
+
+	private static BiggerTimeFrameCandleCompressor CreateCompressor(TimeSpan timeFrame, TimeSpan source, bool isCalcVolumeProfile = false)
+	{
+		var builder = new CandleBuilderProvider(new InMemoryExchangeInfoProvider()).Get(typeof(TimeFrameCandleMessage));
+
+		return new(new MarketDataMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = timeFrame.TimeFrame(),
+			IsCalcVolumeProfile = isCalcVolumeProfile,
+		}, builder, source.TimeFrame());
+	}
+
+	// A finished source candle of the given time frame.
+	private static TimeFrameCandleMessage SourceCandle(DateTime openTime, TimeSpan timeFrame, decimal volume)
+		=> new()
+		{
+			TypedArg = timeFrame,
+			OpenTime = openTime,
+			CloseTime = openTime + timeFrame,
+			HighTime = openTime,
+			LowTime = openTime,
+			OpenPrice = 100,
+			HighPrice = 100,
+			LowPrice = 100,
+			ClosePrice = 100,
+			TotalVolume = volume,
+			State = CandleStates.Finished,
+		};
+
+	private static TimeFrameCandleMessage[] Compress(BiggerTimeFrameCandleCompressor compressor, params TimeFrameCandleMessage[] sources)
+		=> [.. sources.SelectMany(s => compressor.Process(s).Select(c => (TimeFrameCandleMessage)c.TypedClone()))];
+
+	// The latest state of each built candle, in the order the candles opened.
+	private static TimeFrameCandleMessage[] Latest(IEnumerable<TimeFrameCandleMessage> changes)
+		=> [.. changes.GroupBy(c => c.OpenTime).Select(g => g.Last()).OrderBy(c => c.OpenTime)];
+
+	[TestMethod]
+	public void Compress_Months_FollowTheCalendar()
+	{
+		var compressor = CreateCompressor(TimeSpan.FromTicks(TimeHelper.TicksPerMonth), TimeSpan.FromDays(1));
+		static DateTime day(int month, int day) => new DateTime(2024, month, day).UtcKind();
+
+		var candles = Latest(Compress(compressor,
+			SourceCandle(day(1, 30), TimeSpan.FromDays(1), 1),
+			SourceCandle(day(1, 31), TimeSpan.FromDays(1), 2),
+			SourceCandle(day(2, 1), TimeSpan.FromDays(1), 4),
+			SourceCandle(day(2, 29), TimeSpan.FromDays(1), 8),
+			SourceCandle(day(3, 1), TimeSpan.FromDays(1), 16)));
+
+		candles.Select(c => c.OpenTime).ToArray().AssertEqual([day(1, 1), day(2, 1), day(3, 1)]);
+		candles.Select(c => c.TotalVolume).ToArray().AssertEqual([3m, 12m, 16m]);
+		candles[0].State.AssertEqual(CandleStates.Finished);
+		candles[1].State.AssertEqual(CandleStates.Finished);
+	}
+
+	[TestMethod]
+	public void Compress_MonthsWithoutData_AreEmptyMonthsOfTheCalendar()
+	{
+		var compressor = CreateCompressor(TimeSpan.FromTicks(TimeHelper.TicksPerMonth), TimeSpan.FromDays(1));
+		static DateTime day(int month, int day) => new DateTime(2024, month, day).UtcKind();
+
+		var empty = Compress(compressor,
+			SourceCandle(day(1, 15), TimeSpan.FromDays(1), 1),
+			SourceCandle(day(4, 10), TimeSpan.FromDays(1), 1)).Where(c => c.State == CandleStates.None).ToArray();
+
+		empty.Select(c => c.OpenTime).ToArray().AssertEqual([day(2, 1), day(3, 1)]);
+		empty.Select(c => c.CloseTime).ToArray().AssertEqual([day(3, 1), day(4, 1)]);
+	}
+
+	// Candles of several days are the same whichever day the data starts on.
+	[TestMethod]
+	public void Compress_ThreeDays_DoNotDependOnTheFirstDayOfTheData()
+	{
+		var start = new DateTime(2024, 1, 1).UtcKind();
+
+		DateTime openOfTheSixthDay(int firstDay)
+		{
+			var compressor = CreateCompressor(TimeSpan.FromDays(3), TimeSpan.FromDays(1));
+			var sources = Enumerable.Range(firstDay, 6 - firstDay).Select(d => SourceCandle(start.AddDays(d), TimeSpan.FromDays(1), 1)).ToArray();
+
+			return Latest(Compress(compressor, sources)).Last().OpenTime;
+		}
+
+		var opens = Enumerable.Range(0, 3).Select(openOfTheSixthDay).ToArray();
+
+		opens.Distinct().Count().AssertEqual(1, $"The candle of the sixth day opens at {opens.Select(o => o.ToString("u")).JoinComma()}");
+	}
+
+	// A time frame that does not divide a day starts anew each day, so the day's last candle ends at midnight.
+	[TestMethod]
+	public void Compress_FiveHours_TheLastCandleOfADayEndsAtMidnight()
+	{
+		var compressor = CreateCompressor(TimeSpan.FromHours(5), TimeSpan.FromHours(1));
+		var day = new DateTime(2024, 1, 1).UtcKind();
+
+		var candles = Latest(Compress(compressor,
+			[.. Enumerable.Range(20, 6).Select(h => SourceCandle(day.AddHours(h), TimeSpan.FromHours(1), 1))]));
+
+		candles.Select(c => c.OpenTime).ToArray().AssertEqual([day.AddHours(20), day.AddDays(1)]);
+		candles.Select(c => c.TotalVolume).ToArray().AssertEqual([4m, 2m]);
+		candles[0].State.AssertEqual(CandleStates.Finished);
+	}
+
+	[TestMethod]
+	public void ShiftCandleOpenTime_Months_StepByTheCalendar()
+	{
+		var month = TimeSpan.FromTicks(TimeHelper.TicksPerMonth);
+		static DateTime first(int month) => new DateTime(2024, month, 1).UtcKind();
+
+		month.ShiftCandleOpenTime(first(1), 1, TimeZoneInfo.Utc, new()).AssertEqual(first(2));
+		month.ShiftCandleOpenTime(first(1), 3, TimeZoneInfo.Utc, new()).AssertEqual(first(4));
+		month.ShiftCandleOpenTime(first(3), -2, TimeZoneInfo.Utc, new()).AssertEqual(first(1));
+	}
+
+	[TestMethod]
+	public void ShiftCandleOpenTime_TheLastFiveHoursOfADay_AreFollowedByTheNextDay()
+	{
+		var tf = TimeSpan.FromHours(5);
+		var day = new DateTime(2024, 1, 1).UtcKind();
+
+		tf.ShiftCandleOpenTime(day.AddHours(20), 1, TimeZoneInfo.Utc, new()).AssertEqual(day.AddDays(1));
+		tf.ShiftCandleOpenTime(day.AddDays(1), -1, TimeZoneInfo.Utc, new()).AssertEqual(day.AddHours(20));
+	}
+
+	[TestMethod]
+	public void CandleBounds_ThreeDays_AreThoseOfEveryDayOfTheCandle()
+	{
+		var tf = TimeSpan.FromDays(3);
+		var bounds = tf.GetCandleBounds(new DateTime(2024, 1, 1, 12, 0, 0).UtcKind());
+
+		(bounds.Max - bounds.Min).AssertEqual(tf);
+
+		for (var day = bounds.Min; day < bounds.Max; day = day.AddDays(1))
+		{
+			var dayBounds = tf.GetCandleBounds(day.AddHours(12));
+
+			dayBounds.Min.AssertEqual(bounds.Min);
+			dayBounds.Max.AssertEqual(bounds.Max);
+		}
+
+		tf.GetCandleBounds(bounds.Max).Min.AssertEqual(bounds.Max);
+	}
+
+	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(5 * 60, 22 * 60, 20 * 60)]
+	[DataRow(7, 23 * 60 + 57, 23 * 60 + 55)]
+	public void CandleBounds_ATimeFrameThatDoesNotDivideADay_EndsTheDayAtMidnight(int timeFrameMinutes, int minuteOfDay, int openMinute)
+	{
+		var day = new DateTime(2024, 1, 1).UtcKind();
+
+		var bounds = TimeSpan.FromMinutes(timeFrameMinutes).GetCandleBounds(day.AddMinutes(minuteOfDay));
+
+		bounds.Min.AssertEqual(day.AddMinutes(openMinute));
+		bounds.Max.AssertEqual(day.AddDays(1));
+	}
+
+	// A forming minute as a source sends it: again with every change, carrying the minute's totals so far.
+	private static TimeFrameCandleMessage Minute(int minute, decimal open, decimal high, decimal low, decimal close, decimal volume)
+	{
+		var start = new DateTime(2020, 1, 1, 0, 0, 0).UtcKind();
+
+		return new()
+		{
+			OpenTime = start.AddMinutes(minute),
+			CloseTime = start.AddMinutes(minute + 1),
+			HighTime = start.AddMinutes(minute),
+			LowTime = start.AddMinutes(minute),
+			OpenPrice = open,
+			HighPrice = high,
+			LowPrice = low,
+			ClosePrice = close,
+			TotalVolume = volume,
+			State = CandleStates.Active,
+		};
+	}
+
+	[TestMethod]
+	public void PriceLevels_UpdatesOfAMinute_CountItOnce()
+	{
+		var compressor = CreateMinuteCompressor(5, true);
+
+		compressor.Process(Minute(0, 100, 100, 100, 100, 10)).ToArray();
+		compressor.Process(Minute(1, 101, 101, 101, 101, 5)).ToArray();
+		var big = compressor.Process(Minute(1, 101, 102, 101, 102, 8)).Cast<TimeFrameCandleMessage>().Single();
+
+		big.TotalVolume.AreEqual(18m);
+		big.PriceLevels.FirstOrDefault(l => l.Price == 100m).TotalVolume.AreEqual(10m);
+		big.PriceLevels.FirstOrDefault(l => l.Price == 101m).TotalVolume.AreEqual(8m);
+	}
+
+	[TestMethod]
+	public void Compress_UpdatesOfTheLastMinute_TheFinishedCandleHoldsItsLatestState()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		compressor.Process(Minute(0, 100, 101, 99, 100, 10)).ToArray();
+		compressor.Process(Minute(4, 100, 102, 100, 101, 5)).ToArray();
+		compressor.Process(Minute(4, 100, 104, 98, 103, 12)).ToArray();
+
+		var finished = compressor.Process(Minute(5, 103, 103, 103, 103, 1)).Cast<TimeFrameCandleMessage>().Single(c => c.State == CandleStates.Finished);
+
+		finished.TotalVolume.AreEqual(22m);
+		finished.HighPrice.AreEqual(104m);
+		finished.LowPrice.AreEqual(98m);
+		finished.ClosePrice.AreEqual(103m);
+	}
+
+	[TestMethod]
+	public void Compress_AnEarlierMinuteSentAgain_IsNotCountedTwice()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		compressor.Process(Minute(0, 100, 100, 100, 100, 10)).ToArray();
+		compressor.Process(Minute(1, 101, 101, 101, 101, 5)).ToArray();
+		var big = compressor.Process(Minute(0, 100, 100, 100, 100, 10)).Cast<TimeFrameCandleMessage>().Last();
+
+		big.TotalVolume.AreEqual(15m);
+	}
+
+	// A minute of a big candle that is finished already changes neither that candle nor the one being built.
+	[TestMethod]
+	public void Compress_AMinuteOfAFinishedCandleSentAgain_ChangesNothing()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		compressor.Process(Minute(3, 100, 100, 100, 100, 10)).ToArray();
+		compressor.Process(Minute(5, 101, 101, 101, 101, 5)).ToArray();
+		compressor.Process(Minute(3, 100, 100, 100, 100, 10)).ToArray().Length.AssertEqual(0);
+		var big = compressor.Process(Minute(5, 101, 102, 101, 102, 8)).Cast<TimeFrameCandleMessage>().Last();
+
+		big.OpenTime.AssertEqual(new DateTime(2020, 1, 1, 0, 5, 0).UtcKind());
+		big.TotalVolume.AreEqual(8m);
+	}
+
+	[TestMethod]
+	public void Compress_TheTradesOfACandle_AreThoseOfItsMinutes()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		var first = Minute(0, 100, 101, 99, 100, 10);
+		first.TotalTicks = 30;
+		var second = Minute(1, 100, 102, 100, 101, 5);
+		second.TotalTicks = 20;
+
+		compressor.Process(first).ToArray();
+		var big = compressor.Process(second).Cast<TimeFrameCandleMessage>().Last();
+
+		big.TotalTicks.AreEqual(50);
+	}
+
+	[TestMethod]
+	public void Compress_TheBuyAndSellVolumeOfACandle_AreThoseOfItsMinutes()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		var first = Minute(0, 100, 101, 99, 100, 10);
+		first.BuyVolume = 6;
+		first.SellVolume = 4;
+		var second = Minute(1, 100, 102, 100, 101, 5);
+		second.BuyVolume = 1;
+		second.SellVolume = 4;
+
+		compressor.Process(first).ToArray();
+		var big = compressor.Process(second).Cast<TimeFrameCandleMessage>().Last();
+
+		big.BuyVolume.AreEqual(7m);
+		big.SellVolume.AreEqual(8m);
+	}
+
+	[TestMethod]
+	public void Compress_TheOpenInterestOfACandle_IsThatOfItsLastMinute()
+	{
+		var compressor = CreateMinuteCompressor(5);
+
+		var first = Minute(0, 100, 101, 99, 100, 10);
+		first.OpenInterest = 1000;
+		var second = Minute(1, 100, 102, 100, 101, 5);
+		second.OpenInterest = 1100;
+
+		compressor.Process(first).ToArray();
+		var big = compressor.Process(second).Cast<TimeFrameCandleMessage>().Last();
+
+		big.OpenInterest.AreEqual(1100m);
+	}
+
 	[TestMethod]
 	public void VolumeProfile_CreatesAndUpdatesLevel()
 	{

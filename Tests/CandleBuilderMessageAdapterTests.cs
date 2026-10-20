@@ -30,6 +30,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			this.AddSupportedMarketDataType(timeFrame.TimeFrame());
 		}
 
+		public bool TimeFramesByRequest { get; set; }
+
+		public override bool CheckTimeFrameByRequest => TimeFramesByRequest;
+
 		public void FailOnSubscribe(long transactionId)
 		{
 			_failOnSubscribe.Add(transactionId);
@@ -733,6 +737,351 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(90m, compressedCandle.LowPrice, "Compressed Low should be min of all Lows (90)");
 		AreEqual(108m, compressedCandle.ClosePrice, "Compressed Close should be last 1-min Close (108)");
 		AreEqual(5500m, compressedCandle.TotalVolume, "Compressed Volume should be sum of all volumes (5500)");
+	}
+
+	[TestMethod]
+	public async Task Subscribe_BuildFromSmallerTimeFrame_BuildsAlthoughTheSourceOffersTheTimeFrame()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var inner = new MockCandleAdapter(idGen);
+		inner.AddSupportedTimeFrame(TimeSpan.FromMinutes(1));
+		inner.AddSupportedTimeFrame(TimeSpan.FromMinutes(5));
+		var adapter = new CandleBuilderMessageAdapter(inner, CreateCandleBuilderProvider());
+
+		var outMessages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+
+		var secId = CreateSecurityId();
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = 1,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			IsSubscribe = true,
+			SecurityId = secId,
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = TimeSpan.FromMinutes(1).TimeFrame(),
+		}, CancellationToken);
+
+		var sent = inner.SentMessages.OfType<MarketDataMessage>().Single(m => m.IsSubscribe);
+		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), sent.DataType2, "The series named to be built from minutes is asked of the source as minutes");
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 98, 104, 1000), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 104, 110, 100, 108, 1200), CancellationToken);
+
+		var built = outMessages.OfType<TimeFrameCandleMessage>().Last(c => c.OpenTime == baseTime);
+		AreEqual(TimeSpan.FromMinutes(5), built.TypedArg);
+		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), built.BuildFrom);
+		AreEqual(100m, built.OpenPrice);
+		AreEqual(110m, built.HighPrice);
+		AreEqual(98m, built.LowPrice);
+		AreEqual(108m, built.ClosePrice);
+		AreEqual(2200m, built.TotalVolume);
+	}
+
+	// A venue streams a minute while it forms, every update carrying the minute's totals so far.
+	[TestMethod]
+	public async Task Subscribe_SmallerTimeFrame_UpdatesOfAMinute_CountItOnce()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var inner = new MockCandleAdapter(idGen);
+		inner.AddSupportedTimeFrame(TimeSpan.FromMinutes(1));
+		var adapter = new CandleBuilderMessageAdapter(inner, CreateCandleBuilderProvider());
+
+		var outMessages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+
+		var secId = CreateSecurityId();
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = 1,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			IsSubscribe = true,
+			SecurityId = secId,
+			AllowBuildFromSmallerTimeFrame = true,
+		}, CancellationToken);
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		ValueTask SendMinute(int minute, decimal open, decimal high, decimal low, decimal close, decimal volume, CandleStates state)
+			=> inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(minute), TimeSpan.FromMinutes(1), open, high, low, close, volume, state), CancellationToken);
+
+		await SendMinute(0, 100, 102, 99, 101, 100, CandleStates.Active);
+		await SendMinute(0, 100, 106, 97, 103, 150, CandleStates.Active);
+		await SendMinute(0, 100, 106, 97, 104, 180, CandleStates.Finished);
+		await SendMinute(1, 104, 108, 103, 107, 50, CandleStates.Active);
+		await SendMinute(1, 104, 109, 103, 105, 70, CandleStates.Active);
+		await SendMinute(5, 105, 106, 104, 106, 10, CandleStates.Active);
+		await SendMinute(5, 105, 107, 104, 107, 30, CandleStates.Active);
+
+		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
+
+		var first = candles.Last(c => c.OpenTime == baseTime);
+		AreEqual(CandleStates.Finished, first.State);
+		AreEqual(100m, first.OpenPrice);
+		AreEqual(109m, first.HighPrice);
+		AreEqual(97m, first.LowPrice);
+		AreEqual(105m, first.ClosePrice);
+		AreEqual(250m, first.TotalVolume, "Each minute counts once, with its latest volume: 180 + 70");
+
+		var second = candles.Last(c => c.OpenTime == baseTime.AddMinutes(5));
+		AreEqual(105m, second.OpenPrice);
+		AreEqual(107m, second.HighPrice);
+		AreEqual(104m, second.LowPrice);
+		AreEqual(107m, second.ClosePrice);
+		AreEqual(30m, second.TotalVolume, "The minute that opens a candle counts once as well");
+	}
+
+	#endregion
+
+	#region Build From A Named Time Frame Tests
+
+	private static (MockCandleAdapter Inner, CandleBuilderMessageAdapter Adapter, List<Message> Out) CreateBuildFromSetup(params int[] offeredMinutes)
+	{
+		var inner = new MockCandleAdapter(new IncrementalIdGenerator());
+
+		foreach (var minutes in offeredMinutes)
+			inner.AddSupportedTimeFrame(TimeSpan.FromMinutes(minutes));
+
+		var adapter = new CandleBuilderMessageAdapter(inner, CreateCandleBuilderProvider());
+		var outMessages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+
+		return (inner, adapter, outMessages);
+	}
+
+	private static MarketDataMessage CreateBuildFrom(SecurityId securityId, int seriesMinutes, int sourceMinutes, MarketDataBuildModes mode = MarketDataBuildModes.Build)
+		=> new()
+		{
+			TransactionId = 1,
+			DataType2 = TimeSpan.FromMinutes(seriesMinutes).TimeFrame(),
+			IsSubscribe = true,
+			SecurityId = securityId,
+			BuildMode = mode,
+			BuildFrom = TimeSpan.FromMinutes(sourceMinutes).TimeFrame(),
+		};
+
+	private static MarketDataMessage SentSubscription(MockCandleAdapter inner)
+		=> inner.SentMessages.OfType<MarketDataMessage>().Single(m => m.IsSubscribe);
+
+	[TestMethod]
+	public async Task BuildFrom_TheNamedTimeFrameIsUsed_NotTheLargestOneThatDivides()
+	{
+		var (inner, adapter, _) = CreateBuildFromSetup(1, 3, 5, 15);
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(CreateSecurityId(), 15, 3), CancellationToken);
+
+		AreEqual(TimeSpan.FromMinutes(3).TimeFrame(), SentSubscription(inner).DataType2);
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_TheSourceOffersOnlyTheNamedTimeFrame_BuildsFromIt()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1);
+		var secId = CreateSecurityId();
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(secId, 5, 1), CancellationToken);
+
+		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), SentSubscription(inner).DataType2);
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 98, 104, 1000), CancellationToken);
+
+		var built = outMessages.OfType<TimeFrameCandleMessage>().Last();
+		AreEqual(TimeSpan.FromMinutes(5), built.TypedArg);
+		AreEqual(1000m, built.TotalVolume);
+	}
+
+	// The named time frame equals the series, is bigger than it, or does not divide it.
+	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(5, 5)]
+	[DataRow(5, 15)]
+	[DataRow(5, 2)]
+	public async Task BuildFrom_ATimeFrameTheSeriesCannotBeBuiltFrom_IsNotSupported(int seriesMinutes, int sourceMinutes)
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1, 2, 5, 15);
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(CreateSecurityId(), seriesMinutes, sourceMinutes), CancellationToken);
+
+		IsTrue(outMessages.OfType<SubscriptionResponseMessage>().Single(r => r.OriginalTransactionId == 1).IsNotSupported());
+		IsFalse(inner.SentMessages.OfType<MarketDataMessage>().Any(m => m.IsSubscribe), "Nothing is asked of the source");
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_ATimeFrameTheSourceDoesNotOffer_IsNotSupported()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(5);
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(CreateSecurityId(), 5, 1), CancellationToken);
+
+		IsTrue(outMessages.OfType<SubscriptionResponseMessage>().Single(r => r.OriginalTransactionId == 1).IsNotSupported());
+		IsFalse(inner.SentMessages.OfType<MarketDataMessage>().Any(m => m.IsSubscribe), "Nothing is asked of the source");
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_ASourceThatChecksTimeFramesByRequest_BuildsFromTheNamedOne()
+	{
+		var (inner, adapter, _) = CreateBuildFromSetup();
+		inner.TimeFramesByRequest = true;
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(CreateSecurityId(), 5, 1), CancellationToken);
+
+		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), SentSubscription(inner).DataType2);
+	}
+
+	// Only a series asked to be built is built from the named time frame; one that may be loaded is taken as the source offers it.
+	[TestMethod]
+	public async Task BuildFrom_InLoadAndBuildMode_TheSeriesTheSourceOffersIsTaken()
+	{
+		var (inner, adapter, _) = CreateBuildFromSetup(1, 5);
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(CreateSecurityId(), 5, 1, MarketDataBuildModes.LoadAndBuild), CancellationToken);
+
+		AreEqual(TimeSpan.FromMinutes(5).TimeFrame(), SentSubscription(inner).DataType2);
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_History_IsBuiltFromTheNamedTimeFrame()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1, 5);
+		var secId = CreateSecurityId();
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		var request = CreateBuildFrom(secId, 5, 1);
+		request.From = baseTime;
+		request.To = baseTime.AddMinutes(10);
+		await adapter.SendInMessageAsync(request, CancellationToken);
+
+		var sent = SentSubscription(inner);
+		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), sent.DataType2);
+		AreEqual(baseTime, sent.From);
+
+		for (var i = 0; i < 10; i++)
+			await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1), 100 + i, 101 + i, 99 + i, 100 + i, 10), CancellationToken);
+
+		await inner.SimulateFinished(1, CancellationToken);
+
+		var finished = outMessages.OfType<TimeFrameCandleMessage>().Where(c => c.State == CandleStates.Finished).ToArray();
+		AreEqual(2, finished.Length);
+
+		AreEqual(baseTime, finished[0].OpenTime);
+		AreEqual(100m, finished[0].OpenPrice);
+		AreEqual(105m, finished[0].HighPrice);
+		AreEqual(99m, finished[0].LowPrice);
+		AreEqual(104m, finished[0].ClosePrice);
+		AreEqual(50m, finished[0].TotalVolume);
+
+		AreEqual(baseTime.AddMinutes(5), finished[1].OpenTime);
+		AreEqual(105m, finished[1].OpenPrice);
+		AreEqual(110m, finished[1].HighPrice);
+		AreEqual(104m, finished[1].LowPrice);
+		AreEqual(109m, finished[1].ClosePrice);
+		AreEqual(50m, finished[1].TotalVolume);
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_Unsubscribing_ReleasesTheSourceSubscription()
+	{
+		var (inner, adapter, _) = CreateBuildFromSetup(1, 5);
+		var secId = CreateSecurityId();
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(secId, 5, 1), CancellationToken);
+		IsTrue(inner.HasActiveSubscription(1));
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			IsSubscribe = false,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+		}, CancellationToken);
+
+		IsFalse(inner.HasActiveSubscription(1), "The minutes the series was built from are no longer asked for");
+	}
+
+	// A series asked for by count gets that many candles of its own time frame, not as many source candles.
+	[TestMethod]
+	public async Task BuildFrom_ByCount_GivesThatManyCandlesOfTheSeries()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1, 5);
+		var secId = CreateSecurityId();
+		var end = new DateTime(2024, 1, 1, 10, 10, 0).UtcKind();
+
+		var request = CreateBuildFrom(secId, 5, 1);
+		request.Count = 2;
+		request.To = end;
+		await adapter.SendInMessageAsync(request, CancellationToken);
+
+		// the source gives what it is asked for: the minutes of a time range, or the last minutes of a count
+		var sent = SentSubscription(inner);
+		var minutes = sent.From is DateTime from
+			? Enumerable.Range(0, (int)((sent.To ?? end) - from).TotalMinutes).Select(i => from.AddMinutes(i)).ToArray()
+			: [.. Enumerable.Range(1, (int)(sent.Count ?? 0)).Select(i => end.AddMinutes(-i)).Reverse()];
+
+		foreach (var minute in minutes)
+			await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, minute, TimeSpan.FromMinutes(1), 100, 101, 99, 100, 10), CancellationToken);
+
+		await inner.SimulateFinished(1, CancellationToken);
+
+		var finished = outMessages.OfType<TimeFrameCandleMessage>().Where(c => c.State == CandleStates.Finished).ToArray();
+		AreEqual(2, finished.Length, $"The source was asked for {minutes.Length} minutes");
+		IsTrue(finished.All(c => c.TotalVolume == 50m), "Each candle holds its five minutes");
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_EverySecurity_KeepsTheSecuritiesApart()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1, 5);
+
+		await adapter.SendInMessageAsync(CreateBuildFrom(default, 5, 1), CancellationToken);
+
+		var sber = Helper.CreateSecurityId("SBER", "TQBR");
+		var gazp = Helper.CreateSecurityId("GAZP", "TQBR");
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(sber, baseTime, TimeSpan.FromMinutes(1), 100, 101, 99, 100, 10), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(gazp, baseTime, TimeSpan.FromMinutes(1), 200, 201, 199, 200, 20), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(sber, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 100, 102, 100, 101, 10), CancellationToken);
+
+		var sberCandle = outMessages.OfType<TimeFrameCandleMessage>().LastOrDefault(c => c.SecurityId == sber);
+		var gazpCandle = outMessages.OfType<TimeFrameCandleMessage>().LastOrDefault(c => c.SecurityId == gazp);
+
+		IsNotNull(sberCandle, "No candle built for SBER");
+		IsNotNull(gazpCandle, "No candle built for GAZP");
+		AreEqual(20m, sberCandle.TotalVolume);
+		AreEqual(102m, sberCandle.HighPrice);
+		AreEqual(20m, gazpCandle.TotalVolume);
+		AreEqual(201m, gazpCandle.HighPrice);
+	}
+
+	[TestMethod]
+	public async Task BuildFrom_EverySecurity_TheEndOfTheHistoryFinishesTheCandleOfEachSecurity()
+	{
+		var (inner, adapter, outMessages) = CreateBuildFromSetup(1, 5);
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		var request = CreateBuildFrom(default, 5, 1);
+		request.From = baseTime;
+		request.To = baseTime.AddMinutes(5);
+		await adapter.SendInMessageAsync(request, CancellationToken);
+
+		var sber = Helper.CreateSecurityId("SBER", "TQBR");
+		var gazp = Helper.CreateSecurityId("GAZP", "TQBR");
+
+		for (var i = 0; i < 5; i++)
+		{
+			await inner.SimulateCandle(1, CreateTimeFrameCandle(sber, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1), 100, 101, 99, 100, 10), CancellationToken);
+			await inner.SimulateCandle(1, CreateTimeFrameCandle(gazp, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1), 200, 201, 199, 200, 20), CancellationToken);
+		}
+
+		await inner.SimulateFinished(1, CancellationToken);
+
+		var finished = outMessages.OfType<TimeFrameCandleMessage>().Where(c => c.State == CandleStates.Finished).ToArray();
+
+		AreEqual(50m, finished.SingleOrDefault(c => c.SecurityId == sber)?.TotalVolume, "SBER's candle is finished with its five minutes");
+		AreEqual(100m, finished.SingleOrDefault(c => c.SecurityId == gazp)?.TotalVolume, "GAZP's candle is finished with its five minutes");
 	}
 
 	#endregion
