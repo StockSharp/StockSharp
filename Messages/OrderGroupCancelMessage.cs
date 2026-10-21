@@ -100,11 +100,13 @@ public enum OrderGroupCancelModes
 	/// Cancel orders.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelOrdersKey)]
 	CancelOrders = 1,
 
 	/// <summary>
 	/// Close positions.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ClosePositionsKey)]
 	ClosePositions = CancelOrders << 1,
 }

@@ -11,24 +11,28 @@ public enum QuoteChangeStates
 	/// Snapshot started.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SnapshotStartedKey)]
 	SnapshotStarted,
 
 	/// <summary>
 	/// Snapshot building.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SnapshotBuildingKey)]
 	SnapshotBuilding,
 
 	/// <summary>
 	/// Snapshot complete.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SnapshotCompleteKey)]
 	SnapshotComplete,
 
 	/// <summary>
 	/// Incremental.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IncrementalKey)]
 	Increment,
 }
 

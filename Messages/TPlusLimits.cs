@@ -11,27 +11,27 @@ public enum TPlusLimits
 	/// Т+0.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "T+0")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SettlementT0Key)]
 	T0,
 
 	/// <summary>
 	/// Т+1.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "T+1")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SettlementT1Key)]
 	T1,
 
 	/// <summary>
 	/// Т+2.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "T+2")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SettlementT2Key)]
 	T2,
 	
 	/// <summary>
 	/// Т+x.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "T+x")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SettlementTxKey)]
 	Tx,
 }

@@ -9,11 +9,13 @@ public enum ProcessResults
 	/// <summary>
 	/// To continue the operation.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ContinueKey)]
 	Continue,
 
 	/// <summary>
 	/// To stop the strategy operation.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StopKey)]
 	Stop,
 }
 

@@ -131,11 +131,13 @@ public enum FixUserRequestTypes
 	/// <summary>
 	/// Force log off.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ForceLogoutKey)]
 	LogoffForce = 2,
 
 	/// <summary>
 	/// Change password.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ChangePasswordKey)]
 	ChangePassword = 3,
 }
 
@@ -182,46 +184,55 @@ public enum FixUserResponseTypes
 	/// <summary>
 	/// Password changed.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PasswordChangedKey)]
 	PasswordChanged,
 
 	/// <summary>
 	/// User found.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UserFoundKey)]
 	UserFound,
 
 	/// <summary>
 	/// User logged off.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UserLoggedOutKey)]
 	UserLoggedOff,
 
 	/// <summary>
 	/// User not found.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UserNotFoundLabelKey)]
 	UserNotFound,
 
 	/// <summary>
 	/// User blocked.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UserBlockedKey)]
 	UserBlocked,
 
 	/// <summary>
 	/// Old password is incorrect.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OldPasswordIncorrectKey)]
 	OldPasswordIncorrect,
 
 	/// <summary>
 	/// New password is incorrect.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewPasswordIncorrectKey)]
 	NewPasswordIncorrect,
 
 	/// <summary>
 	/// Not supported.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NotSupportedKey)]
 	NotSupported,
 
 	/// <summary>
 	/// Unknown server error.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnknownErrorKey)]
 	UnknownError
 }
 

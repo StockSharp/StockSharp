@@ -12,12 +12,14 @@ public enum ExecutionTypes
 	/// Tick trade.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TickKey)]
 	Tick,
 
 	/// <summary>
 	/// Transaction.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TransactionKey)]
 	Transaction,
 
 	/// <summary>
@@ -25,12 +27,14 @@ public enum ExecutionTypes
 	/// </summary>
 	[EnumMember]
 	[Obsolete]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ObsoleteKey)]
 	Obsolete,
 
 	/// <summary>
 	/// Order log.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrderLogKey)]
 	OrderLog,
 }
 

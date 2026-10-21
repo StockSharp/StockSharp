@@ -24,31 +24,37 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		/// <summary>
 		/// Processed successfully.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OKKey)]
 		OK,
 
 		/// <summary>
 		/// Ignored as state is invalid.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InvalidOrderStatusKey)]
 		InvalidStatus,
 
 		/// <summary>
 		/// No existing position for the order.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnknownOrderKey)]
 		UnknownOrder,
 
 		/// <summary>
 		/// Cumulative matched volume decreased.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InconsistentOrderUpdateKey)]
 		Inconsistent,
 
 		/// <summary>
 		/// Ignored market order execution due to missing last price.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoMarketPriceKey)]
 		NoMarketPrice,
 
 		/// <summary>
 		/// The order is already finished and the snapshot carries no execution beyond what was applied.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrderAlreadyFinishedKey)]
 		AlreadyFinished,
 	}
 

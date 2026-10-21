@@ -29,16 +29,19 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				/// <summary>
 				/// Send a message into the adapter chain.
 				/// </summary>
+				[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SendAdapterMessageKey)]
 				SendInMessage,
 
 				/// <summary>
 				/// Register order status transaction id.
 				/// </summary>
+				[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RegisterOrderStatusKey)]
 				AddOrderStatus,
 
 				/// <summary>
 				/// Remove order status transaction id.
 				/// </summary>
+				[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RemoveOrderStatusKey)]
 				RemoveOrderStatus,
 			}
 

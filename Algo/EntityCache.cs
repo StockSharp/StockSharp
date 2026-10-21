@@ -8,16 +8,19 @@ public enum OrderOperations
 	/// <summary>
 	/// Order registration.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RegistrationKey)]
 	Register,
 
 	/// <summary>
 	/// Order cancellation.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelKey)]
 	Cancel,
 
 	/// <summary>
 	/// Order modification.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditKey)]
 	Edit,
 }
 

@@ -16,18 +16,21 @@ public enum StopOrderStates
 	/// Waiting for its price.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 	Active,
 
 	/// <summary>
 	/// Its price came and the order it guards was placed.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TriggeredKey)]
 	Triggered,
 
 	/// <summary>
 	/// Taken back before it fired.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelledKey)]
 	Cancelled,
 }
 
@@ -47,11 +50,13 @@ public enum StopOrderConditionTypes
 	/// Fires when the price falls to the level, to cap a loss.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StopLossKey)]
 	StopLoss,
 
 	/// <summary>
 	/// Fires when the price rises to the level, to bank a gain.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TakeProfitKey)]
 	TakeProfit,
 }

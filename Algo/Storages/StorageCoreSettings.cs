@@ -9,16 +9,19 @@ public enum StorageModes
 	/// <summary>
 	/// None.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 	None = 1,
 
 	/// <summary>
 	/// Incremental.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IncrementalKey)]
 	Incremental = None << 1,
 
 	/// <summary>
 	/// Snapshot.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SnapshotKey)]
 	Snapshot = Incremental << 1,
 }
 

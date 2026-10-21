@@ -8,16 +8,19 @@ public enum MessageOfflineModes
 	/// <summary>
 	/// None.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 	None,
 
 	/// <summary>
 	/// Ignore offline mode and continue processing.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IgnoreKey)]
 	Ignore,
 
 	/// <summary>
 	/// Cancel message processing and create reply.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelKey)]
 	Cancel,
 }
 
@@ -29,16 +32,19 @@ public enum MessageBackModes
 	/// <summary>
 	/// None.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 	None,
 
 	/// <summary>
 	/// Direct.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DirectKey)]
 	Direct,
 
 	/// <summary>
 	/// Via whole adapters chain.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AdapterChainKey)]
 	Chain,
 }
 

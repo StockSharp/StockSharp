@@ -74,15 +74,19 @@ public sealed record MarketEdge(
 public enum SessionParts
 {
 	/// <summary>Outside the active session.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OutsideSessionKey)]
 	Outside,
 
 	/// <summary>The first thirty minutes of the active session.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FirstHalfHourKey)]
 	FirstHalfHour,
 
 	/// <summary>Between the first and the last thirty minutes.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MiddleKey)]
 	Middle,
 
 	/// <summary>The last thirty minutes of the active session.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LastHalfHourKey)]
 	LastHalfHour,
 }
 
@@ -102,12 +106,15 @@ public sealed record SessionShare(SessionParts Part, decimal RangeSharePercent, 
 public enum MarketProfileCaveats
 {
 	/// <summary>Nothing.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 	None = 0,
 
 	/// <summary>Fewer than twenty trading days are covered, so anything measured per day rests on few observations.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FewTradingSessionsKey)]
 	FewSessions = 1 << 0,
 
 	/// <summary>Fewer than a thousand candles were measured, so the event counts are indicative rather than settled.</summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FewCandlesKey)]
 	FewCandles = 1 << 1,
 }
 

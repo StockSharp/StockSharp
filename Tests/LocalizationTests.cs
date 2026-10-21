@@ -3,6 +3,8 @@ namespace StockSharp.Tests;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
+using StockSharp.Charting;
+using StockSharp.Diagram;
 using StockSharp.Localization;
 
 [TestClass]
@@ -116,6 +118,75 @@ public class LocalizationTests : BaseTestClass
 
 		CultureInfo.CurrentCulture = _culture;
 		CultureInfo.CurrentUICulture = _uiCulture;
+	}
+
+	/// <summary>Enum captions exposed by the protocol, statistics, charting and diagram APIs.</summary>
+	public static IEnumerable<object[]> EnumDisplayNameCases =>
+	[
+		[typeof(MessageTypes), nameof(MessageTypes.Connect), LocalizedStrings.ConnectKey],
+		[typeof(MessageTypes), nameof(MessageTypes.Security), LocalizedStrings.SecurityKey],
+		[typeof(MessageTypes), nameof(MessageTypes.CandleTimeFrame), LocalizedStrings.TimeFrameCandleKey],
+		[typeof(MessageTypes), nameof(MessageTypes.QuoteChange), LocalizedStrings.MarketDepthKey],
+		[typeof(CommandTypes), nameof(CommandTypes.Start), LocalizedStrings.StartKey],
+		[typeof(CommandScopes), nameof(CommandScopes.Adapter), LocalizedStrings.AdapterKey],
+		[typeof(MessageAdapterCategories), nameof(MessageAdapterCategories.Crypto), LocalizedStrings.CryptoKey],
+		[typeof(MarginModes), nameof(MarginModes.Cross), LocalizedStrings.CrossKey],
+		[typeof(StatisticParameterTypes), nameof(StatisticParameterTypes.NetProfit), LocalizedStrings.NetProfitKey],
+		[typeof(QuoteChangeActions), nameof(QuoteChangeActions.Delete), LocalizedStrings.DeleteKey],
+		[typeof(StopOrderStates), nameof(StopOrderStates.Active), LocalizedStrings.ActiveKey],
+		[typeof(StopOrderConditionTypes), nameof(StopOrderConditionTypes.StopLoss), LocalizedStrings.StopLossKey],
+		[typeof(ShrinkRules), nameof(ShrinkRules.Less), LocalizedStrings.LessKey],
+		[typeof(StorageModes), nameof(StorageModes.Snapshot), LocalizedStrings.SnapshotKey],
+		[typeof(ComplexIndicatorModes), nameof(ComplexIndicatorModes.Parallel), LocalizedStrings.ParallelKey],
+		[typeof(IndicatorMeasures), nameof(IndicatorMeasures.Price), LocalizedStrings.PriceKey],
+		[typeof(StaticSocketIds), nameof(StaticSocketIds.Security), LocalizedStrings.SecurityKey],
+		[typeof(LineChartStyles), nameof(LineChartStyles.DashedLine), LocalizedStrings.DashedLineKey],
+		[typeof(LabelPlacement), nameof(LabelPlacement.Right), LocalizedStrings.RightKey],
+		[typeof(DiagramSocketDirection), nameof(DiagramSocketDirection.In), LocalizedStrings.InputKey],
+		[typeof(MessageOfflineModes), nameof(MessageOfflineModes.Cancel), LocalizedStrings.CancelKey],
+		[typeof(MessageBackModes), nameof(MessageBackModes.None), LocalizedStrings.NoneKey],
+		[typeof(OrderGroupCancelModes), nameof(OrderGroupCancelModes.CancelOrders), LocalizedStrings.CancelOrdersKey],
+	];
+
+	[TestMethod]
+	[DynamicData(nameof(EnumDisplayNameCases))]
+	public void EnumDisplayNames_FollowLanguageSelection(Type enumType, string fieldName, string resourceKey)
+	{
+		var value = (Enum)Enum.Parse(enumType, fieldName);
+
+		foreach (var (code, caption) in new[] { ("qf", "First caption"), ("qs", "Second caption") })
+		{
+			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>
+			{
+				{ LocalizedStrings.LanguageKey, code },
+				{ LocalizedStrings.CultureCodeKey, "en-US" },
+				{ resourceKey, caption },
+			});
+		}
+
+		foreach (var (code, caption) in new[] { ("qf", "First caption"), ("qs", "Second caption"), ("qf", "First caption") })
+		{
+			LocalizedStrings.ActiveLanguage = code;
+			AreEqual(caption, value.GetDisplayName(), $"{enumType.Name}.{fieldName}");
+
+			if (value is MessageTypes messageType)
+				AreEqual(caption, messageType.ToInfo().DisplayName);
+		}
+	}
+
+	[TestMethod]
+	public void EnumDisplayNames_LocalizeEveryFlagInACombinedCategory()
+	{
+		LocalizedStrings.AddLanguage("qf", new Dictionary<string, string>
+		{
+			{ LocalizedStrings.LanguageKey, "Flag captions" },
+			{ LocalizedStrings.CultureCodeKey, "en-US" },
+			{ LocalizedStrings.CryptoKey, "Crypto caption" },
+			{ LocalizedStrings.TicksKey, "Ticks caption" },
+		});
+		LocalizedStrings.ActiveLanguage = "qf";
+
+		AreEqual("Crypto caption, Ticks caption", (MessageAdapterCategories.Crypto | MessageAdapterCategories.Ticks).GetDisplayName());
 	}
 
 	// Switching the language must drop the generated cache, or a property keeps answering in the language the

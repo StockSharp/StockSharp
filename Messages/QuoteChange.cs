@@ -11,18 +11,21 @@ public enum QuoteChangeActions : byte
 	/// New quote for <see cref="QuoteChange.StartPosition"/>.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewKey)]
 	New,
 
 	/// <summary>
 	/// Update quote for <see cref="QuoteChange.StartPosition"/>.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.InstallerUpdateKey)]
 	Update,
 
 	/// <summary>
 	/// Delete quotes from <see cref="QuoteChange.StartPosition"/> till <see cref="QuoteChange.EndPosition"/>.
 	/// </summary>
 	[EnumMember]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteKey)]
 	Delete,
 }
 

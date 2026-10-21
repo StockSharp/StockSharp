@@ -379,56 +379,56 @@ public enum Level1Fields
 	/// Price/profit.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "P/E")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceEarningsKey)]
 	PriceEarnings,
 
 	/// <summary>
 	/// Price target/profit.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "Forward P/E")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ForwardPriceEarningsKey)]
 	ForwardPriceEarnings,
 
 	/// <summary>
 	/// Price/profit (increase).
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "PEG")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceEarningsGrowthKey)]
 	PriceEarningsGrowth,
 
 	/// <summary>
 	/// Price/buy.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "P/S")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceSalesKey)]
 	PriceSales,
 
 	/// <summary>
 	/// Price/sell.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "P/B")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceBookKey)]
 	PriceBook,
 
 	/// <summary>
 	/// Price/amount.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "P/CF")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceCashKey)]
 	PriceCash,
 
 	/// <summary>
 	/// Price/amount (free).
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "P/FCF")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceFreeCashKey)]
 	PriceFreeCash,
 
 	/// <summary>
 	/// Payments.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "Payout")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PayoutKey)]
 	Payout,
 
 	/// <summary>
@@ -442,42 +442,42 @@ public enum Level1Fields
 	/// Shares Float.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "Shares Float")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SharesFloatKey)]
 	SharesFloat,
 
 	/// <summary>
 	/// Float Short.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "Float Short")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FloatShortKey)]
 	FloatShort,
 
 	/// <summary>
 	/// Short.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "Short")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ShortRatioKey)]
 	ShortRatio,
 
 	/// <summary>
 	/// Return on assets.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "ROA")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ReturnOnAssetsKey)]
 	ReturnOnAssets,
 
 	/// <summary>
 	/// Return on equity.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "ROE")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ReturnOnEquityKey)]
 	ReturnOnEquity,
 
 	/// <summary>
 	/// Return on investment.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "ROI")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ReturnOnInvestmentKey)]
 	ReturnOnInvestment,
 
 	/// <summary>
@@ -540,7 +540,7 @@ public enum Level1Fields
 	/// ATR.
 	/// </summary>
 	[EnumMember]
-	[Display(Name = "ATR")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AverageTrueRangeKey)]
 	AverageTrueRange,
 
 	/// <summary>

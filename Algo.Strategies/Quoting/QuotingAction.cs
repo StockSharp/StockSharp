@@ -8,26 +8,31 @@ public enum QuotingActionType
 	/// <summary>
 	/// No action needed.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 	None,
 
 	/// <summary>
 	/// Register new order.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RegistrationKey)]
 	Register,
 
 	/// <summary>
 	/// Cancel current order.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelKey)]
 	Cancel,
 
 	/// <summary>
 	/// Modify current order (cancel and register new).
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditKey)]
 	Modify,
 
 	/// <summary>
 	/// Finish quoting (target reached or timeout).
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
 	Finish
 }
 

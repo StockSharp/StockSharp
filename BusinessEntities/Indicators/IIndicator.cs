@@ -12,21 +12,25 @@ public enum IndicatorMeasures
 	/// <summary>
 	/// Price.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceKey)]
 	Price,
 
 	/// <summary>
 	/// 0 till 100.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PercentKey)]
 	Percent,
 
 	/// <summary>
 	/// -1 till +1.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SignedUnitRangeKey)]
 	MinusOnePlusOne,
 
 	/// <summary>
 	/// Volume.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolumeKey)]
 	Volume,
 }
 

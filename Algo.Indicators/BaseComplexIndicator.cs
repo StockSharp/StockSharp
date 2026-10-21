@@ -8,11 +8,13 @@ public enum ComplexIndicatorModes
 	/// <summary>
 	/// In-series. The result of the previous indicator execution is passed to the next one,.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SequentialKey)]
 	Sequence,
 
 	/// <summary>
 	/// In parallel. Results of indicators execution for not depend on each other.
 	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ParallelKey)]
 	Parallel,
 }
 

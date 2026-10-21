@@ -13,21 +13,25 @@ public class PositionModifyAction
 		/// <summary>
 		/// No action needed.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 		None,
 
 		/// <summary>
 		/// Register a new order.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RegistrationKey)]
 		Register,
 
 		/// <summary>
 		/// Cancel current order.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelKey)]
 		Cancel,
 
 		/// <summary>
 		/// Algorithm is finished.
 		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
 		Finished,
 	}
 
