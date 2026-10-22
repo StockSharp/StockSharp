@@ -322,6 +322,7 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 	/// <summary>
 	/// The price shift from the previous trade, determining boundaries of maximal and minimal prices for the next session. Used only if there is no saved information <see cref="Level1ChangeMessage"/>. By default, it equals to 40%.
 	/// </summary>
+	[Required]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PriceShiftKey,

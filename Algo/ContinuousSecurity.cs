@@ -357,6 +357,7 @@ public class VolumeContinuousSecurity : ContinuousSecurity
 	/// <summary>
 	/// Volume trigger causes switch to the next contract.
 	/// </summary>
+	[Required]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VolumeKey,

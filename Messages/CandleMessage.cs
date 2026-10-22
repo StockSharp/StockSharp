@@ -522,6 +522,7 @@ public class PnFArg : Equatable<PnFArg>
 	/// Range of price above which increase the candle body.
 	/// </summary>
 	[DataMember]
+	[Required]
 	public Unit BoxSize
 	{
 		get => _boxSize;

@@ -418,6 +418,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 
 		_volumePart = AddParam(nameof(VolumePart), new Unit(1, UnitTypes.Percent))
 			.SetBasic(true)
+			.SetRequired()
 			.SetDisplay(LocalizedStrings.Position, LocalizedStrings.Part, LocalizedStrings.VolumePart, 54)
 			.SetOnValueChangingHandler((oldValue, newValue) =>
 			{

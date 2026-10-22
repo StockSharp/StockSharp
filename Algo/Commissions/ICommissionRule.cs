@@ -54,6 +54,7 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 
 	/// <inheritdoc />
 	[DataMember]
+	[Required]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommissionKey,

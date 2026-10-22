@@ -179,6 +179,14 @@ public class DiagramElementParam<T> : NotifiableObject, IDiagramElementParam, IH
 		=> this.SetAttribute(readOnly, () => new ReadOnlyAttribute(true));
 
 	/// <summary>
+	/// Set <see cref="RequiredAttribute"/>: the parameter cannot be left without a value.
+	/// </summary>
+	/// <param name="required">Whether the parameter is required.</param>
+	/// <returns>The parameter.</returns>
+	public DiagramElementParam<T> SetRequired(bool required = true)
+		=> this.SetAttribute(required, () => new RequiredAttribute());
+
+	/// <summary>
 	/// To set the <see cref="BasicSettingAttribute"/> attribute for the diagram element parameter.
 	/// </summary>
 	/// <param name="isBasic">Is basic parameter.</param>

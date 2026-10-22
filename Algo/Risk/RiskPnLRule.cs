@@ -24,6 +24,7 @@ public class RiskPnLRule : RiskRule
 	/// <summary>
 	/// Profit-loss.
 	/// </summary>
+	[Required]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PnLKey,

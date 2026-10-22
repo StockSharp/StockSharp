@@ -1,5 +1,10 @@
 namespace StockSharp.Tests;
 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using StockSharp.Algo.Risk;
+using StockSharp.Diagram;
 using StockSharp.Messages;
 
 [TestClass]
@@ -823,5 +828,76 @@ public class UnitTests : BaseTestClass
 
 		IsFalse(new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m)).IsValid(null));
 		IsTrue(new UnitStepAttribute(new Unit(0.2m), new Unit(0.1m)) { DisableNullCheck = true }.IsValid(null));
+	}
+
+	/// <summary>
+	/// A property of type <see cref="Unit"/> that refuses to be left without a value says so with
+	/// <see cref="RequiredAttribute"/> where a property grid reads it: a grid offers to clear a value only where clearing
+	/// it is possible.
+	/// </summary>
+	[TestMethod]
+	public void AUnitPropertyThatRefusesNoValueIsRequired()
+	{
+		Assembly[] assemblies =
+		[
+			typeof(Unit).Assembly,
+			typeof(Security).Assembly,
+			typeof(RiskPnLRule).Assembly,
+			typeof(MarketEmulatorSettings).Assembly,
+			typeof(Strategy).Assembly,
+			typeof(DiagramElement).Assembly,
+		];
+
+		var refusing = new List<string>();
+		var unmarked = new List<string>();
+
+		foreach (var type in assemblies.Distinct().SelectMany(assembly => assembly.GetExportedTypes()))
+		{
+			if (!type.IsClass || type.IsAbstract || type.ContainsGenericParameters || type.GetConstructor(Type.EmptyTypes) is null)
+				continue;
+
+			var properties = type
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(property => property.PropertyType == typeof(Unit) && property.SetMethod?.IsPublic == true && property.GetIndexParameters().Length == 0)
+				.ToArray();
+
+			foreach (var property in properties)
+			{
+				var instance = Activator.CreateInstance(type);
+
+				try
+				{
+					if (!RefusesNoValue(instance, property))
+						continue;
+
+					var name = $"{type.Name}.{property.Name}";
+					refusing.Add(name);
+
+					// What a grid reads: the parameter of a diagram element, the property of anything else.
+					if (TypeDescriptor.GetProperties(instance)[property.Name]?.Attributes[typeof(RequiredAttribute)] is null)
+						unmarked.Add(name);
+				}
+				finally
+				{
+					(instance as IDisposable)?.Dispose();
+				}
+			}
+		}
+
+		IsTrue(refusing.Contains($"{nameof(MarketEmulatorSettings)}.{nameof(MarketEmulatorSettings.PriceLimitOffset)}"), string.Join(", ", refusing));
+		AreEqual(0, unmarked.Count, $"Not marked required: {string.Join(", ", unmarked)}.");
+	}
+
+	private static bool RefusesNoValue(object instance, PropertyInfo property)
+	{
+		try
+		{
+			property.SetValue(instance, null);
+			return false;
+		}
+		catch (TargetInvocationException)
+		{
+			return true;
+		}
 	}
 }
