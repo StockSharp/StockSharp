@@ -10,8 +10,11 @@ public class MarketEmulatorTests : BaseTestClass
 		=> CreateEmuWithEvents([secId], out result);
 
 	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<SecurityId> secIds, out List<Message> result)
+		=> CreateEmuWithEvents(secIds.Select(id => new Security { Id = id.ToStringId() }), out result);
+
+	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<Security> securities, out List<Message> result)
 	{
-		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
+		var emu = new MarketEmulator(new CollectionSecurityProvider(securities), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
 		emu.RandomProvider = new MockEmulationRandomizer();
 		var result2 = new List<Message>();
 		emu.NewOutMessageAsync += (m, ct) => { Helper.CheckPortfolioRowContract(m); result2.Add(m); return default; };
@@ -21,6 +24,111 @@ public class MarketEmulatorTests : BaseTestClass
 
 	private const string _pfName = Messages.Extensions.SimulatorPortfolioName;
 	private static readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
+	private static readonly DateTime _stepMarketTime = new(2026, 10, 22, 10, 0, 0, DateTimeKind.Utc);
+	private static readonly DataType[] _stepMarketDataTypes =
+	[
+		DataType.Ticks, DataType.Level1, DataType.OrderLog, DataType.MarketDepth,
+		TimeSpan.FromMinutes(1).TimeFrame(),
+	];
+
+	/// <summary>Market data paths exercised through the emulator transport.</summary>
+	public static IEnumerable<object[]> InstrumentMarketDataSources
+		=> _stepMarketDataTypes.Select(dataType => new object[] { dataType });
+
+	/// <summary>Market data that needs synthesized liquidity when no book was stated.</summary>
+	public static IEnumerable<object[]> SyntheticMarketDataSources
+		=> _stepMarketDataTypes.Where(type => type == DataType.Ticks || type.IsCandles).Select(dataType => new object[] { dataType });
+
+	/// <summary>Trades and bars received after a venue states its real order book.</summary>
+	public static IEnumerable<object[]> QuotedLiquidityCases
+		=> from dataType in _stepMarketDataTypes.Where(type => type == DataType.Ticks || type.IsCandles)
+		   from hadSyntheticBook in new[] { false, true }
+		   select new object[] { dataType, hadSyntheticBook };
+
+	/// <summary>Declared steps that cannot be deduced from the precision of a single observation.</summary>
+	public static IEnumerable<object[]> DeclaredInstrumentStepCases
+	{
+		get
+		{
+			(decimal Price, decimal Volume, decimal PriceStep, decimal VolumeStep)[] instruments =
+			[
+				(25000.00m, 10m, 0.25m, 0.5m),
+				(25000.25m, 10.50m, 0.25m, 0.5m),
+				(100m, 2m, 0.05m, 0.001m),
+				(0.00012500m, 6m, 0.000005m, 2m),
+				(1000m, 100m, 5m, 10m),
+			];
+
+			foreach (var dataType in _stepMarketDataTypes)
+			foreach (var (price, volume, priceStep, volumeStep) in instruments)
+			foreach (var fromProvider in new[] { false, true })
+				yield return [dataType, price, volume, priceStep, volumeStep, fromProvider];
+		}
+	}
+
+	/// <summary>Independent observations and the granularity inferred when no step was declared.</summary>
+	public static IEnumerable<object[]> InferredInstrumentStepCases
+	{
+		get
+		{
+			(decimal Price, decimal Volume, decimal PriceStep, decimal VolumeStep)[] observations =
+			[
+				(123.45m, 0.125m, 0.01m, 0.001m),
+				(25000.00m, 10.00m, 1m, 1m),
+				(0.00012500m, 2.50m, 0.000001m, 0.1m),
+			];
+
+			foreach (var dataType in _stepMarketDataTypes)
+			foreach (var (price, volume, priceStep, volumeStep) in observations)
+				yield return [dataType, price, volume, priceStep, volumeStep];
+		}
+	}
+
+	/// <summary>Price and volume metadata can each be stated or omitted independently.</summary>
+	public static IEnumerable<object[]> PartialInstrumentStepCases
+	{
+		get
+		{
+			foreach (var dataType in _stepMarketDataTypes)
+			foreach (var priceStep in new decimal?[] { null, 0.25m })
+			foreach (var volumeStep in new decimal?[] { null, 0.5m })
+				yield return [dataType, priceStep, volumeStep];
+		}
+	}
+
+	/// <summary>Expected bid and ask offsets, in declared steps, for synthetic market data.</summary>
+	public static IEnumerable<object[]> SyntheticSpreadCases
+	{
+		get
+		{
+			(int Spread, bool Centered, Sides? Origin, int Bid, int Ask)[] quotes =
+			[
+				(0, false, null, 0, 0), (0, true, null, 0, 0),
+				(1, false, null, -1, 0), (1, true, null, 0, 1),
+				(2, false, null, -2, 0), (2, true, null, -1, 1),
+				(3, false, null, -3, 0), (3, true, null, -1, 2),
+				(4, false, null, -4, 0), (4, true, null, -2, 2),
+				(2, false, Sides.Buy, -2, 0), (2, true, Sides.Buy, -2, 0),
+				(2, false, Sides.Sell, 0, 2), (2, true, Sides.Sell, 0, 2),
+				(0, false, Sides.Buy, 0, 0), (0, true, Sides.Buy, 0, 0),
+				(0, false, Sides.Sell, 0, 0), (0, true, Sides.Sell, 0, 0),
+				(1, false, Sides.Buy, -1, 0), (1, true, Sides.Buy, -1, 0),
+				(1, false, Sides.Sell, 0, 1), (1, true, Sides.Sell, 0, 1),
+				(3, false, Sides.Buy, -3, 0), (3, true, Sides.Buy, -3, 0),
+				(3, false, Sides.Sell, 0, 3), (3, true, Sides.Sell, 0, 3),
+			];
+
+			foreach (var dataType in _stepMarketDataTypes.Where(type => type == DataType.Ticks || type.IsCandles))
+			foreach (var step in new[] { 0.25m, 0.05m, 5m, 0.000005m })
+			foreach (var (spread, centered, origin, bid, ask) in quotes)
+			{
+				if (dataType.IsCandles && origin is not null)
+					continue;
+
+				yield return [dataType, step, spread, centered, origin, bid, ask];
+			}
+		}
+	}
 
 	private async Task AddBookAsync(IMarketEmulator emu, SecurityId secId, DateTime now, decimal bid = 100, decimal ask = 101)
 	{
@@ -3346,6 +3454,461 @@ public class MarketEmulatorTests : BaseTestClass
 
 		AreEqual(104m, buy);
 		AreEqual(104m, sell);
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(DeclaredInstrumentStepCases))]
+	public async Task MarketDataPreservesDeclaredPriceStep(DataType dataType, decimal price, decimal volume, decimal priceStep, decimal volumeStep, bool fromProvider)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, priceStep, volumeStep, fromProvider);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price, volume, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(priceStep, state.PriceStep, "the first observation must not replace a declared price step");
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price + priceStep, volume + volumeStep, _stepMarketTime.AddMinutes(1), null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(priceStep, state.PriceStep, "later observations must keep the declared price step");
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(DeclaredInstrumentStepCases))]
+	public async Task MarketDataPreservesDeclaredVolumeStep(DataType dataType, decimal price, decimal volume, decimal priceStep, decimal volumeStep, bool fromProvider)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, priceStep, volumeStep, fromProvider);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price, volume, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(volumeStep, state.VolumeStep, "trade or quote size must not replace the instrument's lot granularity");
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price + priceStep, volume + volumeStep, _stepMarketTime.AddMinutes(1), null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(volumeStep, state.VolumeStep, "later observations must keep the declared volume step");
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(PartialInstrumentStepCases))]
+	public async Task MarketDataInfersOnlyMissingSteps(DataType dataType, decimal? priceStep, decimal? volumeStep)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, priceStep, volumeStep, false);
+		var definition = state.Definition;
+
+		await FeedStepMarketDataAsync(emu, id, dataType, 25000.25m, 10.5m, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+
+		AreEqual(priceStep ?? 0.01m, state.PriceStep);
+		AreEqual(volumeStep ?? 0.1m, state.VolumeStep);
+		AreEqual(priceStep, definition.PriceStep, "inference must not write into the received security message");
+		AreEqual(volumeStep, definition.VolumeStep, "inference must not write into the received security message");
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(InferredInstrumentStepCases))]
+	public async Task MissingStepsAreInferredWithoutChangingTheDefinition(DataType dataType, decimal price, decimal volume, decimal expectedPriceStep, decimal expectedVolumeStep)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, null, null, false);
+		var definition = state.Definition;
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price, volume, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+
+		AreEqual(expectedPriceStep, state.PriceStep);
+		AreEqual(expectedVolumeStep, state.VolumeStep);
+		IsNull(definition.PriceStep, "an inferred value is not a value stated by the venue");
+		IsNull(definition.VolumeStep, "an inferred value is not a value stated by the venue");
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(InferredInstrumentStepCases))]
+	public async Task StepsAreInferredWithoutASecurityDefinition(DataType dataType, decimal price, decimal volume, decimal expectedPriceStep, decimal expectedVolumeStep)
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(Array.Empty<Security>(), out var messages);
+		var state = ((MarketEmulator)emu).GetSecurityState(id);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, price, volume, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+
+		AreEqual(expectedPriceStep, state.PriceStep);
+		AreEqual(expectedVolumeStep, state.VolumeStep);
+		IsNull(state.Definition, "market data alone must not invent a venue's security definition");
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(PartialInstrumentStepCases))]
+	public async Task SecurityUpdatesOverrideOnlyTheStepsTheyDeclare(DataType dataType, decimal? priceStep, decimal? volumeStep)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, null, null, false);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, 123.456m, 0.123m, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(0.001m, state.PriceStep);
+		AreEqual(0.001m, state.VolumeStep);
+
+		var definition = new SecurityMessage
+		{
+			SecurityId = id,
+			PriceStep = priceStep,
+			VolumeStep = volumeStep,
+			LocalTime = _stepMarketTime.AddMinutes(1),
+		};
+		await emu.SendInMessageAsync(definition, CancellationToken);
+		await FeedStepMarketDataAsync(emu, id, dataType, 25000.25m, 10.5m, _stepMarketTime.AddMinutes(1), null);
+		AssertNoEmulatorErrors(messages);
+
+		AreEqual(priceStep ?? 0.001m, state.PriceStep);
+		AreEqual(volumeStep ?? 0.001m, state.VolumeStep);
+		AreEqual(priceStep, definition.PriceStep);
+		AreEqual(volumeStep, definition.VolumeStep);
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(InstrumentMarketDataSources))]
+	public async Task ResetForgetsInferredInstrumentSteps(DataType dataType)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, null, null, false);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, 123.456m, 0.123m, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(0.001m, state.PriceStep);
+		AreEqual(0.001m, state.VolumeStep);
+
+		await emu.SendInMessageAsync(new ResetMessage { LocalTime = _stepMarketTime.AddMinutes(1) }, CancellationToken);
+		state = ((MarketEmulator)emu).GetSecurityState(id);
+		IsNull(state.Definition);
+		AreEqual(0.01m, state.PriceStep);
+		AreEqual(1m, state.VolumeStep);
+
+		await FeedStepMarketDataAsync(emu, id, dataType, 1234.5m, 12.5m, _stepMarketTime.AddMinutes(2), null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(0.1m, state.PriceStep, "a new run must infer from its own observations");
+		AreEqual(0.1m, state.VolumeStep, "a new run must infer from its own observations");
+	}
+
+	[TestMethod]
+	[DataRow(0)]
+	[DataRow(-1)]
+	public async Task NonPositiveTicksDoNotSetTheInferredPriceStep(int invalidPrice)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, null, null, false);
+
+		await FeedStepMarketDataAsync(emu, id, DataType.Ticks, invalidPrice, 0.123m, _stepMarketTime, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(0.01m, state.PriceStep);
+
+		await FeedStepMarketDataAsync(emu, id, DataType.Ticks, 123.456m, 0.123m, _stepMarketTime.AddMinutes(1), null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(0.001m, state.PriceStep);
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(SyntheticSpreadCases))]
+	public async Task SyntheticQuotesAndFillsUseDeclaredSteps(DataType dataType, decimal priceStep, int spreadSize, bool centered, Sides? originSide, int bidSteps, int askSteps)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, priceStep, 1m, true);
+		emu.Settings.SpreadSize = spreadSize;
+		emu.Settings.IsSpreadCentered = centered;
+
+		for (var frame = 0; frame < 2; frame++)
+		{
+			var price = 25000.00m + frame * 3 * priceStep;
+			var time = _stepMarketTime.AddMinutes(frame);
+			await FeedStepMarketDataAsync(emu, id, dataType, price, 10m, time, originSide);
+			AssertNoEmulatorErrors(messages);
+
+			var expectedBid = price + bidSteps * priceStep;
+			var expectedAsk = price + askSteps * priceStep;
+			AreEqual(expectedBid, state.OrderBook.BestBid?.price);
+			AreEqual(expectedAsk, state.OrderBook.BestAsk?.price);
+			AreEqual(1, state.OrderBook.BidLevels, "the next print must replace the previous synthetic bid");
+			AreEqual(1, state.OrderBook.AskLevels, "the next print must replace the previous synthetic ask");
+
+			await AssertMarketFillAsync(emu, messages, id, Sides.Buy, time, expectedAsk);
+			await AssertMarketFillAsync(emu, messages, id, Sides.Sell, time, expectedBid);
+
+			var portfolio = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName);
+			AreEqual(0m, portfolio.GetPosition(id).CurrentValue, "a whole round trip must return to flat");
+			AreEqual(-(frame + 1) * spreadSize * priceStep, portfolio.RealizedPnL, "each round trip must pay exactly one configured spread");
+		}
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(QuotedLiquidityCases))]
+	public async Task TradesAndCandlesDoNotReplaceTheQuotedBook(DataType dataType, bool hadSyntheticBook)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, 1m, 1m, true);
+
+		if (hadSyntheticBook)
+			await FeedStepMarketDataAsync(emu, id, dataType, 101m, 10m, _stepMarketTime, null);
+
+		var quotedAt = _stepMarketTime.AddMinutes(1);
+		await emu.SendInMessageAsync(new QuoteChangeMessage
+		{
+			SecurityId = id,
+			LocalTime = quotedAt,
+			ServerTime = quotedAt,
+			Bids = [new(99m, 10m)],
+			Asks = [new(101m, 10m)],
+		}, CancellationToken);
+		AreEqual(99m, state.OrderBook.BestBid?.price);
+		AreEqual(101m, state.OrderBook.BestAsk?.price);
+
+		var tradedAt = _stepMarketTime.AddMinutes(2);
+		await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, tradedAt, null);
+		AssertNoEmulatorErrors(messages);
+
+		AreEqual(99m, state.OrderBook.BestBid?.price, "a print does not replace the venue's bid");
+		AreEqual(101m, state.OrderBook.BestAsk?.price, "a print does not replace the venue's ask");
+		AreEqual(10m, state.OrderBook.TotalBidVolume, "synthetic levels must not add liquidity to the quoted book");
+		AreEqual(10m, state.OrderBook.TotalAskVolume, "synthetic levels must not add liquidity to the quoted book");
+		await AssertMarketFillAsync(emu, messages, id, Sides.Buy, tradedAt, 101m);
+		await AssertMarketFillAsync(emu, messages, id, Sides.Sell, tradedAt, 99m);
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(SyntheticMarketDataSources))]
+	public async Task TradesDoNotInventMissingSidesOfAQuotedBook(DataType dataType)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, 1m, 1m, true);
+		await FeedStepMarketDataAsync(emu, id, dataType, 101m, 10m, _stepMarketTime, null);
+
+		var time = _stepMarketTime;
+		foreach (var side in new Sides?[] { null, Sides.Buy, Sides.Sell })
+		{
+			time = time.AddMinutes(1);
+			await emu.SendInMessageAsync(new QuoteChangeMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				ServerTime = time,
+				Bids = side == Sides.Buy ? [new(99m, 10m)] : [],
+				Asks = side == Sides.Sell ? [new(101m, 10m)] : [],
+			}, CancellationToken);
+
+			time = time.AddMinutes(1);
+			await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, time, null);
+			AssertNoEmulatorErrors(messages);
+			AreEqual(side == Sides.Buy ? 99m : (decimal?)null, state.OrderBook.BestBid?.price);
+			AreEqual(side == Sides.Sell ? 101m : (decimal?)null, state.OrderBook.BestAsk?.price);
+			AreEqual(side == Sides.Buy ? 10m : 0m, state.OrderBook.TotalBidVolume);
+			AreEqual(side == Sides.Sell ? 10m : 0m, state.OrderBook.TotalAskVolume);
+		}
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(SyntheticMarketDataSources))]
+	public async Task IncrementalQuotedBookReplacesSyntheticLiquidity(DataType dataType)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, state, messages) = await CreateInstrumentEmulatorAsync(id, 1m, 1m, true);
+		await FeedStepMarketDataAsync(emu, id, dataType, 101m, 10m, _stepMarketTime, null);
+
+		var time = _stepMarketTime.AddMinutes(1);
+		await emu.SendInMessageAsync(new QuoteChangeMessage
+		{
+			SecurityId = id,
+			LocalTime = time,
+			ServerTime = time,
+			State = QuoteChangeStates.SnapshotStarted,
+			Bids = [new(99m, 10m)],
+			Asks = [],
+		}, CancellationToken);
+		await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, time, null);
+		IsNull(state.OrderBook.BestBid, "synthetic liquidity must not stand in for an incomplete venue snapshot");
+		IsNull(state.OrderBook.BestAsk);
+
+		time = time.AddMinutes(1);
+		await emu.SendInMessageAsync(new QuoteChangeMessage
+		{
+			SecurityId = id,
+			LocalTime = time,
+			ServerTime = time,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [],
+			Asks = [new(101m, 10m)],
+		}, CancellationToken);
+		await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, time, null);
+		AreEqual(99m, state.OrderBook.BestBid?.price);
+		AreEqual(101m, state.OrderBook.BestAsk?.price);
+
+		time = time.AddMinutes(1);
+		await emu.SendInMessageAsync(new QuoteChangeMessage
+		{
+			SecurityId = id,
+			LocalTime = time,
+			ServerTime = time,
+			State = QuoteChangeStates.Increment,
+			Bids = [new(99m, 0m), new(98m, 7m)],
+			Asks = [new(101m, 0m), new(102m, 8m)],
+		}, CancellationToken);
+		await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, time, null);
+		AssertNoEmulatorErrors(messages);
+		AreEqual(98m, state.OrderBook.BestBid?.price);
+		AreEqual(102m, state.OrderBook.BestAsk?.price);
+		AreEqual(7m, state.OrderBook.TotalBidVolume);
+		AreEqual(8m, state.OrderBook.TotalAskVolume);
+		await AssertMarketFillAsync(emu, messages, id, Sides.Buy, time, 102m);
+		await AssertMarketFillAsync(emu, messages, id, Sides.Sell, time, 98m);
+	}
+
+	[TestMethod]
+	[DynamicData(nameof(SyntheticMarketDataSources))]
+	public async Task ResetAllowsSyntheticLiquidityAfterAQuotedBook(DataType dataType)
+	{
+		var id = Helper.CreateSecurityId();
+		var (emu, _, messages) = await CreateInstrumentEmulatorAsync(id, 1m, 1m, true);
+		await AddBookAsync(emu, id, _stepMarketTime, 99m, 101m);
+		await emu.SendInMessageAsync(new ResetMessage { LocalTime = _stepMarketTime.AddMinutes(1) }, CancellationToken);
+
+		var time = _stepMarketTime.AddMinutes(2);
+		await FeedStepMarketDataAsync(emu, id, dataType, 100m, 10m, time, null);
+		AssertNoEmulatorErrors(messages);
+		var book = ((MarketEmulator)emu).GetSecurityState(id).OrderBook;
+		AreEqual(98m, book.BestBid?.price);
+		AreEqual(100m, book.BestAsk?.price);
+		await AssertMarketFillAsync(emu, messages, id, Sides.Buy, time, 100m);
+		await AssertMarketFillAsync(emu, messages, id, Sides.Sell, time, 98m);
+	}
+
+	private async Task<(IMarketEmulator Emulator, SecurityState State, List<Message> Messages)> CreateInstrumentEmulatorAsync(SecurityId id, decimal? priceStep, decimal? volumeStep, bool fromProvider)
+	{
+		IEnumerable<Security> securities = fromProvider
+			? [new Security { Id = id.ToStringId(), PriceStep = priceStep, VolumeStep = volumeStep }]
+			: [];
+		var emu = CreateEmuWithEvents(securities, out var messages);
+
+		if (!fromProvider)
+		{
+			await emu.SendInMessageAsync(new SecurityMessage
+			{
+				SecurityId = id,
+				PriceStep = priceStep,
+				VolumeStep = volumeStep,
+				LocalTime = _stepMarketTime,
+			}, CancellationToken);
+		}
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = id,
+			DataType2 = DataType.MarketDepth,
+			TransactionId = _idGenerator.GetNextId(),
+			IsSubscribe = true,
+			LocalTime = _stepMarketTime,
+		}, CancellationToken);
+
+		AssertNoEmulatorErrors(messages);
+		return (emu, ((MarketEmulator)emu).GetSecurityState(id), messages);
+	}
+
+	private async Task FeedStepMarketDataAsync(IMarketEmulator emu, SecurityId id, DataType dataType, decimal price, decimal volume, DateTime time, Sides? originSide)
+	{
+		Message message;
+
+		if (dataType == DataType.Ticks)
+		{
+			message = new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				ServerTime = time,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = price,
+				TradeVolume = volume,
+				OriginSide = originSide,
+			};
+		}
+		else if (dataType == DataType.Level1)
+		{
+			message = new Level1ChangeMessage { SecurityId = id, LocalTime = time, ServerTime = time }
+				.Add(Level1Fields.BestBidPrice, price)
+				.Add(Level1Fields.BestBidVolume, volume);
+		}
+		else if (dataType == DataType.OrderLog)
+		{
+			message = new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				ServerTime = time,
+				DataTypeEx = DataType.OrderLog,
+				Side = Sides.Buy,
+				OrderPrice = price,
+				OrderVolume = volume,
+			};
+		}
+		else if (dataType == DataType.MarketDepth)
+		{
+			message = new QuoteChangeMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				ServerTime = time,
+				Bids = [new(price, volume)],
+				Asks = [],
+			};
+		}
+		else if (dataType.IsCandles)
+		{
+			message = new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				TypedArg = TimeSpan.FromMinutes(1),
+				OpenTime = time.AddMinutes(-1),
+				CloseTime = time,
+				OpenPrice = price,
+				HighPrice = price,
+				LowPrice = price,
+				ClosePrice = price,
+				TotalVolume = volume,
+				State = CandleStates.Finished,
+			};
+		}
+		else
+			throw new ArgumentOutOfRangeException(nameof(dataType));
+
+		await emu.SendInMessageAsync(message, CancellationToken);
+	}
+
+	private void AssertNoEmulatorErrors(List<Message> messages)
+		=> IsEmpty(messages.OfType<ErrorMessage>().Select(message => message.Error).ToArray());
+
+	private async Task AssertMarketFillAsync(IMarketEmulator emu, List<Message> messages, SecurityId id, Sides side, DateTime time, decimal expectedPrice)
+	{
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			OrderType = OrderTypes.Market,
+			Side = side,
+			Volume = 1m,
+			LocalTime = time,
+		};
+		await emu.SendInMessageAsync(order, CancellationToken);
+		AssertNoEmulatorErrors(messages);
+
+		var executions = messages.OfType<ExecutionMessage>().Where(message => message.OriginalTransactionId == order.TransactionId).ToArray();
+		var fills = executions.Where(message => message.HasTradeInfo()).ToArray();
+		AreEqual(1, fills.Length, "the market order must fill completely in one trade");
+		AreEqual(expectedPrice, fills[0].TradePrice);
+		AreEqual(1m, fills[0].TradeVolume);
+
+		var final = executions.Last(message => message.HasOrderInfo && !message.HasTradeInfo());
+		IsNull(final.Error);
+		AreEqual(OrderStates.Done, final.OrderState);
+		AreEqual(0m, final.Balance);
 	}
 
 	private async Task<(decimal Buy, decimal Sell)> FillBothWaysOnACandleAsync(int spreadSize, bool isSpreadCentered)

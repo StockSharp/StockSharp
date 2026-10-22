@@ -123,7 +123,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (sec != null)
 			{
 				var secMsg = sec.ToMessage();
-				emulator.ProcessSecurity(secMsg);
 				_engine.GetSecurityState(securityId).ProcessSecurity(secMsg);
 			}
 		}
@@ -312,7 +311,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.Security:
 			{
 				var secMsg = (SecurityMessage)message;
-				(await GetEmulatorAsync(secMsg.SecurityId, cancellationToken)).ProcessSecurity(secMsg);
+				await GetEmulatorAsync(secMsg.SecurityId, cancellationToken);
 				_engine.GetSecurityState(secMsg.SecurityId).ProcessSecurity(secMsg);
 				break;
 			}
@@ -730,7 +729,6 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 	private readonly MarketEmulator _parent = parent;
 	private readonly MatchingEngineAdapter _engine = engine;
-	private SecurityMessage _securityDefinition;
 	private long? _depthSubscription;
 	private long? _ticksSubscription;
 	private long? _orderLogSubscription;
@@ -742,8 +740,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 	private SecurityState GetEngineState() => _engine.GetSecurityState(SecurityId);
 
-	private bool _priceStepUpdated;
-	private bool _volumeStepUpdated;
+	private bool _hasDepthData;
 	private DateTime _lastPriceLimitDate;
 
 	// Prices of the order book levels last synthesized from a tick, so they can be
@@ -755,8 +752,6 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	// rather than partially against the fractional data volume.
 	internal const decimal EmulatedLevelVolume = 1_000_000_000m;
 
-	public decimal PriceStep => _securityDefinition?.PriceStep ?? 0.01m;
-	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? 1m;
 	public bool HasDepthSubscription => _depthSubscription.HasValue;
 	public bool HasTicksSubscription => _ticksSubscription.HasValue;
 
@@ -764,28 +759,6 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	/// True when order book was populated from candle data.
 	/// </summary>
 	public bool IsCandleMatchingMode { get; private set; }
-
-	public void ProcessSecurity(SecurityMessage msg)
-	{
-		_securityDefinition = msg;
-	}
-
-	private void UpdateSteps(decimal price, decimal? volume)
-	{
-		if (!_priceStepUpdated && price > 0)
-		{
-			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
-			_securityDefinition.PriceStep = price.GetDecimalInfo().EffectiveScale.GetPriceStep();
-			_priceStepUpdated = true;
-		}
-
-		if (!_volumeStepUpdated && volume > 0)
-		{
-			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
-			_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
-			_volumeStepUpdated = true;
-		}
-	}
 
 	private void UpdatePriceLimits(decimal price, DateTime localTime, DateTime serverTime, List<Message> results)
 	{
@@ -795,7 +768,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		_lastPriceLimitDate = localTime.Date;
 
 		var priceOffset = _parent.Settings.PriceLimitOffset;
-		var priceStep = PriceStep;
+		var priceStep = GetEngineState().PriceStep;
 
 		var level1Msg = new Level1ChangeMessage
 		{
@@ -849,11 +822,13 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	}
 
 	/// <summary>
-	/// Called when QuoteChange is received - exit candle matching mode.
+	/// A quoted book replaces synthesized liquidity and ends candle matching mode.
 	/// </summary>
 	public void OnQuoteChange()
 	{
 		IsCandleMatchingMode = false;
+		_hasDepthData = true;
+		RemoveSyntheticLevels();
 	}
 
 	// Returns the quote mid (current market) so the caller can match resting limit orders without
@@ -872,9 +847,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (askVol == 0) askVol = null;
 		askVol ??= _parent.RandomProvider.NextVolume();
 
-		UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
-
 		var engineState = GetEngineState();
+		engineState.UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
 
 		// Move the synthesized best bid/ask to the new quote instead of accumulating levels.
 		// Without removing the previous synthetic level the best bid/ask drift to historical
@@ -907,7 +881,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	}
 
 	/// <summary>
-	/// Move the book to a print.
+	/// Move synthesized liquidity to a print when no depth data has been received.
 	/// </summary>
 	/// <param name="tick">The print.</param>
 	/// <param name="levelVolume">How much the synthesized levels hold.</param>
@@ -921,17 +895,16 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (tradeVolume == 0)
 			tradeVolume = _parent.RandomProvider.NextVolume();
 
-		UpdateSteps(tradePrice, tradeVolume);
+		var engineState = GetEngineState();
+		engineState.UpdateSteps(tradePrice, tradeVolume);
 
 		if (tradePrice > 0)
 			UpdatePriceLimits(tradePrice, tick.LocalTime, tick.ServerTime, results);
 
-		var priceStep = PriceStep;
+		var priceStep = engineState.PriceStep;
 		var spread = priceStep * _parent.Settings.SpreadSize;
 
-		var engineState = GetEngineState();
-
-		if (tradePrice <= 0)
+		if (_hasDepthData || tradePrice <= 0)
 		{
 			if (_depthSubscription.HasValue)
 				results.Add(engineState.OrderBook.ToMessage(tick.LocalTime, tick.ServerTime));
@@ -943,11 +916,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		// historical extremes, so market orders filled far from the market (buys far below, sells
 		// far above). Clearing only the synthetic market volume (UpdateLevel with zero) leaves any
 		// real resting orders at those prices untouched.
-		if (_synthBidPrice is decimal prevBid)
-			engineState.OrderBook.UpdateLevel(Sides.Buy, prevBid, 0);
-
-		if (_synthAskPrice is decimal prevAsk)
-			engineState.OrderBook.UpdateLevel(Sides.Sell, prevAsk, 0);
+		RemoveSyntheticLevels();
 
 		// A print that names the side it traded on puts that side at its price and the other a spread
 		// away. A print that names no side - every price replayed from a candle - says nothing about
@@ -991,6 +960,20 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		}
 	}
 
+	private void RemoveSyntheticLevels()
+	{
+		var book = GetEngineState().OrderBook;
+
+		if (_synthBidPrice is decimal bid)
+			book.UpdateLevel(Sides.Buy, bid, 0);
+
+		if (_synthAskPrice is decimal ask)
+			book.UpdateLevel(Sides.Sell, ask, 0);
+
+		_synthBidPrice = null;
+		_synthAskPrice = null;
+	}
+
 	public void ProcessOrderLog(ExecutionMessage ol, List<Message> results)
 	{
 		IsCandleMatchingMode = false;
@@ -1006,9 +989,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (ol.Side is not Sides side)
 			return;
 
-		UpdateSteps(ol.OrderPrice, ol.OrderVolume);
-
 		var engineState = GetEngineState();
+		engineState.UpdateSteps(ol.OrderPrice, ol.OrderVolume);
 
 		if (ol.IsCancellation)
 		{
@@ -1039,7 +1021,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 	public void ProcessCandle(CandleMessage candle, List<Message> results)
 	{
-		UpdateSteps(candle.ClosePrice, candle.TotalVolume);
+		GetEngineState().UpdateSteps(candle.ClosePrice, candle.TotalVolume);
 
 		var candles = _storedCandles.SafeAdd(candle.OpenTime, key => []);
 		candles.Add(new(candle));
