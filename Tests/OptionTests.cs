@@ -23,9 +23,23 @@ public class OptionTests : BaseTestClass
 		// Use protected constructor that doesn't set Option
 		var bs = new TestBlackScholes(underlying, dataProvider);
 
-		// DefaultDeviation should return 0 when Option is null instead of throwing NullReferenceException
-		var deviation = bs.DefaultDeviation;
-		deviation.AssertEqual(0m);
+		// No option, so no volatility is quoted: unknown rather than a NullReferenceException.
+		IsNull(bs.DefaultDeviation);
+	}
+
+	// No volatility quoted and none given: the model does not know the option's value or greeks, and says so rather than
+	// pricing it as if the asset could not move - a delta of 0.5 on every strike.
+	[TestMethod]
+	public void BlackScholes_NoVolatilityQuoted_KnowsNothing()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var model = CreateBlackScholes(OptionTypes.Call, 100m, expiration, 0m, 0m);
+
+		IsNull(model.Premium(now, assetPrice: 150m), "premium");
+		IsNull(model.Delta(now, assetPrice: 150m), "delta");
+		IsNull(model.Vega(now, assetPrice: 150m), "vega");
 	}
 
 	[TestMethod]
@@ -53,7 +67,7 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void D1_ZeroDeviation_ReturnsZero()
+	public void D1_ZeroDeviation_IsInfiniteOnTheSideOfTheForward()
 	{
 		const decimal assetPrice = 100m;
 		const decimal strike = 100m;
@@ -62,9 +76,12 @@ public class OptionTests : BaseTestClass
 		const decimal deviation = 0m;
 		const double timeToExp = 0.5;
 
-		// Zero deviation makes the divisor zero, so D1 returns the degenerate default 0.
+		// Without volatility the forward 100 * e^(0.05 * 0.5) lies above the strike for certain: d1 is infinite.
 		var d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, deviation, timeToExp);
-		d1.AssertEqual(0);
+		IsTrue(double.IsPositiveInfinity(d1), $"d1 is {d1}");
+
+		// And below it when the asset pays out more than the rate earns.
+		IsTrue(double.IsNegativeInfinity(DerivativesHelper.D1(assetPrice, strike, riskFree, 0.1m, deviation, timeToExp)));
 	}
 
 	[TestMethod]
@@ -544,6 +561,57 @@ public class OptionTests : BaseTestClass
 		return (basket, call, put);
 	}
 
+	// The EXP line of an option position chart is the basket priced at the expiry moment: what each option pays there,
+	// times the position held in it. A venue sends the expiry as a date alone or with its time of day.
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public void BasketBlackScholes_Premium_AtExpiry_IsPositionWeightedPayoff(bool withTimeOfDay)
+	{
+		var expiry = withTimeOfDay
+			? new DateTime(2026, 12, 17, 15, 50, 0).UtcKind()
+			: new DateTime(2026, 12, 17).UtcKind();
+
+		var underlying = CreateUnderlying();
+		var longCall = CreateOption(OptionTypes.Call, 110_000m, expiry);
+		var shortCall = CreateOption(OptionTypes.Call, 115_000m, expiry);
+		var put = CreateOption(OptionTypes.Put, 105_000m, expiry);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+
+		foreach (var option in new[] { longCall, shortCall, put })
+			dataProvider.Setup(p => p.GetSecurityValue(option, Level1Fields.ImpliedVolatility)).Returns(20m);
+
+		var positions = new[]
+		{
+			new Position { Security = longCall, CurrentValue = 10m },
+			new Position { Security = shortCall, CurrentValue = -10m },
+			new Position { Security = put, CurrentValue = 5m },
+		};
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(positions);
+
+		// Built as the option panels build it: no expiry moment of its own.
+		var basket = new BasketBlackScholes(underlying, dataProvider.Object, positionProvider.Object);
+		basket.InnerModels.Add(new BlackScholes(longCall, underlying, dataProvider.Object));
+		basket.InnerModels.Add(new BlackScholes(shortCall, underlying, dataProvider.Object));
+		basket.InnerModels.Add(new BlackScholes(put, underlying, dataProvider.Object));
+
+		// At 100 000 only the puts pay, 5 * 5 000; at 112 000 the long calls, 10 * 2 000; at 120 000 the call spread is
+		// capped, 10 * 10 000 - 10 * 5 000.
+		void Check(decimal assetPrice, decimal expected)
+		{
+			var value = basket.Premium(expiry, assetPrice: assetPrice);
+			value.AssertNotNull();
+			value.Value.AssertEqual(expected, $"position value at expiry with the asset at {assetPrice}");
+		}
+
+		Check(100_000m, 25_000m);
+		Check(112_000m, 20_000m);
+		Check(120_000m, 50_000m);
+	}
+
 	[TestMethod]
 	public void BasketBlackScholes_Delta_IsPositionWeightedSumPlusUnderlying()
 	{
@@ -753,5 +821,495 @@ public class OptionTests : BaseTestClass
 		AreEqual(2, ids.Count);
 		IsTrue(ids.Contains(call100.ToSecurityId()));
 		IsTrue(ids.Contains(put100.ToSecurityId()));
+	}
+
+	// Without volatility the forward is known, so the option finishes in the money or it does not: its delta is one or
+	// nought, not the one half of an option at the money.
+	[TestMethod]
+	public void Delta_WithoutVolatility_IsWhetherTheOptionFinishesInTheMoney()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var call = CreateBlackScholes(OptionTypes.Call, 100m, expiration, 0m, 0m);
+		var put = CreateBlackScholes(OptionTypes.Put, 100m, expiration, 0m, 0m);
+
+		AreEqual(1m, call.Delta(now, 0m, 150m), "a call far in the money");
+		AreEqual(0m, call.Delta(now, 0m, 50m), "a call far out of the money");
+		AreEqual(0m, put.Delta(now, 0m, 150m), "a put far out of the money");
+		AreEqual(-1m, put.Delta(now, 0m, 50m), "a put far in the money");
+	}
+
+	// Nor does a point of volatility move the premium of an option that finishes in or out of the money for certain.
+	[TestMethod]
+	public void Vega_WithoutVolatility_IsNothingAwayFromTheStrike()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var call = CreateBlackScholes(OptionTypes.Call, 100m, expiration, 0m, 0m);
+
+		AreEqual(0m, call.Vega(now, 0m, 150m), "a call far in the money");
+		AreEqual(0m, call.Vega(now, 0m, 50m), "a call far out of the money");
+	}
+
+	// Without volatility the premium of a call that finishes in the money is the asset less the discounted strike: its
+	// theta is the strike's discount wearing off day by day, its rho the strike's present value falling with the rate.
+	[TestMethod]
+	public void ThetaAndRho_WithoutVolatility_AreTheSlopesOfTheDiscountedIntrinsicValue()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var call = CreateBlackScholes(OptionTypes.Call, 100m, expiration, 0.05m, 0m);
+		var discountedStrike = 100m * (decimal)Math.Exp(-0.05 * 0.5);
+
+		AreEqual(Math.Round(-0.05m * discountedStrike / 365m, 6), Math.Round(call.Theta(now, 0m, 150m).Value, 6), "theta of a call far in the money");
+		AreEqual(Math.Round(0.01m * 0.5m * discountedStrike, 6), Math.Round(call.Rho(now, 0m, 150m).Value, 6), "rho of a call far in the money");
+		AreEqual(0m, call.Theta(now, 0m, 50m), "theta of a call far out of the money");
+		AreEqual(0m, call.Rho(now, 0m, 50m), "rho of a call far out of the money");
+	}
+
+	// The offsets around the central strike count strikes: one to each side keeps both types listed at three strikes,
+	// however many contracts each strike has.
+	[TestMethod]
+	public void FilterByStrikes_CountsStrikesNotContracts()
+	{
+		var expiry = new DateTime(2026, 12, 17).UtcKind();
+
+		var options = new[] { 80m, 90m, 100m, 110m, 120m }
+			.SelectMany(strike => new[] { CreateOption(OptionTypes.Call, strike, expiry), CreateOption(OptionTypes.Put, strike, expiry) })
+			.ToArray();
+
+		var kept = options.FilterByStrikes(100m, 1, 1).ToArray();
+
+		AreEqual(6, kept.Length);
+		IsTrue(kept.All(o => o.Strike is 90m or 100m or 110m), string.Join(", ", kept.Select(o => o.Id)));
+	}
+
+	// Two expiries list the same strikes: a strike out keeps it in both series, and an offset left out keeps every strike
+	// on its side.
+	[TestMethod]
+	public void FilterByStrikes_CountsAStrikeOnceAcrossSeries()
+	{
+		var near = new DateTime(2026, 12, 17).UtcKind();
+		var far = new DateTime(2027, 3, 18).UtcKind();
+
+		var options = new[] { near, far }
+			.SelectMany(expiry => new[] { 80m, 90m, 100m, 110m, 120m }.Select(strike => CreateOption(OptionTypes.Call, strike, expiry)))
+			.ToArray();
+
+		var kept = options.FilterByStrikes(100m, 1, null).ToArray();
+
+		AreEqual(8, kept.Length);
+		IsTrue(kept.All(o => o.Strike >= 90m), string.Join(", ", kept.Select(o => o.Id)));
+	}
+
+	// A venue sends the expiry with its time of day. Until that moment the option trades and has time left; the model is
+	// built the way the option panels build it, with no expiry moment of its own.
+	[TestMethod]
+	public void Premium_OnTheExpiryDayBeforeTheExpiryTime_StillHasTimeValue()
+	{
+		var expiry = new DateTime(2026, 12, 17, 15, 50, 0).UtcKind();
+		var morning = new DateTime(2026, 12, 17, 10, 0, 0).UtcKind();
+
+		var model = new BlackScholes(CreateOption(OptionTypes.Call, 100m, expiry), CreateUnderlying(), Mock.Of<IMarketDataProvider>());
+
+		var premium = model.Premium(morning, 0.2m, 100m);
+
+		IsNotNull(premium, "the option still trades on the morning of its expiry day");
+		IsTrue(premium > 0m, $"an option at the money with hours to go is worth something, not {premium}");
+		IsNotNull(model.Delta(morning, 0.2m, 100m), "its delta on the morning of its expiry day");
+	}
+
+	// When no option of the basket can be priced - none has a quoted volatility and the caller gave none - its value and
+	// greeks are unknown, not nought: a nought reads as a flat book.
+	[TestMethod]
+	public void BasketBlackScholes_NoOptionPriceable_IsUnknown()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var (basket, _, _) = CreateBasket(new Mock<IMarketDataProvider>(), expiration);
+
+		IsNull(basket.Premium(now, assetPrice: 100m), "premium");
+		IsNull(basket.Delta(now, assetPrice: 100m), "delta");
+		IsNull(basket.Gamma(now, assetPrice: 100m), "gamma");
+	}
+
+	// One option of the basket without a quoted volatility makes the basket's figures unknown: the sum of the others is not
+	// the basket's, and shown as its total it misstates the book.
+	[TestMethod]
+	public void BasketBlackScholes_AnOptionNotPriceable_LeavesTheBasketUnknown()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		var (basket, call, _) = CreateBasket(dataProvider, expiration);
+
+		dataProvider.Setup(p => p.GetSecurityValue(call, Level1Fields.ImpliedVolatility)).Returns(20m);
+
+		IsNull(basket.Premium(now, assetPrice: 100m), "premium");
+		IsNull(basket.Delta(now, assetPrice: 100m), "delta");
+	}
+
+	// At expiry the basket's delta is the slope of what it pays there - the payoff its premium returns - as it is a
+	// minute before: the options that finish in the money count one for one.
+	[TestMethod]
+	public void BasketBlackScholes_Delta_AtExpiry_IsTheSlopeOfThePayoff()
+	{
+		var expiry = new DateTime(2026, 12, 17).UtcKind();
+
+		var underlying = CreateUnderlying();
+		var longCall = CreateOption(OptionTypes.Call, 110_000m, expiry);
+		var shortCall = CreateOption(OptionTypes.Call, 115_000m, expiry);
+		var put = CreateOption(OptionTypes.Put, 105_000m, expiry);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+
+		foreach (var option in new[] { longCall, shortCall, put })
+			dataProvider.Setup(p => p.GetSecurityValue(option, Level1Fields.ImpliedVolatility)).Returns(20m);
+
+		var positions = new[]
+		{
+			new Position { Security = longCall, CurrentValue = 10m },
+			new Position { Security = shortCall, CurrentValue = -10m },
+			new Position { Security = put, CurrentValue = 5m },
+		};
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(positions);
+
+		var basket = new BasketBlackScholes(underlying, dataProvider.Object, positionProvider.Object);
+		basket.InnerModels.Add(new BlackScholes(longCall, underlying, dataProvider.Object));
+		basket.InnerModels.Add(new BlackScholes(shortCall, underlying, dataProvider.Object));
+		basket.InnerModels.Add(new BlackScholes(put, underlying, dataProvider.Object));
+
+		// At 100 000 only the five puts are in the money; at 112 000 only the ten long calls.
+		AreEqual(-5m, basket.Delta(expiry, assetPrice: 100_000m), "at 100 000");
+		AreEqual(10m, basket.Delta(expiry, assetPrice: 112_000m), "at 112 000");
+	}
+
+	// The volatility of a basket is the one at which its own premium is the premium given, as for a single option: a
+	// straddle priced at 20 per cent comes back at 20 per cent.
+	[TestMethod]
+	public void BasketBlackScholes_ImpliedVolatility_InvertsTheBasketsOwnPremium()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var underlying = CreateUnderlying();
+		var call = CreateOption(OptionTypes.Call, 100m, expiration);
+		var put = CreateOption(OptionTypes.Put, 100m, expiration);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(100m);
+		dataProvider.Setup(p => p.GetSecurityValue(call, Level1Fields.ImpliedVolatility)).Returns(20m);
+		dataProvider.Setup(p => p.GetSecurityValue(put, Level1Fields.ImpliedVolatility)).Returns(20m);
+
+		var positions = new[]
+		{
+			new Position { Security = call, CurrentValue = 1m },
+			new Position { Security = put, CurrentValue = 1m },
+		};
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(positions);
+
+		var basket = new BasketBlackScholes(underlying, dataProvider.Object, positionProvider.Object, expiration);
+		basket.InnerModels.Add(new BlackScholes(call, underlying, dataProvider.Object, expiration));
+		basket.InnerModels.Add(new BlackScholes(put, underlying, dataProvider.Object, expiration));
+
+		var premium = basket.Premium(now, 0.2m).Value;
+
+		AreEqual(20m, basket.ImpliedVolatility(now, premium)?.Round(1));
+	}
+
+	// An option listed with its expiry date alone expires at its board's expiry time, which is the board's local time: on a
+	// board three hours east of UTC that closes its options at 18:45, the option has a quarter of an hour left at 15:30 UTC
+	// and none at 15:45.
+	[TestMethod]
+	public void BlackScholes_ExpiryDateAlone_ExpiresAtTheBoardsExpiryTimeInItsZone()
+	{
+		var day = new DateTime(2026, 3, 19).UtcKind();
+		var option = CreateOption(OptionTypes.Call, 100m, day);
+
+		option.Board = new ExchangeBoard
+		{
+			Code = "EAST",
+			Exchange = new Exchange { Name = "EAST" },
+			ExpiryTime = new TimeSpan(18, 45, 0),
+			TimeZone = TimeZoneInfo.CreateCustomTimeZone("UTC+3", TimeSpan.FromHours(3), "UTC+3", "UTC+3"),
+		};
+
+		var model = new BlackScholes(option, CreateUnderlying(), Mock.Of<IMarketDataProvider>());
+
+		AreEqual((double)TimeSpan.FromMinutes(15).Ticks / TimeSpan.FromDays(365).Ticks, model.GetExpirationTimeLine(day.AddHours(15).AddMinutes(30)));
+		IsNull(model.GetExpirationTimeLine(day.AddHours(15).AddMinutes(45)), "the time left at 18:45 of the board");
+	}
+
+	// A straddle of the given positions in a call and a put struck at 100, on an asset the market prices at 100.
+	private static BasketBlackScholes CreateStraddle(DateTime expiration, decimal position)
+	{
+		var underlying = CreateUnderlying();
+		var call = CreateOption(OptionTypes.Call, 100m, expiration);
+		var put = CreateOption(OptionTypes.Put, 100m, expiration);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(100m);
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(
+		[
+			new Position { Security = call, CurrentValue = position },
+			new Position { Security = put, CurrentValue = position },
+		]);
+
+		var basket = new BasketBlackScholes(underlying, dataProvider.Object, positionProvider.Object, expiration);
+		basket.InnerModels.Add(new BlackScholes(call, underlying, dataProvider.Object, expiration));
+		basket.InnerModels.Add(new BlackScholes(put, underlying, dataProvider.Object, expiration));
+
+		return basket;
+	}
+
+	// A basket rounds the volatility it reports, not the premiums of its options its search compares: a straddle priced at
+	// 25 per cent comes back at 25.00.
+	[TestMethod]
+	public void BasketBlackScholes_ImpliedVolatility_RoundDecimals_RoundsTheAnswerNotTheSearch()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var basket = CreateStraddle(now.AddDays(36.5), 1m);
+
+		var premium = basket.Premium(now, 0.25m).Value;
+
+		basket.RoundDecimals = 2;
+
+		AreEqual(25.00m, basket.ImpliedVolatility(now, premium));
+	}
+
+	// A book short of volatility - a sold straddle - is worth less the higher the volatility: its premium comes back at the
+	// volatility that priced it all the same.
+	[TestMethod]
+	public void BasketBlackScholes_ImpliedVolatility_OfABookShortOfVolatility()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var basket = CreateStraddle(now.AddDays(182.5), -1m);
+
+		var premium = basket.Premium(now, 0.2m).Value;
+
+		IsTrue(premium < 0, $"A sold straddle is worth {premium}.");
+		AreEqual(20m, basket.ImpliedVolatility(now, premium)?.Round(1));
+	}
+
+	// A basket that holds no option and was given no asset of its own - the basket element of a scheme whose list of options
+	// came empty - is a book of nothing: it is worth nought and has no slope, rather than failing for want of an asset, and
+	// no volatility explains a premium of it.
+	[TestMethod]
+	public void BasketBlackScholes_WithNothingInIt_IsWorthNothing()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(Array.Empty<Position>());
+
+		var basket = new BasketBlackScholes(new Mock<IMarketDataProvider>().Object, positionProvider.Object);
+
+		AreEqual(0m, basket.Premium(now, 0.2m, 100m), "premium");
+		AreEqual(0m, basket.Delta(now, 0.2m, 100m), "delta");
+		IsNull(basket.ImpliedVolatility(now, 1m), "volatility");
+	}
+
+	// The expiry moment a basket is given is the one its constructor promises to price every option to; the options here
+	// are listed to an earlier date.
+	[TestMethod]
+	public void BasketBlackScholes_ExpirationOfItsOwn_PricesEveryOptionToIt()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var listed = new DateTime(2024, 4, 1).UtcKind();
+
+		var underlying = CreateUnderlying();
+		var call = CreateOption(OptionTypes.Call, 100m, listed);
+		var put = CreateOption(OptionTypes.Put, 100m, listed);
+
+		var positions = new[]
+		{
+			new Position { Security = call, CurrentValue = 10m },
+			new Position { Security = put, CurrentValue = -5m },
+		};
+
+		var positionProvider = new Mock<IPositionProvider>();
+		positionProvider.Setup(p => p.Positions).Returns(positions);
+
+		var dataProvider = Mock.Of<IMarketDataProvider>();
+
+		var basket = new BasketBlackScholes(underlying, dataProvider, positionProvider.Object, now.AddDays(182.5));
+		basket.InnerModels.Add(new BlackScholes(call, underlying, dataProvider));
+		basket.InnerModels.Add(new BlackScholes(put, underlying, dataProvider));
+
+		// Half a year at 20 per cent prices either option at 5.6372 with the asset on the strike: 10 * 5.6372 - 5 * 5.6372.
+		AreEqual(28.1860m, basket.Premium(now, 0.2m, 100m)?.Round(4));
+	}
+
+	// A basket with no expiry moment of its own has no time line of its own either: it is not an option.
+	[TestMethod]
+	public void BasketBlackScholes_WithoutAnExpirationOfItsOwn_HasNoTimeLine()
+	{
+		var basket = new BasketBlackScholes(CreateUnderlying(), Mock.Of<IMarketDataProvider>(), Mock.Of<IPositionProvider>());
+
+		IsNull(basket.GetExpirationTimeLine(new DateTime(2024, 1, 1).UtcKind()));
+	}
+
+	// The basket's delta is the slope of the basket's premium, as for a single option: what is held of the asset counts in
+	// both, or in neither.
+	[TestMethod]
+	public void BasketBlackScholes_Delta_IsTheSlopeOfTheBasketsPremium()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var (basket, _, _) = CreateBasket(new Mock<IMarketDataProvider>(), now.AddDays(182.5));
+
+		var delta = basket.Delta(now, 0.2m, 100m).Value;
+		var slope = (basket.Premium(now, 0.2m, 100.01m).Value - basket.Premium(now, 0.2m, 99.99m).Value) / 0.02m;
+
+		IsTrue((delta - slope).Abs() < 0.0001m, $"delta {delta}, the slope of the premium {slope}");
+	}
+
+	// A level of the book that no volatility explains - a bid under what the option is worth for certain, an ask above the
+	// asset itself - is left out of the book of volatilities rather than shown at 0 per cent.
+	[TestMethod]
+	public void ImpliedVolatilityBook_ALevelNoVolatilityExplains_IsLeftOut()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+
+		var underlying = CreateUnderlying();
+		var option = CreateOption(OptionTypes.Call, 100m, expiration);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(150m);
+
+		var model = new BlackScholes(option, underlying, dataProvider.Object, expiration);
+
+		var book = new QuoteChangeMessage
+		{
+			SecurityId = option.ToSecurityId(),
+			ServerTime = now,
+			Bids = [new(52m, 1m), new(49m, 1m)],
+			Asks = [new(53m, 1m), new(200m, 1m)],
+		};
+
+		var volatility = book.ImpliedVolatility(model, now);
+
+		AreEqual(1, volatility.Bids.Length, "bids");
+		AreEqual(1, volatility.Asks.Length, "asks");
+	}
+
+	// A FORTS option sent with its expiry date alone expires at 18:45 in Moscow, 15:45 by the clock UTC.
+	[TestMethod]
+	public void IsExpired_ExpiryDateAlone_TakesTheBoardsExpiryTimeInItsTimeZone()
+	{
+		var option = CreateOption(OptionTypes.Call, 100m, new DateTime(2024, 9, 19).UtcKind());
+		var exchangeInfo = new InMemoryExchangeInfoProvider();
+
+		IsFalse(option.IsExpired(exchangeInfo, new DateTime(2024, 9, 19, 15, 0, 0).UtcKind()), "at 18:00 in Moscow");
+		IsTrue(option.IsExpired(exchangeInfo, new DateTime(2024, 9, 19, 16, 0, 0).UtcKind()), "at 19:00 in Moscow");
+	}
+
+	// Strikes widen away from the money on some venues: one step out of the money is the next strike listed, whatever the
+	// distance between the two lowest strikes.
+	[TestMethod]
+	public async Task OffsetBasketStrike_OneStepOut_IsTheNextListedStrike()
+	{
+		var underlying = new Security { Id = "UNEVEN@TEST" };
+		var expiry = new DateTime(2030, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		Security option(OptionTypes type, decimal strike) => new()
+		{
+			Id = $"UNEVEN{type}{strike}@TEST",
+			Type = SecurityTypes.Option,
+			OptionType = type,
+			Strike = strike,
+			UnderlyingSecurityId = underlying.Id,
+			ExpiryDate = expiry,
+		};
+
+		decimal[] strikes = [50, 75, 100, 105, 110, 115, 120];
+		var calls = strikes.ToDictionary(s => s, s => option(OptionTypes.Call, s));
+		var puts = strikes.ToDictionary(s => s, s => option(OptionTypes.Put, s));
+
+		var provider = new CollectionSecurityProvider([underlying, .. calls.Values, .. puts.Values]);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(105m);
+
+		var basket = new OffsetBasketStrike(underlying, provider, dataProvider.Object, new(0, 1));
+		await basket.LoadDerivativesAsync(CancellationToken);
+
+		var expected = new[] { calls[105], calls[110], puts[100], puts[105] }.Select(s => s.ToSecurityId()).ToHashSet();
+
+		IsTrue(expected.SetEquals(basket.InnerSecurityIds), $"the basket holds {basket.InnerSecurityIds.Select(id => id.SecurityCode).JoinCommaSpace()}");
+	}
+
+	// An offset into the money is negative, and a basket saved with one comes back with it.
+	[TestMethod]
+	public void OffsetBasketStrike_InTheMoneyOffset_SurvivesItsExpression()
+	{
+		var underlying = new Security { Id = "BASKETU@TEST" };
+		var provider = new CollectionSecurityProvider([underlying]);
+		var dataProvider = Mock.Of<IMarketDataProvider>();
+
+		var saved = new OffsetBasketStrike(underlying, provider, dataProvider, new(-2, 3));
+		var loaded = new OffsetBasketStrike(underlying, provider, dataProvider, new(0, 0));
+
+		loaded.BasketExpression = saved.BasketExpression;
+
+		AreEqual(saved.BasketExpression, loaded.BasketExpression);
+	}
+
+	// A basket of strikes is a basket: storage and subscriptions ask for its code.
+	[TestMethod]
+	public void OffsetBasketStrike_IsABasket()
+	{
+		var underlying = new Security { Id = "BASKETU@TEST" };
+		var basket = new OffsetBasketStrike(underlying, new CollectionSecurityProvider([underlying]), Mock.Of<IMarketDataProvider>(), new(0, 1));
+
+		IsTrue(basket.IsBasket());
+	}
+
+	// Rounding is applied to the answer, not to the premiums the search compares: an option priced at 25 per cent comes
+	// back at 25.00.
+	[TestMethod]
+	public void ImpliedVolatility_RoundDecimals_RoundsTheAnswerNotTheSearch()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(36.5);
+
+		var underlying = CreateUnderlying();
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(100m);
+
+		var model = new BlackScholes(CreateOption(OptionTypes.Call, 110m, expiration), underlying, dataProvider.Object, expiration);
+
+		var premium = model.Premium(now, 0.25m).Value;
+
+		model.RoundDecimals = 2;
+
+		AreEqual(25.00m, model.ImpliedVolatility(now, premium));
+	}
+
+	// The Black model rounds what it reports, as every model does, and not a figure it then goes on to discount: a delta of
+	// 0.635 reads 0.64.
+	[TestMethod]
+	public void Black_RoundDecimals_RoundsTheGreeksItReports()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var model = CreateBlack(OptionTypes.Call, 95m, now.AddDays(182.5), 0.1m);
+
+		model.RoundDecimals = 2;
+
+		AreEqual(0.64m, model.Delta(now, 0.2m, 100m), "delta");
+		AreEqual(0.02m, model.Gamma(now, 0.2m, 100m), "gamma");
+		AreEqual(0.24m, model.Vega(now, 0.2m, 100m), "vega");
 	}
 }

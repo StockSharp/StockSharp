@@ -114,36 +114,12 @@ public class OptionsStrikesDiagramElement : DiagramElement
 
 		var arr = options.ToArray();
 
-		var centralStike = arr.GetCentralStrike(assetPrice);
-
-		if (centralStike is null)
+		if (arr.GetCentralStrike(assetPrice)?.Strike is not decimal centralStrike)
 			return;
 
-		var leftOffset = LeftOffset;
+		Security[] filtered = [.. arr.FilterByStrikes(centralStrike, LeftOffset, RightOffset)];
 
-		if (leftOffset != null)
-		{
-			arr =
-			[
-				.. arr.Where(o => o.Strike >= centralStike.Strike),
-				.. arr.Where(o => o.Strike < centralStike.Strike).OrderByDescending(o => o.Strike).Take(leftOffset.Value),
-			];
-		}
-
-		var rightOffset = RightOffset;
-
-		if (rightOffset != null)
-		{
-			arr =
-			[
-				.. arr.Where(o => o.Strike <= centralStike.Strike),
-				.. arr.Where(o => o.Strike > centralStike.Strike).OrderBy(o => o.Strike).Take(rightOffset.Value),
-			];
-		}
-
-		options = arr;
-
-		RaiseProcessOutput(_outputSocket, value.Time, options, value);
+		RaiseProcessOutput(_outputSocket, value.Time, filtered, value);
 	}
 
 	/// <inheritdoc/>

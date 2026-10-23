@@ -55,6 +55,8 @@ public class OptionsPositionChartDiagramElement : OptionsBaseModelDiagramElement
 	/// <inheritdoc />
 	protected override void ProcessModel(DiagramSocketValue value)
 	{
+		base.ProcessModel(value);
+
 		if (_chart is null)
 			return;
 

@@ -30,6 +30,8 @@ public class OptionsDeskDiagramElement : OptionsBaseModelDiagramElement<BasketBl
 	/// <inheritdoc />
 	protected override void ProcessModel(DiagramSocketValue value)
 	{
+		base.ProcessModel(value);
+
 		if (_desk is null)
 			return;
 

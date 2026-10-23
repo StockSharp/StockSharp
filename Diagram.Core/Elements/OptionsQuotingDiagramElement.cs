@@ -121,6 +121,8 @@ public class OptionsQuotingDiagramElement : OptionsBaseModelDiagramElement<IBlac
 	/// <inheritdoc />
 	protected override void ProcessModel(DiagramSocketValue value)
 	{
+		base.ProcessModel(value);
+
 		if (_volume is null)
 			return;
 

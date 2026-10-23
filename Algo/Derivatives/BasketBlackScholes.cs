@@ -35,13 +35,13 @@ public class BasketBlackScholes : BlackScholes
 
 		protected override bool OnAdding(BlackScholes item)
 		{
-			item.RoundDecimals = _parent.RoundDecimals;
+			_parent.Adopt(item);
 			return base.OnAdding(item);
 		}
 
 		protected override bool OnInserting(int index, BlackScholes item)
 		{
-			item.RoundDecimals = _parent.RoundDecimals;
+			_parent.Adopt(item);
 			return base.OnInserting(index, item);
 		}
 	}
@@ -123,65 +123,120 @@ public class BasketBlackScholes : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	/// <remarks>The basket's own expiry moment prices every option of it to that moment.</remarks>
+	public override DateTime? ExpirationTime
 	{
-		var pos = PositionProvider.Positions.Where(p => p.Security == UnderlyingAsset).Sum(p => p.CurrentValue);
-		return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice), deviation, true) + pos;
+		get => base.ExpirationTime;
+		set
+		{
+			base.ExpirationTime = value;
+
+			// Set by the base constructor before the options exist.
+			if (_innerModels is null || value is null)
+				return;
+
+			using (_innerModels.EnterScope())
+			{
+				_innerModels.ForEach(m => m.ExpirationTime = value);
+			}
+		}
 	}
+
+	/// <inheritdoc />
+	/// <remarks>A basket has a time line only when it is given an expiry moment of its own.</remarks>
+	public override double? GetExpirationTimeLine(DateTime currentTime)
+		=> ExpirationTime is { } expiration ? DerivativesHelper.GetExpirationTimeLine(expiration, currentTime) : null;
+
+	// An option joining the basket takes the basket's rounding and, when the basket has one, its expiry moment.
+	private void Adopt(BlackScholes model)
+	{
+		model.RoundDecimals = RoundDecimals;
+
+		if (ExpirationTime is { } expiration)
+			model.ExpirationTime = expiration;
+	}
+
+	/// <inheritdoc />
+	/// <remarks>
+	/// An option that has expired by <paramref name="currentTime"/> counts with the slope of what it pays there. The asset
+	/// held counts one for one, as in <see cref="Premium"/>.
+	/// </remarks>
+	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		=> ProcessOptions(bs => bs.IsExpired(currentTime) ? bs.PayoffDelta(assetPrice) : bs.Delta(currentTime, deviation, assetPrice)) + PositionOfAsset();
 
 	/// <inheritdoc />
 	public override decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice), deviation, true);
-	}
+		=> ProcessOptions(bs => bs.IsExpired(currentTime) ? 0 : bs.Gamma(currentTime, deviation, assetPrice));
 
 	/// <inheritdoc />
 	public override decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice), deviation, true);
-	}
+		=> ProcessOptions(bs => bs.IsExpired(currentTime) ? 0 : bs.Vega(currentTime, deviation, assetPrice));
 
 	/// <inheritdoc />
 	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice), deviation, true);
-	}
+		=> ProcessOptions(bs => bs.IsExpired(currentTime) ? 0 : bs.Theta(currentTime, deviation, assetPrice));
 
 	/// <inheritdoc />
 	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice), deviation, true);
-	}
+		=> ProcessOptions(bs => bs.IsExpired(currentTime) ? 0 : bs.Rho(currentTime, deviation, assetPrice));
 
 	/// <inheritdoc />
+	/// <remarks>
+	/// An option that has expired by <paramref name="currentTime"/> counts with what it pays there, and the asset held
+	/// with its price, so that the value of the book and its <see cref="Delta"/> describe the same position.
+	/// </remarks>
 	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		=> base.Premium(currentTime, deviation, assetPrice);
+
+	internal override decimal? PremiumCore(DateTime currentTime, decimal? deviation, decimal? assetPrice)
 	{
-		return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice), deviation, true);
+		var options = ProcessOptions(bs => bs.IsExpired(currentTime) ? bs.Payoff(assetPrice) : bs.PremiumCore(currentTime, deviation, assetPrice));
+		var held = PositionOfAsset();
+
+		if (held == 0)
+			return options;
+
+		return GetAssetPrice(assetPrice) is decimal price ? options + held * price : null;
 	}
 
 	/// <inheritdoc />
-	public override decimal? ImpliedVolatility(DateTime currentTime, decimal premium)
-	{
-		return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), null, false);
-	}
+	/// <remarks>
+	/// The volatility at which the basket's own premium is the premium given, whether the book gains with volatility or, short
+	/// of it, loses. A book that does both as volatility rises may be priced so at more than one, and one of them is found.
+	/// </remarks>
+	public override decimal? ImpliedVolatility(DateTime currentTime, decimal premium, decimal? assetPrice = null)
+		=> base.ImpliedVolatility(currentTime, premium, assetPrice);
 
 	/// <summary>
-	/// To sum a value over the options of the basket.
+	/// To sum a value over the options of the basket, each weighted by the position in it.
 	/// </summary>
 	/// <param name="func">The value of one option.</param>
-	/// <param name="deviation">The standard deviation the caller supplied for the whole basket, or <see langword="null" /> when each option is priced by its own quoted volatility.</param>
-	/// <param name="usePos">To weight each value by the position in that option.</param>
-	/// <returns>The sum over the options the model can price.</returns>
-	private decimal? ProcessOptions(Func<BlackScholes, decimal?> func, decimal? deviation, bool usePos)
+	/// <returns>The sum; <see langword="null" /> when an option the book holds cannot be valued, for the sum of the others
+	/// is not the book's.</returns>
+	private decimal? ProcessOptions(Func<BlackScholes, decimal?> func)
 	{
-		return _innerModels.Cache.Sum(m =>
+		var total = 0m;
+
+		foreach (var model in _innerModels.Cache)
 		{
-			// An option is priced only when its volatility is known: the caller either states one for
-			// the whole basket, or the provider quotes one for that option.
-			if (deviation is null && DataProvider.GetSecurityValue(m.Option, Level1Fields.ImpliedVolatility) is null)
+			var position = PositionOf(model.Option);
+
+			if (position == 0)
+				continue;
+
+			if (func(model) is not decimal value)
 				return null;
 
-			return func(m) * (usePos ? PositionProvider.Positions.Where(p => p.Security == m.Option).Sum(p => p.CurrentValue) : 1);
-		});
+			total += value * position;
+		}
+
+		return total;
 	}
+
+	private decimal PositionOf(Security security)
+		=> PositionProvider.Positions.Where(p => p.Security == security).Sum(p => p.CurrentValue ?? 0);
+
+	// The asset held beside the options; a basket given no asset of its own and holding no option knows of none.
+	private decimal PositionOfAsset()
+		=> (base.UnderlyingAsset ?? _innerModels.SyncGet(c => c.FirstOrDefault())?.UnderlyingAsset) is { } asset ? PositionOf(asset) : 0;
 }

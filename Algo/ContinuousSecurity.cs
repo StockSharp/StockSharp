@@ -37,6 +37,16 @@ public static class BasketCodes
 	public const string ExpressionIndex = "EI";
 
 	/// <summary>
+	/// <see cref="Derivatives.OffsetBasketStrike"/>: the options of the strikes a given number of steps from the money.
+	/// </summary>
+	public const string OffsetStrike = "SO";
+
+	/// <summary>
+	/// <see cref="Derivatives.VolatilityBasketStrike"/>: the options whose implied volatility is within a range.
+	/// </summary>
+	public const string VolatilityStrike = "SV";
+
+	/// <summary>
 	/// All continuous security codes.
 	/// </summary>
 	public static readonly ISet<string> AllContinuous = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -63,6 +73,8 @@ public static class BasketCodes
 		VolumeContinuous,
 		WeightedIndex,
 		ExpressionIndex,
+		OffsetStrike,
+		VolatilityStrike,
 	};
 }
 

@@ -196,4 +196,10 @@ public enum StaticSocketIds
 	/// </summary>
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BlackScholesKey)]
 	BlackScholes,
+
+	/// <summary>
+	/// Option premium.
+	/// </summary>
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PremiumKey)]
+	Premium,
 }

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Derivatives;
 
+using System.Globalization;
+
 /// <summary>
 /// The virtual strike created from a combination of other strikes.
 /// </summary>
@@ -82,52 +84,48 @@ public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider s
 /// <param name="securityProvider">The provider of information about instruments.</param>
 /// <param name="dataProvider">The market data provider.</param>
 /// <param name="strikeOffset">Boundaries of shift from the main strike (a negative value specifies the shift to options in the money, a positive value - out of the money).</param>
+[BasketCode(BasketCodes.OffsetStrike)]
 public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<int> strikeOffset) : BasketStrike(underlyingSecurity, securityProvider, dataProvider)
 {
 	private Range<int> _strikeOffset = strikeOffset ?? throw new ArgumentNullException(nameof(strikeOffset));
-	private decimal _strikeStep;
 
 	/// <inheritdoc />
+	/// <remarks>An offset counts the strikes listed, however far apart they stand.</remarks>
 	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
-		if (_strikeStep == 0)
-			_strikeStep = Derivatives.GetStrikeStep();
-
 		allStrikes = [.. allStrikes];
 
-		var centralStrike = allStrikes.GetCentralStrike(assetPrice);
-
-		if (centralStrike == null)
+		if (allStrikes.GetCentralStrike(assetPrice)?.Strike is not decimal central)
 			return [];
 
-		var callStrikeFrom = centralStrike.Strike + _strikeOffset.Min * _strikeStep;
-		var callStrikeTo = centralStrike.Strike + _strikeOffset.Max * _strikeStep;
+		var strikes = allStrikes.Where(s => s.Strike != null).Select(s => s.Strike.Value).Distinct().OrderBy(s => s).ToArray();
+		var centralIndex = Array.IndexOf(strikes, central);
 
-		var putStrikeFrom = centralStrike.Strike - _strikeOffset.Max * _strikeStep;
-		var putStrikeTo = centralStrike.Strike - _strikeOffset.Min * _strikeStep;
+		// Out of the money is up the strikes for a call and down them for a put.
+		HashSet<decimal> Within(int from, int to)
+			=> [.. strikes.Where((_, index) => index >= centralIndex + from && index <= centralIndex + to)];
+
+		var calls = Within(_strikeOffset.Min, _strikeOffset.Max);
+		var puts = Within(-_strikeOffset.Max, -_strikeOffset.Min);
 
 		return allStrikes
-			.Where(s =>
-				(s.OptionType == OptionTypes.Call && s.Strike >= callStrikeFrom && s.Strike <= callStrikeTo)
-				||
-				(s.OptionType == OptionTypes.Put && s.Strike >= putStrikeFrom && s.Strike <= putStrikeTo)
-			)
+			.Where(s => s.Strike is decimal strike && (s.OptionType == OptionTypes.Call ? calls.Contains(strike) : s.OptionType == OptionTypes.Put && puts.Contains(strike)))
 			.OrderBy(s => s.Strike);
 	}
 
 	/// <inheritdoc />
 	protected override string ToSerializedString()
-		=> $"{_strikeOffset.Min}-{_strikeOffset.Max}";
+		=> FormattableString.Invariant($"{_strikeOffset.Min}:{_strikeOffset.Max}");
 
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		var parts = text.Split('-');
+		var parts = text.Split(':');
 
-		if (parts.Length < 2)
+		if (parts.Length != 2)
 			throw new InvalidOperationException($"Invalid serialized string format: {text}");
 
-		_strikeOffset = new(parts[0].To<int>(), parts[1].To<int>());
+		_strikeOffset = new(int.Parse(parts[0], CultureInfo.InvariantCulture), int.Parse(parts[1], CultureInfo.InvariantCulture));
 	}
 }
 
@@ -141,6 +139,7 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 /// <param name="securityProvider">The provider of information about instruments.</param>
 /// <param name="dataProvider">The market data provider.</param>
 /// <param name="volatilityRange">Volatility range.</param>
+[BasketCode(BasketCodes.VolatilityStrike)]
 public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<decimal> volatilityRange) : BasketStrike(underlyingAsset, securityProvider, dataProvider)
 {
 	private Range<decimal> _volatilityRange = volatilityRange ?? throw new ArgumentNullException(nameof(volatilityRange));
@@ -157,16 +156,16 @@ public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider 
 
 	/// <inheritdoc />
 	protected override string ToSerializedString()
-		=> $"{_volatilityRange.Min}-{_volatilityRange.Max}";
+		=> FormattableString.Invariant($"{_volatilityRange.Min}:{_volatilityRange.Max}");
 
 	/// <inheritdoc />
 	protected override void FromSerializedString(string text)
 	{
-		var parts = text.Split('-');
+		var parts = text.Split(':');
 
-		if (parts.Length < 2)
+		if (parts.Length != 2)
 			throw new InvalidOperationException($"Invalid serialized string format: {text}");
 
-		_volatilityRange = new(parts[0].To<decimal>(), parts[1].To<decimal>());
+		_volatilityRange = new(decimal.Parse(parts[0], CultureInfo.InvariantCulture), decimal.Parse(parts[1], CultureInfo.InvariantCulture));
 	}
 }

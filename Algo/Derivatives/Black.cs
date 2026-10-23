@@ -13,7 +13,7 @@ public class Black : BlackScholes
 	/// <param name="option">Options contract.</param>
 	/// <param name="underlyingAsset">Underlying asset.</param>
 	/// <param name="dataProvider">The market data provider.</param>
-	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, midnight of <see cref="Security.ExpiryDate"/> is used when available.</param>
+	/// <param name="expirationTime">Explicit option expiration moment. If <c>null</c>, <see cref="Security.ExpiryDate"/> is used when available: with its time of day, or at the board's expiry time for a date alone.</param>
 	public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider, DateTime? expirationTime = null)
 		: base(option, underlyingAsset, dataProvider, expirationTime)
 	{
@@ -31,16 +31,6 @@ public class Black : BlackScholes
 		}
 	}
 
-	private decimal? GetExpRate(DateTime currentTime)
-	{
-		var timeLine = GetExpirationTimeLine(currentTime);
-
-		if (timeLine == null)
-			return null;
-
-		return (decimal)DerivativesHelper.ExpRate(RiskFree, timeLine.Value);
-	}
-
 	/// <inheritdoc />
 	protected override decimal CalcPremium(decimal deviation, decimal assetPrice, double timeToExp)
 	{
@@ -53,53 +43,30 @@ public class Black : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Delta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	protected override decimal CalcDelta(decimal deviation, decimal assetPrice, double timeToExp)
+		=> (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp) * base.CalcDelta(deviation, assetPrice, timeToExp);
+
+	/// <inheritdoc />
+	protected override decimal CalcGamma(decimal deviation, decimal assetPrice, double timeToExp)
+		=> (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp) * base.CalcGamma(deviation, assetPrice, timeToExp);
+
+	/// <inheritdoc />
+	protected override decimal CalcVega(decimal deviation, decimal assetPrice, double timeToExp)
+		=> (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp) * base.CalcVega(deviation, assetPrice, timeToExp);
+
+	/// <inheritdoc />
+	protected override decimal CalcTheta(decimal deviation, decimal assetPrice, double timeToExp)
 	{
-		return GetExpRate(currentTime) * base.Delta(currentTime, deviation, assetPrice);
+		var expRate = (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp);
+		var diffusion = expRate * DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice, 0, deviation, timeToExp, D1(deviation, assetPrice, timeToExp));
+		var carry = RiskFree * CalcPremium(deviation, assetPrice, timeToExp) / 365m;
+
+		return diffusion + carry;
 	}
 
 	/// <inheritdoc />
-	public override decimal? Gamma(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return GetExpRate(currentTime) * base.Gamma(currentTime, deviation, assetPrice);
-	}
-
-	/// <inheritdoc />
-	public override decimal? Vega(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		return GetExpRate(currentTime) * base.Vega(currentTime, deviation, assetPrice);
-	}
-
-	/// <inheritdoc />
-	public override decimal? Theta(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		deviation ??= DefaultDeviation;
-		assetPrice = GetAssetPrice(assetPrice);
-		var timeToExp = GetExpirationTimeLine(currentTime);
-
-		if (assetPrice is null || timeToExp is null)
-			return null;
-
-		var expRate = (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp.Value);
-		var diffusion = expRate * DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, 0, deviation.Value,
-			timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value));
-		var carry = RiskFree * CalcPremium(deviation.Value, assetPrice.Value, timeToExp.Value) / 365m;
-
-		return TryRound(diffusion + carry);
-	}
-
-	/// <inheritdoc />
-	public override decimal? Rho(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
-	{
-		deviation ??= DefaultDeviation;
-		assetPrice = GetAssetPrice(assetPrice);
-		var timeToExp = GetExpirationTimeLine(currentTime);
-
-		if (assetPrice is null || timeToExp is null)
-			return null;
-
-		return TryRound(-0.01m * (decimal)timeToExp.Value * CalcPremium(deviation.Value, assetPrice.Value, timeToExp.Value));
-	}
+	protected override decimal CalcRho(decimal deviation, decimal assetPrice, double timeToExp)
+		=> -0.01m * (decimal)timeToExp * CalcPremium(deviation, assetPrice, timeToExp);
 
 	/// <inheritdoc />
 	protected override double D1(decimal deviation, decimal assetPrice, double timeToExp)

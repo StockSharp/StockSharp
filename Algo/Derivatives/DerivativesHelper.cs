@@ -127,6 +127,32 @@ public static class DerivativesHelper
 	}
 
 	/// <summary>
+	/// To filter options by the strikes around the central one.
+	/// </summary>
+	/// <param name="options">Options to be filtered.</param>
+	/// <param name="centralStrike">The central strike.</param>
+	/// <param name="below">How many of the listed strikes below the central one to keep; <see langword="null"/> keeps all of them.</param>
+	/// <param name="above">How many of the listed strikes above the central one to keep; <see langword="null"/> keeps all of them.</param>
+	/// <returns>The options listed at the central strike and at the kept ones, of every type and expiry listed there.</returns>
+	public static IEnumerable<Security> FilterByStrikes(this IEnumerable<Security> options, decimal centralStrike, int? below, int? above)
+	{
+		if (options is null)
+			throw new ArgumentNullException(nameof(options));
+
+		var arr = options.ToArray();
+		var strikes = arr.Select(o => o.Strike).OfType<decimal>().Distinct().ToArray();
+
+		var lower = strikes.Where(strike => strike < centralStrike).OrderDescending();
+		var upper = strikes.Where(strike => strike > centralStrike).Order();
+
+		var kept = new HashSet<decimal> { centralStrike };
+		kept.UnionWith(below is int b ? lower.Take(b) : lower);
+		kept.UnionWith(above is int a ? upper.Take(a) : upper);
+
+		return arr.Where(o => o.Strike is decimal strike && kept.Contains(strike));
+	}
+
+	/// <summary>
 	/// To filter instruments by the underlying asset.
 	/// </summary>
 	/// <param name="securities">Instruments to be filtered.</param>
@@ -631,15 +657,24 @@ public static class DerivativesHelper
 		if (security.ExpiryDate == null)
 			throw new ArgumentException(LocalizedStrings.NoExpirationDate.Put(security.Id), nameof(security));
 
-		var expDate = security.ExpiryDate.Value;
+		return GetExpirationMoment(security.ExpiryDate.Value, provider.GetOrCreateBoard(security.ToSecurityId().BoardCode));
+	}
 
-		if (expDate.TimeOfDay == TimeSpan.Zero)
-		{
-			var board = provider.GetOrCreateBoard(security.ToSecurityId().BoardCode);
-			expDate += board.ExpiryTime;
-		}
+	/// <summary>
+	/// The moment an instrument expires: its expiry date as given when that carries a time of day, otherwise the board's
+	/// expiry time on that date, which is the board's local time.
+	/// </summary>
+	/// <param name="expiryDate">The expiry date of the instrument, UTC.</param>
+	/// <param name="board">The board the instrument trades on, or <see langword="null"/> when it is not known.</param>
+	/// <returns>The expiry moment, UTC.</returns>
+	internal static DateTime GetExpirationMoment(DateTime expiryDate, ExchangeBoard board)
+	{
+		if (expiryDate.TimeOfDay != TimeSpan.Zero || board is null)
+			return expiryDate;
 
-		return expDate;
+		var local = DateTime.SpecifyKind(expiryDate.Date + board.ExpiryTime, DateTimeKind.Unspecified);
+
+		return TimeZoneInfo.ConvertTimeToUtc(local, board.TimeZone ?? TimeZoneInfo.Utc);
 	}
 
 	/// <summary>
@@ -797,18 +832,27 @@ public static class DerivativesHelper
 		if (model == null)
 			throw new ArgumentNullException(nameof(model));
 
-		QuoteChange Convert(QuoteChange quote)
+		// A level no volatility explains - a bid under what the option is worth for certain, an ask above the asset itself -
+		// is left out rather than shown as a quote at no volatility.
+		IEnumerable<QuoteChange> Convert(IEnumerable<QuoteChange> quotes)
 		{
-			quote.Price = model.ImpliedVolatility(currentTime, quote.Price) ?? 0;
-			return quote;
+			foreach (var quote in quotes)
+			{
+				if (model.ImpliedVolatility(currentTime, quote.Price) is not decimal volatility)
+					continue;
+
+				var converted = quote;
+				converted.Price = volatility;
+				yield return converted;
+			}
 		}
 
 		return new()
 		{
 			ServerTime = depth.ServerTime,
 			SecurityId = depth.SecurityId,
-			Bids = [.. depth.Bids.Select(Convert)],
-			Asks = [.. depth.Asks.Select(Convert)],
+			Bids = [.. Convert(depth.Bids)],
+			Asks = [.. Convert(depth.Asks)],
 		};
 	}
 
@@ -874,12 +918,15 @@ public static class DerivativesHelper
 		if (deviation < 0)
 			throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.InvalidValue);
 
+		var drift = (double)(assetPrice / strike).Log() + (double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp;
 		var divisor = (double)deviation * timeToExp.Sqrt();
-		if (divisor == 0)
-			return 0;
 
-		return ((double)(assetPrice / strike).Log() +
-			(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / divisor;
+		// Without volatility, or with no time left, the forward is known and lies on one side of the strike for certain,
+		// which puts d1 at infinity on that side; exactly on the strike neither side wins.
+		if (divisor == 0)
+			return drift > 0 ? double.PositiveInfinity : drift < 0 ? double.NegativeInfinity : 0;
+
+		return drift / divisor;
 	}
 
 	/// <summary>
@@ -1047,13 +1094,20 @@ public static class DerivativesHelper
 
 		const decimal min = 0.00001m;
 
-		// A premium at or below the price of a motionless asset is explained by no positive volatility.
-		if (premium <= getPremium(min))
+		// The price at a motionless asset. An option gains with the deviation and a book short of it loses, so the premium to
+		// invert lies on one side of this price; the price itself is explained by no positive volatility.
+		if (getPremium(min) is not decimal atMin || atMin == premium)
 			return null;
 
-		// The premium grows with the deviation, so the search starts from a bracket that already holds
-		// the answer: the ceiling is doubled until the premium it prices exceeds the one being inverted.
-		// Reporting a ceiling the search merely stopped at would be indistinguishable from a real quote.
+		var isAbove = premium > atMin;
+
+		// Whether the premium at a deviation has come from the motionless asset's side to the one being inverted, or past it.
+		bool HasReached(decimal atDeviation)
+			=> atDeviation == premium || (premium > atDeviation) != isAbove;
+
+		// The search starts from a bracket that already holds the answer: the ceiling is doubled until the premium it prices
+		// is past the one being inverted. Reporting a ceiling the search merely stopped at would be indistinguishable from a
+		// real quote.
 		const decimal maxDeviation = 1000m;
 
 		var low = 0m;
@@ -1064,7 +1118,7 @@ public static class DerivativesHelper
 			if (getPremium(high) is not decimal atHigh)
 				return null;
 
-			if (atHigh >= premium)
+			if (HasReached(atHigh))
 				break;
 
 			if (high >= maxDeviation)
@@ -1081,7 +1135,10 @@ public static class DerivativesHelper
 		{
 			var deviation = (high + low) / 2;
 
-			if (getPremium(deviation) > premium)
+			if (getPremium(deviation) is not decimal atDeviation)
+				return null;
+
+			if (HasReached(atDeviation))
 				high = deviation;
 			else
 				low = deviation;

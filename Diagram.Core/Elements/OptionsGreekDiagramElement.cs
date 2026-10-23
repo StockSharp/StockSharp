@@ -16,6 +16,7 @@ public class OptionsGreekDiagramElement : OptionsBaseModelDiagramElement<IBlackS
 
 	private decimal? _assetPrice;
 	private decimal? _deviation;
+	private decimal? _premium;
 
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "C076ECF2-C64A-41F7-A470-8C1AB9634F34".To<Guid>();
@@ -41,6 +42,7 @@ public class OptionsGreekDiagramElement : OptionsBaseModelDiagramElement<IBlackS
 	{
 		AddInput(StaticSocketIds.Price, LocalizedStrings.UnderlyingAssetPrice, DiagramSocketType.Unit, ProcessAssetPrice);
 		AddInput(StaticSocketIds.MaxDeviation, LocalizedStrings.MaxDeviation, DiagramSocketType.Unit, ProcessDeviation);
+		AddInput(StaticSocketIds.Premium, LocalizedStrings.Premium, DiagramSocketType.Unit, ProcessPremium);
 
 		_outputSocket = AddOutput(StaticSocketIds.Output, LocalizedStrings.Result, DiagramSocketType.Unit);
 
@@ -56,6 +58,7 @@ public class OptionsGreekDiagramElement : OptionsBaseModelDiagramElement<IBlackS
 
 		_assetPrice = default;
 		_deviation = default;
+		_premium = default;
 	}
 
 	private void ProcessAssetPrice(DiagramSocketValue value)
@@ -67,6 +70,12 @@ public class OptionsGreekDiagramElement : OptionsBaseModelDiagramElement<IBlackS
 	private void ProcessDeviation(DiagramSocketValue value)
 	{
 		_deviation = value.GetValue<decimal?>();
+		TryCalcOutputValue(value);
+	}
+
+	private void ProcessPremium(DiagramSocketValue value)
+	{
+		_premium = value.GetValue<decimal?>();
 		TryCalcOutputValue(value);
 	}
 
@@ -86,7 +95,8 @@ public class OptionsGreekDiagramElement : OptionsBaseModelDiagramElement<IBlackS
 			BlackScholesGreeks.Vega => model.Vega(time, _deviation, _assetPrice),
 			BlackScholesGreeks.Theta => model.Theta(time, _deviation, _assetPrice),
 			BlackScholesGreeks.Rho => model.Rho(time, _deviation, _assetPrice),
-			BlackScholesGreeks.IV => model.ImpliedVolatility(time, _assetPrice ?? 0),
+			// The volatility is that of the option's own price, at the asset's price given or else the market's.
+			BlackScholesGreeks.IV => _premium is decimal premium ? model.ImpliedVolatility(time, premium, _assetPrice) : null,
 			BlackScholesGreeks.Premium => model.Premium(time, _deviation, _assetPrice),
 			_ => throw new InvalidOperationException(Greek.To<string>()),
 		};

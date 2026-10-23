@@ -79,6 +79,7 @@ public interface IBlackScholes
 	/// </summary>
 	/// <param name="currentTime">The current time.</param>
 	/// <param name="premium">The option premium.</param>
+	/// <param name="assetPrice">Underlying asset price.</param>
 	/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
-	decimal? ImpliedVolatility(DateTime currentTime, decimal premium);
+	decimal? ImpliedVolatility(DateTime currentTime, decimal premium, decimal? assetPrice = null);
 }

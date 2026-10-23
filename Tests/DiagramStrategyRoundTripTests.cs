@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
 using StockSharp.Algo.Candles.Patterns;
+using StockSharp.Algo.Derivatives;
 using StockSharp.Diagram;
 using StockSharp.Diagram.Elements;
 using StockSharp.Localization;
@@ -3120,6 +3121,182 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		panel.IndicatorElements.Count.AssertEqual(1, "wiring indicator values into a panel must put an indicator series on it");
 		((IChartIndicatorElementWrapper)panel.IndicatorElements.First()).Element.AssertNotNull("the series has a chart element behind it");
 		panel.InputSockets.Count.AssertEqual(2, "the panel must offer a free input again once one has been taken");
+	}
+
+	#endregion
+
+	#region The option elements
+
+	private sealed class SeenDesk : OptionsDeskDiagramElement
+	{
+		public BasketBlackScholes Seen => Model;
+
+		public void Feed(IBlackScholes model)
+			=> ProcessModel(new DiagramSocketValue(InputSockets.First(s => s.Id == StaticSocketIds.BlackScholes.ToString()), DateTime.UtcNow, model, null, null));
+	}
+
+	private sealed class SeenPositionChart : OptionsPositionChartDiagramElement
+	{
+		public BasketBlackScholes Seen => Model;
+
+		public void Feed(IBlackScholes model)
+			=> ProcessModel(new DiagramSocketValue(InputSockets.First(s => s.Id == StaticSocketIds.BlackScholes.ToString()), DateTime.UtcNow, model, null, null));
+	}
+
+	private sealed class SeenQuoting : OptionsQuotingDiagramElement
+	{
+		public IBlackScholes Seen => Model;
+
+		public void Feed(IBlackScholes model)
+			=> ProcessModel(new DiagramSocketValue(InputSockets.First(s => s.Id == StaticSocketIds.BlackScholes.ToString()), DateTime.UtcNow, model, null, null));
+	}
+
+	private sealed class SeenGreek(DiagramStrategy strategy) : OptionsGreekDiagramElement
+	{
+		public override DiagramStrategy Strategy
+		{
+			get => strategy;
+			set => throw new NotSupportedException();
+		}
+
+		public void Feed(StaticSocketIds socket, object value, DateTime time)
+		{
+			var input = InputSockets.First(s => s.Id == socket.ToString());
+			input.Action(new DiagramSocketValue(input, time, value, null, null));
+		}
+	}
+
+	private static BasketBlackScholes CreateBasket()
+		=> new(new Security { Id = "SI@FORTS" }, Mock.Of<IMarketDataProvider>(), Mock.Of<IPositionProvider>());
+
+	// A put at the money half a year out, on an asset the market prices at 100.
+	private static (BlackScholes Model, DateTime Time) CreateQuotedPut()
+	{
+		var time = new DateTime(2026, 1, 5, 12, 0, 0, DateTimeKind.Utc);
+		var underlying = new Security { Id = "UND@TEST" };
+		var put = new Security
+		{
+			Id = "P100@TEST",
+			Type = SecurityTypes.Option,
+			OptionType = OptionTypes.Put,
+			Strike = 100m,
+			ExpiryDate = time.AddDays(182.5),
+			UnderlyingSecurityId = underlying.Id,
+		};
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(100m);
+
+		return (new BlackScholes(put, underlying, dataProvider.Object), time);
+	}
+
+	/// <summary>
+	/// In volatility mode the greeks element finds the volatility that prices the option at the premium it is given: the
+	/// premium the model gives at a deviation of 0.2 comes back as 20 %.
+	/// </summary>
+	[TestMethod]
+	public void TheGreeksInVolatilityModeInvertTheOptionsPremium()
+	{
+		var (model, time) = CreateQuotedPut();
+		var premium = model.Premium(time, 0.2m, 100m).Value;
+
+		using var strategy = new DiagramStrategy();
+		var greek = new SeenGreek(strategy) { Greek = BlackScholesGreeks.IV };
+		var outputs = new List<object>();
+		greek.ProcessOutput += value => outputs.Add(value.Value);
+
+		greek.Feed(StaticSocketIds.BlackScholes, model, time);
+		greek.Feed(StaticSocketIds.Price, 100m, time);
+		greek.Feed(StaticSocketIds.Premium, premium, time);
+
+		// The model takes the deviation as a fraction and answers the implied volatility in percent.
+		IsTrue(outputs.Count > 0, "The element gave no volatility.");
+		AreEqual(20m, Math.Round((decimal)outputs[^1], 1));
+	}
+
+	/// <summary>
+	/// In volatility mode the element prices the option at the asset's price it is given, as it does in every other mode: a
+	/// premium priced at 20 % with the asset at 110 comes back as 20 % while the market prices the asset at 100.
+	/// </summary>
+	[TestMethod]
+	public void TheGreeksInVolatilityModeTakeTheAssetPriceTheyAreGiven()
+	{
+		var (model, time) = CreateQuotedPut();
+		var premium = model.Premium(time, 0.2m, 110m).Value;
+
+		using var strategy = new DiagramStrategy();
+		var greek = new SeenGreek(strategy) { Greek = BlackScholesGreeks.IV };
+		var outputs = new List<object>();
+		greek.ProcessOutput += value => outputs.Add(value.Value);
+
+		greek.Feed(StaticSocketIds.BlackScholes, model, time);
+		greek.Feed(StaticSocketIds.Price, 110m, time);
+		greek.Feed(StaticSocketIds.Premium, premium, time);
+
+		IsTrue(outputs.Count > 0, "The element gave no volatility.");
+		AreEqual(20m, Math.Round((decimal)outputs[^1], 1));
+	}
+
+	/// <summary>
+	/// The asset's price is no premium: with only it given, the element in volatility mode has nothing to invert and
+	/// gives nothing, rather than the volatility of an option worth as much as its asset.
+	/// </summary>
+	[TestMethod]
+	public void TheGreeksInVolatilityModeTakeNoAssetPriceForAPremium()
+	{
+		var (model, time) = CreateQuotedPut();
+
+		using var strategy = new DiagramStrategy();
+		var greek = new SeenGreek(strategy) { Greek = BlackScholesGreeks.IV };
+		var outputs = new List<object>();
+		greek.ProcessOutput += value => outputs.Add(value.Value);
+
+		greek.Feed(StaticSocketIds.BlackScholes, model, time);
+		greek.Feed(StaticSocketIds.Price, 100m, time);
+
+		AreEqual(0, outputs.Count, $"The element gave {string.Join(", ", outputs)}.");
+	}
+
+	/// <summary>
+	/// The option desk of a scheme works on the pricing model its model socket gives it.
+	/// </summary>
+	[TestMethod]
+	public void TheDeskTakesTheModelItIsGiven()
+	{
+		var desk = new SeenDesk();
+		var basket = CreateBasket();
+
+		desk.Feed(basket);
+
+		AreSame(basket, desk.Seen);
+	}
+
+	/// <summary>
+	/// The position chart of a scheme works on the pricing model its model socket gives it.
+	/// </summary>
+	[TestMethod]
+	public void ThePositionChartTakesTheModelItIsGiven()
+	{
+		var chart = new SeenPositionChart();
+		var basket = CreateBasket();
+
+		chart.Feed(basket);
+
+		AreSame(basket, chart.Seen);
+	}
+
+	/// <summary>
+	/// The quoting by volatility of a scheme works on the pricing model its model socket gives it.
+	/// </summary>
+	[TestMethod]
+	public void TheQuotingTakesTheModelItIsGiven()
+	{
+		var quoting = new SeenQuoting();
+		var basket = CreateBasket();
+
+		quoting.Feed(basket);
+
+		AreSame(basket, quoting.Seen);
 	}
 
 	#endregion
