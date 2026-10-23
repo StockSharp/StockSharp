@@ -895,6 +895,7 @@
   "Chart3D": "نمودار سه‌بعدی",
   "ChartArea": "ناحیه نمودار",
   "ChartAreaName": "نام ناحیه نمودار.",
+  "ChartAxes": "محورهای نمودار",
   "ChartElements": "عناصر نمودار",
   "ChartLayoutNotRestored": "چیدمان نمودار بازیابی نشد: {0}",
   "ChartPainterAlreadySet": "رسم‌کننده اندیکاتور فقط یک بار می‌تواند تنظیم شود.",

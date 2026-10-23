@@ -895,6 +895,7 @@
   "Chart3D": "3D График",
   "ChartArea": "Область графика",
   "ChartAreaName": "Название области графика.",
+  "ChartAxes": "Оси графика",
   "ChartElements": "Элементы графика",
   "ChartLayoutNotRestored": "Раскладка графика не восстановлена: {0}",
   "ChartPainterAlreadySet": "Средство отрисовки индикатора можно задать только один раз.",

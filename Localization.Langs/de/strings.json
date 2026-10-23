@@ -895,6 +895,7 @@
   "Chart3D": "3D-Chart",
   "ChartArea": "Chartbereich",
   "ChartAreaName": "Name des Chartbereichs.",
+  "ChartAxes": "Chartachsen",
   "ChartElements": "Chartelemente",
   "ChartLayoutNotRestored": "Chart-Layout wurde nicht wiederhergestellt: {0}",
   "ChartPainterAlreadySet": "Der Chart-Renderer des Indikatorelements kann nur einmal gesetzt werden.",

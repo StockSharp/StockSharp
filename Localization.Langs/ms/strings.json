@@ -895,6 +895,7 @@
   "Chart3D": "Carta 3D",
   "ChartArea": "Kawasan Carta",
   "ChartAreaName": "Nama kawasan carta.",
+  "ChartAxes": "Paksi Carta",
   "ChartElements": "Elemen Carta",
   "ChartLayoutNotRestored": "Susun atur carta tidak dipulihkan: {0}",
   "ChartPainterAlreadySet": "Pemapar penunjuk hanya boleh ditetapkan sekali.",

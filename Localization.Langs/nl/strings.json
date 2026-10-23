@@ -895,6 +895,7 @@
   "Chart3D": "3D Grafiek",
   "ChartArea": "Grafiekgebied",
   "ChartAreaName": "Naam van het grafiekgebied.",
+  "ChartAxes": "Grafiekassen",
   "ChartElements": "Grafiekelementen",
   "ChartLayoutNotRestored": "Grafiekindeling is niet hersteld: {0}",
   "ChartPainterAlreadySet": "De indicator-renderer kan slechts één keer worden ingesteld.",

@@ -895,6 +895,7 @@
   "Chart3D": "3D graf",
   "ChartArea": "Oblast grafu",
   "ChartAreaName": "Název oblasti grafu.",
+  "ChartAxes": "Osy grafu",
   "ChartElements": "Prvky grafu",
   "ChartLayoutNotRestored": "Rozvržení grafu nebylo obnoveno: {0}",
   "ChartPainterAlreadySet": "Vykreslovač indikátoru lze nastavit pouze jednou.",

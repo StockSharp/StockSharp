@@ -895,6 +895,7 @@
   "Chart3D": "Biểu đồ 3D",
   "ChartArea": "Khu vực biểu đồ",
   "ChartAreaName": "Tên khu vực biểu đồ.",
+  "ChartAxes": "Các trục biểu đồ",
   "ChartElements": "Các phần tử biểu đồ",
   "ChartLayoutNotRestored": "Không khôi phục được bố cục biểu đồ: {0}",
   "ChartPainterAlreadySet": "Bộ kết xuất biểu đồ của phần tử chỉ báo chỉ có thể được thiết lập một lần.",

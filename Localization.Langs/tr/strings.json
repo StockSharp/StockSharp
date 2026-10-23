@@ -895,6 +895,7 @@
   "Chart3D": "3D Grafik",
   "ChartArea": "Grafik alanı",
   "ChartAreaName": "Grafik alanı adı.",
+  "ChartAxes": "Grafik eksenleri",
   "ChartElements": "Grafik öğeleri",
   "ChartLayoutNotRestored": "Grafik düzeni geri yüklenmedi: {0}",
   "ChartPainterAlreadySet": "Göstergenin grafik çizeri sadece bir kez ayarlanabilir.",

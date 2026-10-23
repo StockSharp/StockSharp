@@ -895,6 +895,7 @@
   "Chart3D": "Wykres 3D",
   "ChartArea": "Obszar wykresu",
   "ChartAreaName": "Nazwa obszaru wykresu.",
+  "ChartAxes": "Osie wykresu",
   "ChartElements": "Elementy wykresu",
   "ChartLayoutNotRestored": "Nie przywrócono układu wykresu: {0}",
   "ChartPainterAlreadySet": "Moduł renderujący wskaźnik można ustawić tylko raz.",

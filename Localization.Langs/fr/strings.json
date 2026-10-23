@@ -895,6 +895,7 @@
   "Chart3D": "Graphique 3D",
   "ChartArea": "Zone de graphique",
   "ChartAreaName": "Nom de la zone du graphique.",
+  "ChartAxes": "Axes du graphique",
   "ChartElements": "Éléments du graphique",
   "ChartLayoutNotRestored": "La disposition du graphique n\u0027a pas été restaurée : {0}",
   "ChartPainterAlreadySet": "Le moteur de rendu de l\u0027indicateur ne peut être défini qu\u0027une seule fois.",

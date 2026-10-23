@@ -895,6 +895,7 @@
   "Chart3D": "3Dチャート",
   "ChartArea": "チャートエリア",
   "ChartAreaName": "チャートエリアの名前。",
+  "ChartAxes": "チャートの軸",
   "ChartElements": "チャートの要素",
   "ChartLayoutNotRestored": "チャートのレイアウトを復元できませんでした: {0}",
   "ChartPainterAlreadySet": "インジケータ要素のチャートレンダラーは一度だけ設定できます。",

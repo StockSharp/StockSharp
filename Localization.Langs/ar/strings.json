@@ -895,6 +895,7 @@
   "Chart3D": "رسم بياني ثلاثي الأبعاد",
   "ChartArea": "منطقة الرسم البياني",
   "ChartAreaName": "اسم منطقة الرسم البياني.",
+  "ChartAxes": "محاور الرسم البياني",
   "ChartElements": "عناصر الرسم البياني",
   "ChartLayoutNotRestored": "لم تتم استعادة تخطيط الرسم البياني: {0}",
   "ChartPainterAlreadySet": "لا يمكن تعيين رسام المؤشر إلا مرة واحدة.",

@@ -895,6 +895,7 @@
   "Chart3D": "3D Графік",
   "ChartArea": "Область діаграми",
   "ChartAreaName": "Назва області графіка.",
+  "ChartAxes": "Осі графіка",
   "ChartElements": "Елементи графіка",
   "ChartLayoutNotRestored": "Розкладку графіка не відновлено: {0}",
   "ChartPainterAlreadySet": "Рендер чарту елемента індикатора може бути встановлений лише один раз.",

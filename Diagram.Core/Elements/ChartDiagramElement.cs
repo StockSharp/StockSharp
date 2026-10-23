@@ -304,21 +304,21 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 			.SetDisplay(LocalizedStrings.Chart, LocalizedStrings.Panel, LocalizedStrings.PanelName, 10)
 			.SetOnValueChangedHandler(name => _area.Title = name);
 
-		_candleElements = AddElementsCollectionParam<IChartCandleElement>("Candles");
-		_indicatorElements = AddElementsCollectionParam<TChartIndicatorElementWrapper>("Indicators");
-		_orderElements = AddElementsCollectionParam<IChartOrderElement>("Orders");
-		_tradeElements = AddElementsCollectionParam<IChartTradeElement>("Trades");
+		_candleElements = AddElementsCollectionParam<IChartCandleElement>("Candles", LocalizedStrings.Candles);
+		_indicatorElements = AddElementsCollectionParam<TChartIndicatorElementWrapper>("Indicators", LocalizedStrings.Indicators);
+		_orderElements = AddElementsCollectionParam<IChartOrderElement>("Orders", LocalizedStrings.Orders);
+		_tradeElements = AddElementsCollectionParam<IChartTradeElement>("Trades", LocalizedStrings.Trades);
 
 		EnsureEmptySocket();
 
-		_xAxes = AddAxesCollectionParam(LocalizedStrings.XAxis, AddXAxis, RemoveXAxis);
-		_yAxes = AddAxesCollectionParam(LocalizedStrings.YAxis, AddYAxis, RemoveYAxis);
+		_xAxes = AddAxesCollectionParam("XAxis", LocalizedStrings.XAxis, AddXAxis, RemoveXAxis);
+		_yAxes = AddAxesCollectionParam("YAxis", LocalizedStrings.YAxis, AddYAxis, RemoveYAxis);
 
 		RemoveAxes();
 		TryAddDefaultAxes();
 	}
 
-	private ObsCollection<IChartAxis> AddAxesCollectionParam(string name, Action<IChartAxis> addAxis, Action<IChartAxis> removeAxis)
+	private ObsCollection<IChartAxis> AddAxesCollectionParam(string name, string displayName, Action<IChartAxis> addAxis, Action<IChartAxis> removeAxis)
 	{
 		var paramName = name + "CollectionParam";
 
@@ -352,7 +352,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		};
 
 		var collectionParam = AddParam(paramName, axesCollection)
-			.SetDisplay("Chart axes", name, string.Empty, 20)
+			.SetDisplay(LocalizedStrings.ChartAxes, displayName, string.Empty, 20)
 			.SetSaveLoadHandlers(_ => [], _ => null);
 
 		var editor = CreateEditor("AxesEditorTemplate");
@@ -621,7 +621,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		}
 	}
 
-	private ObsCollection<T> AddElementsCollectionParam<T>(string name)
+	private ObsCollection<T> AddElementsCollectionParam<T>(string name, string displayName)
 	{
 		var paramName = name + "CollectionParam";
 
@@ -646,7 +646,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		elementsColl.CollectionChanged += OnCollectionChanged;
 
 		var collectionParam = AddParam(paramName, elementsColl)
-			.SetDisplay(LocalizedStrings.ChartElements, name, string.Empty, 20)
+			.SetDisplay(LocalizedStrings.ChartElements, displayName, string.Empty, 20)
 			.SetSaveLoadHandlers(_ => [], _ => null);
 
 		collectionParam.IgnoreOnSave = true;

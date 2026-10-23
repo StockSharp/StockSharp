@@ -895,6 +895,7 @@
   "Chart3D": "3D Grafik",
   "ChartArea": "Chizma maydoni",
   "ChartAreaName": "Grafik hududining nomi.",
+  "ChartAxes": "Chizma o\u0027qlari",
   "ChartElements": "Chizma elementlari",
   "ChartLayoutNotRestored": "Grafik tartibi tiklanmadi: {0}",
   "ChartPainterAlreadySet": "Indikator elementining chart chizuvchisi faqat bir marta o\u0027rnatilishi mumkin.",

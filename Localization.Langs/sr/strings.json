@@ -895,6 +895,7 @@
   "Chart3D": "3Д Графикон",
   "ChartArea": "Област графикона",
   "ChartAreaName": "Назив области графикона.",
+  "ChartAxes": "Осе графикона",
   "ChartElements": "Елементи графикона",
   "ChartLayoutNotRestored": "Распоред графикона није враћен: {0}",
   "ChartPainterAlreadySet": "Цртач индикатора може бити постављен само једном.",

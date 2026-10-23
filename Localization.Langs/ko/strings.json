@@ -895,6 +895,7 @@
   "Chart3D": "3D 차트",
   "ChartArea": "차트 영역",
   "ChartAreaName": "차트 영역 이름.",
+  "ChartAxes": "차트 축",
   "ChartElements": "차트 요소들",
   "ChartLayoutNotRestored": "차트 레이아웃을 복원하지 못했습니다: {0}",
   "ChartPainterAlreadySet": "표시기 요소의 차트 렌더러는 한 번만 설정할 수 있습니다.",

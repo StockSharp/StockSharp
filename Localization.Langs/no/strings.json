@@ -895,6 +895,7 @@
   "Chart3D": "3D Diagram",
   "ChartArea": "Diagramområde",
   "ChartAreaName": "Navn på diagramområde.",
+  "ChartAxes": "Diagramakser",
   "ChartElements": "Diagramelementer",
   "ChartLayoutNotRestored": "Diagramoppsettet ble ikke gjenopprettet: {0}",
   "ChartPainterAlreadySet": "Indikatorrenderer kan bare settes én gang.",

@@ -895,6 +895,7 @@
   "Chart3D": "Chart 3D",
   "ChartArea": "Chart area",
   "ChartAreaName": "Chart area name.",
+  "ChartAxes": "Chart axes",
   "ChartElements": "Chart elements",
   "ChartLayoutNotRestored": "Chart layout was not restored: {0}",
   "ChartPainterAlreadySet": "Indicator painter can only be set once.",

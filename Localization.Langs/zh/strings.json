@@ -895,6 +895,7 @@
   "Chart3D": "3D图表",
   "ChartArea": "图表区域",
   "ChartAreaName": "图表区域名称。",
+  "ChartAxes": "图表坐标轴",
   "ChartElements": "图表元素",
   "ChartLayoutNotRestored": "未能恢复图表布局：{0}",
   "ChartPainterAlreadySet": "指标元素的图表渲染器只能设置一次。",

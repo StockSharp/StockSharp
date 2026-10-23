@@ -895,6 +895,7 @@
   "Chart3D": "Grafico 3D",
   "ChartArea": "Area del grafico",
   "ChartAreaName": "Nome dell\u0027area del grafico.",
+  "ChartAxes": "Assi del grafico",
   "ChartElements": "Elementi del grafico",
   "ChartLayoutNotRestored": "Il layout del grafico non è stato ripristinato: {0}",
   "ChartPainterAlreadySet": "Il renderer dell\u0027indicatore può essere impostato una sola volta.",

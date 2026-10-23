@@ -895,6 +895,7 @@
   "Chart3D": "3D Grafikon",
   "ChartArea": "Diagram terület",
   "ChartAreaName": "A diagram területének neve.",
+  "ChartAxes": "A grafikon tengelyei",
   "ChartElements": "A grafikon elemei",
   "ChartLayoutNotRestored": "A diagram elrendezése nem állt vissza: {0}",
   "ChartPainterAlreadySet": "Az indikátor elem grafikon rajzolóját csak egyszer lehet beállítani.",

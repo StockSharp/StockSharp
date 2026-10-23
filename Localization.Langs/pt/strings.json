@@ -895,6 +895,7 @@
   "Chart3D": "Gráfico 3D",
   "ChartArea": "Área do gráfico",
   "ChartAreaName": "Nome da área do gráfico.",
+  "ChartAxes": "Eixos do gráfico",
   "ChartElements": "Elementos do gráfico",
   "ChartLayoutNotRestored": "O esquema do gráfico não foi restaurado: {0}",
   "ChartPainterAlreadySet": "O renderizador do gráfico do elemento indicador pode ser definido apenas uma vez.",

@@ -895,6 +895,7 @@
   "Chart3D": "3D-Kaavio",
   "ChartArea": "Kaavioalue",
   "ChartAreaName": "Kaavioalueen nimi.",
+  "ChartAxes": "Kaavion akselit",
   "ChartElements": "Kaavion elementit",
   "ChartLayoutNotRestored": "Kaavion asettelua ei palautettu: {0}",
   "ChartPainterAlreadySet": "Indikaattorielementin kaavionpiirtäjä voidaan asettaa vain kerran.",

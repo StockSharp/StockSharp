@@ -895,6 +895,7 @@
   "Chart3D": "Grafic 3D",
   "ChartArea": "Zona diagramei",
   "ChartAreaName": "Numele zonei graficului.",
+  "ChartAxes": "Axele graficului",
   "ChartElements": "Elementele graficului",
   "ChartLayoutNotRestored": "Aranjamentul graficului nu a fost restaurat: {0}",
   "ChartPainterAlreadySet": "Rendererul graficului elementului indicator poate fi setat doar o dată.",

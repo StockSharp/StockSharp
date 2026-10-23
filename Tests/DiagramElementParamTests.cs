@@ -1,10 +1,66 @@
 namespace StockSharp.Tests;
 
+using System.ComponentModel.DataAnnotations;
+
 using StockSharp.Diagram;
+using StockSharp.Diagram.Elements;
+using StockSharp.Localization;
 
 [TestClass]
 public class DiagramElementParamTests : BaseTestClass
 {
+	/// <summary>
+	/// The chart panel names its collections of chart elements and of axes in the interface's language: a property grid
+	/// shows these names, and a Russian one showed "Candles" and "Chart axes".
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize]
+	public void ChartPanelNamesItsCollectionsInTheInterfacesLanguage()
+	{
+		const string code = "q3";
+
+		var previous = LocalizedStrings.ActiveLanguage;
+
+		try
+		{
+			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>
+			{
+				{ LocalizedStrings.CultureCodeKey, "en-US" },
+				{ LocalizedStrings.CandlesKey, "Q candles" },
+				{ LocalizedStrings.IndicatorsKey, "Q indicators" },
+				{ LocalizedStrings.OrdersKey, "Q orders" },
+				{ LocalizedStrings.TradesKey, "Q trades" },
+				{ LocalizedStrings.XAxisKey, "Q x" },
+				{ LocalizedStrings.YAxisKey, "Q y" },
+				{ LocalizedStrings.ChartAxesKey, "Q axes" },
+			});
+
+			LocalizedStrings.ActiveLanguage = code;
+
+			var panel = new DummyChartDiagramElement();
+
+			DisplayAttribute Display(string name)
+				=> panel.Parameters.Single(param => param.Name == name).Attributes.OfType<DisplayAttribute>().Single();
+
+			AreEqual("Q candles", Display("CandlesCollectionParam").Name);
+			AreEqual("Q indicators", Display("IndicatorsCollectionParam").Name);
+			AreEqual("Q orders", Display("OrdersCollectionParam").Name);
+			AreEqual("Q trades", Display("TradesCollectionParam").Name);
+
+			var xAxes = Display("XAxisCollectionParam");
+
+			AreEqual("Q x", xAxes.Name);
+			AreEqual("Q axes", xAxes.GroupName);
+			AreEqual("Q y", Display("YAxisCollectionParam").Name);
+		}
+		finally
+		{
+			LocalizedStrings.ActiveLanguage = previous;
+			LocalizedStrings.RemoveLanguage(code);
+			LocalizedStrings.ResetCache();
+		}
+	}
+
 	private sealed class AsyncSettings : IAsyncPersistable
 	{
 		public int Number { get; set; }

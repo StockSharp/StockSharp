@@ -895,6 +895,7 @@
   "Chart3D": "Grafik 3D",
   "ChartArea": "Wilayah grafik",
   "ChartAreaName": "Jeneng area grafik.",
+  "ChartAxes": "Sumbu grafik",
   "ChartElements": "Unsur-unsur grafik",
   "ChartLayoutNotRestored": "Tata letak grafik ora dipulihake: {0}",
   "ChartPainterAlreadySet": "Painter indikator mung bisa disetel sepisan.",

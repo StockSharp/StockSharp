@@ -895,6 +895,7 @@
   "Chart3D": "Gràfic 3D",
   "ChartArea": "Àrea del gràfic",
   "ChartAreaName": "Nom de l\u0027àrea del gràfic.",
+  "ChartAxes": "Eixos del gràfic",
   "ChartElements": "Elements del gràfic",
   "ChartLayoutNotRestored": "No s\u0027ha restaurat la disposició del gràfic: {0}",
   "ChartPainterAlreadySet": "El renderitzador de l\u0027indicador només es pot establir una vegada.",

@@ -895,6 +895,7 @@
   "Chart3D": "3D Diagram",
   "ChartArea": "Diagramområde",
   "ChartAreaName": "Namn på diagramområdet.",
+  "ChartAxes": "Diagramaxlar",
   "ChartElements": "Diagramelement",
   "ChartLayoutNotRestored": "Diagramlayouten återställdes inte: {0}",
   "ChartPainterAlreadySet": "Diagrammålaren för indikatorelementet kan endast ställas in en gång.",

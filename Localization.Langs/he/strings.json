@@ -895,6 +895,7 @@
   "Chart3D": "תרשים תלת-ממדי",
   "ChartArea": "אזור התרשים",
   "ChartAreaName": "שם אזור התרשים.",
+  "ChartAxes": "צירי התרשים",
   "ChartElements": "אלמנטים של תרשים",
   "ChartLayoutNotRestored": "פריסת הגרף לא שוחזרה: {0}",
   "ChartPainterAlreadySet": "צייר התרשים של רכיב המחוון יכול להיות מוגדר רק פעם אחת.",

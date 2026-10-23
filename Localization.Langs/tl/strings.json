@@ -895,6 +895,7 @@
   "Chart3D": "Chart 3D",
   "ChartArea": "Chart area",
   "ChartAreaName": "Chart area name.",
+  "ChartAxes": "Mga axis ng chart",
   "ChartElements": "Chart elements",
   "ChartLayoutNotRestored": "Hindi naibalik ang layout ng chart: {0}",
   "ChartPainterAlreadySet": "Ang indicator painter ay maaaring itakda lamang nang isang beses.",
