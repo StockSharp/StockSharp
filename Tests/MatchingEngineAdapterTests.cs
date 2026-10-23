@@ -2646,4 +2646,44 @@ public class MatchingEngineAdapterTests : BaseTestClass
 		IsTrue(engine.GetSecurityState(_securityId).OrderBook.HasLevel(Sides.Buy, 100m),
 			"and it is the book's only bid, because it is the only thing in the book");
 	}
+
+	/// <summary>
+	/// A market that closes takes what it offered out of the book: an order finds no price there, while an open position keeps
+	/// the value of the quotes the market closed with, until the venue states a book again.
+	/// </summary>
+	[TestMethod]
+	public async Task AClosedMarketTradesNothingAndKeepsTheValueItClosedWith()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 2000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 101m, 10m, _start.AddSeconds(1)), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(150m, 10m)], [new QuoteChange(151m, 10m)]), CancellationToken);
+
+		var portfolio = engine.PortfolioManager.GetPortfolio(account);
+
+		AreEqual(490m, portfolio.UnrealizedPnL, "the position cost 1010 and the bid would pay 1500 for it");
+
+		var state = engine.GetSecurityState(_securityId);
+		state.CloseMarket();
+
+		IsTrue(state.IsMarketClosed, "the market is closed");
+		AreEqual(490m, portfolio.UnrealizedPnL, "a position keeps the value of the quotes its market closed with");
+
+		await run.SendAsync(NewOrder(2, account, Sides.Buy, OrderTypes.Market, 0m, 1m, _start.AddSeconds(3)), CancellationToken);
+
+		var replies = run.Executions.Where(m => m.OriginalTransactionId == 2).ToArray();
+
+		IsFalse(replies.Any(m => m.TradePrice is not null), "a closed market has nothing to trade with");
+		IsTrue(replies.Any(m => m.OrderState == OrderStates.Failed && m.Error is not null), "a market order finds no price there");
+
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(4), [new QuoteChange(120m, 10m)], [new QuoteChange(121m, 10m)]), CancellationToken);
+
+		IsFalse(state.IsMarketClosed, "a book the venue states opens the market again");
+		AreEqual(190m, portfolio.UnrealizedPnL, "and the position is valued at it");
+	}
 }

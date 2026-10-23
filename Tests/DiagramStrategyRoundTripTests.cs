@@ -392,6 +392,40 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A scheme asks for its market data as it starts: by the time the strategy is started the candles of its source are
+	/// among its own subscriptions, so it is not taken for a strategy without market data and stopped.
+	/// </summary>
+	[TestMethod]
+	public async Task A_scheme_has_asked_for_its_candles_by_the_time_it_is_started()
+	{
+		var graph = new Graph();
+		graph.Add(new CandlesDiagramElement { DataType = TimeSpan.FromMinutes(1).TimeFrame() });
+
+		var strategy = graph.Strategy;
+		var errors = new List<Exception>();
+
+		strategy.Error += (_, error) => errors.Add(error);
+
+		// The candles source asks for its history back from the connector's clock, so the clock has to be somewhere.
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		var now = new DateTime(2026, 1, 5, 10, 0, 0, DateTimeKind.Utc);
+		connector.As<ITimeProvider>().Setup(c => c.CurrentTime).Returns(now);
+		connector.As<ILogSource>().Setup(c => c.CurrentTime).Returns(now);
+
+		strategy.Connector = connector.Object;
+		strategy.Security = Helper.CreateSecurity();
+		strategy.Portfolio = Helper.CreatePortfolio();
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		AreEqual(0, errors.Count, $"The start failed: {errors.FirstOrDefault()?.Message}");
+		IsFalse(await strategy.StopIfNoMarketDataAsync(CancellationToken), "A scheme with a candles source was taken for one without market data.");
+		AreEqual(ProcessStates.Started, strategy.ProcessState);
+	}
+
+	/// <summary>
 	/// The point of a diagram: a value put into one element comes out of the last one, changed by
 	/// every element it passed. Two runs, because a graph that always answers the same thing has
 	/// carried nothing.

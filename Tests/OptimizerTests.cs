@@ -7,6 +7,7 @@ using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
 using StockSharp.Algo.Testing;
 using StockSharp.Designer;
+using StockSharp.Localization;
 
 [TestClass]
 // The optimizer spreads its own iterations across every core, so running these beside other tests
@@ -333,6 +334,100 @@ public class OptimizerTests : BaseTestClass
 		AreEqual(ChannelStates.Stopped, connector.State);
 		strategy.Dispose();
 		connector.Dispose();
+	}
+
+	/// <summary>
+	/// An iteration whose market data the storage does not hold ends without going the whole way, so the optimizer stops
+	/// its strategy as it does for any iteration it did not see through.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnIterationWithoutHistoryHasItsStrategyStopped()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		using var optimizer = new BruteForceOptimizer(new CollectionSecurityProvider([security]), new CollectionPortfolioProvider([portfolio]), fs.GetStorage(fs.GetSubTemp()));
+		optimizer.EmulationSettings.BatchSize = 1;
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		IStrategyParam[] parameters = [strategy.Parameters[nameof(SmaStrategy.Short)]];
+		(Strategy strategy, IStrategyParam[] parameters)[] iterations = [(strategy, parameters)];
+
+		var results = new List<Strategy>();
+
+		await foreach (var (result, _) in optimizer.RunAsync(start, start.AddDays(1), iterations, CancellationToken))
+			results.Add(result);
+
+		AreEqual(1, results.Count, "The iteration did not come back.");
+		AreEqual(ProcessStates.Stopped, results[0].ProcessState, "The optimizer left the strategy of an iteration that replayed nothing running.");
+	}
+
+	/// <summary>
+	/// Told to stop on subscription errors, the optimizer stops a strategy that asks for no market data with the error that
+	/// says so, and the iteration ends instead of waiting for data nothing asked for.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnIterationWhoseStrategyAsksForNoMarketDataEnds()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		using var optimizer = new BruteForceOptimizer(new CollectionSecurityProvider([security]), new CollectionPortfolioProvider([portfolio]), fs.GetStorage(fs.GetSubTemp()))
+		{
+			StopOnSubscriptionError = true,
+		};
+
+		optimizer.EmulationSettings.BatchSize = 1;
+
+		var strategy = new NoMarketDataStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		IStrategyParam[] parameters = [];
+		(Strategy strategy, IStrategyParam[] parameters)[] iterations = [(strategy, parameters)];
+
+		var run = CollectAsync(optimizer.RunAsync(start, start.AddDays(1), iterations, CancellationToken));
+		var completed = await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(20), CancellationToken));
+
+		IsTrue(completed == run, "The iteration of a strategy that asks for no market data never ended.");
+
+		var results = await run;
+
+		AreEqual(1, results.Length, "The iteration did not come back.");
+		AreEqual(LocalizedStrings.NoData, results[0].LastError?.Message, "The strategy was not told why it was stopped.");
+	}
+
+	// Starts without asking for any market data.
+	private sealed class NoMarketDataStrategy : Strategy
+	{
+	}
+
+	// What an optimization yields, gathered.
+	private static async Task<Strategy[]> CollectAsync(IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> results)
+	{
+		var strategies = new List<Strategy>();
+
+		await foreach (var (strategy, _) in results)
+			strategies.Add(strategy);
+
+		return [.. strategies];
 	}
 
 	/// <summary>

@@ -4399,4 +4399,198 @@ public class MarketEmulatorTests : BaseTestClass
 		AreEqual(140m, bands[1].TryGetDecimal(Level1Fields.MaxPrice), "and so is its ceiling");
 		AreEqual(nextSession, bands[1].ServerTime, "and the band is stamped with the session it belongs to");
 	}
+
+	/// <summary>
+	/// Once the history of a security has run out and the last bar it recorded has been handed over, the security has no
+	/// market: a market order finds no price and a limit order waits, while an order sent on that last bar still trades at its
+	/// prices and an open position keeps the value it had when the market closed.
+	/// </summary>
+	[TestMethod]
+	public async Task ASecurityWhoseHistoryRanOutHasNoMarket()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+		var onBars = new Dictionary<DateTime, OrderRegisterMessage>();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// The subscriber buys on every bar handed over, as a strategy does.
+		emu.NewOutMessageAsync += async (message, ct) =>
+		{
+			if (message is not CandleMessage { State: CandleStates.Finished, OpenTime: var open } || onBars.ContainsKey(open))
+				return;
+
+			var order = MarketOrder(id, Sides.Buy, message.LocalTime);
+			onBars.Add(open, order);
+			await emu.SendInMessageAsync(order, ct);
+		};
+
+		bool Traded(OrderRegisterMessage order)
+			=> res.OfType<ExecutionMessage>().Any(m => m.OriginalTransactionId == order.TransactionId && m.TradePrice is not null);
+
+		await SendFlatBar(emu, id, subscriptionId, start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+		await SendFlatBar(emu, id, subscriptionId, start.AddMinutes(1), 110m);
+
+		// The replay has nothing more of the security while its last bar is still open.
+		await emu.SendInMessageAsync(new HistoryEndMessage { SecurityId = id, LocalTime = start.AddMinutes(1), ServerTime = start.AddMinutes(1) }, CancellationToken);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		IsTrue(onBars.TryGetValue(start.AddMinutes(1), out var onLastBar), "the last bar must be handed over");
+		IsTrue(Traded(onLastBar), "an order sent on the last bar trades at its prices");
+
+		var lastValue = res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(3) }, CancellationToken);
+
+		var market = MarketOrder(id, Sides.Buy, start.AddMinutes(3));
+		await emu.SendInMessageAsync(market, CancellationToken);
+
+		IsFalse(Traded(market), "nothing trades once the history of the security ran out");
+		IsTrue(res.OfType<ExecutionMessage>().Any(m => m.OriginalTransactionId == market.TransactionId && m.OrderState == OrderStates.Failed && m.Error is not null),
+			"a market order finds no price, as on an empty book");
+
+		res.Clear();
+
+		var limit = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = start.AddMinutes(3),
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+			Price = 200m,
+			Volume = 1,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(limit, CancellationToken);
+
+		IsFalse(Traded(limit), "a limit order has nothing to trade with");
+		AreEqual(OrderStates.Active, res.OfType<ExecutionMessage>().Last(m => m.OriginalTransactionId == limit.TransactionId && m.HasOrderInfo).OrderState, "and waits");
+		AreEqual(lastValue, res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == SecurityId.Money).TryGetDecimal(PositionChangeTypes.UnrealizedPnL),
+			"the position keeps the value it had when its market closed, whatever rests in the book since");
+	}
+
+	/// <summary>
+	/// History that goes on after its end was announced - a series subscribed later - gives the security its market back:
+	/// orders trade at the new prices.
+	/// </summary>
+	[TestMethod]
+	public async Task MoreHistoryAfterTheEndGivesTheMarketBack()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await SendFlatBar(emu, id, subscriptionId, start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+		await emu.SendInMessageAsync(MarketOrder(id, Sides.Buy, start.AddMinutes(1)), CancellationToken);
+
+		await emu.SendInMessageAsync(new HistoryEndMessage { SecurityId = id, LocalTime = start.AddMinutes(1), ServerTime = start.AddMinutes(1) }, CancellationToken);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		var state = ((MarketEmulator)emu).GetSecurityState(id);
+
+		IsTrue(state.IsMarketClosed, "the market closes once the history ran out");
+
+		await SendFlatBar(emu, id, subscriptionId, start.AddMinutes(10), 120m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(11) }, CancellationToken);
+
+		IsFalse(state.IsMarketClosed, "a bar of more history quotes the security again");
+
+		res.Clear();
+
+		var order = MarketOrder(id, Sides.Buy, start.AddMinutes(11));
+		await emu.SendInMessageAsync(order, CancellationToken);
+
+		AreEqual(120m, res.OfType<ExecutionMessage>().Single(m => m.OriginalTransactionId == order.TransactionId && m.TradePrice is not null).TradePrice,
+			"the order trades at the new prices");
+	}
+
+	/// <summary>
+	/// Where history is silent the replay's clock comes on its own, and the emulator's output is what everything downstream
+	/// reads: a moment that releases nothing is still handed on, or the clock of a strategy stops at the last data.
+	/// </summary>
+	[TestMethod]
+	public async Task AMomentWithNothingToReleaseIsStillHandedOn()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var saturday = new DateTime(2026, 1, 3, 12, 0, 0, DateTimeKind.Utc);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = saturday, ServerTime = saturday }, CancellationToken);
+
+		var clock = res.OfType<TimeMessage>().Select(m => m.LocalTime).ToArray();
+
+		AreEqual(1, clock.Length, $"time messages the emulator handed on: {clock.Select(t => $"{t:O}").JoinCommaSpace()}");
+		AreEqual(saturday, clock[0], "the moment handed on");
+		AreEqual(saturday, emu.CurrentTime, "the emulator's clock");
+	}
+
+	/// <summary>
+	/// A bar becomes known at its close. When the replay's clock moves past that close with no data to carry it - over a night
+	/// or a weekend the history skips - the bar is still handed over stamped with its close, as at the end of a run, and not
+	/// with the moment the clock happened to reach.
+	/// </summary>
+	[TestMethod]
+	public async Task ABarTheClockMovesPastIsHandedOverAtItsClose()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var hour = TimeSpan.FromHours(1);
+		var open = new DateTime(2026, 1, 2, 23, 0, 0, DateTimeKind.Utc);
+		var close = open + hour;
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = hour.TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = hour,
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = close,
+			OpenPrice = 100,
+			HighPrice = 101,
+			LowPrice = 99,
+			ClosePrice = 100,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		var noon = close.AddHours(12);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = noon, ServerTime = noon }, CancellationToken);
+
+		var finished = res.OfType<TimeFrameCandleMessage>().Where(c => c.State == CandleStates.Finished).ToArray();
+
+		AreEqual(1, finished.Length, "the bar closes once");
+		AreEqual(close, finished[0].LocalTime, "the bar belongs to the moment it closed, not to the moment the clock reached");
+	}
 }

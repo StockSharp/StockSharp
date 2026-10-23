@@ -20,6 +20,10 @@ public class SecurityState(SecurityId securityId)
 	// The builder has handed over a whole book, so the increments after it are folded straight into the engine's.
 	private bool _isBookStated;
 
+	// The best quotes the market had when it closed: what an open position is valued at until the market quotes again.
+	private decimal? _closingBid;
+	private decimal? _closingAsk;
+
 	/// <summary>
 	/// Security identifier.
 	/// </summary>
@@ -61,6 +65,12 @@ public class SecurityState(SecurityId securityId)
 	/// percent of the market is resolved from.
 	/// </summary>
 	public decimal? LastTradePrice { get; private set; }
+
+	/// <summary>
+	/// Whether the market of this security is closed: its book holds only the orders resting in it, and an open position is
+	/// valued at the quotes the market closed with.
+	/// </summary>
+	public bool IsMarketClosed { get; private set; }
 
 	/// <summary>
 	/// The definition the venue stated for this security, or <see langword="null"/> when it has
@@ -109,6 +119,7 @@ public class SecurityState(SecurityId securityId)
 		if (msg.State is null)
 		{
 			OrderBook.SetSnapshot(msg.Bids ?? [], msg.Asks ?? []);
+			ReopenMarket();
 		}
 		else if (msg.State == QuoteChangeStates.Increment && !msg.HasPositions && _isBookStated)
 		{
@@ -130,7 +141,10 @@ public class SecurityState(SecurityId securityId)
 			_isBookStated = full is not null;
 
 			if (full is not null)
+			{
 				OrderBook.SetSnapshot(full.Bids ?? [], full.Asks ?? []);
+				ReopenMarket();
+			}
 		}
 
 		if (_depthSubscription.HasValue)
@@ -147,6 +161,51 @@ public class SecurityState(SecurityId securityId)
 	{
 		_incrementBuilder = null;
 		_isBookStated = false;
+	}
+
+	/// <summary>
+	/// Close the market of this security: what the market offered leaves the book and the orders resting in it stay, while
+	/// open positions keep the value of the best quotes it had until it quotes again.
+	/// </summary>
+	public void CloseMarket()
+	{
+		// A market closed again before it quoted keeps the quotes it first closed with: its book holds no market by then.
+		if (!IsMarketClosed)
+		{
+			_closingBid = OrderBook.BestBid?.price;
+			_closingAsk = OrderBook.BestAsk?.price;
+			IsMarketClosed = true;
+		}
+
+		OrderBook.SetSnapshot([], []);
+		ForgetBook();
+	}
+
+	/// <summary>
+	/// The market of this security quotes again: its book values open positions from now on.
+	/// </summary>
+	public void ReopenMarket()
+	{
+		if (!IsMarketClosed)
+			return;
+
+		IsMarketClosed = false;
+		_closingBid = null;
+		_closingAsk = null;
+	}
+
+	/// <summary>
+	/// The price a position in this security can be closed at by an order of <paramref name="closeSide"/>: the best quote on
+	/// the side that order takes from, or the one the market closed with while it is closed.
+	/// </summary>
+	/// <param name="closeSide">Side of the order that would close the position.</param>
+	/// <returns>The price, or <see langword="null"/> when the market has not named one.</returns>
+	public decimal? TryGetClosePrice(Sides closeSide)
+	{
+		if (IsMarketClosed)
+			return closeSide == Sides.Sell ? _closingBid : _closingAsk;
+
+		return closeSide == Sides.Sell ? OrderBook.BestBid?.price : OrderBook.BestAsk?.price;
 	}
 
 	/// <summary>

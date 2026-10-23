@@ -3262,6 +3262,35 @@ public class StrategyDecomposedTests : BaseTestClass
 		AreEqual(1, registered.Count, "CancelTargetPosition must not emit a new order");
 	}
 
+	/// <summary>
+	/// A subscription that fails after it got going takes the data the strategy relies on with it: the strategy is no longer
+	/// online, so it trades nothing on what that data last said. Only a subscription refused before it got going is left out.
+	/// </summary>
+	[TestMethod]
+	public async Task ASubscriptionThatFailsAfterItWentOnlineTakesTheStrategyOffline()
+	{
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+
+		var strategy = new Strategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = CreatePortfolio(),
+		};
+
+		var sub = new Subscription(DataType.MarketDepth, security);
+		strategy.Subscriptions.Subscribe(sub);
+
+		connMock.Raise(c => c.SubscriptionStarted += null, sub);
+		await DriveOnlineAsync(strategy, connMock, CancellationToken);
+
+		sub.State = SubscriptionStates.Error;
+		connMock.Raise(c => c.SubscriptionFailed += null, sub, new InvalidOperationException("The feed was lost."), true);
+
+		IsFalse(strategy.IsOnline, "A strategy whose market data failed in the middle of its run is still online.");
+	}
+
 	[TestMethod]
 	public async Task SetTargetPosition_WhenNotOnline_DoesNotEmitButRemembersTarget()
 	{

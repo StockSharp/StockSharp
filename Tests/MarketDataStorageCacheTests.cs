@@ -109,4 +109,45 @@ public class MarketDataStorageCacheTests : BaseTestClass
 		ThrowsExactly<ArgumentOutOfRangeException>(() => cache.Limit = 0);
 	}
 
+	/// <summary>
+	/// A day of several series is cached by what it is made of: the same day of other series is loaded on its own, and
+	/// the day of the same series again comes from the cache.
+	/// </summary>
+	[TestMethod]
+	public async Task GetMessagesAsync_TheSameDayOfOtherSeries_IsLoadedApart()
+	{
+		var token = CancellationToken;
+
+		var cache = new MarketDataStorageCache();
+		var first = CreateSecurityId("FIRST");
+		var second = CreateSecurityId("SECOND");
+		var date = new DateTime(2025, 1, 1);
+
+		var loadCalls = 0;
+
+		IAsyncEnumerable<Message> LoaderOf(params SecurityId[] securities)
+		{
+			return Load();
+
+			async IAsyncEnumerable<Message> Load()
+			{
+				loadCalls++;
+
+				foreach (var securityId in securities)
+				{
+					yield return CreateTick(securityId, date.AddHours(1));
+					await Task.Yield();
+				}
+			}
+		}
+
+		var alone = await cache.GetMessagesAsync("first", date, _ => LoaderOf(first)).ToArrayAsync(token);
+		var both = await cache.GetMessagesAsync("first|second", date, _ => LoaderOf(first, second)).ToArrayAsync(token);
+		var again = await cache.GetMessagesAsync("first", date, _ => LoaderOf(first)).ToArrayAsync(token);
+
+		loadCalls.AssertEqual(2);
+		alone.Length.AssertEqual(1);
+		both.Cast<ExecutionMessage>().Select(m => m.SecurityId).SequenceEqual([first, second]).AssertTrue();
+		again.SequenceEqual(alone).AssertTrue();
+	}
 }

@@ -7,6 +7,7 @@ using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.Designer;
+using StockSharp.Localization;
 
 /// <summary>
 /// Tests for backtesting functionality using <see cref="HistoryEmulationConnector"/> with <see cref="SmaStrategy"/>.
@@ -435,6 +436,382 @@ public class BacktestingTests : BaseTestClass
 			IsTrue(execAtBasket > 0, $"Orders were placed ({ordersReceived}) but no order execs reached the basket adapter");
 			IsTrue(execMessagesWithIds > 0, "Order-info execution messages at the basket must carry subscription IDs when orders were placed");
 		}
+	}
+
+	/// <summary>
+	/// A run over a storage with none of the history its strategy asks for: the candle subscription is refused, no market
+	/// data is left to replay, and the run ends by itself instead of waiting for data forever.
+	/// </summary>
+	[TestMethod]
+	public async Task ARunWhoseOnlyMarketDataIsRefusedEndsByItself()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = Helper.MemorySystem.GetStorage(Helper.MemorySystem.GetSubTemp());
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(2);
+
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var stopped = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run is still waiting for history the storage does not hold.");
+	}
+
+	/// <summary>
+	/// A run that ended because none of its market data exists did not go the whole way: it says why with an error, it
+	/// is not finished, and its progress does not reach the end - so no host shows it as a completed backtest.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ARunWithNoneOfItsMarketDataEndsWithAnError()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		var storageRegistry = Helper.MemorySystem.GetStorage(Helper.MemorySystem.GetSubTemp());
+
+		await using var connector = CreateConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			Paths.HistoryBeginDate,
+			Paths.HistoryBeginDate.AddDays(2));
+
+		var (completed, errors, progress) = await RunToTheEndAsync(connector, async () =>
+		{
+			var strategy = new BarCountingStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				TimeFrame = TimeSpan.FromMinutes(1),
+				WaitRulesOnStop = false,
+			};
+
+			strategy.Reset();
+			await strategy.StartAsync(CancellationToken);
+			connector.Connect();
+			await connector.StartAsync(CancellationToken);
+		});
+
+		IsTrue(completed, "The run is still waiting for history the storage does not hold.");
+		IsFalse(connector.IsFinished, "A run without any of its market data is reported as finished.");
+		IsTrue(errors.Length > 0, "The run ended without saying why.");
+		IsFalse(progress.Contains(100), "The run reported full progress.");
+	}
+
+	/// <summary>
+	/// A run told to stop on a failed subscription stops on the refused candles and says why: it is not finished, the
+	/// connector reports the failed subscription, and the progress does not claim the whole way.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ARunStoppedOnARefusedSubscriptionEndsWithAnError()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			fs.GetStorage(fs.GetSubTemp()),
+			start,
+			start.AddDays(2));
+
+		connector.StopOnSubscriptionError = true;
+
+		var (completed, errors, progress) = await RunToTheEndAsync(connector, async () =>
+		{
+			var strategy = new BarCountingStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				TimeFrame = TimeSpan.FromMinutes(1),
+				WaitRulesOnStop = false,
+			};
+
+			strategy.Reset();
+			await strategy.StartAsync(CancellationToken);
+			connector.Connect();
+			await connector.StartAsync(CancellationToken);
+		});
+
+		IsTrue(completed, "The run did not stop on the refused subscription.");
+		IsFalse(connector.IsFinished, "A run stopped on a refused subscription is reported as finished.");
+		IsTrue(errors.Length > 0, "The run ended without saying why.");
+		IsFalse(progress.Contains(100), "The run reported full progress.");
+	}
+
+	/// <summary>
+	/// A run without its market data keeps the error it ended on, so a host that looks at the run once it has stopped can
+	/// tell why: it is the error the connector reported, and it says the market data is missing. The strategy starts before
+	/// the connection, as the Designer starts it, or after it, as the Shell does.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task ARunWithoutItsMarketDataKeepsTheErrorItEndedOn(bool connectsFirst)
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			fs.GetStorage(fs.GetSubTemp()),
+			start,
+			start.AddDays(2));
+
+		var strategy = new BarCountingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			TimeFrame = TimeSpan.FromMinutes(1),
+			WaitRulesOnStop = false,
+		};
+
+		var (completed, errors, _) = await RunToTheEndAsync(connector, async () =>
+		{
+			strategy.Reset();
+
+			if (connectsFirst)
+			{
+				connector.Connect();
+				await strategy.StartAsync(CancellationToken);
+			}
+			else
+			{
+				await strategy.StartAsync(CancellationToken);
+				connector.Connect();
+			}
+
+			await connector.StartAsync(CancellationToken);
+		});
+
+		IsTrue(completed, "The run is still waiting for history the storage does not hold.");
+		IsNotNull(connector.StopError, "The run does not keep the error it ended on.");
+		AreEqual(LocalizedStrings.NoData, connector.StopError.Message);
+		IsTrue(errors.Contains(connector.StopError), "The error the run ended on is not the one it reported.");
+	}
+
+	/// <summary>
+	/// A strategy executed over a run that asks for no market data is stopped with the error that says so, and its
+	/// execution reports the error instead of a run that completed.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ExecutingAStrategyThatAsksForNoMarketDataReportsTheError()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			fs.GetStorage(fs.GetSubTemp()),
+			start,
+			start.AddDays(1));
+
+		var strategy = new NoMarketDataStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			WaitRulesOnStop = false,
+		};
+
+		strategy.Reset();
+
+		var (completed, error) = await strategy.ExecAsync(async cancellationToken =>
+		{
+			connector.Connect();
+			await connector.StartAsync(cancellationToken);
+		}, CancellationToken);
+
+		IsFalse(completed, "A strategy that asked for no market data is reported as having completed its run.");
+		AreEqual(LocalizedStrings.NoData, error?.Message, "The execution does not say the strategy had no market data.");
+	}
+
+	/// <summary>
+	/// The same for a strategy executed over a run that is already going, as a host does that starts the run first, when all
+	/// the market data it asks for is refused for want of history: its execution reports the error instead of waiting for
+	/// data the run does not hold.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ExecutingAStrategyWhoseMarketDataIsRefusedOverAGoingRunReportsTheError()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			fs.GetStorage(fs.GetSubTemp()),
+			start,
+			start.AddDays(2));
+
+		var strategy = new BarCountingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			TimeFrame = TimeSpan.FromMinutes(5),
+			WaitRulesOnStop = false,
+		};
+
+		strategy.Reset();
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var execution = strategy.ExecAsync(_ => default, CancellationToken).AsTask();
+
+		IsTrue(await Task.WhenAny(execution, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken)) == execution,
+			"The execution is still waiting for history the storage does not hold.");
+
+		var (completed, error) = await execution;
+
+		IsFalse(completed, "A strategy whose market data was all refused is reported as having completed its run.");
+		AreEqual(LocalizedStrings.NoData, error?.Message, "The execution does not say the strategy had no market data.");
+	}
+
+	// Starts without asking for any market data.
+	private sealed class NoMarketDataStrategy : Strategy
+	{
+	}
+
+	/// <summary>
+	/// A strategy that subscribes to market data as it starts is left running; one that subscribes to none is stopped with
+	/// the error that says it has no market data.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task OnlyAStrategyWithoutMarketDataIsStoppedForIt()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var fs = Helper.MemorySystem;
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			fs.GetStorage(fs.GetSubTemp()),
+			start,
+			start.AddDays(1));
+
+		var idle = new NoMarketDataStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			WaitRulesOnStop = false,
+		};
+
+		var trading = new BarCountingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			TimeFrame = TimeSpan.FromMinutes(1),
+			WaitRulesOnStop = false,
+		};
+
+		idle.Reset();
+		trading.Reset();
+
+		await idle.StartAsync(CancellationToken);
+		await trading.StartAsync(CancellationToken);
+
+		IsTrue(await idle.StopIfNoMarketDataAsync(CancellationToken), "A strategy without market data was left running.");
+		IsFalse(await trading.StopIfNoMarketDataAsync(CancellationToken), "A strategy with market data was stopped.");
+
+		AreEqual(ProcessStates.Stopped, idle.ProcessState);
+		AreEqual(LocalizedStrings.NoData, idle.LastError?.Message);
+		AreEqual(ProcessStates.Started, trading.ProcessState);
+
+		await trading.StopAsync(CancellationToken);
+	}
+
+	// Starts a run the given way and waits for it to stop, collecting the errors it raised and the progress it reported.
+	private async Task<(bool Completed, Exception[] Errors, int[] Progress)> RunToTheEndAsync(HistoryEmulationConnector connector, Func<Task> start)
+	{
+		var sync = new Lock();
+		var errors = new List<Exception>();
+		var progress = new List<int>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.Error += error =>
+		{
+			using (sync.EnterScope())
+				errors.Add(error);
+		};
+
+		connector.ProgressChanged += step =>
+		{
+			using (sync.EnterScope())
+				progress.Add(step);
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		await start();
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken)) == stopped.Task;
+
+		if (!completed)
+			connector.Disconnect();
+
+		using (sync.EnterScope())
+			return (completed, [.. errors], [.. progress]);
 	}
 
 	/// <summary>
@@ -4460,5 +4837,1188 @@ public class BacktestingTests : BaseTestClass
 			else if (Position > 0 && isShortLessThenLong)
 				SellMarket(Volume);
 		}
+	}
+
+	// Candles of two instruments, the first asked for first; buys the second at market on its first finished bar when the
+	// strategy may trade.
+	private sealed class TwoLegStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private int _secondBars;
+
+		public Security First { get; set; }
+		public Security Second { get; set; }
+		public TimeSpan TimeFrame { get; set; }
+		public bool WasOnline { get; private set; }
+		public Order EntryOrder { get; private set; }
+
+		public int SecondBars
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return _secondBars;
+			}
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeFrame, security: First).Start();
+
+			SubscribeCandles(TimeFrame, security: Second)
+				.Bind(candle =>
+				{
+					using (_sync.EnterScope())
+						_secondBars++;
+
+					WasOnline |= IsOnline;
+
+					if (EntryOrder is null && IsFormedAndOnlineAndAllowTrading())
+						EntryOrder = BuyMarket(Volume, Second);
+				})
+				.Start();
+		}
+	}
+
+	private sealed class TapeAndOrderLogStrategy : Strategy
+	{
+		private int _ticks;
+		private int _orderLog;
+
+		public TapeAndOrderLogStrategy()
+		{
+			TickTradeReceived += (_, _) => { Interlocked.Increment(ref _ticks); };
+			OrderLogReceived += (_, _) => { Interlocked.Increment(ref _orderLog); };
+		}
+
+		public int Ticks => Volatile.Read(ref _ticks);
+
+		public int OrderLog => Volatile.Read(ref _orderLog);
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			Subscribe(new Subscription(DataType.Ticks, Security));
+			Subscribe(new Subscription(DataType.OrderLog, Security));
+		}
+	}
+
+	private sealed class BarCountingStrategy : Strategy
+	{
+		private int _bars;
+
+		public TimeSpan TimeFrame { get; set; }
+
+		public int Bars => Volatile.Read(ref _bars);
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeFrame).Bind(_ => { Interlocked.Increment(ref _bars); }).Start();
+		}
+	}
+
+	// Two instruments, history for the second only, the run long enough for the stored bars; the connector is connected
+	// before the strategy starts, as the Shell does it, and the run is started before it too when asked, as a host does that
+	// starts the run first.
+	private async Task<(TwoLegStrategy Strategy, bool Stopped, int Stored)> RunWithTheFirstLegMissingAsync(bool startsTheRunFirst)
+	{
+		var first = Helper.CreateSecurity(100);
+		var second = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		const int stored = 12;
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(second.ToSecurityId(), timeFrame)
+			.SaveAsync(CreateContiguousBars(second.ToSecurityId(), start, timeFrame, stored), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([first, second]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (stored + 1)));
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		var strategy = new TwoLegStrategy
+		{
+			Connector = connector,
+			Security = second,
+			Portfolio = portfolio,
+			Volume = 1,
+			First = first,
+			Second = second,
+			TimeFrame = timeFrame,
+			WaitRulesOnStop = false,
+		};
+
+		connector.Connect();
+		strategy.Reset();
+
+		if (startsTheRunFirst)
+		{
+			await connector.StartAsync(CancellationToken);
+			await strategy.StartAsync(CancellationToken);
+		}
+		else
+		{
+			await strategy.StartAsync(CancellationToken);
+			await connector.StartAsync(CancellationToken);
+		}
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		return (strategy, completed == stopped.Task, stored);
+	}
+
+	/// <summary>
+	/// A pair whose first leg has no history: that subscription is refused, and the run goes on with the second leg's
+	/// history, which it holds whole - whether the strategy asks for its data before the run starts or after it, as a host
+	/// does that starts the run first.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task ARunThatLosesItsFirstLegStillReplaysTheSecond(bool startsTheRunFirst)
+	{
+		var (strategy, stopped, stored) = await RunWithTheFirstLegMissingAsync(startsTheRunFirst);
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+		IsTrue(strategy.SecondBars >= stored - 1, $"{strategy.SecondBars} bars of the second leg replayed of the {stored} stored.");
+	}
+
+	/// <summary>
+	/// The refused leg will never come online and must not keep the strategy offline: on the leg it has, the strategy
+	/// trades.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ALegThatIsRefusedDoesNotKeepTheStrategyOffline()
+	{
+		var (strategy, stopped, _) = await RunWithTheFirstLegMissingAsync(false);
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+		IsTrue(strategy.WasOnline, "The strategy never went online on the leg it has.");
+		IsNotNull(strategy.EntryOrder, "The strategy sent no order on the leg it has.");
+	}
+
+	/// <summary>
+	/// A strategy subscribes to the tape and the order log as it starts, before its run is connected, as the Designer and
+	/// the optimizer start one: both reach the history before the replay moves, so neither loses its first rows. The
+	/// default channels order the messages by their threads, hence the runs in a row.
+	/// </summary>
+	[TestMethod]
+	[Timeout(300_000, CooperativeCancellation = true)]
+	public async Task SubscriptionsMadeAsTheStrategyStartsGetTheRunFromItsStart()
+	{
+		const int rows = 30;
+
+		for (var run = 1; run <= 10; run++)
+		{
+			var (ticks, orderLog) = await RunTapeAndOrderLogAsync(rows);
+
+			AreEqual(rows, ticks, $"ticks replayed in run {run}");
+			AreEqual(rows, orderLog, $"order log rows replayed in run {run}");
+		}
+	}
+
+	// Ticks on the minute and order log rows on the half minute of one morning, a strategy that subscribes to both as it
+	// starts, and the run connected after it, over the default message channels.
+	private async Task<(int Ticks, int OrderLog)> RunTapeAndOrderLogAsync(int rows)
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var start = day.AddHours(10);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry.GetTickMessageStorage(secId).SaveAsync([.. Enumerable.Range(0, rows).Select(i => new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			ServerTime = start.AddMinutes(i),
+			TradeId = i + 1,
+			TradePrice = 100 + i * 0.01m,
+			TradeVolume = 1,
+		})], CancellationToken);
+
+		await storageRegistry.GetOrderLogMessageStorage(secId).SaveAsync([.. Enumerable.Range(0, rows).Select(i => new ExecutionMessage
+		{
+			DataTypeEx = DataType.OrderLog,
+			SecurityId = secId,
+			ServerTime = start.AddMinutes(i).AddSeconds(30),
+			OrderId = i + 1,
+			TransactionId = i + 1,
+			OrderPrice = 100 + i * 0.01m,
+			OrderVolume = 2,
+			Balance = 2,
+			Side = i % 2 == 0 ? Sides.Buy : Sides.Sell,
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Limit,
+		})], CancellationToken);
+
+		await using var connector = CreateConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			day,
+			day.AddDays(1));
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		var strategy = new TapeAndOrderLogStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			WaitRulesOnStop = false,
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(20), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		return (strategy.Ticks, strategy.OrderLog);
+	}
+
+	/// <summary>
+	/// A host that starts the run before the strategy finds the run waiting for it: with no market data asked for yet the
+	/// run does not end, and the strategy gets the history from the run's start.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AStrategyStartedAfterTheRunGetsItsHistoryFromTheStart()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		const int stored = 12;
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, stored), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (stored + 1)));
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		var strategy = new BarCountingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			TimeFrame = timeFrame,
+			WaitRulesOnStop = false,
+		};
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+		IsTrue(strategy.Bars >= stored - 1, $"{strategy.Bars} bars replayed of the {stored} stored.");
+	}
+
+	/// <summary>
+	/// History that ends before the run's stop date: the run still ends at its stop date, and its progress says it went
+	/// the whole way.
+	/// </summary>
+	[TestMethod]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task ARunWhoseHistoryEndsBeforeItsStopReportsFullProgress()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(1);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, 2 * 24 * 60), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start.AddDays(10));
+
+		var sync = new Lock();
+		var progress = new List<int>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.ProgressChanged += step =>
+		{
+			using (sync.EnterScope())
+				progress.Add(step);
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(timeFrame.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		int[] steps;
+
+		using (sync.EnterScope())
+			steps = [.. progress];
+
+		AreEqual(100, steps.DefaultIfEmpty().Max(), "the progress the run reported last");
+	}
+
+	/// <summary>
+	/// History with a day missing in the middle that ends before the run's stop: the run's clock walks through the missing
+	/// day and on to the stop, so what a strategy does by the clock - a timer, a rule at an hour - happens there as well.
+	/// </summary>
+	[TestMethod]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task TheClockOfARunWalksThroughDaysWithoutHistoryToItsStop()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(1);
+		var start = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+		var storage = storageRegistry.GetTimeFrameCandleMessageStorage(secId, timeFrame);
+
+		await storage.SaveAsync(CreateContiguousBars(secId, start, timeFrame, 24 * 60), CancellationToken);
+		await storage.SaveAsync(CreateContiguousBars(secId, start.AddDays(2), timeFrame, 24 * 60), CancellationToken);
+
+		var stop = start.AddDays(5);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			stop);
+
+		var sync = new Lock();
+		var times = new List<DateTime>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.CurrentTimeChanged += _ =>
+		{
+			using (sync.EnterScope())
+				times.Add(connector.CurrentTime);
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(timeFrame.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		DateTime[] seen;
+
+		using (sync.EnterScope())
+			seen = [.. times];
+
+		IsTrue(seen.Any(t => t.Date == start.AddDays(1)), "The clock jumped over the day without history.");
+		IsTrue(seen.Max() >= stop.AddDays(-1), $"The clock stopped at {seen.Max():u}, short of the run's stop {stop:u}.");
+	}
+
+	/// <summary>
+	/// The progress of a run is how far its clock has got: when the clock crosses days without history in a few long
+	/// steps, the progress keeps up with it rather than adding one per step.
+	/// </summary>
+	[TestMethod]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task TheProgressOfARunKeepsUpWithItsClockAcrossDaysWithoutHistory()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(1);
+		var start = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var stop = start.AddDays(10);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+		var storage = storageRegistry.GetTimeFrameCandleMessageStorage(secId, timeFrame);
+
+		await storage.SaveAsync(CreateContiguousBars(secId, start, timeFrame, 24 * 60), CancellationToken);
+		await storage.SaveAsync(CreateContiguousBars(secId, start.AddDays(8), timeFrame, 24 * 60), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			stop);
+
+		var sync = new Lock();
+		var reports = new List<(int Step, DateTime Time)>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.ProgressChanged += step =>
+		{
+			using (sync.EnterScope())
+				reports.Add((step, connector.CurrentTime));
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(timeFrame.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		(int Step, DateTime Time)[] seen;
+
+		using (sync.EnterScope())
+			seen = [.. reports];
+
+		// The bars of the ninth day come after the gap: by then the clock is past four fifths of the run.
+		var afterGap = seen.Where(r => r.Time >= start.AddDays(8).AddHours(12)).ToArray();
+
+		IsTrue(afterGap.Length > 0, "No progress was reported after the days without history.");
+		IsTrue(afterGap[0].Step >= 80, $"At {afterGap[0].Time:u}, past four fifths of the run, the progress said {afterGap[0].Step}.");
+	}
+
+	/// <summary>
+	/// A run disconnected halfway did not go the whole way, and its progress does not say it did: the optimizer goes by
+	/// it to stop the strategy of an iteration it cancels.
+	/// </summary>
+	[TestMethod]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task ARunDisconnectedHalfwayDoesNotReportFullProgress()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(1);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, 4 * 24 * 60), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start.AddDays(4));
+
+		var sync = new Lock();
+		var progress = new List<int>();
+		var disconnected = 0;
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.ProgressChanged += step =>
+		{
+			using (sync.EnterScope())
+				progress.Add(step);
+
+			if (step >= 10 && Interlocked.Exchange(ref disconnected, 1) == 0)
+				connector.Disconnect();
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(timeFrame.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not stop after it was disconnected.");
+		AreEqual(1, disconnected, "The run never got a tenth of the way to be disconnected.");
+
+		int[] steps;
+
+		using (sync.EnterScope())
+			steps = [.. progress];
+
+		IsTrue(steps.Max() < 100, $"A run disconnected at a tenth of the way reported {steps.Max()} % progress.");
+	}
+
+	/// <summary>
+	/// Five-minute candles for the run's day are built from the one-minute candles stored for it, though five-minute
+	/// candles of another week are stored too: what is stored outside the run does not stand in for what is inside it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task ASeriesStoredOnlyOutsideTheRunIsBuiltFromWhatTheRunHas(bool anotherWeekStored)
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var start = new DateTime(2026, 1, 12, 0, 0, 0, DateTimeKind.Utc);
+		var minute = TimeSpan.FromMinutes(1);
+		var five = TimeSpan.FromMinutes(5);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry.GetTimeFrameCandleMessageStorage(secId, minute)
+			.SaveAsync(CreateContiguousBars(secId, start, minute, 120), CancellationToken);
+
+		if (anotherWeekStored)
+		{
+			await storageRegistry.GetTimeFrameCandleMessageStorage(secId, five)
+				.SaveAsync(CreateContiguousBars(secId, start.AddDays(-7), five, 12), CancellationToken);
+		}
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start.AddHours(3));
+
+		var sync = new Lock();
+		var finished = 0;
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.CandleReceived += (_, candle) =>
+		{
+			if (candle.State == CandleStates.Finished)
+			{
+				using (sync.EnterScope())
+					finished++;
+			}
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(five.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		using (sync.EnterScope())
+			IsTrue(finished >= 20, $"{finished} five-minute candles of the two hours of one-minute candles stored.");
+	}
+
+	// Candles of two instruments; buys the traded one, at market or with a limit, on the first finished bar of the watched
+	// one that opens on each day and, when asked to, on every finished bar of its own. Keeps each order by what prompted it.
+	private sealed class DailyEntryStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly Dictionary<DateTime, Order> _onDays = [];
+		private readonly Dictionary<DateTime, Order> _onBars = [];
+
+		public Security Watched { get; set; }
+		public Security Traded { get; set; }
+		public TimeSpan WatchedTimeFrame { get; set; }
+		public TimeSpan TradedTimeFrame { get; set; }
+		public bool IsBuyingOnTradedBars { get; set; }
+		public OrderTypes EntryType { get; set; } = OrderTypes.Market;
+		public decimal EntryPrice { get; set; }
+
+		// The order sent on the first finished bar of the watched instrument that opened on the day.
+		public Order EntryOnDay(DateTime day)
+		{
+			using (_sync.EnterScope())
+				return _onDays.TryGetValue(day.Date, out var order) ? order : null;
+		}
+
+		// The order sent on the finished bar of the traded instrument that opened at the time.
+		public Order EntryOnBar(DateTime openTime)
+		{
+			using (_sync.EnterScope())
+				return _onBars.TryGetValue(openTime, out var order) ? order : null;
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TradedTimeFrame, security: Traded)
+				.Bind(candle =>
+				{
+					if (IsBuyingOnTradedBars)
+						SendEntry(_onBars, candle.OpenTime);
+				})
+				.Start();
+
+			SubscribeCandles(WatchedTimeFrame, security: Watched)
+				.Bind(candle => SendEntry(_onDays, candle.OpenTime.Date))
+				.Start();
+		}
+
+		private void SendEntry(Dictionary<DateTime, Order> orders, DateTime key)
+		{
+			using (_sync.EnterScope())
+			{
+				if (!orders.TryAdd(key, null))
+					return;
+			}
+
+			var order = EntryType == OrderTypes.Market
+				? BuyMarket(Volume, Traded)
+				: BuyLimit(EntryPrice, Volume, Traded);
+
+			using (_sync.EnterScope())
+				orders[key] = order;
+		}
+	}
+
+	// Contiguous bars of the time frame from each of the starts.
+	private async Task SaveBarsAsync(IStorageRegistry storageRegistry, Security security, TimeSpan timeFrame, int count, params DateTime[] starts)
+	{
+		var secId = security.ToSecurityId();
+		var storage = storageRegistry.GetTimeFrameCandleMessageStorage(secId, timeFrame);
+
+		foreach (var start in starts)
+			await storage.SaveAsync(CreateContiguousBars(secId, start, timeFrame, count), CancellationToken);
+	}
+
+	// Replays the stored candles from the first day to noon of the last, the strategy started before the connector is
+	// connected, as the Designer does; tells whether the run reached its stop and which orders the emulator refused.
+	private async Task<(bool Stopped, Order[] Refused)> RunEntriesAsync(DailyEntryStrategy strategy, IStorageRegistry storageRegistry, DateTime firstDay, DateTime lastDay)
+	{
+		var portfolio = Helper.CreatePortfolio();
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([strategy.Watched, strategy.Traded]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			firstDay,
+			lastDay.AddHours(12));
+
+		var sync = new Lock();
+		var refused = new List<Order>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.OrderRegisterFailReceived += (_, fail) =>
+		{
+			using (sync.EnterScope())
+				refused.Add(fail.Order);
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		strategy.Connector = connector;
+		strategy.Security = strategy.Watched;
+		strategy.Portfolio = portfolio;
+		strategy.Volume = 1;
+		strategy.WaitRulesOnStop = false;
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		using (sync.EnterScope())
+			return (completed == stopped.Task, [.. refused]);
+	}
+
+	/// <summary>
+	/// An instrument whose history ends before the run's has no market once it has: a market order on it does not fill in
+	/// full at the last price it had, a day old, but fails as it does on an empty book.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AMarketOrderOnAnInstrumentWhoseHistoryEndedFindsNoPrice()
+	{
+		var watched = Helper.CreateSecurity(100);
+		var traded = Helper.CreateSecurity(100);
+		var firstDay = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var secondDay = firstDay.AddDays(1);
+		var timeFrame = TimeSpan.FromMinutes(5);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await SaveBarsAsync(storageRegistry, watched, timeFrame, 12, firstDay.AddHours(10), secondDay.AddHours(10));
+		await SaveBarsAsync(storageRegistry, traded, timeFrame, 12, firstDay.AddHours(10));
+
+		var strategy = new DailyEntryStrategy
+		{
+			Watched = watched,
+			Traded = traded,
+			WatchedTimeFrame = timeFrame,
+			TradedTimeFrame = timeFrame,
+		};
+
+		var (stopped, refused) = await RunEntriesAsync(strategy, storageRegistry, firstDay, secondDay);
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+
+		var onFirstDay = strategy.EntryOnDay(firstDay);
+
+		IsNotNull(onFirstDay, "The strategy sent no order on the first day.");
+		IsTrue(strategy.MyTrades.Any(t => t.Order == onFirstDay), $"The instrument has history on the first day, and the order sent then did not trade: {onFirstDay.State}.");
+
+		var onSecondDay = strategy.EntryOnDay(secondDay);
+
+		IsNotNull(onSecondDay, "The strategy sent no order on the second day.");
+
+		var stale = strategy.MyTrades.Where(t => t.Order == onSecondDay).ToArray();
+
+		IsTrue(stale.Length == 0,
+			$"The instrument's history ended with the first day, and the order sent on the second traded {stale.Sum(t => t.Trade.Volume)} " +
+			$"at {stale.Select(t => t.Trade.Price.ToString()).JoinCommaSpace()}.");
+		AreEqual(OrderStates.Failed, onSecondDay.State, "a market order finds no price on an empty book");
+		IsTrue(refused.Contains(onSecondDay), "the emulator refuses the order");
+	}
+
+	/// <summary>
+	/// A limit order on an instrument whose history ended is taken and waits: there is nothing to trade it with, whatever price
+	/// it names.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ALimitOrderOnAnInstrumentWhoseHistoryEndedWaits()
+	{
+		var watched = Helper.CreateSecurity(100);
+		var traded = Helper.CreateSecurity(100);
+		var firstDay = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var secondDay = firstDay.AddDays(1);
+		var timeFrame = TimeSpan.FromMinutes(5);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await SaveBarsAsync(storageRegistry, watched, timeFrame, 12, firstDay.AddHours(10), secondDay.AddHours(10));
+		await SaveBarsAsync(storageRegistry, traded, timeFrame, 12, firstDay.AddHours(10));
+
+		var strategy = new DailyEntryStrategy
+		{
+			Watched = watched,
+			Traded = traded,
+			WatchedTimeFrame = timeFrame,
+			TradedTimeFrame = timeFrame,
+			EntryType = OrderTypes.Limit,
+			EntryPrice = 150m,
+		};
+
+		var (stopped, refused) = await RunEntriesAsync(strategy, storageRegistry, firstDay, secondDay);
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+
+		var onFirstDay = strategy.EntryOnDay(firstDay);
+
+		IsNotNull(onFirstDay, "The strategy sent no order on the first day.");
+		IsTrue(strategy.MyTrades.Any(t => t.Order == onFirstDay), $"A limit above the market trades while the instrument has history, and the one sent on the first day did not: {onFirstDay.State}.");
+
+		var onSecondDay = strategy.EntryOnDay(secondDay);
+
+		IsNotNull(onSecondDay, "The strategy sent no order on the second day.");
+
+		var stale = strategy.MyTrades.Where(t => t.Order == onSecondDay).ToArray();
+
+		IsTrue(stale.Length == 0, $"The instrument's history ended with the first day, and the limit sent on the second traded at {stale.Select(t => t.Trade.Price.ToString()).JoinCommaSpace()}.");
+		AreEqual(OrderStates.Active, onSecondDay.State, "the order is taken and waits");
+		IsFalse(refused.Contains(onSecondDay), "nothing about the order is wrong, so it is not refused");
+	}
+
+	/// <summary>
+	/// A daily series has a market between its own bars - the day after a bar the instrument trades at that bar's close, and an
+	/// order sent on its last bar trades at that bar's prices - and none before its first bar is known or once its last has
+	/// been handed over.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task ADailySeriesHasAMarketBetweenItsBarsAndNoneAfterItsLast()
+	{
+		var watched = Helper.CreateSecurity(100);
+		var traded = Helper.CreateSecurity(100);
+		var firstDay = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var fiveMinutes = TimeSpan.FromMinutes(5);
+		var oneDay = TimeSpan.FromDays(1);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await SaveBarsAsync(storageRegistry, watched, fiveMinutes, 12, firstDay.AddHours(10), firstDay.AddDays(1).AddHours(10), firstDay.AddDays(2).AddHours(10));
+		await SaveBarsAsync(storageRegistry, traded, oneDay, 2, firstDay);
+
+		var strategy = new DailyEntryStrategy
+		{
+			Watched = watched,
+			Traded = traded,
+			WatchedTimeFrame = fiveMinutes,
+			TradedTimeFrame = oneDay,
+			IsBuyingOnTradedBars = true,
+		};
+
+		var (stopped, refused) = await RunEntriesAsync(strategy, storageRegistry, firstDay, firstDay.AddDays(2));
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+
+		bool HasTraded(Order order) => strategy.MyTrades.Any(t => t.Order == order);
+
+		var beforeTheFirst = strategy.EntryOnDay(firstDay);
+
+		IsNotNull(beforeTheFirst, "The strategy sent no order on the first day.");
+		IsFalse(HasTraded(beforeTheFirst), "the first daily bar is not known before it closes: on its own day the instrument has no market yet");
+
+		var onTheFirst = strategy.EntryOnBar(firstDay);
+
+		IsNotNull(onTheFirst, "The first daily bar was not handed over.");
+		IsTrue(HasTraded(onTheFirst), "an order sent on a daily bar trades at its prices");
+
+		var betweenBars = strategy.EntryOnDay(firstDay.AddDays(1));
+
+		IsNotNull(betweenBars, "The strategy sent no order on the second day.");
+		IsTrue(HasTraded(betweenBars), "the day after a bar the instrument trades at that bar's close: a series is not stale between its own bars");
+
+		var onTheLast = strategy.EntryOnBar(firstDay.AddDays(1));
+
+		IsNotNull(onTheLast, "The last daily bar was not handed over.");
+		IsTrue(HasTraded(onTheLast), "an order sent on the last bar of a series trades at that bar's prices");
+
+		var afterTheLast = strategy.EntryOnDay(firstDay.AddDays(2));
+
+		IsNotNull(afterTheLast, "The strategy sent no order on the third day.");
+		IsFalse(HasTraded(afterTheLast), "the series ended with its second bar: on the third day the instrument has no market");
+		IsTrue(refused.Contains(afterTheLast), "a market order finds no price on an empty book");
+	}
+
+	/// <summary>
+	/// A series that pauses for a day and goes on is not over: on the day it has nothing the instrument trades at the last price
+	/// it had, as between any two of its bars.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnInstrumentWhoseHistoryPausesForADayKeepsItsMarket()
+	{
+		var watched = Helper.CreateSecurity(100);
+		var traded = Helper.CreateSecurity(100);
+		var firstDay = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var timeFrame = TimeSpan.FromMinutes(5);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await SaveBarsAsync(storageRegistry, watched, timeFrame, 12, firstDay.AddHours(10), firstDay.AddDays(1).AddHours(10), firstDay.AddDays(2).AddHours(10));
+		await SaveBarsAsync(storageRegistry, traded, timeFrame, 12, firstDay.AddHours(10), firstDay.AddDays(2).AddHours(10));
+
+		var strategy = new DailyEntryStrategy
+		{
+			Watched = watched,
+			Traded = traded,
+			WatchedTimeFrame = timeFrame,
+			TradedTimeFrame = timeFrame,
+		};
+
+		var (stopped, _) = await RunEntriesAsync(strategy, storageRegistry, firstDay, firstDay.AddDays(2));
+
+		IsTrue(stopped, "The run did not reach its stop date in time.");
+
+		foreach (var day in new[] { firstDay, firstDay.AddDays(1), firstDay.AddDays(2) })
+		{
+			var entry = strategy.EntryOnDay(day);
+
+			IsNotNull(entry, $"The strategy sent no order on {day:yyyy-MM-dd}.");
+			IsTrue(strategy.MyTrades.Any(t => t.Order == entry), $"The order sent on {day:yyyy-MM-dd} did not trade: {entry.State}.");
+		}
+	}
+
+	/// <summary>
+	/// The market clock reaches a strategy as time messages, as a live connector's timer brings it: a strategy refreshes its
+	/// unrealized profit and checks its time rules on them. In a replay the clock is the emulator's, handed over with every bar
+	/// it releases.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task TheReplayClockReachesTheConnectorWithEveryBarItReleases()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		const int stored = 12;
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, stored), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (stored + 1)));
+
+		var sync = new Lock();
+		var clock = new List<DateTime>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.NewOutMessageAsync += (message, _) =>
+		{
+			if (message is TimeMessage)
+			{
+				using (sync.EnterScope())
+					clock.Add(message.LocalTime);
+			}
+
+			return default;
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Connect();
+		connector.Subscribe(new(timeFrame.TimeFrame(), security));
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		DateTime[] seen;
+
+		using (sync.EnterScope())
+			seen = [.. clock];
+
+		// The bars the data itself carried the run past: each closes where the next one opens.
+		var missing = Enumerable.Range(1, stored - 1)
+			.Select(i => start + TimeSpan.FromTicks(timeFrame.Ticks * i))
+			.Except(seen)
+			.ToArray();
+
+		IsTrue(missing.Length == 0,
+			$"{missing.Length} bar close(s) the connector was not told the time of: {missing.Select(t => $"{t:HH:mm}").JoinCommaSpace()}");
+	}
+
+	// Hourly candles, and a timer that goes off every hour of the strategy's clock and notes the moment and the state the run
+	// was in.
+	private sealed class HourlyTimerStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly List<(DateTime Time, ChannelStates State)> _alarms = [];
+
+		public (DateTime Time, ChannelStates State)[] Alarms
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return [.. _alarms];
+			}
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeSpan.FromHours(1)).Start();
+
+			CreateTimer(TimeSpan.FromHours(1), () =>
+			{
+				using (_sync.EnterScope())
+					_alarms.Add((CurrentTime, ((HistoryEmulationConnector)Connector).State));
+			}).Start();
+		}
+	}
+
+	/// <summary>
+	/// A weekend the history skips is walked at the pace the run keeps with data, so a strategy's hourly timer goes off through
+	/// it; after the last bar the clock walks on to the run's stop and reaches it while the run is still going.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AStrategyTimerGoesOffThroughDaysWithoutHistoryAndAtTheStop()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var hour = TimeSpan.FromHours(1);
+		var friday = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var saturday = friday.AddDays(1);
+		var monday = friday.AddDays(3);
+		var stop = monday.AddDays(2);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+		var storage = storageRegistry.GetTimeFrameCandleMessageStorage(secId, hour);
+
+		await storage.SaveAsync(CreateContiguousBars(secId, friday, hour, 24), CancellationToken);
+		await storage.SaveAsync(CreateContiguousBars(secId, monday, hour, 24), CancellationToken);
+
+		await using var connector = CreateDeterministicConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			friday,
+			stop);
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		var strategy = new HourlyTimerStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			WaitRulesOnStop = false,
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != stopped.Task)
+			connector.Disconnect();
+
+		IsTrue(completed == stopped.Task, "The run did not reach its stop date in time.");
+
+		var alarms = strategy.Alarms;
+
+		var silent = Enumerable.Range(1, 47)
+			.Select(i => saturday.AddHours(i))
+			.Except(alarms.Select(a => a.Time))
+			.ToArray();
+
+		IsTrue(silent.Length == 0,
+			$"{silent.Length} hour(s) of the weekend passed without the hourly timer, the first {silent.FirstOrDefault():ddd HH:mm}; " +
+			$"it went off at {alarms.Select(a => $"{a.Time:ddd HH:mm:ss}").JoinCommaSpace()}");
+
+		IsTrue(alarms.Any(a => a.Time == stop && a.State == ChannelStates.Started),
+			$"The run's clock did not reach its stop {stop:ddd HH:mm} while the run was going; after Monday the timer went off at " +
+			alarms.Where(a => a.Time >= monday).Select(a => $"{a.Time:ddd HH:mm:ss} {a.State}").JoinCommaSpace());
 	}
 }

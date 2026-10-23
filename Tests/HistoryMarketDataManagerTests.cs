@@ -2104,4 +2104,457 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Partial history
+
+	// Ticks of one instrument from the start, one a second, numbered by their trade ids.
+	private static ExecutionMessage[] CreateTicks(SecurityId secId, DateTime start, int count, long firstId)
+		=> [.. Enumerable.Range(0, count).Select(i => new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = start.AddSeconds(i),
+			TradeId = firstId + i,
+			TradePrice = 100m + i,
+			TradeVolume = 1,
+		})];
+
+	private static MarketDataMessage Subscription(SecurityId secId, DataType dataType, long transactionId)
+		=> new() { SecurityId = secId, DataType2 = dataType, TransactionId = transactionId, IsSubscribe = true };
+
+	/// <summary>
+	/// A series is history of the run only on the run's dates: one stored for another week is not offered for the run, so
+	/// what the run has is used to build it.
+	/// </summary>
+	[TestMethod]
+	public async Task GetSupportedDataTypesAsync_ASeriesStoredOnlyOutsideTheRun_IsNotOffered()
+	{
+		var secId = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTickMessageStorage(secId).SaveAsync(CreateTicks(secId, day.AddHours(10), 5, 1), CancellationToken);
+		await registry.GetLevel1MessageStorage(secId).SaveAsync(
+			[new Level1ChangeMessage { SecurityId = secId, ServerTime = day.AddDays(-7).AddHours(10) }.TryAdd(Level1Fields.LastTradePrice, 101m)],
+			CancellationToken);
+
+		using var manager = CreateManager(registry, day, day.AddDays(1));
+
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToArrayAsync(CancellationToken);
+
+		IsTrue(dataTypes.Contains(DataType.Ticks), "ticks stored on the run's day");
+		IsFalse(dataTypes.Contains(DataType.Level1), "level 1 stored only a week before the run");
+	}
+
+	/// <summary>
+	/// Asked without a security - whether a data type is stored at all, as the router asks before it builds an order book
+	/// - the answer is every data type the storage holds, whatever the dates.
+	/// </summary>
+	[TestMethod]
+	public async Task GetSupportedDataTypesAsync_WithoutASecurity_ListsWhatIsStored()
+	{
+		var secId = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTickMessageStorage(secId).SaveAsync(CreateTicks(secId, day.AddDays(-7).AddHours(10), 5, 1), CancellationToken);
+
+		using var manager = CreateManager(registry, day, day.AddDays(1));
+
+		var dataTypes = await manager.GetSupportedDataTypesAsync(default).ToArrayAsync(CancellationToken);
+
+		IsTrue(dataTypes.Contains(DataType.Ticks), "ticks stored for a security, a week before the run");
+	}
+
+	/// <summary>
+	/// A subscription added while the replay runs reloads the day from where the replay is; what was sent at that moment
+	/// is not sent again, or a strategy counts a print twice.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_SubscriptionAddedMidRun_DoesNotRepeatWhatWasSent()
+	{
+		var secId = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var start = day.AddHours(10);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTickMessageStorage(secId).SaveAsync(CreateTicks(secId, start, 10, 1), CancellationToken);
+		await registry.GetLevel1MessageStorage(secId).SaveAsync(
+			[new Level1ChangeMessage { SecurityId = secId, ServerTime = start.AddSeconds(30) }.TryAdd(Level1Fields.LastTradePrice, 101m)],
+			CancellationToken);
+
+		using var manager = CreateManager(registry, day, day.AddDays(1));
+
+		await manager.SubscribeAsync(Subscription(secId, DataType.Ticks, 1), CancellationToken);
+
+		var ids = new List<long>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is not ExecutionMessage tick || tick.DataTypeEx != DataType.Ticks)
+				continue;
+
+			ids.Add(tick.TradeId ?? 0);
+
+			if (ids.Count == 3)
+				await manager.SubscribeAsync(Subscription(secId, DataType.Level1, 2), CancellationToken);
+		}
+
+		AreEqual(10, ids.Count, $"trade ids replayed: {ids.Select(id => id.ToString()).JoinCommaSpace()}");
+		AreEqual(10, ids.Distinct().Count());
+	}
+
+	/// <summary>
+	/// With a cache of the days the replay has read, a subscription added during a day still gets the rest of that day, and
+	/// the series replayed before it is not replayed again.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_WithAdapterCache_ASubscriptionAddedMidDayGetsTheRestOfThatDay()
+	{
+		var first = Helper.CreateSecurityId();
+		var second = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var start = day.AddHours(10);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTickMessageStorage(first).SaveAsync(CreateTicks(first, start, 10, 1), CancellationToken);
+		await registry.GetTickMessageStorage(second).SaveAsync(CreateTicks(second, start.AddSeconds(5), 5, 101), CancellationToken);
+
+		using var manager = CreateManager(registry, day, day.AddDays(1));
+		manager.AdapterCache = new();
+
+		await manager.SubscribeAsync(Subscription(first, DataType.Ticks, 1), CancellationToken);
+
+		var subscribed = false;
+		var secondTicks = 0;
+		var firstIds = new List<long>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is not ExecutionMessage tick || tick.DataTypeEx != DataType.Ticks)
+				continue;
+
+			if (tick.SecurityId == second)
+				secondTicks++;
+			else
+			{
+				firstIds.Add(tick.TradeId.Value);
+
+				if (!subscribed)
+				{
+					subscribed = true;
+					await manager.SubscribeAsync(Subscription(second, DataType.Ticks, 2), CancellationToken);
+				}
+			}
+		}
+
+		AreEqual(5, secondTicks, "ticks of the instrument subscribed during the day");
+		AreEqual(string.Join(", ", Enumerable.Range(1, 10)), string.Join(", ", firstIds), "ticks of the instrument subscribed first");
+	}
+
+	/// <summary>
+	/// Ticks a generator makes for an instrument without history are the whole of a run's market data: the replay runs its
+	/// time line through them and ends.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_GeneratorOnly_ReplaysGeneratedTicksAndEnds()
+	{
+		var secId = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		using var manager = CreateManager(fs.GetStorage(fs.GetSubTemp()), day, day.AddDays(1));
+
+		var generator = new RandomWalkTradeGenerator(secId)
+		{
+			Interval = TimeSpan.FromMinutes(1),
+		};
+
+		generator.Init();
+		generator.Process(new SecurityMessage { SecurityId = secId });
+		generator.Process(new Level1ChangeMessage { SecurityId = secId, ServerTime = day }.TryAdd(Level1Fields.LastTradePrice, 100m));
+
+		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
+		await manager.SubscribeAsync(Subscription(secId, DataType.Ticks, 2), CancellationToken);
+
+		var messages = new List<Message>();
+
+		var replay = Task.Run(async () =>
+		{
+			await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+				messages.Add(msg);
+		}, CancellationToken);
+
+		var completed = await Task.WhenAny(replay, Task.Delay(TimeSpan.FromSeconds(45), CancellationToken));
+
+		IsTrue(completed == replay, "The replay of generated ticks never started or never ended.");
+		IsTrue(messages.OfType<ExecutionMessage>().Any(m => m.SecurityId == secId && m.DataTypeEx == DataType.Ticks), "No generated tick was replayed.");
+	}
+
+	/// <summary>
+	/// A security whose history ends before the run's stop is said to have none left, once, as the replay moves past its last
+	/// day; one whose history only pauses for a day is not, nor is one whose history lasts the run.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_AHistoryThatRunsOutIsAnnouncedOnceAfterItsLastDay()
+	{
+		var ending = Helper.CreateSecurityId();
+		var pausing = Helper.CreateSecurityId();
+		var lasting = Helper.CreateSecurityId();
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTickMessageStorage(ending).SaveAsync(CreateTicks(ending, day.AddHours(10), 5, 1), CancellationToken);
+		await registry.GetTickMessageStorage(pausing).SaveAsync(
+			[.. CreateTicks(pausing, day.AddHours(10), 5, 101), .. CreateTicks(pausing, day.AddDays(2).AddHours(10), 5, 201)], CancellationToken);
+		await registry.GetTickMessageStorage(lasting).SaveAsync(
+			[.. Enumerable.Range(0, 3).SelectMany(i => CreateTicks(lasting, day.AddDays(i).AddHours(10), 5, 301 + i * 10))], CancellationToken);
+
+		using var manager = CreateManager(registry, day, day.AddDays(2).AddHours(12));
+
+		await manager.SubscribeAsync(Subscription(ending, DataType.Ticks, 1), CancellationToken);
+		await manager.SubscribeAsync(Subscription(pausing, DataType.Ticks, 2), CancellationToken);
+		await manager.SubscribeAsync(Subscription(lasting, DataType.Ticks, 3), CancellationToken);
+
+		var messages = new List<Message>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+			messages.Add(msg);
+
+		var ends = messages.OfType<HistoryEndMessage>().ToArray();
+
+		AreEqual(1, ends.Length, $"securities said to have no history left: {ends.Select(e => e.SecurityId.ToStringId()).JoinCommaSpace()}");
+		AreEqual(ending, ends[0].SecurityId, "the one whose ticks are all on the first day");
+
+		var at = messages.IndexOf(ends[0]);
+
+		IsTrue(at > messages.FindLastIndex(m => m is ExecutionMessage tick && tick.SecurityId == ending), "said after the last of its history");
+		IsTrue(at < messages.FindIndex(m => m is ExecutionMessage tick && tick.ServerTime >= day.AddDays(1)), "said before anything of the day after its last");
+	}
+
+	// Flat bars of one instrument, back to back from the start.
+	private static TimeFrameCandleMessage[] CreateBars(SecurityId secId, DateTime start, TimeSpan timeFrame, int count)
+		=> [.. Enumerable.Range(0, count).Select(i =>
+		{
+			var openTime = start + TimeSpan.FromTicks(timeFrame.Ticks * i);
+
+			return new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = openTime,
+				LowTime = openTime,
+				CloseTime = openTime + timeFrame,
+				OpenPrice = 100,
+				HighPrice = 100,
+				LowPrice = 100,
+				ClosePrice = 100,
+				TotalVolume = 1,
+				State = CandleStates.Finished,
+			};
+		})];
+
+	/// <summary>
+	/// A weekend the history skips is walked at the pace the run keeps with data: with hourly candles replayed, the replay's
+	/// clock passes every hour of it, not only the first seconds of each of its days.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_ADayWithoutHistory_IsWalkedAtThePaceOfTheReplayedCandles()
+	{
+		var secId = Helper.CreateSecurityId();
+		var hour = TimeSpan.FromHours(1);
+		var friday = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var saturday = friday.AddDays(1);
+		var monday = friday.AddDays(3);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+		var storage = registry.GetTimeFrameCandleMessageStorage(secId, hour);
+
+		await storage.SaveAsync(CreateBars(secId, friday, hour, 24), CancellationToken);
+		await storage.SaveAsync(CreateBars(secId, monday, hour, 24), CancellationToken);
+
+		using var manager = CreateManager(registry, friday, monday.AddDays(1));
+
+		await manager.SubscribeAsync(Subscription(secId, hour.TimeFrame(), 1), CancellationToken);
+
+		var weekend = new List<DateTime>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is TimeMessage time && time.ServerTime >= saturday && time.ServerTime < monday)
+				weekend.Add(time.ServerTime);
+		}
+
+		static string Show(IEnumerable<DateTime> times) => times.Select(t => $"{t:ddd HH:mm:ss}").JoinCommaSpace();
+
+		AreEqual(Show(Enumerable.Range(0, 48).Select(i => saturday.AddHours(i))), Show(weekend), "the moments of the weekend the replay passed");
+	}
+
+	/// <summary>
+	/// Ticks keep no pace: replayed with hourly candles, they do not make the replay walk a weekend the history skips once a
+	/// clock interval, which would make every day without history as long a replay as a second-by-second series.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_ADayWithoutHistory_IsNotWalkedAtAPaceOfTicks()
+	{
+		var secId = Helper.CreateSecurityId();
+		var hour = TimeSpan.FromHours(1);
+		var friday = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var saturday = friday.AddDays(1);
+		var monday = friday.AddDays(3);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+		var candles = registry.GetTimeFrameCandleMessageStorage(secId, hour);
+		var ticks = registry.GetTickMessageStorage(secId);
+
+		await candles.SaveAsync(CreateBars(secId, friday, hour, 24), CancellationToken);
+		await candles.SaveAsync(CreateBars(secId, monday, hour, 24), CancellationToken);
+		await ticks.SaveAsync(CreateTicks(secId, friday.AddHours(10), 5, 1), CancellationToken);
+		await ticks.SaveAsync(CreateTicks(secId, monday.AddHours(10), 5, 6), CancellationToken);
+
+		using var manager = CreateManager(registry, friday, monday.AddDays(1));
+
+		await manager.SubscribeAsync(Subscription(secId, hour.TimeFrame(), 1), CancellationToken);
+		await manager.SubscribeAsync(Subscription(secId, DataType.Ticks, 2), CancellationToken);
+
+		var weekend = new List<DateTime>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is TimeMessage time && time.ServerTime >= saturday && time.ServerTime < monday)
+				weekend.Add(time.ServerTime);
+		}
+
+		AreEqual(48, weekend.Count, "the moments of the weekend the replay passed");
+		AreEqual(saturday.AddHours(47), weekend.Max(), "the last moment of the weekend the replay passed");
+	}
+
+	/// <summary>
+	/// A weekend the history of ticks skips is marked only where its days begin, as a day is marked when nothing replayed keeps
+	/// a pace: ticks have none.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_ADayWithoutTicks_IsMarkedOnlyWhereItBegins()
+	{
+		var secId = Helper.CreateSecurityId();
+		var friday = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var saturday = friday.AddDays(1);
+		var monday = friday.AddDays(3);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+		var ticks = registry.GetTickMessageStorage(secId);
+
+		await ticks.SaveAsync(CreateTicks(secId, friday.AddHours(10), 5, 1), CancellationToken);
+		await ticks.SaveAsync(CreateTicks(secId, monday.AddHours(10), 5, 6), CancellationToken);
+
+		using var manager = CreateManager(registry, friday, monday.AddDays(1));
+
+		await manager.SubscribeAsync(Subscription(secId, DataType.Ticks, 1), CancellationToken);
+
+		var weekend = new List<DateTime>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is TimeMessage time && time.ServerTime >= saturday && time.ServerTime < monday)
+				weekend.Add(time.ServerTime);
+		}
+
+		var walked = weekend.Where(t => t.TimeOfDay >= TimeSpan.FromMinutes(1)).ToArray();
+
+		IsTrue(weekend.Count > 0, "The replay passed no moment of the weekend.");
+		IsTrue(walked.Length == 0, $"{walked.Length} moments of the weekend past the first minute of their day, the first {walked.FirstOrDefault():ddd HH:mm:ss}.");
+	}
+
+	/// <summary>
+	/// Once the history replayed is over, nothing is left whose pace the clock keeps: the days to the run's stop are marked
+	/// only where they begin, and the clock still reaches the stop.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_DaysAfterTheLastHistory_AreMarkedOnlyWhereTheyBegin()
+	{
+		var secId = Helper.CreateSecurityId();
+		var minute = TimeSpan.FromMinutes(1);
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var stop = day.AddDays(3).AddHours(12);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTimeFrameCandleMessageStorage(secId, minute).SaveAsync(CreateBars(secId, day, minute, 60), CancellationToken);
+
+		using var manager = CreateManager(registry, day, stop);
+
+		await manager.SubscribeAsync(Subscription(secId, minute.TimeFrame(), 1), CancellationToken);
+
+		var after = new List<DateTime>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is TimeMessage time && time.ServerTime >= day.AddDays(1))
+				after.Add(time.ServerTime);
+		}
+
+		var walked = after.Where(t => t < stop && t.TimeOfDay >= minute).ToArray();
+
+		IsTrue(walked.Length == 0, $"{walked.Length} moments past the first minute of a day after the history, the first {walked.FirstOrDefault():ddd HH:mm:ss}.");
+		AreEqual(stop, after.LastOrDefault(), "the last moment the replay passed");
+	}
+
+	/// <summary>
+	/// History that ends before the run's stop does not leave the replay's clock short of it: the last moment the replay passes
+	/// before it stops is the stop.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task StartAsync_HistoryEndingBeforeTheStop_TakesTheClockToTheStop()
+	{
+		var secId = Helper.CreateSecurityId();
+		var hour = TimeSpan.FromHours(1);
+		var day = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc);
+		var stop = day.AddHours(10).AddMinutes(30);
+
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
+
+		await registry.GetTimeFrameCandleMessageStorage(secId, hour).SaveAsync(CreateBars(secId, day, hour, 6), CancellationToken);
+
+		using var manager = CreateManager(registry, day, stop);
+
+		await manager.SubscribeAsync(Subscription(secId, hour.TimeFrame(), 1), CancellationToken);
+
+		var messages = new List<Message>();
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+			messages.Add(msg);
+
+		var stopping = messages.FindIndex(m => m is EmulationStateMessage { State: ChannelStates.Stopping });
+
+		IsTrue(stopping > 0, "the replay ends with its stop signal");
+		AreEqual((DateTime?)stop, messages.Take(stopping).OfType<TimeMessage>().LastOrDefault()?.ServerTime, "the last moment the replay passed before it stopped");
+	}
+
+	#endregion
 }

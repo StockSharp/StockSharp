@@ -402,6 +402,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	public bool IsSupportTransactionLog { get; set; } = true;
 
 	/// <summary>
+	/// Pass on the <see cref="TimeMessage"/> the inner adapters send out. Off by default: a connector keeps a clock of its own,
+	/// and the time an adapter reports only paces the wrappers around it. A replay of history has no clock but its adapter's.
+	/// </summary>
+	public bool IsTimeForwarded { get; set; }
+
+	/// <summary>
 	/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 	/// </summary>
 	public bool ConnectDisconnectEventOnFirstAdapter
@@ -808,7 +814,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			switch (message.Type)
 			{
 				case MessageTypes.Time:
-					return;
+					if (!IsTimeForwarded)
+						return;
+
+					break;
 
 				case MessageTypes.Connect:
 					extra = [];
@@ -1074,6 +1083,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			UseInChannel = UseInChannel,
 			UseOutChannel = UseOutChannel,
 			IsSupportTransactionLog = IsSupportTransactionLog,
+			IsTimeForwarded = IsTimeForwarded,
 			FillGapsBehaviour = FillGapsBehaviour,
 			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
 		};

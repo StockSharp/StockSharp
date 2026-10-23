@@ -4,6 +4,8 @@ using StockSharp.Algo.Testing.Generation;
 
 using System.Runtime.CompilerServices;
 
+using Ecng.Reflection;
+
 /// <summary>
 /// History market data manager implementation.
 /// </summary>
@@ -17,8 +19,17 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	private readonly BasketMarketDataStorage<Message> _basketStorage = new();
 	private readonly ITradingTimeLineGenerator _timeLineGenerator;
 
+	private readonly Dictionary<string, int> _sentAtTime = [];
+
+	// The last day each series replayed has history on, up to the run's last day; null when it has none.
+	private readonly Dictionary<IMarketDataStorage, DateTime?> _lastDays = [];
+
+	// The securities the replay has said have no history left.
+	private readonly HashSet<SecurityId> _endedHistories = [];
+
 	private bool _isChanged;
 	private DateTime _currentTime;
+	private DateTime _sentTime;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HistoryMarketDataManager"/>.
@@ -167,6 +178,10 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 			throw new ArgumentNullException(nameof(generator));
 
 		_generators.Add((securityId, dataType), (generator, transactionId));
+
+		// A generator is market data the time line has to run for, whether or not any history is subscribed.
+		_isChanged = true;
+		_syncRoot.Set();
 	}
 
 	/// <inheritdoc />
@@ -197,7 +212,19 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 			var drive = DriveInternal;
 
 			if (drive != null)
-				dataTypes.AddRange(await drive.GetAvailableDataTypesAsync(securityId, StorageFormat).ToArrayAsync(cancellationToken));
+			{
+				var from = StartDate.Date;
+				var to = StopDate.Date;
+
+				foreach (var dataType in await drive.GetAvailableDataTypesAsync(securityId, StorageFormat).ToArrayAsync(cancellationToken))
+				{
+					// A series stored only outside the run is no history of the run: what the run has is used to build it
+					// instead, or the subscription is refused. Asked without a security, the question is whether the data
+					// type is stored at all.
+					if (securityId == default || await drive.GetStorageDrive(securityId, dataType, StorageFormat).GetDatesAsync().AnyAsync(date => date >= from && date <= to, cancellationToken))
+						dataTypes.Add(dataType);
+				}
+			}
 
 			dataTypes.AddRange(_generators
 				.Where(g => g.Key.secId == securityId)
@@ -228,6 +255,9 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		async IAsyncEnumerable<Message> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			IsStarted = true;
+
+			_lastDays.Clear();
+			_endedHistories.Clear();
 
 			try
 			{
@@ -261,6 +291,11 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 						// the emulator refuses as time running backwards.
 						var dayTime = _currentTime == default ? currentTime : _currentTime;
 
+						// A security with no history left before the run's stop is told so once, before the day after its last is
+						// replayed: the emulator closes its market instead of trading it at its last price for the rest of the run.
+						foreach (var securityId in await GetEndedHistoriesAsync(loadDateInUtc, startDateTime.Date, stopDateInUtc, cancellationToken))
+							yield return new HistoryEndMessage { SecurityId = securityId, ServerTime = dayTime, LocalTime = dayTime };
+
 						if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, loadDateInUtc))
 						{
 							IAsyncEnumerable<Message> messages;
@@ -268,7 +303,7 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 
 							if (AdapterCache is not null)
 							{
-								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
+								messages = AdapterCache.GetMessagesAsync(GetBasketScope(), loadDateInUtc, _basketStorage.LoadAsync);
 								noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
 							}
 							else
@@ -280,30 +315,13 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 							}
 
 							var source = noData
-								? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, loadDateInUtc))
+								? new SyncAsyncEnumerable<Message>(GetEmptyDayTimeLine(boardsArray, loadDateInUtc))
 								: messages;
 
-							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, dayTime).WithCancellation(cancellationToken))
+							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, dayTime, _sentTime, new(_sentAtTime)).WithCancellation(cancellationToken))
 							{
-								if (msg.TryGetServerTime(out var serverTime))
-								{
-									_currentTime = serverTime;
-
-									// Drive the registered generators up to the current replay time and
-									// interleave their output ahead of the triggering message (same time).
-									if (_generators.Count > 0)
-									{
-										foreach (var generated in DriveGenerators(msg, serverTime))
-										{
-											LoadedMessageCount++;
-											yield return generated;
-										}
-									}
-								}
-
-								LoadedMessageCount++;
-
-								yield return msg;
+								foreach (var outMsg in Replay(msg))
+									yield return outMsg;
 
 								if (_isChanged)
 									break;
@@ -311,6 +329,13 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 						}
 
 						loadDateInUtc += TimeSpan.FromDays(1);
+					}
+
+					// The run's clock reaches its stop whether or not history does.
+					if (!_isChanged && _currentTime < stopDateTime)
+					{
+						foreach (var outMsg in Replay(new TimeMessage { ServerTime = stopDateTime, LocalTime = stopDateTime }))
+							yield return outMsg;
 					}
 
 					if (!_isChanged)
@@ -346,6 +371,10 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		_actions.Clear();
 		_isChanged = false;
 		_currentTime = default;
+		_sentTime = default;
+		_sentAtTime.Clear();
+		_lastDays.Clear();
+		_endedHistories.Clear();
 		_basketStorage.InnerStorages.Clear();
 		LoadedMessageCount = 0;
 		IsStarted = false;
@@ -364,11 +393,115 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		_syncRoot.Set();
 	}
 
+	// What the replay is made of now, the series of the securities subscribed: a day cached for other series is not theirs.
+	private string GetBasketScope()
+		=> string.Join("|", _basketStorage.InnerStorages.SyncGet(c => c.ToArray())
+			.Select(storage => $"{storage.SecurityId}/{storage.DataType}")
+			.Order(StringComparer.Ordinal));
+
+	// Securities whose history in the run is over by the day that begins: they had some, and no series of theirs replayed has
+	// a day left before the run's stop. A security a generator makes data for never runs out; each is named once.
+	private async ValueTask<SecurityId[]> GetEndedHistoriesAsync(DateTime day, DateTime firstDay, DateTime lastDay, CancellationToken cancellationToken)
+	{
+		var lastDays = new Dictionary<SecurityId, DateTime?>();
+
+		foreach (var storage in _basketStorage.InnerStorages.SyncGet(c => c.ToArray()))
+		{
+			var last = await GetLastDayAsync(storage, lastDay, cancellationToken);
+
+			if (lastDays.TryGetValue(storage.SecurityId, out var known) && (last is null || known > last))
+				continue;
+
+			lastDays[storage.SecurityId] = last;
+		}
+
+		var ended = new List<SecurityId>();
+
+		foreach (var (securityId, last) in lastDays)
+		{
+			var isOver = last is DateTime l && l >= firstDay && l < day && !_generators.Keys.Any(key => key.secId == securityId);
+
+			if (!isOver)
+				_endedHistories.Remove(securityId);
+			else if (_endedHistories.Add(securityId))
+				ended.Add(securityId);
+		}
+
+		return [.. ended];
+	}
+
+	// The last day a series has history on, up to the run's last day. A storage that makes its data as it is read has it on
+	// every day.
+	private async ValueTask<DateTime?> GetLastDayAsync(IMarketDataStorage storage, DateTime lastDay, CancellationToken cancellationToken)
+	{
+		if (_lastDays.TryGetValue(storage, out var known))
+			return known;
+
+		DateTime? last = null;
+
+		if (storage.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) is not null)
+		{
+			last = lastDay;
+		}
+		else
+		{
+			await foreach (var date in storage.GetDatesAsync().WithCancellation(cancellationToken))
+			{
+				if (date <= lastDay && (last is null || date > last))
+					last = date;
+			}
+		}
+
+		_lastDays[storage] = last;
+		return last;
+	}
+
+	// A replayed message is told apart from others at the same moment by its kind and the subscriptions it is for.
+	private static string GetSentKey(Message message)
+		=> message is ISubscriptionIdMessage subscribed
+			? $"{message.Type}:{string.Join(",", subscribed.GetSubscriptionIds())}"
+			: message.Type.ToString();
+
+	// What went out at the moment the replay has reached, so that a reload of the day after a subscription changes does not
+	// send it again.
+	private void CountSent(Message message, DateTime serverTime)
+	{
+		if (serverTime != _sentTime)
+		{
+			_sentTime = serverTime;
+			_sentAtTime.Clear();
+		}
+
+		var key = GetSentKey(message);
+		_sentAtTime[key] = _sentAtTime.TryGetValue(key) + 1;
+	}
+
+	// Marks a message replayed at its moment and gives what goes out for it: what the generators make by then, then the message.
+	private IEnumerable<Message> Replay(Message message)
+	{
+		if (message.TryGetServerTime(out var serverTime))
+		{
+			_currentTime = serverTime;
+			CountSent(message, serverTime);
+
+			foreach (var generated in DriveGenerators(message, serverTime))
+			{
+				LoadedMessageCount++;
+				yield return generated;
+			}
+		}
+
+		LoadedMessageCount++;
+		yield return message;
+	}
+
 	private static async IAsyncEnumerable<Message> FilterMessages(
 		IAsyncEnumerable<Message> messages,
 		DateTime fromTime,
 		DateTime toTime,
-		DateTime curTime)
+		DateTime curTime,
+		DateTime sentTime,
+		Dictionary<string, int> sentAtTime)
 	{
 		await foreach (var msg in messages)
 		{
@@ -376,6 +509,18 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 
 			if (msgServerTime < curTime)
 				continue;
+
+			// Sent already, before the day was reloaded for a change of the subscriptions.
+			if (msgServerTime == sentTime && sentAtTime.Count > 0)
+			{
+				var key = GetSentKey(msg);
+
+				if (sentAtTime.TryGetValue(key) is var sent and > 0)
+				{
+					sentAtTime[key] = sent - 1;
+					continue;
+				}
+			}
 
 			msg.LocalTime = msgServerTime;
 
@@ -446,6 +591,61 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 					yield break;
 			}
 		}
+	}
+
+	// A day without history runs the clock at the pace the replay keeps with data: through the boards' trading hours to the
+	// session's end and the post-trade moments, or through the whole day when no board is known. With nothing replayed that
+	// keeps a pace, the day is marked only where its hours begin and end.
+	private IEnumerable<TimeMessage> GetEmptyDayTimeLine(BoardMessage[] boards, DateTime date)
+	{
+		if (GetReplayStep() is not TimeSpan step)
+		{
+			foreach (var msg in GetSimpleTimeLine(boards, date))
+				yield return msg;
+
+			yield break;
+		}
+
+		if (boards.Length == 0)
+		{
+			for (var time = TimeSpan.Zero; time < TimeSpan.FromDays(1); time += step)
+				yield return new TimeMessage { ServerTime = date.Date + time };
+
+			yield break;
+		}
+
+		var lastTime = TimeSpan.Zero;
+
+		foreach (var (_, range) in _timeLineGenerator.GetOrderedRanges(boards, date))
+		{
+			for (var time = range.Min; time < range.Max; time += step)
+				yield return new TimeMessage { ServerTime = date.Date + time };
+
+			yield return new TimeMessage { ServerTime = date.Date + range.Max };
+			lastTime = range.Max;
+		}
+
+		foreach (var msg in _timeLineGenerator.GetPostTradeTimeMessages(date, lastTime, MarketTimeChangedInterval, PostTradeMarketTimeChangedCount))
+			yield return msg;
+	}
+
+	// How often the replay moves its clock: as often as the quickest of what it still replays that keeps a pace - time-frame
+	// candles once a time frame, a generator once its interval or a clock interval - and never oftener than the clock interval.
+	// Ticks, quotes and the order log keep none, and a series whose history is over is replayed no more.
+	private TimeSpan? GetReplayStep()
+	{
+		var periods = _basketStorage.InnerStorages.SyncGet(c => c.ToArray())
+			.Where(storage => storage.DataType.IsTFCandles && !_endedHistories.Contains(storage.SecurityId))
+			.Select(storage => storage.DataType.GetTimeFrame())
+			.Concat(_generators.Values.Select(v => v.generator.Interval > TimeSpan.Zero ? v.generator.Interval : MarketTimeChangedInterval))
+			.ToArray();
+
+		if (periods.Length == 0)
+			return null;
+
+		var quickest = periods.Min();
+
+		return quickest > MarketTimeChangedInterval ? quickest : MarketTimeChangedInterval;
 	}
 
 	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTime date)

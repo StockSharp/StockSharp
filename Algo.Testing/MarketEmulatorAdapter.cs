@@ -44,8 +44,7 @@ public class MarketEmulatorAdapter : MessageAdapter
 		var isStopping = message.Type == MessageTypes.EmulationState
 			&& ((EmulationStateMessage)message).State == ChannelStates.Stopping;
 
-		// The emulator gets the marker too: the bar the run's last data message belongs to closes
-		// after that message, so it is handed over on the marker or not at all.
+		// The emulator gets the marker too: a bar it still holds when the run is told to stop is handed over on it.
 		await Emulator.SendInMessageAsync(message, cancellationToken);
 
 		// The emulator produces no output for the marker itself, so the echo is what puts it back

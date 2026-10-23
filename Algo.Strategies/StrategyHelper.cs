@@ -477,13 +477,33 @@ public static partial class StrategyHelper
 	}
 
 	/// <summary>
+	/// Stop a started strategy that has no market data to run on, with an error that says so: it asked for none, or all it
+	/// asked for was refused. A run over history replays only the market data subscribed and would wait forever for such a
+	/// strategy. Called once the strategy has started, when it has asked for its data.
+	/// </summary>
+	/// <param name="strategy"><see cref="Strategy"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see langword="true"/> if the strategy was stopped.</returns>
+	public static async ValueTask<bool> StopIfNoMarketDataAsync(this Strategy strategy, CancellationToken cancellationToken)
+	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
+		if (strategy.ProcessState != ProcessStates.Started || strategy.HasMarketData)
+			return false;
+
+		await strategy.StopAsync(new InvalidOperationException(LocalizedStrings.NoData), cancellationToken);
+		return true;
+	}
+
+	/// <summary>
 	/// Execute strategy.
 	/// </summary>
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
 	/// <param name="extra">Extra action.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this IStrategy strategy, Func<CancellationToken, ValueTask> extra, CancellationToken cancellationToken)
+	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this Strategy strategy, Func<CancellationToken, ValueTask> extra, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -495,6 +515,7 @@ public static partial class StrategyHelper
 			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
 
 		var tcs = AsyncHelper.CreateTaskCompletionSource<int>();
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		const int canceled = 1;
 		const int completed = 2;
@@ -525,11 +546,7 @@ public static partial class StrategyHelper
 			}
 			else if (s.ProcessState == ProcessStates.Started)
 			{
-				if (!((ISubscriptionProvider)strategy).Subscriptions.Any(s => s.DataType.IsMarketData))
-				{
-					s.AddErrorLog("No any market data subscription.");
-					s.Stop();
-				}
+				started.TrySetResult(true);
 			}
 		}
 
@@ -539,9 +556,13 @@ public static partial class StrategyHelper
 		{
 			await Task.Yield();
 
-			strategy.Start();
+			await strategy.StartAsync();
 
 			await extra(cancellationToken);
+
+			// By the time it is started the strategy has asked for the market data it trades on.
+			if (await Task.WhenAny(started.Task, tcs.Task) == started.Task && !tcs.Task.IsCompleted)
+				await strategy.StopIfNoMarketDataAsync(cancellationToken);
 
 			var res = await tcs.Task;
 
@@ -552,7 +573,7 @@ public static partial class StrategyHelper
 			strategy.ProcessStateChanged -= OnProcessStateChanged;
 
 			if (finalResult == canceled)
-				strategy.Stop();
+				await strategy.StopAsync();
 		}
 	}
 

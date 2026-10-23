@@ -14,6 +14,12 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	private readonly StrategyPositionManager _posManager;
 	private readonly HashSet<Order> _pendingOwnOrders = [];
 	private readonly HashSet<long> _ordersAdjustedByTrade = [];
+
+	// The subscriptions that got going, and those refused before they did: a refused one never comes online and does not keep
+	// the strategy offline, while one that fails after it got going takes the data the strategy relies on with it.
+	private readonly SynchronizedSet<Subscription> _startedSubscriptions = [];
+	private readonly SynchronizedSet<Subscription> _refusedSubscriptions = [];
+
 	private readonly Action<MyTrade> _beforeTradeProcessing;
 	private readonly Dictionary<(SecurityId secId, string pfName), decimal> _positions = [];
 	private string _idStr;
@@ -1253,6 +1259,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Subscriptions.Reset();
 		Engine.ForceStop();
 
+		_startedSubscriptions.Clear();
+		_refusedSubscriptions.Clear();
+
 		_pendingOwnOrders.Clear();
 		_ordersAdjustedByTrade.Clear();
 		_boardMsg = default;
@@ -2289,6 +2298,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (!Subscriptions.CanProcess(subscription))
 			return;
 
+		_startedSubscriptions.Add(subscription);
+		_refusedSubscriptions.Remove(subscription);
+
 		SubscriptionStarted?.Invoke(subscription);
 		RefreshOnlineState();
 	}
@@ -2315,6 +2327,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	{
 		if (!Subscriptions.CanProcess(subscription))
 			return;
+
+		if (isSubscribe && !_startedSubscriptions.Contains(subscription))
+			_refusedSubscriptions.Add(subscription);
 
 		SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
 		RefreshOnlineState();
@@ -2394,13 +2409,19 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 	private void RefreshOnlineState()
 	{
+		// A subscription refused before it got going will never come online, and must not keep the strategy offline on the
+		// data it has.
 		var isOnline = ProcessState == ProcessStates.Started &&
 			Subscriptions.Subscriptions
-				.Where(subscription => !subscription.SubscriptionMessage.IsHistoryOnly())
+				.Where(subscription => !subscription.SubscriptionMessage.IsHistoryOnly() && !_refusedSubscriptions.Contains(subscription))
 				.All(subscription => subscription.State == SubscriptionStates.Online);
 
 		IsOnline = isOnline;
 	}
+
+	// Whether the strategy asks for market data that was not refused before it got going.
+	internal bool HasMarketData
+		=> Subscriptions.Subscriptions.Any(subscription => subscription.DataType.IsMarketData && !_refusedSubscriptions.Contains(subscription));
 
 	/// <summary>
 	/// Handle order registration failure from connector.

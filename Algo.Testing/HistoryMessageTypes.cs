@@ -14,4 +14,9 @@ public static class HistoryMessageTypes
 	/// <see cref="CommissionRuleMessage"/>.
 	/// </summary>
 	public const MessageTypes CommissionRule = (MessageTypes)(-7);
+
+	/// <summary>
+	/// <see cref="HistoryEndMessage"/>.
+	/// </summary>
+	public const MessageTypes HistoryEnd = (MessageTypes)(-8);
 }

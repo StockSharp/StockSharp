@@ -641,21 +641,16 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		StrategyInitialized?.Invoke(strategy, parameters);
 		ConnectorInitialized?.Invoke(connector);
 
-		if (StopOnSubscriptionError)
-		{
-			strategy.ProcessStateChanged += s =>
-			{
-				if (s == strategy && s.ProcessState == ProcessStates.Started && !((ISubscriptionProvider)s).Subscriptions.Any(sub => sub.DataType.IsMarketData))
-				{
-					s.LogError("No any market data subscription.");
-					connector.Disconnect();
-				}
-			};
-		}
-
 		await strategy.StartAsync(cancellationToken);
+
+		var hasNoMarketData = StopOnSubscriptionError && await strategy.StopIfNoMarketDataAsync(cancellationToken);
 
 		connector.Connect();
 		await connector.StartAsync(cancellationToken);
+
+		// The strategy was stopped for asking for no market data: there is nothing to replay, and the run ends as soon as it
+		// is up, which ends the iteration.
+		if (hasNoMarketData)
+			connector.Disconnect();
 	}
 }

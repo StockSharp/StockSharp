@@ -322,6 +322,13 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				break;
 			}
 
+			case HistoryMessageTypes.HistoryEnd:
+			{
+				// The emulator closes the market of a security whose history ran out; nothing past it has a use for the news.
+				await SendToEmulator(message, cancellationToken);
+				break;
+			}
+
 			default:
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)

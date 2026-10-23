@@ -211,13 +211,23 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		if (message is EmulationStateMessage { State: ChannelStates.Stopping } stopMsg)
 		{
-			// A run ends with its last data message, and the bar that message belongs to closes
-			// later than the message itself: nothing else will ever carry the clock over that
-			// close. The leftovers are handed over here, each at its own close rather than at the
-			// moment the run was told to stop, so the last bar of a run is stamped as every other
-			// bar is. Bars that would only close after that moment are not part of the run and stay
-			// where they are.
+			// A run told to stop hands over the bars it holds that close by the moment it stops at, each at its own close
+			// rather than at that moment, so the last bar of a run is stamped as every other bar is. Bars that would only
+			// close after that moment are not part of the run and stay where they are.
 			ReleaseStoredCandles(stopMsg.LocalTime, results);
+			return;
+		}
+
+		if (message.Type == MessageTypes.Time)
+		{
+			// Where history is silent the replay's clock comes on its own. A bar it carries past its close is handed over at
+			// that close, and the moment itself goes out after whatever it released, so a reader keeps the replay's time.
+			ReleaseStoredCandles(message.LocalTime, results);
+			ProcessTime(message.LocalTime, results);
+
+			if (message.LocalTime > _currentTime && !results.Exists(m => m.LocalTime >= message.LocalTime))
+				results.Add(new TimeMessage { LocalTime = message.LocalTime, ServerTime = message.LocalTime });
+
 			return;
 		}
 
@@ -236,10 +246,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.EmulationState:
 				// Every state other than the stop signal handled above arrives here on purpose, and
 				// there is nothing to do with it: the emulator keeps no run state of its own.
-				break;
-
-			case MessageTypes.Time:
-				// handled below in ProcessTime call
 				break;
 
 			case MessageTypes.QuoteChange:
@@ -339,6 +345,15 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				// A rule accumulates what it has charged for, so the emulator counts on a copy of its own.
 				_commissionManager.Rules.Add(await ((CommissionRuleMessage)message).Rule.CloneAsync(cancellationToken));
 				break;
+
+			case HistoryMessageTypes.HistoryEnd:
+			{
+				// A security the emulator has never been shown has no market to close.
+				if (_securityEmulators.TryGetValue(((HistoryEndMessage)message).SecurityId, out var ended))
+					ended.EndHistory(message.LocalTime);
+
+				break;
+			}
 
 			default:
 				if (message is CandleMessage candleMsg)
@@ -602,14 +617,18 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				_engine.AddPositionRevaluations(time, results);
 				results.Add(candle);
 			}
+
+			// Past the end of its history the security has no market: nothing trades at a price the history will never update.
+			if (emulator.TryCloseMarket(time))
+				LogInfo("History of {0} ran out: its market is closed at {1:O}.", secId, time);
 		}
 	}
 
 	/// <summary>
-	/// Hand over every bar still held whose close falls no later than <paramref name="stopTime"/>,
+	/// Hand over every bar still held whose close falls no later than <paramref name="time"/>,
 	/// each at its own close and in order.
 	/// </summary>
-	private void ReleaseStoredCandles(DateTime stopTime, List<Message> results)
+	private void ReleaseStoredCandles(DateTime time, List<Message> results)
 	{
 		while (true)
 		{
@@ -617,7 +636,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			foreach (var (_, emulator) in _securityEmulators)
 			{
-				if (emulator.NextStoredCandleReleaseTime is not DateTime releaseTime || releaseTime > stopTime)
+				if (emulator.NextStoredCandleReleaseTime is not DateTime releaseTime || releaseTime > time)
 					continue;
 
 				if (next is null || releaseTime < next)
@@ -748,6 +767,9 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	private decimal? _synthBidPrice;
 	private decimal? _synthAskPrice;
 
+	// When the replay ran out of this security's history, until its market is closed.
+	private DateTime? _historyEnd;
+
 	// Ample liquidity for a synthesized level, so a marketable order fills fully in one trade
 	// rather than partially against the fractional data volume.
 	internal const decimal EmulatedLevelVolume = 1_000_000_000m;
@@ -850,6 +872,9 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		var engineState = GetEngineState();
 		engineState.UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
 
+		if (bidPrice.HasValue || askPrice.HasValue)
+			engineState.ReopenMarket();
+
 		// Move the synthesized best bid/ask to the new quote instead of accumulating levels.
 		// Without removing the previous synthetic level the best bid/ask drift to historical
 		// extremes (same bug as ticks), making orders fill far from the market. Clearing only
@@ -918,6 +943,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		// real resting orders at those prices untouched.
 		RemoveSyntheticLevels();
 
+		engineState.ReopenMarket();
+
 		// A print that names the side it traded on puts that side at its price and the other a spread
 		// away. A print that names no side - every price replayed from a candle - says nothing about
 		// which side was there: by default the spread is placed below it, and with IsSpreadCentered it
@@ -974,6 +1001,34 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		_synthAskPrice = null;
 	}
 
+	/// <summary>
+	/// The replay holds no more history of this security.
+	/// </summary>
+	/// <param name="time">The moment of the replay at which it ran out.</param>
+	public void EndHistory(DateTime time)
+		=> _historyEnd = time;
+
+	/// <summary>
+	/// Close the market once the history is over: past the moment it ran out and past the release of the last bar it
+	/// recorded, so an order sent on that bar still meets the prices the bar recorded.
+	/// </summary>
+	/// <param name="time">The current time.</param>
+	/// <returns><see langword="true"/> when the market closed now.</returns>
+	public bool TryCloseMarket(DateTime time)
+	{
+		if (_historyEnd is not DateTime end || time <= end || _storedCandles.Count > 0)
+			return false;
+
+		_historyEnd = null;
+
+		// The synthesized levels leave with the rest of what the market offered.
+		_synthBidPrice = null;
+		_synthAskPrice = null;
+
+		GetEngineState().CloseMarket();
+		return true;
+	}
+
 	public void ProcessOrderLog(ExecutionMessage ol, List<Message> results)
 	{
 		IsCandleMatchingMode = false;
@@ -991,6 +1046,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 		var engineState = GetEngineState();
 		engineState.UpdateSteps(ol.OrderPrice, ol.OrderVolume);
+		engineState.ReopenMarket();
 
 		if (ol.IsCancellation)
 		{
@@ -1115,6 +1171,10 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			foreach (var key in toRemove)
 				_storedCandles.Remove(key);
 		}
+
+		// A bar handed over after the history ran out moves the closing past it, so the order that bar prompts still meets its prices.
+		if (released is not null && _historyEnd is DateTime end && end < currentTime)
+			_historyEnd = currentTime;
 
 		if (candleResults.Count == 0)
 			return released;

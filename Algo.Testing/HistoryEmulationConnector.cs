@@ -9,6 +9,10 @@ using StockSharp.Algo.Commissions;
 public class HistoryEmulationConnector : BaseEmulationConnector
 {
 	private bool _stopPending;
+	private bool _isInterrupted;
+	private bool _isMarketDataRefused;
+	private Exception _lastRefusal;
+	private Exception _stopError;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
@@ -112,6 +116,9 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		Adapter.GenerateOrderBookFromLevel1 = false;
 		Adapter.UseInChannel = false;
 		Adapter.UseOutChannel = false;
+
+		// The replay's clock is the only one a run has: the time its emulator hands over is the strategies' time.
+		Adapter.IsTimeForwarded = true;
 
 		InMessageChannel = new PassThroughMessageChannel();
 		OutMessageChannel = new PassThroughMessageChannel();
@@ -253,7 +260,8 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	}
 
 	/// <summary>
-	/// Call <see cref="Connector.Disconnect"/> when any <see cref="Subscription"/> failed.
+	/// End the run on any market data subscription that fails, not only when none of its market data is left: such a run
+	/// is not finished, and <see cref="StopError"/> holds the failure.
 	/// </summary>
 	public bool StopOnSubscriptionError { get; set; }
 
@@ -282,8 +290,41 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	{
 		base.RaiseSubscriptionFailed(subscription, error, isSubscribe);
 
-		if (StopOnSubscriptionError && subscription.SubscriptionMessage is MarketDataMessage)
-			Disconnect();
+		if (subscription.SubscriptionMessage is not MarketDataMessage)
+			return;
+
+		if (StopOnSubscriptionError)
+		{
+			StopRun(new InvalidOperationException(LocalizedStrings.ErrorSubDetails.Put(subscription.DataType, subscription.SecurityId), error));
+			return;
+		}
+
+		if (!isSubscribe)
+			return;
+
+		// Whether any market data is left is decided when the run starts: a strategy asks for its series one after another,
+		// each refused inside its own call, so at a refusal the rest may not be asked for yet.
+		_isMarketDataRefused = true;
+		_lastRefusal = error;
+	}
+
+	// History is replayed only for the market data subscribed: a run with none of it would wait for it forever.
+	private bool HasMarketDataSubscriptions()
+		=> Subscriptions.Any(s => s.SubscriptionMessage is MarketDataMessage);
+
+	// What a run that has none of its market data ends with; the last refusal says which data was missing.
+	private InvalidOperationException CreateNoDataError()
+		=> new(LocalizedStrings.NoData, _lastRefusal);
+
+	// Ends the run on the error that ends it, told before the run is torn down; a run not started yet ends as it starts.
+	private void StopRun(Exception error)
+	{
+		if (ConnectionState != ConnectionStates.Connected)
+			return;
+
+		_stopError = error;
+		RaiseError(error);
+		Disconnect();
 	}
 
 	/// <summary>
@@ -310,7 +351,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 	private void OnCurrentTimeChanged(TimeSpan diff)
 	{
-		if (_stepTicks == default)
+		if (_stepTicks == default || _progress >= 100)
 			return;
 
 		if (CurrentTime < _nextTime && CurrentTime < _stopTime)
@@ -322,9 +363,16 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 	/// <summary>
 	/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="IConnector.Disconnect"/>method.
+	/// A run that ended on an error has not, and <see cref="StopError"/> says why.
 	/// </summary>
 	public bool IsFinished { get; private set; }
-	
+
+	/// <summary>
+	/// The error the emulation ended on, or <see langword="null"/> if it ended without one: a run left with none of its
+	/// market data, a run stopped on a failed subscription, a replay that failed.
+	/// </summary>
+	public Exception StopError { get; private set; }
+
 	/// <inheritdoc />
 	public override TimeSpan MarketTimeChangedInterval
 	{
@@ -352,6 +400,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		await base.ClearCacheAsync(cancellationToken);
 
 		IsFinished = false;
+		StopError = null;
 	}
 
 	/// <inheritdoc />
@@ -366,6 +415,10 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		_progress = default;
 
 		_stopPending = false;
+		_isInterrupted = false;
+		_isMarketDataRefused = false;
+		_lastRefusal = null;
+		_stopError = null;
 
 		await base.OnConnectAsync(cancellationToken);
 	}
@@ -373,6 +426,8 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <inheritdoc />
 	protected override ValueTask OnDisconnectAsync(CancellationToken cancellationToken)
 	{
+		_isInterrupted = true;
+
 		if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
 			EmulationAdapter.InChannel.Resume();
 
@@ -473,6 +528,17 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		using (_stateSync.EnterScope())
 			isStopping = ProcessEmulationStateMessageNoLock(message, ref errors);
 
+		// The replay ran out of history rather than being disconnected: the run went the whole way and its progress says
+		// so, whether or not history reached the stop date.
+		if (isStopping && IsFinished && !_isInterrupted && _progress < 100)
+		{
+			_progress = 100;
+			ProgressChanged?.Invoke(_progress);
+		}
+
+		// What went wrong is told before the run is torn down: a host knows why the run ends by the time it sees it stopped.
+		await SendOutErrorsAsync(errors, cancellationToken);
+
 		if (isStopping)
 		{
 			// change ConnectionState to Disconnecting
@@ -482,8 +548,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 			// base method cannot be invoked from OnDisconnect HistConnector.OnDisconnect
 			await base.OnDisconnectAsync(cancellationToken);
 		}
-
-		await SendOutErrorsAsync(errors, cancellationToken);
 	}
 
 	// Core of the emulation-state handling. Must be called while holding _stateSync. Tells whether
@@ -498,7 +562,10 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		{
 			case ChannelStates.Stopping:
 			{
-				IsFinished = message.IsOk();
+				// What the connector ended the run on, or what the replay failed with; with neither, the run went the whole way
+				// or was disconnected.
+				StopError = _stopError ?? message.Error;
+				IsFinished = StopError is null;
 				isStopping = true;
 				break;
 			}
@@ -506,6 +573,17 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 			case ChannelStates.Starting:
 			{
 				SetStateInternal(ChannelStates.Started, ref errors);
+
+				// All the market data asked for was refused for want of history: the run ends rather than waiting for data
+				// that will not come. With none asked for yet the run waits, as a strategy started after the replay
+				// subscribes only then.
+				if (_isMarketDataRefused && !HasMarketDataSubscriptions())
+				{
+					_stopError = CreateNoDataError();
+					(errors ??= []).Add(_stopError);
+					_stopPending = true;
+				}
+
 				break;
 			}
 

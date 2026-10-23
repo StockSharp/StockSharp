@@ -1447,9 +1447,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			if (!engine._securityStates.TryGetValue(securityId, out var state))
 				return null;
 
-			return closeSide == Sides.Sell
-				? state.OrderBook.BestBid?.price
-				: state.OrderBook.BestAsk?.price;
+			return state.TryGetClosePrice(closeSide);
 		}
 	}
 

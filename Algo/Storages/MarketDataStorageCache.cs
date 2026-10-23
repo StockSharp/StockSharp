@@ -5,7 +5,7 @@
 /// </summary>
 public class MarketDataStorageCache
 {
-	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = [];
+	private readonly SynchronizedDictionary<(SecurityId, DataType, string scope, DateTime), (DateTime lastAccess, Message[] data)> _cache = [];
 
 	private int _limit = 1000;
 
@@ -31,7 +31,7 @@ public class MarketDataStorageCache
 	/// <param name="dataType"><see cref="DataType"/>.</param>
 	/// <param name="date">Date to invalidate.</param>
 	public void Invalidate(SecurityId securityId, DataType dataType, DateTime date)
-		=> _cache.Remove((securityId, dataType, date));
+		=> _cache.Remove((securityId, dataType, null, date));
 
 	/// <summary>
 	/// Get data asynchronously.
@@ -44,19 +44,36 @@ public class MarketDataStorageCache
 	/// <returns>Data.</returns>
 	public IAsyncEnumerable<Message> GetMessagesAsync<TEnumerable>(SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, TEnumerable> loadIfNeed)
 		where TEnumerable : IAsyncEnumerable<Message>
+		=> GetMessagesAsync(securityId, dataType, null, date, loadIfNeed);
+
+	/// <summary>
+	/// Get data of a day asynchronously for data that is not one series of one security: a day of several series replayed
+	/// together, named by what they are.
+	/// </summary>
+	/// <typeparam name="TEnumerable">Type of data collection.</typeparam>
+	/// <param name="scope">What the data of the day is made of; the same day of different data is cached apart.</param>
+	/// <param name="date">Date to load.</param>
+	/// <param name="loadIfNeed">Handler to load data from real storage.</param>
+	/// <returns>Data.</returns>
+	public IAsyncEnumerable<Message> GetMessagesAsync<TEnumerable>(string scope, DateTime date, Func<DateTime, TEnumerable> loadIfNeed)
+		where TEnumerable : IAsyncEnumerable<Message>
+		=> GetMessagesAsync(default, null, scope ?? throw new ArgumentNullException(nameof(scope)), date, loadIfNeed);
+
+	private IAsyncEnumerable<Message> GetMessagesAsync<TEnumerable>(SecurityId securityId, DataType dataType, string scope, DateTime date, Func<DateTime, TEnumerable> loadIfNeed)
+		where TEnumerable : IAsyncEnumerable<Message>
 	{
 		if (loadIfNeed is null)
 			throw new ArgumentNullException(nameof(loadIfNeed));
 
-		return Impl(this, securityId, dataType, date, loadIfNeed);
+		return Impl(this, securityId, dataType, scope, date, loadIfNeed);
 
-		static async IAsyncEnumerable<Message> Impl(MarketDataStorageCache cache, SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, TEnumerable> loadIfNeed, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		static async IAsyncEnumerable<Message> Impl(MarketDataStorageCache cache, SecurityId securityId, DataType dataType, string scope, DateTime date, Func<DateTime, TEnumerable> loadIfNeed, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
 			var now = DateTime.UtcNow;
 
-			var key = (securityId, dataType, date);
+			var key = (securityId, dataType, scope, date);
 
 			if (!cache._cache.TryGetValue(key, out var t))
 			{
