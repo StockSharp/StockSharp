@@ -382,6 +382,49 @@ public class ImportTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Securities_AnImportedOptionKeepsItsUnderlying()
+	{
+		// An option is found through its underlying asset. A file names the underlying by its code, as a venue does,
+		// or by its whole identifier when it trades on another board; either way the option has to come out of the
+		// import pointing at it, or no option desk can ever list it.
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Securities).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "SecurityType"),
+			allFields.First(f => f.Name == "UnderlyingSecurityId"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var path = WriteFixedCsv("securities_underlying_import.csv",
+			"RI110000BF5;FORTS;Option;RIM5",
+			"SBER300CE5;OPTSPOT;Option;SBER@TQBR");
+
+		var (securities, exchanges) = NewImportTargets();
+
+		var importer = new CsvImporter(DataType.Securities, fields, securities, exchanges, _ => throw new InvalidOperationException("Securities are filed, not stored."))
+		{
+			ColumnSeparator = ";"
+		};
+
+		using (var stream = Helper.MemorySystem.OpenRead(path))
+			await importer.Import(stream, _ => { }, CancellationToken);
+
+		var onItsBoard = await securities.LookupByIdAsync(new() { SecurityCode = "RI110000BF5", BoardCode = "FORTS" }, CancellationToken);
+		var onAnother = await securities.LookupByIdAsync(new() { SecurityCode = "SBER300CE5", BoardCode = "OPTSPOT" }, CancellationToken);
+
+		onItsBoard.AssertNotNull();
+		onAnother.AssertNotNull();
+
+		onItsBoard.UnderlyingSecurityId.AssertEqual("RIM5@FORTS");
+		onAnother.UnderlyingSecurityId.AssertEqual("SBER@TQBR");
+	}
+
+	[TestMethod]
 	public Task Boards()
 	{
 		var allFields = FieldMappingRegistry.CreateFields(DataType.Board).ToArray();

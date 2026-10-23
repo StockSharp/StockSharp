@@ -241,6 +241,10 @@ public class CsvParser : BaseLogReceiver
 					}
 					else
 					{
+						// A code alone names an underlying on the security's own board, as a venue writes it.
+						if (!secMsg.UnderlyingSecurityId.SecurityCode.IsEmpty() && secMsg.UnderlyingSecurityId.BoardCode.IsEmpty())
+							secMsg.TryFillUnderlyingId(secMsg.UnderlyingSecurityId.SecurityCode);
+
 						foreach (var pair in mappings)
 						{
 							cancellationToken.ThrowIfCancellationRequested();
