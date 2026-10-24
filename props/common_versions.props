@@ -13,7 +13,6 @@
     <MsCodeAnalysisAnalyzersVer>3.3.4</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>3.11.1</MsTestVer>
     <MsTestSdkVer>17.13.0</MsTestSdkVer>
-    <GrpcVer>2.71.0</GrpcVer>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('$(NetTfm)'))">
@@ -23,7 +22,6 @@
     <MsCodeAnalysisAnalyzersVer>5.*</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>4.*</MsTestVer>
     <MsTestSdkVer>18.*</MsTestSdkVer>
-    <GrpcVer>2.*</GrpcVer>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -31,34 +29,17 @@
     <StockSharpVer>5.*</StockSharpVer>
 
     <MathNumVer>6.0.0-beta2</MathNumVer>
-    <JwtVer>9.0.3</JwtVer>
-    <FluentFtpVer>40.0.0</FluentFtpVer>
-    <SignalRVer>2.4.3</SignalRVer>
-    <NuGetApiVer>7.0.1</NuGetApiVer>
-    <SpectreVer>0.48.0</SpectreVer>
+    <NuGetApiVer>7.*</NuGetApiVer>
+    <SpectreVer>0.*</SpectreVer>
     <McpVer>2.*</McpVer>
-    <AWSSDKVer>4.*</AWSSDKVer>
-    <GeneticSharpVer>3.1.4</GeneticSharpVer>
-    <SharpPcapVer>6.3.0</SharpPcapVer>
-    <GoogleProtobufVer>3.*</GoogleProtobufVer>
-    <NatsVer>3.*</NatsVer>
-    <LightstreamerVer>6.*</LightstreamerVer>
-    <MoomooApiVer>10.*</MoomooApiVer>
-    <BouncyCastleVer>2.*</BouncyCastleVer>
-    <TigerBrokersOpenApiVer>1.*</TigerBrokersOpenApiVer>
-    <PandasVer>0.6.*</PandasVer>
+    <SharpPcapVer>6.*</SharpPcapVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
     <MoqVer>4.*</MoqVer>
     <ILGPUVer>1.*</ILGPUVer>
-    <FSharpControlTaskSeqVer>0.*</FSharpControlTaskSeqVer>
+    <FSharpControlTaskSeqVer>1.*</FSharpControlTaskSeqVer>
     <FSharpPlusVer>1.*</FSharpPlusVer>
-    <MsSqlClientVer>6.*</MsSqlClientVer>
-    <NethereumSignerVer>5.*</NethereumSignerVer>
-    <TonSdkCoreVer>0.3.*</TonSdkCoreVer>
-    <TonSdkContractsVer>0.4.*</TonSdkContractsVer>
-    <XrplVer>10.*</XrplVer>
-    <SolanaVer>8.*</SolanaVer>
+    <MsSqlClientVer>7.*</MsSqlClientVer>
     <AvaloniaVer>12.*</AvaloniaVer>
     <NewtonsoftVer>13.*</NewtonsoftVer>
     <ActiproVer>25.*</ActiproVer>
