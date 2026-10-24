@@ -216,7 +216,7 @@ public class IndicatorDiagramElement : DiagramElement
 			{
 				var getter = propertyInfo.GetValue;
 				var setter = propertyInfo.SetValue;
-				return (IDiagramElementParam)_createParamMethod.Make(propType).Invoke(this, [indicator, getter, setter, name, propertyInfo.Name, propertyInfo.DisplayName, prefix, order + parameters.Count]);
+				return (IDiagramElementParam)_createParamMethod.Make(propType).Invoke(this, [indicator, getter, setter, name, propertyInfo.Name, propertyInfo.GetDisplayName(), prefix, order + parameters.Count]);
 			}
 
 			var propType = propertyInfo.PropertyType;

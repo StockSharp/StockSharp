@@ -61,6 +61,43 @@ public class DiagramElementParamTests : BaseTestClass
 		}
 	}
 
+	/// <summary>
+	/// The parameters an indicator element takes from its indicator are named in the interface's language, as its own
+	/// are: a Russian property grid showed the period of an SMA as "Length".
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize]
+	public void AnIndicatorsParametersAreNamedInTheInterfacesLanguage()
+	{
+		const string code = "q4";
+
+		var previous = LocalizedStrings.ActiveLanguage;
+
+		try
+		{
+			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>
+			{
+				{ LocalizedStrings.CultureCodeKey, "en-US" },
+				{ LocalizedStrings.PeriodKey, "Q period" },
+			});
+
+			LocalizedStrings.ActiveLanguage = code;
+
+			using var type = new IndicatorType(typeof(SimpleMovingAverage));
+			var element = new IndicatorDiagramElement { Type = type };
+
+			var length = element.Parameters.Single(param => param.Name == nameof(SimpleMovingAverage.Length));
+
+			AreEqual("Q period", length.Attributes.OfType<DisplayAttribute>().Single().Name);
+		}
+		finally
+		{
+			LocalizedStrings.ActiveLanguage = previous;
+			LocalizedStrings.RemoveLanguage(code);
+			LocalizedStrings.ResetCache();
+		}
+	}
+
 	private sealed class AsyncSettings : IAsyncPersistable
 	{
 		public int Number { get; set; }
