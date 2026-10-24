@@ -375,6 +375,9 @@ public class DataType : Equatable<DataType>, IAsyncPersistable
 
 			if (name.IsEmpty())
 			{
+				if (IsTFCandles && Arg is TimeSpan timeFrame && timeFrame.ToTimeFrameName() is string timeFrameName)
+					return timeFrameName;
+
 				name = $"{MessageType?.GetDisplayName()}";
 
 				if (Arg is not null)

@@ -3920,6 +3920,36 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// The name traders give a time frame: m1, h1, d1, w1 for a week, mn1 for a month of thirty days and y1 for a year
+	/// of 365 days.
+	/// </summary>
+	/// <param name="timeFrame">Time frame.</param>
+	/// <returns>The name, or <see langword="null"/> for a time frame that has none, such as a part of a second.</returns>
+	public static string ToTimeFrameName(this TimeSpan timeFrame)
+	{
+		if (timeFrame <= TimeSpan.Zero)
+			return null;
+
+		if (timeFrame.Ticks % TimeSpan.TicksPerDay == 0)
+		{
+			var days = (long)timeFrame.TotalDays;
+
+			return days % 365 == 0 ? $"y{days / 365}" : days % 30 == 0 ? $"mn{days / 30}" : days % 7 == 0 ? $"w{days / 7}" : $"d{days}";
+		}
+
+		if (timeFrame.Ticks % TimeSpan.TicksPerHour == 0)
+			return $"h{(long)timeFrame.TotalHours}";
+
+		if (timeFrame.Ticks % TimeSpan.TicksPerMinute == 0)
+			return $"m{(long)timeFrame.TotalMinutes}";
+
+		if (timeFrame.Ticks % TimeSpan.TicksPerSecond == 0)
+			return $"s{(long)timeFrame.TotalSeconds}";
+
+		return null;
+	}
+
+	/// <summary>
 	/// Convert <see cref="DataType"/> to readable string.
 	/// </summary>
 	/// <param name="dt"><see cref="DataType"/> instance.</param>

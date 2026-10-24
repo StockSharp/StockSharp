@@ -455,6 +455,54 @@ public class DataTypeTests : BaseTestClass
 		}
 	}
 
+	/// <summary>
+	/// A time frame is named the way a trader writes it - m1, h1, d1 - wherever its data type is shown, rather than as a
+	/// time of day after a prefix.
+	/// </summary>
+	[TestMethod]
+	public void ATimeFrameIsNamedTheWayATraderWritesIt()
+	{
+		static string Name(TimeSpan timeFrame) => timeFrame.TimeFrame().ToString();
+
+		AreEqual("s10", Name(TimeSpan.FromSeconds(10)));
+		AreEqual("s90", Name(TimeSpan.FromSeconds(90)));
+		AreEqual("m1", Name(TimeSpan.FromMinutes(1)));
+		AreEqual("m15", Name(TimeSpan.FromMinutes(15)));
+		AreEqual("m90", Name(TimeSpan.FromMinutes(90)));
+		AreEqual("h1", Name(TimeSpan.FromHours(1)));
+		AreEqual("h12", Name(TimeSpan.FromHours(12)));
+		AreEqual("d1", Name(TimeSpan.FromDays(1)));
+		AreEqual("d3", Name(TimeSpan.FromDays(3)));
+		AreEqual("w1", Name(TimeSpan.FromDays(7)));
+		AreEqual("mn1", Name(TimeSpan.FromDays(30)));
+		AreEqual("y1", Name(TimeSpan.FromTicks(TimeHelper.TicksPerYear)));
+		AreEqual("y2", Name(TimeSpan.FromDays(730)));
+	}
+
+	/// <summary>
+	/// A time frame a trader has no short name for - a part of a second - keeps the whole name of its data type.
+	/// </summary>
+	[TestMethod]
+	public void ATimeFrameWithoutAShortNameKeepsItsWholeName()
+	{
+		var half = TimeSpan.FromMilliseconds(500);
+
+		IsNull(half.ToTimeFrameName());
+		IsTrue(half.TimeFrame().ToString().EndsWith(half.ToString()), half.TimeFrame().ToString());
+	}
+
+	/// <summary>
+	/// A data type given a name of its own keeps it, a time frame included.
+	/// </summary>
+	[TestMethod]
+	public void ANamedTimeFrameKeepsItsName()
+	{
+		var named = TimeSpan.FromMinutes(5).TimeFrame().Clone();
+		named.SetName("five");
+
+		AreEqual("five", named.ToString());
+	}
+
 	private static DataType Minute => TimeSpan.FromMinutes(1).TimeFrame();
 
 	private static IndicatorSpec Sma(DataType candleType, params (string Key, object Value)[] parameters)
