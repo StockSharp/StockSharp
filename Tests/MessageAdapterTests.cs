@@ -32,6 +32,9 @@ public class MessageAdapterTests : BaseTestClass
 		/// <summary>What handling a message fails with, when a test makes it fail.</summary>
 		public Exception Fault { get; set; }
 
+		/// <summary>Whether handling a message goes on until the caller gives up on it.</summary>
+		public bool RunsUntilCancelled { get; set; }
+
 		public override string[] AssociatedBoards => Boards;
 
 		public override bool IsAutoReplyOnTransactonalUnsubscription => AutoReply;
@@ -47,7 +50,8 @@ public class MessageAdapterTests : BaseTestClass
 				throw Fault;
 
 			Handled.Add(message);
-			return default;
+
+			return RunsUntilCancelled ? new(Task.Delay(Timeout.Infinite, cancellationToken)) : default;
 		}
 
 		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
@@ -280,6 +284,52 @@ public class MessageAdapterTests : BaseTestClass
 
 		var response = output.OfType<SubscriptionResponseMessage>().Single();
 		response.OriginalTransactionId.AssertEqual(8);
+		response.Error.AssertSame(adapter.Fault, "the caller is told what went wrong");
+	}
+
+	/// <summary>
+	/// A request its caller gives up on - a disconnect ends a lookup that is still under way - has not failed: the
+	/// caller is not told of a failure, and nothing is written to the log as an error.
+	/// </summary>
+	[TestMethod]
+	public async Task ARequestItsCallerGaveUpOn_IsNoFailure()
+	{
+		var (adapter, output) = CreateSut();
+		var errors = new List<LogMessage>();
+
+		adapter.RunsUntilCancelled = true;
+		adapter.Log += message =>
+		{
+			if (message.Level == LogLevels.Error)
+				errors.Add(message);
+		};
+
+		using var caller = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		var handling = adapter.SendInMessageAsync(new SecurityLookupMessage { TransactionId = 9 }, caller.Token).AsTask();
+
+		caller.Cancel();
+		await handling;
+
+		output.OfType<IErrorMessage>().Where(message => message.Error is not null).Count().AssertEqual(0, "the caller is told its own cancellation failed");
+		errors.Count.AssertEqual(0, errors.Select(message => message.Message).JoinNL());
+	}
+
+	/// <summary>
+	/// A request cancelled from inside - a timeout of the trading system's client - while its caller still waits has
+	/// failed, and the caller is told so like of any other failure.
+	/// </summary>
+	[TestMethod]
+	public async Task ARequestCancelledWhileItsCallerWaits_ComesBackAsARefusal()
+	{
+		var (adapter, output) = CreateSut();
+
+		adapter.Fault = new OperationCanceledException("the trading system's client timed out");
+
+		await adapter.SendInMessageAsync(CreateSubscribe(10, Helper.CreateSecurityId()), CancellationToken);
+
+		var response = output.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(10);
 		response.Error.AssertSame(adapter.Fault, "the caller is told what went wrong");
 	}
 

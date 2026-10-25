@@ -402,6 +402,10 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 				}
 			}
 		}
+		catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+		{
+			// The caller gave up on what it asked for - a disconnect ends a lookup still under way - so nothing failed.
+		}
 		catch (Exception ex)
 		{
 			await SendOutMessageAsync(message.CreateErrorResponse(ex, this), cancellationToken);
