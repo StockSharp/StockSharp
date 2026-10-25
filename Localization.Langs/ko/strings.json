@@ -6611,7 +6611,7 @@
   "ThreeWhiteSoldiers": "적삼병",
   "Threshold": "변경 임계값",
   "ThresholdDesc": "지표 변경 임계값입니다.",
-  "Tick": "틱",
+  "Tick": "틱 캔들",
   "TickCandle": "틱 캔들",
   "TickCount": "틱 수",
   "TickCountMustBePositive": "틱 수는 양수여야 합니다.",

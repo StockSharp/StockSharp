@@ -6611,7 +6611,7 @@
   "ThreeWhiteSoldiers": "赤三兵",
   "Threshold": "変更の閾値",
   "ThresholdDesc": "インジケーターの変化の閾値。",
-  "Tick": "ティック",
+  "Tick": "ティックキャンドル",
   "TickCandle": "ティックキャンドル",
   "TickCount": "ティック数",
   "TickCountMustBePositive": "ティックの数は正でなければなりません。",

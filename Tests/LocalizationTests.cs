@@ -889,6 +889,44 @@ public class LocalizationTests : BaseTestClass
 		IsEmpty(problems, problems.Take(20).JoinN());
 	}
 
+	// A list of data types offers every kind of candle beside the ticks, the order book and the rest, and a person tells
+	// them apart by their names alone: two that read the same leave the reader picking blind.
+	[TestMethod]
+	public void Languages_NameTheDataTypesOfferedTogetherApart()
+	{
+		const string probe = "qd";
+
+		DataType[] offered =
+		[
+			.. Messages.Extensions.AllCandleTypes.Select(type => DataType.Create(type, null)),
+			DataType.Level1,
+			DataType.Ticks,
+			DataType.MarketDepth,
+			DataType.OrderLog,
+			DataType.News,
+			DataType.Securities,
+			DataType.Board,
+			DataType.Transactions,
+			DataType.PositionChanges,
+		];
+
+		var problems = new List<string>();
+
+		foreach (var dir in GetLangDirs())
+		{
+			LocalizedStrings.AddLanguage(probe, LoadStrings(Path.Combine(dir, _stringsFileName)));
+			LocalizedStrings.ActiveLanguage = probe;
+
+			foreach (var same in offered.GroupBy(type => type.ToString()).Where(group => group.Count() > 1))
+				problems.Add($"{Path.GetFileName(dir)}: {same.Select(type => type.MessageType.Name).JoinComma()} all read '{same.Key}'");
+
+			LocalizedStrings.ActiveLanguage = _activeLanguage;
+			LocalizedStrings.RemoveLanguage(probe);
+		}
+
+		IsEmpty(problems, problems.JoinN());
+	}
+
 	// The loader scans for StockSharp.Localization.*.dll beside itself and keeps only a two-letter suffix, and
 	// nothing but the aggregator pulls a language project into a build. A folder that breaks either rule ships a
 	// language that is silently never registered.
