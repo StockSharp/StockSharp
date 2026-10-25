@@ -1,4 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="common_versions.props" />
   <Import Project="common_meta.props" />
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <InformationalVersion>$([System.DateTime]::UtcNow.ToString('yyyyMMddHHmmss'))</InformationalVersion>
+  </PropertyGroup>
 </Project>
