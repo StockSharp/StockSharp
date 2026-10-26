@@ -1907,6 +1907,67 @@ public class CompilationTests : BaseTestClass
 	public Task CSharpDiagramElem()
 		=> CSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.cs", InvokeDiagramElem);
 
+	// A scheme exported as code, in the shape the Designer writes it: a strategy whose composition the registry
+	// builds from the scheme's settings.
+	private const string _schemeStrategy = """
+		namespace StockSharp.Diagram.Custom;
+
+		using System;
+
+		using Ecng.Common;
+		using Ecng.Serialization;
+		using Ecng.Configuration;
+
+		using StockSharp.Diagram.Elements;
+
+		public class StrategyScheme : DiagramStrategy
+		{
+			public StrategyScheme()
+			{
+				Composition = CompositionBuilder.Create();
+			}
+		}
+
+		static class CompositionBuilder
+		{
+			public static CompositionDiagramElement Create()
+			{
+				var composition = ConfigManager.GetService<ICompositionRegistry>().CreateComposition();
+				Init(composition);
+				return composition;
+			}
+
+			public static void Init(CompositionDiagramElement composition)
+			{
+				var storage = new SettingsStorage()
+					.Set("Elements", new SettingsStorage[]
+					{
+						new SettingsStorage()
+							.Set("TypeId", "aa4a9e6e-1a8c-4e7c-9d5d-1f0b3a1f2c11".To<Guid>())
+							.Set("TimeFrame", 3000000000L.To<TimeSpan>())
+					});
+
+				ConfigManager.GetService<ICompositionRegistry>().Deserialize(composition, storage, ICompositionRegistryExtensions.NotSupported);
+			}
+		}
+		""";
+
+	/// <summary>
+	/// The Designer validates a scheme by compiling it as code with the default references and nothing else, so what
+	/// such code touches of the core has to be reachable through them.
+	/// </summary>
+	[TestMethod]
+	public async Task CSharpSchemeStrategy()
+	{
+		ICompiler compiler = ServicesRegistry.CompilerProvider[FileExts.CSharp];
+
+		var res = await compiler.Compile("test", [_schemeStrategy], await GetReferenceImages(false, false, CancellationToken), CancellationToken);
+		Validate(res);
+
+		using var context = compiler.CreateContext();
+		res.GetAssembly(context).GetExportedTypes().Single().IsRequiredType<DiagramStrategy>().AssertTrue();
+	}
+
 	private async Task CSharpCompile<T>(string fileName, Action<Type, T> custom = null)
 		where T : IAsyncPersistable
 	{

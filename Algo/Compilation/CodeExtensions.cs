@@ -35,6 +35,7 @@ public static class CodeExtensions
 			"System.ComponentModel.Annotations",
 			"System.Collections",
 			"System.Drawing.Primitives",
+			"System.Runtime.InteropServices",
 #if NET10_0_OR_GREATER
 			"System.Linq.AsyncEnumerable",
 #else
@@ -48,6 +49,7 @@ public static class CodeExtensions
 			"Ecng.Reflection",
 			"Ecng.Drawing",
 			"Ecng.Logging",
+			"Ecng.IO",
 
 			"StockSharp.Algo",
 			"StockSharp.Algo.Indicators",
