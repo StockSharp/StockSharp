@@ -43,6 +43,10 @@ jobs:
           dotnet run --project Benchmarks/Benchmarks.csproj -c Release --no-build -- \
             --filter '*CoreMarketDataBenchmarks*' --job Short \
             --artifacts benchmark-results --exporters json 2>&1 | tee benchmarks.log
+          if ! grep -Eq 'executed benchmarks: [1-9][0-9]*' benchmarks.log; then
+            echo '::error::BenchmarkDotNet produced no measurements.'
+            exit 1
+          fi
 
       - name: Compile-time AOT analysis of core
         working-directory: 'StockSharp (GitHub)'
@@ -58,7 +62,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 \
+          dotnet publish AotSmoke/AotSmoke.csproj -c Release -f net10.0 -r linux-x64 \
             -p:StockSharpAotAudit=true \
             -p:TrimmerSingleWarn=false -bl:aot-publish.binlog \
             -o artifacts/aot-smoke 2>&1 | tee aot-publish.log
