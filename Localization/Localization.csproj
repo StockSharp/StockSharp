@@ -8,6 +8,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Localization.Generator\Localization.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <!-- Source generators target netstandard2.0 and must never inherit the app's PublishAot flag. -->
+    <ProjectReference Include="..\Localization.Generator\Localization.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" GlobalPropertiesToRemove="PublishAot" />
   </ItemGroup>
 </Project>
