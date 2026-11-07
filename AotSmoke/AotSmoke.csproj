@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_target_net.props" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
+    <TargetFrameworks>$(NetTfm)</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\MatchingEngine\MatchingEngine.csproj" />
+  </ItemGroup>
+</Project>
