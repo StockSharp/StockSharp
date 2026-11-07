@@ -3,6 +3,7 @@ namespace StockSharp.Benchmarks;
 using System;
 
 using BenchmarkDotNet.Attributes;
+using Ecng.Common;
 
 using StockSharp.MatchingEngine;
 using StockSharp.Messages;
