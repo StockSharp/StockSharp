@@ -34,6 +34,16 @@ jobs:
         working-directory: 'StockSharp (GitHub)'
         run: dotnet build Benchmarks/Benchmarks.csproj --configuration Release
 
+      - name: Measure core allocations (shared CI runner; illustrative)
+        working-directory: 'StockSharp (GitHub)'
+        shell: bash
+        timeout-minutes: 12
+        run: |
+          set -o pipefail
+          dotnet run --project Benchmarks/Benchmarks.csproj -c Release --no-build -- \
+            --filter '*CoreMarketDataBenchmarks*' --job Short \
+            --artifacts benchmark-results --exporters json 2>&1 | tee benchmarks.log
+
       - name: Compile-time AOT analysis of core
         working-directory: 'StockSharp (GitHub)'
         shell: bash
@@ -49,7 +59,7 @@ jobs:
         run: |
           set -o pipefail
           dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 \
-            -p:PublishAot=true -p:StockSharpAotAudit=true \
+            -p:StockSharpAotAudit=true \
             -p:TrimmerSingleWarn=false -bl:aot-publish.binlog \
             -o artifacts/aot-smoke 2>&1 | tee aot-publish.log
 
@@ -63,6 +73,8 @@ jobs:
         with:
           name: core-aot-diagnostics
           path: |
+            StockSharp (GitHub)/benchmarks.log
+            StockSharp (GitHub)/benchmark-results
             StockSharp (GitHub)/aot-analysis.log
             StockSharp (GitHub)/aot-analysis.binlog
             StockSharp (GitHub)/aot-publish.log
