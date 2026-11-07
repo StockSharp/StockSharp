@@ -2,6 +2,8 @@
   <Import Project="..\props\common_target_net.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <!-- BenchmarkDotNet locates the csproj by the output assembly name. -->
+    <AssemblyName>Benchmarks</AssemblyName>
     <TargetFrameworks>$(NetTfm)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
