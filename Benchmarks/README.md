@@ -35,7 +35,7 @@ The test application's `PublishAot` property is set in its own project (rather t
 From a Linux machine with the native compilation prerequisites installed:
 
 ```bash
-dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 \
+dotnet publish AotSmoke/AotSmoke.csproj -c Release -f net10.0 -r linux-x64 \
   -p:StockSharpAotAudit=true \
   -p:TrimmerSingleWarn=false -bl:aot-audit.binlog
 ```
