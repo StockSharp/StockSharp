@@ -1,0 +1,71 @@
+name: Core Native AOT audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'props/**'
+      - 'Messages/**'
+      - 'MatchingEngine/**'
+      - 'Algo/**'
+      - 'AotSmoke/**'
+      - 'Benchmarks/**'
+      - '.github/workflows/aot-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout StockSharp
+        uses: actions/checkout@v7
+        with:
+          path: 'StockSharp (GitHub)'
+
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install native AOT dependencies
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Build core memory benchmarks
+        working-directory: 'StockSharp (GitHub)'
+        run: dotnet build Benchmarks/Benchmarks.csproj --configuration Release
+
+      - name: Compile-time AOT analysis of core
+        working-directory: 'StockSharp (GitHub)'
+        shell: bash
+        run: |
+          set -o pipefail
+          dotnet build Algo/Algo.csproj -c Release -f net10.0 \
+            -p:StockSharpAotAudit=true -p:TrimmerSingleWarn=false \
+            -bl:aot-analysis.binlog 2>&1 | tee aot-analysis.log
+
+      - name: Publish AOT core smoke test
+        working-directory: 'StockSharp (GitHub)'
+        shell: bash
+        run: |
+          set -o pipefail
+          dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 \
+            -p:PublishAot=true -p:StockSharpAotAudit=true \
+            -p:TrimmerSingleWarn=false -bl:aot-publish.binlog \
+            -o artifacts/aot-smoke 2>&1 | tee aot-publish.log
+
+      - name: Run AOT core smoke test
+        working-directory: 'StockSharp (GitHub)'
+        run: ./artifacts/aot-smoke/StockSharp.AotSmoke
+
+      - name: Upload AOT diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: core-aot-diagnostics
+          path: |
+            StockSharp (GitHub)/aot-analysis.log
+            StockSharp (GitHub)/aot-analysis.binlog
+            StockSharp (GitHub)/aot-publish.log
+            StockSharp (GitHub)/aot-publish.binlog
+          if-no-files-found: warn
+          retention-days: 14
