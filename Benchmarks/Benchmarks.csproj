@@ -5,6 +5,7 @@
     <TargetFrameworks>$(NetTfm)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DefineConstants>$(DefineConstants);CLS_DISABLE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="$(BenchmarkDotNetVer)" />
