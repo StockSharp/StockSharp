@@ -1,5 +1,7 @@
 namespace StockSharp.Benchmarks;
 
+using System;
+
 using BenchmarkDotNet.Attributes;
 
 using StockSharp.MatchingEngine;
