@@ -30,11 +30,13 @@ dotnet build Algo/Algo.csproj -c Release -f net10.0 -p:StockSharpAotAudit=true
 
 ## Check the linked application with Native AOT
 
+The test application's `PublishAot` property is set in its own project (rather than passed globally, which would incorrectly apply it to netstandard source generators).
+
 From a Linux machine with the native compilation prerequisites installed:
 
 ```bash
 dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 \
-  -p:PublishAot=true -p:StockSharpAotAudit=true \
+  -p:StockSharpAotAudit=true \
   -p:TrimmerSingleWarn=false -bl:aot-audit.binlog
 ```
 
