@@ -1,5 +1,7 @@
 namespace StockSharp.AotSmoke;
 
+using System;
+
 using StockSharp.MatchingEngine;
 using StockSharp.Messages;
 
