@@ -1006,11 +1006,13 @@ partial class BaseFixDialect
 
 				var msg = new ExecutionMessage
 				{
-					//SecurityId = new SecurityId
-					//{
-					//	SecurityCode = symbol,
-					//	BoardCode = session.GetBoardCode(securityExchange, tradingSessionId),
-					//},
+					SecurityId = new SecurityId
+					{
+						SecurityCode = report.Symbol,
+						BoardCode = GetBoardCode(report.ExDestination, report.SecurityExchange, report.TradingSessionId),
+					},
+					Side = report.Side?.TryFromFixSide(),
+					PortfolioName = GetAccountId(report.Account),
 					ServerTime = report.SendingTime,
 					DataTypeEx = DataType.Transactions,
 					OrderState = OrderStates.Failed,

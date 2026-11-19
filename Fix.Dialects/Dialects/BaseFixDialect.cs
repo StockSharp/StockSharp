@@ -1127,6 +1127,9 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 
 			yield return msg;
 		}
+		// The venue confirming the logout this side asked for.
+		else if (_disconnecting)
+			yield return new DisconnectMessage();
 	}
 
 	/// <summary>

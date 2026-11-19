@@ -674,15 +674,21 @@ public static partial class Extensions
 	/// <returns><see cref="Sides"/> value.</returns>
 	public static Sides FromFixSide(this char side, bool required = false)
 	{
+		if (side == Side.Undisclosed)
+		{
+			if (required)
+				throw new ArgumentNullException(nameof(side));
+
+			return default;
+		}
+
+		return side.TryFromFixSide() ?? throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue);
+	}
+
+	internal static Sides? TryFromFixSide(this char side)
+	{
 		switch (side)
 		{
-			case Side.Undisclosed:
-			{
-				if (required)
-					throw new ArgumentNullException(nameof(side));
-
-				return default;
-			}
 			case Side.Buy:
 			case Side.BuyMinus:
 				return Sides.Buy;
@@ -694,7 +700,7 @@ public static partial class Extensions
 			case Side.CrossShortExempt:
 				return Sides.Sell;
 			default:
-				throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue);
+				return null;
 		}
 	}
 

@@ -219,6 +219,35 @@ public class FixDialectTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// Checks that a rejected execution report keeps the instrument, account, and any identifiable side.
+	/// </summary>
+	[TestMethod]
+	[CLSCompliant(false)]
+	[DataRow(Side.Buy, Sides.Buy)]
+	[DataRow(Side.Sell, Sides.Sell)]
+	[DataRow(Side.Undisclosed, null)]
+	[DataRow(Side.Cross, null)]
+	[DataRow('Z', null)]
+	[DataRow(null, null)]
+	public async Task Dialect_RejectedExecution_PreservesOrderDetails(char? fixSide, Sides? expectedSide)
+	{
+		CreateDialect();
+
+		await SendAsync(CreateRegister(1001));
+
+		var sideField = fixSide is char side ? $"54={side}|" : string.Empty;
+		Feed(FixMessages.ExecutionReport, 1, $"150={ExecType.Rejected}|39={OrdStatus.Rejected}|11=1001|55=AAPL|100=NYSE|{sideField}1=PF|58=Not enough money|60={_transactTime}|");
+
+		var rejected = (ExecutionMessage)(await ReadNextAsync()).Single();
+
+		AreEqual(1001L, rejected.OriginalTransactionId);
+		AreEqual(OrderStates.Failed, rejected.OrderState);
+		AreEqual(expectedSide, rejected.Side);
+		AreEqual(_aapl, rejected.SecurityId);
+		AreEqual("PF", rejected.PortfolioName);
+	}
+
+	/// <summary>
 	/// Pins that a session level Reject and a business level Reject are answered as the failure of
 	/// the very order they refuse, found by the sequence number that order went out with.
 	/// </summary>
@@ -1211,6 +1240,32 @@ public class FixDialectTests : BaseTestClass
 	{
 		ThrowsExactly<ArgumentNullException>(() =>
 			"StockSharp.Fix.Dialects.DefaultFixDialect, StockSharp.Fix.Dialects".ToDialect(null));
+	}
+
+	#endregion
+
+	#region Logout
+
+	/// <summary>
+	/// A venue that confirms the logout this side sent and keeps the line open is done with the session, so the
+	/// confirmation has to reach the reader as the disconnect it is rather than as nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task Dialect_VenueLogout_ConfirmsTheOneThisSideSent()
+	{
+		CreateDialect();
+
+		await SendAsync(new DisconnectMessage());
+
+		AreEqual(FixMessages.Logout, Tag(Written().Single(), FixTags.MsgType));
+
+		Feed(FixMessages.Logout, 1, string.Empty);
+
+		var read = await ReadNextAsync();
+
+		AreEqual(1, read.Length, "the venue's confirmation of the logout read as nothing");
+		IsInstanceOfType<DisconnectMessage>(read[0]);
+		IsNull(((DisconnectMessage)read[0]).Error);
 	}
 
 	#endregion
