@@ -129,32 +129,46 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 			{
 				var transactionId = message.TransactionId;
 				var context = new StorageLoadContext();
+				var retainServed = false;
 
-				await foreach (var outMsg in Settings.LoadMessagesAsync(CandleBuilderProvider, message, context, cancellationToken))
-					yield return outMsg;
-
-				// The request is complete when storage reached the end of the range, and equally when
-				// the asked-for Count ran out - a remainder of an exhausted Count is a request for nothing.
-				if (context.HasData && (context.Left == 0 || (message.To != null && message.To <= context.LastDate)))
+				try
 				{
-					using (_sync.EnterScope())
+					await foreach (var outMsg in Settings.LoadMessagesAsync(CandleBuilderProvider, message, context, cancellationToken))
+						yield return outMsg;
+
+					// The request is complete when storage reached the end of the range, and equally when
+					// the asked-for Count ran out - a remainder of an exhausted Count is a request for nothing.
+					if (context.HasData && (context.Left == 0 || (message.To != null && message.To <= context.LastDate)))
 					{
-						if (_servedSubscriptions.Remove(transactionId))
-							_fullyProcessedSubscriptions.Add(transactionId);
+						using (_sync.EnterScope())
+						{
+							if (_servedSubscriptions.Remove(transactionId))
+								_fullyProcessedSubscriptions.Add(transactionId);
+						}
+
+						yield return new SubscriptionFinishedMessage { OriginalTransactionId = transactionId };
+						forwardMessage = null;
+					}
+					else if (context.HasData)
+					{
+						if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
+						{
+							var clone = message.TypedClone();
+							clone.From = context.LastDate;
+							clone.Count = context.Left;
+							forwardMessage = clone;
+							forwardMessage.ValidateBounds();
+						}
 					}
 
-					yield return new SubscriptionFinishedMessage { OriginalTransactionId = transactionId };
-					forwardMessage = null;
+					retainServed = forwardMessage != null;
 				}
-				else if (context.HasData)
+				finally
 				{
-					if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
+					if (!retainServed)
 					{
-						var clone = message.TypedClone();
-						clone.From = context.LastDate;
-						clone.Count = context.Left;
-						forwardMessage = clone;
-						forwardMessage.ValidateBounds();
+						using (_sync.EnterScope())
+							_servedSubscriptions.Remove(transactionId);
 					}
 				}
 			}

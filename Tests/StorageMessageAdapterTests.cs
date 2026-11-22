@@ -20,6 +20,22 @@ public class StorageMessageAdapterTests : BaseTestClass
 		}
 	}
 
+	private sealed class ThrowingSendAdapter : MessageAdapter
+	{
+		public ThrowingSendAdapter()
+			: base(new IncrementalIdGenerator())
+		{
+		}
+
+		public int SendCount { get; private set; }
+
+		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			SendCount++;
+			throw new InvalidOperationException("inner send failed");
+		}
+	}
+
 	private sealed class TestStorageProcessor(StorageCoreSettings settings) : IStorageProcessor
 	{
 		public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -42,6 +58,16 @@ public class StorageMessageAdapterTests : BaseTestClass
 				yield return message;
 			}
 		}
+	}
+
+	private static int GetServedSubscriptionCount(StorageProcessor processor)
+	{
+		var field = typeof(StorageProcessor).GetField(
+			"_servedSubscriptions",
+			System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+			?? throw new InvalidOperationException("Storage subscription reservations field was not found.");
+
+		return ((ICollection<long>)field.GetValue(processor)).Count;
 	}
 
 	private static async Task TouchDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime date, CancellationToken cancellationToken)
@@ -650,16 +676,11 @@ public class StorageMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(subscription, token);
 		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
+		GetServedSubscriptionCount(processor).AssertEqual(1);
 
 		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 900 }, token);
-
-		output.Clear();
-		inner.InMessages.Clear();
-
-		await adapter.SendInMessageAsync(subscription.TypedClone(), token);
-
-		output.OfType<ExecutionMessage>().Count().AssertEqual(1,
-			"A completed subscription id must not remain marked as already served.");
+		GetServedSubscriptionCount(processor).AssertEqual(0,
+			"A completed subscription must release its storage reservation.");
 	}
 
 	[TestMethod]
@@ -691,20 +712,15 @@ public class StorageMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(subscription, token);
 		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
+		GetServedSubscriptionCount(processor).AssertEqual(1);
 
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = 901,
 			Error = new InvalidOperationException("Rejected."),
 		}, token);
-
-		output.Clear();
-		inner.InMessages.Clear();
-
-		await adapter.SendInMessageAsync(subscription.TypedClone(), token);
-
-		output.OfType<ExecutionMessage>().Count().AssertEqual(1,
-			"A rejected subscription id must not remain marked as already served.");
+		GetServedSubscriptionCount(processor).AssertEqual(0,
+			"A rejected subscription must release its storage reservation.");
 	}
 
 	[TestMethod]
@@ -770,6 +786,78 @@ public class StorageMessageAdapterTests : BaseTestClass
 		output.OfType<SubscriptionResponseMessage>()
 			.Count(m => m.OriginalTransactionId == 2_002 && m.IsOk()).AssertEqual(1,
 				"A recent completed subscription must still answer unsubscribe locally.");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FailedStorageLoad_ReleasesSubscriptionReservation()
+	{
+		var secId = Helper.CreateSecurityId();
+		var registry = new Mock<IStorageRegistry>();
+		registry
+			.Setup(r => r.GetStorage(It.IsAny<SecurityId>(), It.IsAny<DataType>(), It.IsAny<IMarketDataDrive>(), It.IsAny<StorageFormats>()))
+			.Throws(new InvalidOperationException("storage unavailable"));
+
+		var settings = new StorageCoreSettings
+		{
+			StorageRegistry = registry.Object,
+			Format = StorageFormats.Binary,
+			Mode = StorageModes.Incremental,
+		};
+		var processor = new StorageProcessor(settings, new CandleBuilderProvider(new InMemoryExchangeInfoProvider()));
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		var adapter = new StorageMessageAdapter(inner, processor);
+
+		var subscription = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 44,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2026, 2, 1, 10, 0, 0, DateTimeKind.Utc),
+			To = new DateTime(2026, 2, 1, 11, 0, 0, DateTimeKind.Utc),
+		};
+
+		await ThrowsAsync<InvalidOperationException>(() => adapter.SendInMessageAsync(subscription, CancellationToken).AsTask());
+		GetServedSubscriptionCount(processor).AssertEqual(0,
+			"A failed storage load must not leak a subscription reservation.");
+		inner.InMessages.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task FailedUpstreamHandoff_ReleasesSubscriptionReservation()
+	{
+		var token = CancellationToken;
+		var (settings, processor, secId) = CreateRealEnv();
+		var date = new DateTime(2026, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(
+		[
+			CreateTick(secId, date, tradeId: 1, price: 100),
+		], token);
+
+		var inner = new ThrowingSendAdapter();
+		var adapter = new StorageMessageAdapter(inner, processor);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var subscription = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 45,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = date,
+			To = date.AddMinutes(1),
+		};
+
+		await ThrowsAsync<InvalidOperationException>(() => adapter.SendInMessageAsync(subscription, token).AsTask());
+
+		inner.SendCount.AssertEqual(1);
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
+		GetServedSubscriptionCount(processor).AssertEqual(0,
+			"A failed upstream handoff must not leak a subscription reservation.");
 	}
 
 	[TestMethod]

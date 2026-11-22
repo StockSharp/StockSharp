@@ -50,7 +50,25 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 				}
 
 				if (forwardMessage != null)
-					await base.OnSendInMessageAsync(forwardMessage, cancellationToken);
+				{
+					try
+					{
+						await base.OnSendInMessageAsync(forwardMessage, cancellationToken);
+					}
+					catch (Exception ex)
+					{
+						if (forwardMessage.IsSubscribe)
+						{
+							_storageProcessor.ProcessSubscriptionResult(new SubscriptionResponseMessage
+							{
+								OriginalTransactionId = forwardMessage.TransactionId,
+								Error = ex,
+							});
+						}
+
+						throw;
+					}
+				}
 
 				return;
 			}
