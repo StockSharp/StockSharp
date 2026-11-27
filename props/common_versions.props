@@ -28,6 +28,7 @@
     <EcngVer>1.0.*</EcngVer>
     <StockSharpVer>5.*</StockSharpVer>
 
+    <BenchmarkDotNetVer>0.15.3</BenchmarkDotNetVer>
     <MathNumVer>6.0.0-beta2</MathNumVer>
     <NuGetApiVer>7.*</NuGetApiVer>
     <SpectreVer>0.*</SpectreVer>

@@ -6,4 +6,12 @@
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <!-- Diagnostic-only: opt in with -p:StockSharpAotAudit=true.
+       Do not mark these assemblies IsAotCompatible until the warnings are resolved. -->
+  <PropertyGroup Condition="'$(StockSharpAotAudit)' == 'true' and '$(TargetFramework)' == '$(NetTfm)'">
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
 </Project>
