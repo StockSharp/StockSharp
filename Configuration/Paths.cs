@@ -92,10 +92,13 @@ public static class Paths
 	/// <summary>
 	/// Get history data path.
 	/// </summary>
-	/// <param name="startDir">Directory.</param>
-	/// <returns>History data path.</returns>
+	/// <param name="startDir">Existing directory or file used as the starting point.</param>
+	/// <returns>History data path, or <see langword="null"/> if unavailable.</returns>
 	public static string GetHistoryDataPath(string startDir)
 	{
+		if (!Directory.Exists(startDir) && !File.Exists(startDir))
+			return null;
+
 		static DirectoryInfo FindHistoryDataSubfolder(DirectoryInfo packageRoot)
 		{
 			if (!packageRoot.Exists)
@@ -112,7 +115,7 @@ public static class Paths
 			return null;
 		}
 
-		var dir = new DirectoryInfo(Path.GetDirectoryName(startDir));
+		var dir = new DirectoryInfo(startDir).Parent;
 
 		while (dir != null)
 		{

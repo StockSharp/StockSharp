@@ -33,7 +33,10 @@ public class PathsTests : BaseTestClass
 	[TestMethod]
 	public void GetHistoryDataPath_WithNonExistentFolder()
 	{
-		var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+		var fileSystem = Helper.FileSystem;
+		var root = fileSystem.GetSubTemp();
+		fileSystem.CreateDirectory(Path.Combine(root, "packages", "stocksharp.samples.historydata", "1.0.0", "HistoryData"));
+		var nonExistentPath = Path.Combine(root, "missing");
 
 		var historyPath = Paths.GetHistoryDataPath(nonExistentPath);
 
