@@ -754,12 +754,17 @@ public static partial class StorageHelper
 		var secId = subscription.SecurityId;
 		var transactionId = subscription.TransactionId;
 
+		// The processor advances the upstream start to the last item served. When the cache begins
+		// after the requested start, leave the initial online candle backfill to the upstream adapter.
+		bool CanServeRange(DateTime start)
+			=> !context.PreserveRequestedStart || context.HasData || start <= subscription.From || subscription.From is null;
+
 		async IAsyncEnumerable<Message> LoadFromStorage<TMessage>(IMarketDataStorage<TMessage> storage, Func<TMessage, bool> filter = null)
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
-			if (range == default)
+			if (range == default || !CanServeRange(range.from))
 				yield break;
 
 			// The days the storage loads, then the newest ones, read already while the window was worked out.
@@ -952,18 +957,16 @@ public static partial class StorageHelper
 
 				var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
-				if (range != default && buildFrom == null)
-					buildFrom = DataType.Ticks;
-				else if (range == default && buildFrom == null)
+				if (buildFrom == null && (range == default || !CanServeRange(range.from)))
 				{
 					storage = GetStorage<Level1ChangeMessage>(secId, DataType.Level1);
 					range = await GetRangeAsync(storage, subscription, cancellationToken);
-
-					if (range != default)
-						buildFrom = DataType.Level1;
+					buildFrom = DataType.Level1;
 				}
+				else if (buildFrom == null)
+					buildFrom = DataType.Ticks;
 
-				if (range == default)
+				if (range == default || !CanServeRange(range.from))
 					yield break;
 
 				var from = range.from;
@@ -1386,6 +1389,8 @@ public static partial class StorageHelper
 /// </summary>
 public sealed class StorageLoadContext
 {
+	internal bool PreserveRequestedStart { get; init; }
+
 	/// <summary>
 	/// Last message time.
 	/// </summary>

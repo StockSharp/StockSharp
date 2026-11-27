@@ -128,7 +128,12 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 			if (shouldLoad)
 			{
 				var transactionId = message.TransactionId;
-				var context = new StorageLoadContext();
+				var context = new StorageLoadContext
+				{
+					PreserveRequestedStart = message.To is null &&
+						message.BuildMode == MarketDataBuildModes.LoadAndBuild &&
+						message.DataType2.IsTFCandles,
+				};
 				var retainServed = false;
 
 				try

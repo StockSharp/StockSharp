@@ -214,6 +214,65 @@ public class StorageMessageAdapterTests : BaseTestClass
 		TradeVolume = 1m,
 	};
 
+	[TestMethod]
+	[DataRow(true)]
+	[DataRow(false)]
+	public async Task ANewerLocalCandleDoesNotClipTheRequestedHistory(bool buildFromCachedTicks)
+	{
+		var token = CancellationToken;
+		var (settings, processor, secId) = CreateRealEnv();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var date = new DateTime(2025, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		if (buildFromCachedTicks)
+		{
+			await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(
+				[CreateTick(secId, date, 1, 100m), CreateTick(secId, date.AddMinutes(1), 2, 101m)], token);
+		}
+		else
+		{
+			await settings.GetStorage<CandleMessage>(secId, timeFrame.TimeFrame()).SaveAsync(
+				[new TimeFrameCandleMessage
+				{
+					SecurityId = secId,
+					TypedArg = timeFrame,
+					OpenTime = date,
+					HighTime = date,
+					LowTime = date,
+					CloseTime = date.Add(timeFrame),
+					OpenPrice = 100m,
+					HighPrice = 100m,
+					LowPrice = 100m,
+					ClosePrice = 100m,
+					TotalVolume = 1m,
+					State = CandleStates.Finished,
+				}], token);
+		}
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		var adapter = new StorageMessageAdapter(inner, processor);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) =>
+		{
+			output.Add(message);
+			return default;
+		};
+
+		var start = date.AddDays(-1);
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = timeFrame.TimeFrame(),
+			BuildMode = MarketDataBuildModes.LoadAndBuild,
+			From = start,
+		}, token);
+
+		inner.InMessages.OfType<MarketDataMessage>().Single().From.AssertEqual(start);
+		output.OfType<CandleMessage>().Any().AssertFalse();
+	}
+
 	// Storage covers the whole requested range: the caller gets the history plus
 	// SubscriptionFinished, and nothing is asked of the inner adapter.
 	[TestMethod]
