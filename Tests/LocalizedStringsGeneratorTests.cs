@@ -28,39 +28,8 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 	}
 
 	private const string _resourceFileName = "strings.json";
-	private const string _generatorFileName = "StockSharp.Localization.Generator.dll";
-	private const string _generatorTypeName = "StockSharp.Localization.LocalizedStringsGenerator";
-	private const string _generatorBinDir = "../../../../Localization.Generator/bin";
 
 	private static readonly CSharpCompilation _compilation = CSharpCompilation.Create(nameof(LocalizedStringsGeneratorTests));
-
-	private static IIncrementalGenerator _generator;
-
-	private static IIncrementalGenerator Generator => _generator ??= LoadGenerator();
-
-	// The generator is an analyzer of the Localization project, so the test assembly holds no
-	// reference to it and it is taken from its own build output, built in the same configuration.
-	private static IIncrementalGenerator LoadGenerator()
-	{
-		var binDir = Path.GetFullPath(_generatorBinDir);
-
-		IsTrue(Directory.Exists(binDir), $"'{binDir}' does not exist: the generator project was not built.");
-
-		var paths = Directory.GetFiles(binDir, _generatorFileName, SearchOption.AllDirectories);
-
-		IsNotEmpty(paths, $"'{_generatorFileName}' was not built.");
-
-		var sep = Path.DirectorySeparatorChar;
-		var release = typeof(LocalizedStringsGeneratorTests).Assembly.Location.Contains($"{sep}Release{sep}", StringComparison.OrdinalIgnoreCase);
-		var configuration = $"{sep}{(release ? "Release" : "Debug")}{sep}";
-
-		var path = paths.FirstOrDefault(p => p.Contains(configuration, StringComparison.OrdinalIgnoreCase)) ?? paths[0];
-		var type = Assembly.LoadFrom(path).GetType(_generatorTypeName);
-
-		IsNotNull(type, $"'{_generatorTypeName}' is not in '{path}'.");
-
-		return (IIncrementalGenerator)Activator.CreateInstance(type);
-	}
 
 	// Written by hand rather than through a serializer: a test needs to hand the generator the same
 	// awkward text a translator can type, duplicate keys included, which no dictionary can express.
@@ -75,7 +44,7 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 		ImmutableArray<AdditionalText> texts = [new StubAdditionalText($"Localization/{_resourceFileName}", json)];
 
 		var results = CSharpGeneratorDriver
-			.Create([Generator.AsSourceGenerator()], texts)
+			.Create([new LocalizedStringsGenerator().AsSourceGenerator()], texts)
 			.RunGenerators(_compilation)
 			.GetRunResult()
 			.Results;

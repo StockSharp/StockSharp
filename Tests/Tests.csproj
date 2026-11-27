@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
     <ProjectReference Include="..\Fix.Core\Fix.Core.csproj" />
     <ProjectReference Include="..\Fix.Dialects\Fix.Dialects.csproj" />
+    <ProjectReference Include="..\Localization.Generator\Localization.Generator.csproj" />
     <ProjectReference Include="..\MatchingEngine\MatchingEngine.csproj" />
     <ProjectReference Include="..\Media.Generator\Media.Generator.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />
